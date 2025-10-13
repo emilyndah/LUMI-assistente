@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Assistente Acadêmico</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Assistente Acadêmico IA</h1>
+    <p>Digite sua pergunta sobre a vida acadêmica e a IA tentará responder.</p>
+
+    <form action="/" method="post">
+        <textarea name="pergunta" rows="4" placeholder="Ex: Quais são as datas das próximas provas?"></textarea>
+        <br>
+        <button type="submit">Enviar Pergunta</button>
+    </form>
+
+    {% if resposta %}
+    <div class="resposta">
+        <h2>Resposta da IA:</h2>
+        <p>{{ resposta }}</p>
+    </div>
+    {% endif %}
+
+</body>
+</html>
