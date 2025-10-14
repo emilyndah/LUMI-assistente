@@ -3,7 +3,12 @@ import openai
 import os
 
 app = Flask(__name__)
+# Adicione estas duas linhas no topo do seu app.py (ou próximo à linha 9)
+from dotenv import load_dotenv
+load_dotenv()
 
+# O seu código original
+openai.api_key = os.getenv("OPENAI_API_KEY")
 # Modo avançado com OpenAI (requer chave)
 def responder_avancado(pergunta):
     openai.api_key = os.getenv("OPENAI_API_KEY")  # coloque sua chave no ambiente
@@ -27,8 +32,6 @@ def index():
         modo = request.form.get('modo', 'simples')
 
         if modo == 'simples':
-            resposta = responder_simples(pergunta)
-        else:
             resposta = responder_avancado(pergunta)
 
     return render_template('index.html', resposta=resposta)
