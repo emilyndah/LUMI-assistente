@@ -16,7 +16,7 @@ app.secret_key = "segredo_da_lumi"  # Necessário para armazenar o histórico de
 # 1. CONSTANTES DO OLLAMA (CONFIGURAÇÃO DO MODELO)
 # =======================================================
 OLLAMA_URL = "http://localhost:11434/api/chat"  # URL do servidor Ollama
-OLLAMA_MODELO = "qwen3:0.6b"  # Nome do modelo usado no Ollama
+OLLAMA_MODELO = "gemma3:1b"  # Nome do modelo usado no Ollama
 
 # =======================================================
 # 2. FUNÇÃO PIE (CÁLCULO DE USUÁRIOS ÚNICOS)
@@ -94,6 +94,11 @@ def index():
     # Cria o histórico de conversa na sessão se ainda não existir
     if "historico" not in session:
         session["historico"] = []
+        
+    # Limpa o histórico se a sessão for nova (ou seja, aba recém-aberta)
+    session["historico"] = []
+    session.modified = True
+
 
     # Quando o usuário envia uma pergunta
     if request.method == 'POST':
