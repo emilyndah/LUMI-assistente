@@ -16,7 +16,7 @@ app.secret_key = "segredo_da_lumi"  # Necessário para armazenar o histórico de
 # 1. CONSTANTES DO OLLAMA (CONFIGURAÇÃO DO MODELO)
 # =======================================================
 OLLAMA_URL = "http://localhost:11434/api/chat"  # URL do servidor Ollama
-OLLAMA_MODELO = "qwen3:0.6b"  # Nome do modelo usado no Ollama
+OLLAMA_MODELO = "gemma3:1b"  # Nome do modelo usado no Ollama
 
 # =======================================================
 # 2. FUNÇÃO PIE (CÁLCULO DE USUÁRIOS ÚNICOS)
