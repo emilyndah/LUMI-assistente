@@ -1,49 +1,122 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Lumi – Assistente Acadêmica</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Lumi – Assistente Acadêmica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
-  </header>
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
+        </a>
+    </header>
 
-  <main>
-    <section class="funcoes">
-      <h2>Funcionalidades</h2>
-      <div class="func-item">Recomendações de estudo</div>
-      <div class="func-item">Simulador de provas</div>
-      <div class="func-item">Flashcards</div>
-      <div class="func-item">Quiz</div>
-      <div class="func-item">Método de estudo personalizado</div>
-      <div class="func-item">Análise de desempenho</div>
-      <div class="func-item">Calendário</div>
-      <div class="func-item">Chat motivacional</div>
-      <div class="func-item">Dúvidas frequentes (FAQ)</div>
-    </section>
+    <main>
+        <section class="funcoes">
+            <h2>Funcionalidades</h2>
+            <a href="#" class="func-item disabled">Recomendações de estudo</a>
+            <a href="#" class="func-item disabled">Simulador de provas</a>
+            <a href="{{ url_for('flashcards') }}" class="func-item">Flashcards</a>
+            <a href="#" class="func-item disabled">Quiz</a>
+            <a href="#" class="func-item disabled">Método de estudo personalizado</a>
+            <a href="#" class="func-item disabled">Análise de desempenho</a>
+            <a href="{{ url_for('calendario') }}" class="func-item">Calendário</a>
+            <a href="#" class="func-item disabled">Chat motivacional</a>
+            <a href="{{ url_for('faq') }}" class="func-item">Dúvidas frequentes (FAQ)</a>
+        </section>
+        
+        <section class="chat">
+            <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">
+                Limpar Conversa
+            </a>
+            <div class="chat-box" id="chat-box">
+                {% if not historico %}
+                    <div class="msg lumi">Olá! Sou a Lumi 💡. Como posso te ajudar hoje?</div>
+                {% else %}
+                    {% for msg in historico %}
+                        <div class="msg user">{{ msg.usuario }}</div>
+                        <div class="msg lumi">{{ msg.lumi | safe }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <form id="chat-form">
+                <input type="text" id="pergunta-input" name="pergunta" placeholder="Digite sua pergunta..." required autocomplete="off">
+                <button type="submit" id="submit-btn" aria-label="Enviar Pergunta">&#x27A4;</button>
+            </form>
+        </section>
+    </main>
 
-    <section class="chat">
-      <div class="chat-box">
-        {% if historico %}
-          {% for msg in historico %}
-            <div class="msg user">Você: {{ msg.usuario }}</div>
-            <div class="msg lumi">Lumi: {{ msg.lumi }}</div>
-          {% endfor %}
-        {% else %}
-          <div class="msg lumi">Olá! Sou a Lumi 💡. Como posso te ajudar hoje?</div>
-        {% endif %}
-      </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatBox = document.getElementById('chat-box');
+        function scrollToBottom() { chatBox.scrollTop = chatBox.scrollHeight; }
+        scrollToBottom();
 
-      <form method="POST">
-        <input type="text" name="pergunta" placeholder="Digite sua pergunta..." required>
-        <button type="submit">▶</button>
-      </form>
-    </section>
-  </main>
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('pergunta-input');
+        const submitBtn = document.getElementById('submit-btn');
 
-  <img src="{{ url_for('static', filename='lumi_mascote.jpg') }}" alt="Mascote Lumi" class="mascote">
+        chatForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const userMessage = userInput.value.trim();
+            if (userMessage === '') return;
+
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'msg user';
+            userMsgDiv.textContent = userMessage;
+            chatBox.appendChild(userMsgDiv);
+
+            userInput.value = '';
+            userInput.disabled = true;
+            submitBtn.disabled = true;
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'msg lumi typing-indicator';
+            typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+            chatBox.appendChild(typingIndicator);
+            scrollToBottom();
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ pergunta: userMessage })
+                });
+
+                if (!response.ok) throw new Error('Erro na resposta do servidor.');
+                
+                const data = await response.json();
+                chatBox.removeChild(typingIndicator);
+
+                const lumiMsgDiv = document.createElement('div');
+                lumiMsgDiv.className = 'msg lumi';
+                lumiMsgDiv.innerHTML = data.resposta.replace(/\n/g, '<br>');
+                chatBox.appendChild(lumiMsgDiv);
+                scrollToBottom();
+
+            } catch (error) {
+                console.error('Erro ao enviar mensagem:', error);
+                chatBox.removeChild(typingIndicator);
+                const errorMsgDiv = document.createElement('div');
+                errorMsgDiv.className = 'msg lumi';
+                errorMsgDiv.textContent = 'Desculpe, ocorreu um erro ao conectar.';
+                chatBox.appendChild(errorMsgGiv);
+                scrollToBottom();
+            } finally {
+                userInput.disabled = false;
+                submitBtn.disabled = false;
+                userInput.focus();
+            }
+        });
+
+        document.querySelectorAll('a.func-item.disabled').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+            });
+        });
+    });
+    </script>
 </body>
 </html>
