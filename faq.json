@@ -1,0 +1,34 @@
+[
+  {
+    "pergunta": "Onde posso consultar minhas notas e faltas?",
+    "resposta": "Suas notas e sua frequência são lançadas no Portal do Aluno. Acesse com seu login e senha, e procure pela seção 'Acadêmico > Boletim Online'. As atualizações dependem do lançamento de cada professor."
+  },
+  {
+    "pergunta": "Como faço para solicitar a carteirinha de estudante?",
+    "resposta": "A solicitação da carteirinha de estudante é feita diretamente na Central de Atendimento ao Aluno (CAA), localizada no Bloco A. É necessário levar um documento com foto e o comprovante de matrícula atualizado."
+  },
+  {
+    "pergunta": "Qual é o procedimento para trancar a matrícula?",
+    "resposta": "Para trancar sua matrícula, você deve abrir um requerimento oficial através do Portal do Aluno, na seção 'Secretaria Virtual > Requerimentos'. Fique atento aos prazos definidos no calendário acadêmico para não perder o período de solicitação."
+  },
+  {
+    "pergunta": "Quais são os horários de funcionamento da biblioteca?",
+    "resposta": "A Biblioteca Central funciona de segunda a sexta, das 7h30 às 22h, e aos sábados, das 8h às 12h. Lembre-se que é necessário apresentar sua carteirinha para empréstimo de livros."
+  },
+  {
+    "pergunta": "Como funciona o acesso ao Wi-Fi do campus?",
+    "resposta": "Para acessar a rede Wi-Fi 'UniEVANGELICA_Alunos', utilize seu número de matrícula (RA) como login e a mesma senha do Portal do Aluno como senha."
+  },
+  {
+    "pergunta": "Onde posso encontrar a matriz curricular do curso de IA?",
+    "resposta": "A matriz curricular completa, com todas as disciplinas do curso de Inteligência Artificial, está disponível para consulta no site da UniEVANGÉLICA, na página específica do curso. Você também pode solicitar uma cópia na coordenação do seu curso."
+  },
+  {
+    "pergunta": "Como posso justificar uma falta?",
+    "resposta": "Atestados médicos ou outros documentos comprobatórios devem ser entregues na Central de Atendimento ao Aluno (CAA) em até 72 horas úteis após a falta para que seja analisada a possibilidade de abono."
+  },
+  {
+    "pergunta": "Existem laboratórios específicos para o curso de IA?",
+    "resposta": "Sim, o curso de IA conta com laboratórios de informática avançada equipados com o hardware e software necessários para as aulas práticas. A localização e os horários de livre acesso podem ser consultados com a coordenação do curso."
+  }
+]

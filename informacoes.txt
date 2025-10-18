@@ -1,0 +1,78 @@
+[Observações Gerais]
+- Prazo para requerimento de prova substitutiva: até 3 dias úteis após cada Verificação de Aprendizagem (solicitação via secretaria virtual)
+
+[Matriz Curricular]
+[1º Período]
+- Cidadania, Ética e Espiritualidade
+- Leitura e Interpretação de Texto
+- Fundamentos de Computação e Infraestrutura
+- Introdução à Engenharia de Soluções com IA
+- Lógica Computacional com Projetos de IA
+- Engenharia de Dados: Coleta e Limpeza
+
+[2º Período]
+- Metodologia do Trabalho Científico
+- Redes e Segurança para Ambientes Digitais
+- Estatística Descritiva com Projetos Reais
+- Programação Orientada a Objetos Aplicada à IA
+- Modelagem de Soluções com Dados
+- Design de Soluções com Foco no Usuário
+
+[3º Período]
+- Fundamentos Socioantropológicos
+- Computação em Nuvem para Ciência de Dados
+- Desenvolvimento de Sistemas Web com Dados
+- Estatística e Visualização com Dados Reais
+- Aprendizado de Máquina Supervisionado
+- Inovação e Cultura Empreendedora
+
+[4º Período]
+- Desenvolvimento Social e Sustentabilidade
+- Infraestrutura de Sistemas Inteligentes
+- Sistemas e Arquiteturas Distribuídas
+- Gestão Estratégica de Projetos com Dados
+- Otimização e Modelagem Matemática
+- Deep Learning: Fundamentos e Aplicações
+
+[5º Período]
+- Optativa
+- Computação de Alto Desempenho
+- Ciência de Dados em Larga Escala
+- Fusão e Integração de Dados
+- IA Aplicada a Ambientes Autônomos
+- Visualização de Dados Interativos e Dashboards
+
+[6º Período]
+- Arquitetura de Sistemas Inteligentes
+- Automação e Otimização de Processos com IA
+- Gestão Estratégica de Projetos com IA e Dados
+- Modelagem Matemática Aplicada à IA
+- Engenharia de Modelos Preditivos
+- Sistemas Sensíveis ao Contexto
+
+[7º Período]
+- Residência Tecnológica I – Projeto Orientado
+- Aprendizado de Máquina Escalável
+- Inteligência Adaptativa
+- Redes Neurais Avançadas
+- Robótica Autônoma
+- IA Explicável e Ética Avançada
+
+[8º Período]
+- Residência Tecnológica II – Entrega Final e Avaliação
+- Edge AI e Sistemas Embarcados
+- Modelagem Estatística para IA
+- Aprendizado por Reforço
+- Mineração de Dados em Ambientes Complexos
+- Modelos Generativos e Criatividade Computacional
+
+--------------------------------------
+
+Informações Institucionais
+Instituição: UniEVANGÉLICA – Universidade Evangélica de Goiás
+Localização: Av. Universitária Km. 3,5 – Cidade Universitária – Anápolis – GO
+CEP: 75083-515
+Telefone: (62) 3310-6600 | 0800 603 2023
+Site Oficial: https://www4.unievangelica.edu.br/graduacao?presencial
+
+

@@ -1,0 +1,86 @@
+{
+  "flash_cards": {
+    "Fundamentos de Computação e Infraestrutura": [
+      {
+        "pergunta": "O que é hardware?",
+        "resposta": "Componentes físicos de um computador, como CPU, memória e disco rígido."
+      },
+      {
+        "pergunta": "O que é software?",
+        "resposta": "Conjunto de instruções e programas que controlam o hardware."
+      },
+      {
+        "pergunta": "Qual a função do sistema operacional?",
+        "resposta": "Gerenciar recursos do sistema e permitir a interação entre usuário e hardware."
+      },
+      {
+        "pergunta": "O que é rede de computadores?",
+        "resposta": "Conjunto de dispositivos interconectados que compartilham dados e recursos."
+      },
+      {
+        "pergunta": "O que é IP?",
+        "resposta": "Endereço único que identifica um dispositivo em uma rede."
+      },
+      {
+        "pergunta": "O que é armazenamento em nuvem?",
+        "resposta": "Serviço que permite guardar dados em servidores acessíveis pela internet."
+      },
+      {
+        "pergunta": "O que é BIOS?",
+        "resposta": "Sistema básico de entrada e saída que inicia o hardware do computador."
+      },
+      {
+        "pergunta": "O que é firewall?",
+        "resposta": "Sistema de segurança que controla o tráfego de rede entre redes confiáveis e não confiáveis."
+      }
+    ],
+    "Introdução à Engenharia de Soluções com IA": [
+      {
+        "pergunta": "O que é Inteligência Artificial?",
+        "resposta": "Área da computação que desenvolve sistemas capazes de simular comportamentos inteligentes."
+      },
+      {
+        "pergunta": "O que é machine learning?",
+        "resposta": "Subcampo da IA que permite que sistemas aprendam com dados."
+      },
+      {
+        "pergunta": "O que é deep learning?",
+        "resposta": "Tipo de aprendizado de máquina baseado em redes neurais profundas."
+      },
+      {
+        "pergunta": "O que é visão computacional?",
+        "resposta": "Área da IA que permite que máquinas interpretem imagens e vídeos."
+      },
+      {
+        "pergunta": "O que é PLN?",
+        "resposta": "Processamento de Linguagem Natural, que permite que máquinas compreendam linguagem humana."
+      },
+      {
+        "pergunta": "O que é um agente inteligente?",
+        "resposta": "Entidade que percebe o ambiente e toma decisões para atingir objetivos."
+      },
+      {
+        "pergunta": "O que é IA fraca?",
+        "resposta": "IA projetada para tarefas específicas, sem consciência ou raciocínio geral."
+      },
+      {
+        "pergunta": "O que é IA forte?",
+        "resposta": "IA com capacidade de raciocínio e consciência semelhante à humana."
+      }
+    ],
+    "Lógica Computacional com Projetos de IA": [
+        {
+            "pergunta": "O que é um algoritmo?",
+            "resposta": "Uma sequência finita de ações executáveis que visam obter uma solução para um determinado tipo de problema."
+        },
+        {
+            "pergunta": "O que é uma variável?",
+            "resposta": "Um espaço na memória do computador destinado a um dado que é alterado durante a execução do algoritmo."
+        },
+        {
+            "pergunta": "O que são operadores lógicos?",
+            "resposta": "São operadores que retornam um resultado booleano (verdadeiro ou falso), como AND, OR e NOT."
+        }
+    ]
+  }
+}
