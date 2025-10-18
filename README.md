@@ -85,7 +85,6 @@ Agradecimento especial aos professores orientadores:
 
 ## 👩‍💻 Pessoas Desenvolvedoras
 
-## 👩‍💻 Pessoas Desenvolvedoras
 
 - [@EmilyRodrigues](https://github.com/EmilyRodrigues) 
 - [@FrancielleGoncalves](https://github.com/Francielle84)  
