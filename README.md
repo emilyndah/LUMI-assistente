@@ -13,10 +13,10 @@
 
 ## 📝 Descrição do Projeto
 
-O **Lumi** é um assistente acadêmico inteligente criado para facilitar a rotina de estudantes.  
-Ele responde perguntas sobre a vida universitária, ajuda a organizar estudos e entrega respostas em tempo real por meio de uma **IA local (Ollama)** integrada ao **Flask**.
+A **Lumi** é uma assistente acadêmica inteligente criada para facilitar a rotina dos estudantes.  
+Ela responde perguntas sobre a vida universitária, ajuda a organizar estudos e entrega respostas em tempo real por meio de uma **IA local (Ollama)** integrada ao **Flask**.
 
-Essa é a **primeira versão funcional (Marco 2)** do projeto desenvolvido na disciplina de **Inteligência Artificial – UniEVANGÉLICA (2025/2)**.
+Essa é a **primeira versão funcional** do projeto desenvolvido na disciplina de **Inteligência Artificial – UniEVANGÉLICA (2025/2)**.
 
 ---
 
@@ -41,7 +41,7 @@ Essa é a **primeira versão funcional (Marco 2)** do projeto desenvolvido na di
 
 ## 🔗 Acesso ao Projeto
 
-Para executar o **Lumi** localmente, siga os passos abaixo:
+Para executar a **Lumi** localmente, siga os passos abaixo:
 
 **1. Clone o repositório:**  
 `git clone https://github.com/seu-usuario/lumi-assistente.git`
@@ -58,7 +58,7 @@ Para executar o **Lumi** localmente, siga os passos abaixo:
 **5. Abra no navegador:**  
 👉 [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-Pronto! O assistente Lumi já estará rodando no seu navegador. 🚀
+Pronto! A assistente Lumi já estará rodando no seu navegador. 🚀
 
 ## 🛠️ Tecnologias Utilizadas
 
