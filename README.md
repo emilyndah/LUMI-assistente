@@ -25,17 +25,17 @@ Essa é a **primeira versão funcional (Marco 2)** do projeto desenvolvido na di
 ✅ **Em desenvolvimento funcional**  
 🧠 Interface rodando no navegador via Flask  
 🤖 Integração com IA local (Ollama) já configurada  
-🎯 Próximo passo: melhorar a interface e adicionar histórico de conversas  
+🎯 Próximo passo: melhorar a interface e adicionar funcionalidades
 
 ---
 
 ## ✨ Funcionalidades Principais
 
-- Responde perguntas sobre aulas, avaliações e disciplinas.  
+- Recebe e responde perguntas.  
 - IA local via **Ollama** (respostas dinâmicas).  
 - Interface simples feita em **HTML + Flask**.  
 - Integração total entre **frontend e backend**.  
-
+- (FAQ), flashcards e calendário acadêmico já executavel
 
 ---
 
