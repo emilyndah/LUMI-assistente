@@ -1,47 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- ==============================
+         META E CONFIGURAÇÕES BÁSICAS
+    ================================== -->
     <meta charset="UTF-8">
-    <title>Calendário Académico</title>
+    <title>Calendário Acadêmico</title>
+
+    <!-- ==============================
+         IMPORTAÇÃO DE ESTILOS E FONTES
+    ================================== -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- ==============================
+         CABEÇALHO E LOGO
+    ================================== -->
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
     </header>
 
+    <!-- ==============================
+         CONTEÚDO PRINCIPAL – CALENDÁRIO
+    ================================== -->
     <main class="faq-page">
         <section class="faq-container">
-            <h1>Calendário Académico</h1>
+            <h1>Calendário Acadêmico</h1>
             <p>Navegue pelo calendário ou pesquise na lista de eventos abaixo.</p>
 
-            <!-- NOVO CALENDÁRIO INTERATIVO -->
+            <!-- ==============================
+                 SEÇÃO DO CALENDÁRIO INTERATIVO
+            ================================== -->
             <div class="calendar-grid-container">
+                <!-- Cabeçalho de navegação de meses -->
                 <div class="calendar-header">
                     <button id="prev-month-btn" aria-label="Mês anterior">&lt;</button>
                     <h2 id="month-year-display"></h2>
                     <button id="next-month-btn" aria-label="Próximo mês">&gt;</button>
                 </div>
+
+                <!-- Dias da semana -->
                 <div class="calendar-weekdays">
-                    <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+                    <div>Dom</div><div>Seg</div><div>Ter</div>
+                    <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
                 </div>
+
+                <!-- Área onde os dias são renderizados dinamicamente -->
                 <div class="calendar-days-grid" id="calendar-days-grid">
-                    <!-- Os dias serão gerados dinamicamente com JavaScript -->
+                    <!-- Os dias serão gerados via JavaScript -->
                 </div>
             </div>
 
+            <!-- ==============================
+                 SEÇÃO DE LISTAGEM DE EVENTOS
+            ================================== -->
             <div class="list-header">
                 <h3 id="event-list-title">Todos os Eventos</h3>
                 <button id="show-all-btn" class="hidden">Mostrar Todos</button>
             </div>
 
-            <!-- LISTA DE EVENTOS EXISTENTE -->
+            <!-- Campo de busca de eventos -->
             <div class="search-wrapper">
-                <input type="text" id="calendario-search" placeholder="Digite um evento para filtrar (ex: provas, feriado)...">
+                <input 
+                    type="text" 
+                    id="calendario-search" 
+                    placeholder="Digite um evento para filtrar (ex: provas, feriado)..."
+                >
             </div>
+
+            <!-- Lista dinâmica de eventos -->
             <div class="calendario-list">
                 {% if eventos_data %}
                     {% for evento in eventos_data %}
@@ -51,20 +82,31 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                <p class="calendario-vazio">Nenhum evento encontrado no calendário.</p>
+                    <p class="calendario-vazio">Nenhum evento encontrado no calendário.</p>
                 {% endif %}
             </div>
         </section>
     </main>
 
+    <!-- ==============================
+         MASCOTE DECORATIVO
+    ================================== -->
     <img src="{{ url_for('static', filename='lumi_mascote.jpg') }}" alt="Mascote Lumi" class="mascote">
 
+    <!-- ==============================
+         SCRIPT – IMPORTA OS DADOS DO BACKEND
+    ================================== -->
     <script>
-        // Passa os dados do Flask para o JavaScript de forma segura
+        // Passa os dados do Flask para o JavaScript
         const eventosData = {{ eventos_data | tojson }};
     </script>
+
+    <!-- ==============================
+         SCRIPT – FUNCIONALIDADES DO CALENDÁRIO
+    ================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // --- Seletores principais ---
             const monthYearDisplay = document.getElementById('month-year-display');
             const calendarDaysGrid = document.getElementById('calendar-days-grid');
             const prevMonthBtn = document.getElementById('prev-month-btn');
@@ -74,75 +116,99 @@
             const searchInput = document.getElementById('calendario-search');
             const allEventItems = document.querySelectorAll('.calendario-item');
 
+            // --- Estado inicial ---
             let currentDate = new Date();
             currentDate.setDate(1);
 
+            // --- Mapeia eventos por data ---
             const eventsMap = new Map();
             eventosData.forEach(evento => {
                 const dateKey = new Date(evento.data_obj).toISOString().split('T')[0];
-                if (!eventsMap.has(dateKey)) {
-                    eventsMap.set(dateKey, []);
-                }
+                if (!eventsMap.has(dateKey)) eventsMap.set(dateKey, []);
                 eventsMap.get(dateKey).push(evento);
             });
 
+            // ==============================
+            // Função: Renderiza o calendário do mês atual
+            // ==============================
             function renderCalendar() {
                 calendarDaysGrid.innerHTML = '';
+
                 const month = currentDate.getMonth();
                 const year = currentDate.getFullYear();
-                
-                monthYearDisplay.textContent = new Date(year, month).toLocaleString('pt-BR', { month: 'long', year: 'numeric' }).replace(/^\w/, c => c.toUpperCase());
+
+                // Exibe mês e ano formatados
+                monthYearDisplay.textContent = new Date(year, month)
+                    .toLocaleString('pt-BR', { month: 'long', year: 'numeric' })
+                    .replace(/^\w/, c => c.toUpperCase());
 
                 const firstDayOfMonth = new Date(year, month, 1).getDay();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+                // Adiciona células vazias antes do início do mês
                 for (let i = 0; i < firstDayOfMonth; i++) {
                     const emptyCell = document.createElement('div');
                     calendarDaysGrid.appendChild(emptyCell);
                 }
 
+                // Cria células dos dias
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dayCell = document.createElement('div');
                     dayCell.textContent = day;
                     dayCell.classList.add('calendar-day');
                     
+                    // Destaque para o dia atual
                     const today = new Date();
-                    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    if (
+                        day === today.getDate() &&
+                        month === today.getMonth() &&
+                        year === today.getFullYear()
+                    ) {
                         dayCell.classList.add('today');
                     }
 
+                    // Marca os dias com eventos
                     const dateKey = new Date(year, month, day).toISOString().split('T')[0];
                     if (eventsMap.has(dateKey)) {
                         dayCell.classList.add('has-event');
                         dayCell.dataset.date = dateKey;
                     }
+
                     calendarDaysGrid.appendChild(dayCell);
                 }
             }
 
+            // ==============================
+            // Função: Filtra eventos por data clicada
+            // ==============================
             function filterEventsByDate(dateKey) {
-                eventListTitle.textContent = `Eventos de ${new Date(dateKey + 'T00:00:00').toLocaleDateString('pt-BR')}`;
+                eventListTitle.textContent = 
+                    `Eventos de ${new Date(dateKey + 'T00:00:00').toLocaleDateString('pt-BR')}`;
+                
                 showAllBtn.classList.remove('hidden');
                 searchInput.value = '';
-                
+
                 allEventItems.forEach(item => {
-                    if (item.dataset.date === dateKey) {
-                        item.style.display = 'flex';
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    item.style.display = (item.dataset.date === dateKey) ? 'flex' : 'none';
                 });
             }
 
+            // ==============================
+            // Função: Restaura exibição de todos os eventos
+            // ==============================
             function showAllEvents() {
                 eventListTitle.textContent = 'Todos os Eventos';
                 showAllBtn.classList.add('hidden');
                 searchInput.value = '';
+
                 allEventItems.forEach(item => {
                     item.style.display = 'flex';
                 });
             }
 
+            // ==============================
+            // NAVEGAÇÃO ENTRE MESES
+            // ==============================
             prevMonthBtn.addEventListener('click', () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
                 renderCalendar();
@@ -153,32 +219,40 @@
                 renderCalendar();
             });
 
+            // ==============================
+            // CLIQUE EM UM DIA COM EVENTO
+            // ==============================
             calendarDaysGrid.addEventListener('click', (e) => {
                 if (e.target.classList.contains('has-event')) {
                     filterEventsByDate(e.target.dataset.date);
                 }
             });
 
+            // ==============================
+            // BOTÃO “MOSTRAR TODOS”
+            // ==============================
             showAllBtn.addEventListener('click', showAllEvents);
 
+            // ==============================
+            // FILTRO DE BUSCA POR TEXTO
+            // ==============================
             searchInput.addEventListener('keyup', function () {
                 const filter = searchInput.value.toLowerCase();
                 showAllBtn.classList.add('hidden');
-                eventListTitle.textContent = 'Resultados da Busca';
-                if (filter === '') {
-                    eventListTitle.textContent = 'Todos os Eventos';
-                }
+
+                eventListTitle.textContent = 
+                    filter === '' ? 'Todos os Eventos' : 'Resultados da Busca';
 
                 allEventItems.forEach(item => {
-                    const eventoText = item.querySelector('.calendario-evento').textContent.toLowerCase();
-                    if (eventoText.includes(filter)) {
-                        item.style.display = 'flex';
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    const eventoText = item
+                        .querySelector('.calendario-evento')
+                        .textContent.toLowerCase();
+
+                    item.style.display = eventoText.includes(filter) ? 'flex' : 'none';
                 });
             });
 
+            // --- Renderiza o mês inicial ---
             renderCalendar();
         });
     </script>

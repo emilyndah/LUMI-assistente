@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- ==============================
+         META E CONFIGURAÇÕES BÁSICAS
+    ================================== -->
     <meta charset="UTF-8">
     <title>Lumi – Assistente Acadêmica</title>
+
+    <!-- ==============================
+         IMPORTAÇÃO DE ESTILOS
+    ================================== -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- ==============================
+         CABEÇALHO E LOGO
+    ================================== -->
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
     </header>
 
+    <!-- ==============================
+         CONTEÚDO PRINCIPAL
+    ================================== -->
     <main>
+
+        <!-- ==============================
+             SEÇÃO DE FUNCIONALIDADES
+        ================================== -->
         <section class="funcoes">
             <h2>Funcionalidades</h2>
+
+            <!-- Funções disponíveis e desativadas -->
             <a href="#" class="func-item disabled">Recomendações de estudo</a>
             <a href="#" class="func-item disabled">Simulador de provas</a>
             <a href="{{ url_for('flashcards') }}" class="func-item">Flashcards</a>
@@ -26,11 +46,17 @@
             <a href="#" class="func-item disabled">Chat motivacional</a>
             <a href="{{ url_for('faq') }}" class="func-item">Dúvidas frequentes (FAQ)</a>
         </section>
-        
+
+        <!-- ==============================
+             SEÇÃO DE CHAT INTERATIVO
+        ================================== -->
         <section class="chat">
+            <!-- Botão para limpar o histórico -->
             <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">
                 Limpar Conversa
             </a>
+
+            <!-- Caixa de mensagens -->
             <div class="chat-box" id="chat-box">
                 {% if not historico %}
                     <div class="msg lumi">Olá! Sou a Lumi 💡. Como posso te ajudar hoje?</div>
@@ -41,37 +67,64 @@
                     {% endfor %}
                 {% endif %}
             </div>
+
+            <!-- Campo de envio de mensagem -->
             <form id="chat-form">
-                <input type="text" id="pergunta-input" name="pergunta" placeholder="Digite sua pergunta..." required autocomplete="off">
-                <button type="submit" id="submit-btn" aria-label="Enviar Pergunta">&#x27A4;</button>
+                <input 
+                    type="text" 
+                    id="pergunta-input" 
+                    name="pergunta" 
+                    placeholder="Digite sua pergunta..." 
+                    required 
+                    autocomplete="off"
+                >
+                <button 
+                    type="submit" 
+                    id="submit-btn" 
+                    aria-label="Enviar Pergunta"
+                >
+                    &#x27A4;
+                </button>
             </form>
         </section>
     </main>
 
+    <!-- ==============================
+         SCRIPT DE FUNCIONAMENTO DO CHAT
+    ================================== -->
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const chatBox = document.getElementById('chat-box');
-        function scrollToBottom() { chatBox.scrollTop = chatBox.scrollHeight; }
+
+        // Função para rolar automaticamente até o final da conversa
+        function scrollToBottom() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
         scrollToBottom();
 
         const chatForm = document.getElementById('chat-form');
         const userInput = document.getElementById('pergunta-input');
         const submitBtn = document.getElementById('submit-btn');
 
+        // Evento principal do envio da mensagem
         chatForm.addEventListener('submit', async function(event) {
             event.preventDefault();
+
             const userMessage = userInput.value.trim();
             if (userMessage === '') return;
 
+            // Exibir mensagem do usuário
             const userMsgDiv = document.createElement('div');
             userMsgDiv.className = 'msg user';
             userMsgDiv.textContent = userMessage;
             chatBox.appendChild(userMsgDiv);
 
+            // Desativar input enquanto a resposta é carregada
             userInput.value = '';
             userInput.disabled = true;
             submitBtn.disabled = true;
 
+            // Indicador de digitação da Lumi
             const typingIndicator = document.createElement('div');
             typingIndicator.className = 'msg lumi typing-indicator';
             typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
@@ -79,6 +132,7 @@
             scrollToBottom();
 
             try {
+                // Envia pergunta ao backend Flask
                 const response = await fetch('/ask', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -86,10 +140,11 @@
                 });
 
                 if (!response.ok) throw new Error('Erro na resposta do servidor.');
-                
-                const data = await response.json();
-                chatBox.removeChild(typingIndicator);
 
+                const data = await response.json();
+
+                // Remove indicador e mostra resposta da Lumi
+                chatBox.removeChild(typingIndicator);
                 const lumiMsgDiv = document.createElement('div');
                 lumiMsgDiv.className = 'msg lumi';
                 lumiMsgDiv.innerHTML = data.resposta.replace(/\n/g, '<br>');
@@ -99,22 +154,24 @@
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);
                 chatBox.removeChild(typingIndicator);
+
                 const errorMsgDiv = document.createElement('div');
                 errorMsgDiv.className = 'msg lumi';
                 errorMsgDiv.textContent = 'Desculpe, ocorreu um erro ao conectar.';
-                chatBox.appendChild(errorMsgGiv);
+                chatBox.appendChild(errorMsgDiv);
                 scrollToBottom();
+
             } finally {
+                // Reativa o campo de entrada
                 userInput.disabled = false;
                 submitBtn.disabled = false;
                 userInput.focus();
             }
         });
 
+        // Impede que links desativados funcionem
         document.querySelectorAll('a.func-item.disabled').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-            });
+            link.addEventListener('click', (e) => e.preventDefault());
         });
     });
     </script>

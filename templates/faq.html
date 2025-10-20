@@ -1,38 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- ==============================
+         META E CONFIGURAÇÕES BÁSICAS
+    ================================== -->
     <meta charset="UTF-8">
     <title>FAQ – Dúvidas Frequentes</title>
+
+    <!-- ==============================
+         IMPORTAÇÃO DE ESTILOS E FONTES
+    ================================== -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- ==============================
+         CABEÇALHO E LOGO
+    ================================== -->
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
     </header>
 
+    <!-- ==============================
+         CONTEÚDO PRINCIPAL – SEÇÃO FAQ
+    ================================== -->
     <main class="faq-page">
         <section class="faq-container">
             <h1>Dúvidas Frequentes (FAQ)</h1>
             <p>Encontre respostas rápidas para as perguntas mais comuns.</p>
 
+            <!-- Campo de busca -->
             <div class="search-wrapper">
                 <input type="text" id="faq-search" placeholder="Digite uma palavra-chave para filtrar...">
             </div>
 
+            <!-- Lista de perguntas e respostas -->
             <div class="faq-list">
                 {% for item in faq_data %}
                 <div class="faq-item">
+                    <!-- Botão da pergunta -->
                     <button class="faq-question">
                         <span>{{ item.pergunta }}</span>
                         <span class="faq-icon">+</span>
                     </button>
+
+                    <!-- Resposta correspondente -->
                     <div class="faq-answer">
                         <p>{{ item.resposta | safe | replace('\n', '<br>') }}</p>
                     </div>
                 </div>
+
                 {% else %}
                 <p class="empty-message">Nenhuma dúvida frequente foi encontrada.</p>
                 {% endfor %}
@@ -40,17 +60,25 @@
         </section>
     </main>
 
+    <!-- ==============================
+         SCRIPT – LÓGICA INTERATIVA DO FAQ
+    ================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const faqItems = document.querySelectorAll('.faq-item');
-            
+
+            // ==============================
+            // Função: Expande e recolhe respostas
+            // ==============================
             faqItems.forEach(item => {
                 const question = item.querySelector('.faq-question');
+                
                 question.addEventListener('click', () => {
                     const answer = item.querySelector('.faq-answer');
                     const icon = question.querySelector('.faq-icon');
                     const isActive = item.classList.contains('active');
 
+                    // Fecha qualquer outro item aberto
                     faqItems.forEach(otherItem => {
                         if (otherItem !== item) {
                             otherItem.classList.remove('active');
@@ -59,6 +87,7 @@
                         }
                     });
 
+                    // Abre ou fecha o item clicado
                     if (!isActive) {
                         item.classList.add('active');
                         answer.style.maxHeight = answer.scrollHeight + "px";
@@ -71,12 +100,18 @@
                 });
             });
 
+            // ==============================
+            // Função: Filtra perguntas pelo campo de busca
+            // ==============================
             const searchInput = document.getElementById('faq-search');
+            
             searchInput.addEventListener('keyup', function () {
                 const filter = searchInput.value.toLowerCase();
+
                 faqItems.forEach(item => {
                     const questionText = item.querySelector('.faq-question span').textContent.toLowerCase();
                     const answerText = item.querySelector('.faq-answer p').textContent.toLowerCase();
+
                     if (questionText.includes(filter) || answerText.includes(filter)) {
                         item.style.display = '';
                     } else {
