@@ -1,23 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- ==============================
+         META E CONFIGURAÇÕES BÁSICAS
+    ================================== -->
     <meta charset="UTF-8">
     <title>Flashcards de Estudo</title>
+
+    <!-- ==============================
+         IMPORTAÇÃO DE ESTILOS E FONTES
+    ================================== -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- ==============================
+         CABEÇALHO E LOGO
+    ================================== -->
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
     </header>
 
+    <!-- ==============================
+         CONTEÚDO PRINCIPAL (FLASHCARDS)
+    ================================== -->
     <main class="faq-page">
         <section class="faq-container">
+            
+            <!-- ==============================
+                 SEÇÃO DE SELEÇÃO DE DISCIPLINAS
+            ================================== -->
             <div id="subject-selection">
                 <h1>Flashcards de Estudo</h1>
                 <p>Escolha uma disciplina para começar a revisar.</p>
+
                 <div class="subject-list">
                     {% for subject in flashcard_data.keys() %}
                         <button class="subject-item" data-subject="{{ subject }}">{{ subject }}</button>
@@ -27,10 +46,14 @@
                 </div>
             </div>
 
+            <!-- ==============================
+                 SEÇÃO DO VISUALIZADOR DE FLASHCARDS
+            ================================== -->
             <div id="flashcard-viewer" class="hidden">
                 <button id="back-to-subjects" class="back-button">&larr; Voltar</button>
                 <h2 id="viewer-title"></h2>
                 
+                <!-- Cartão -->
                 <div class="flashcard-container">
                     <div class="flashcard" id="flashcard">
                         <div class="card-face card-front" id="card-question"></div>
@@ -38,6 +61,7 @@
                     </div>
                 </div>
 
+                <!-- Navegação entre cartões -->
                 <div class="flashcard-nav">
                     <button id="prev-card-btn">&larr;</button>
                     <span id="card-counter"></span>
@@ -47,17 +71,25 @@
         </section>
     </main>
 
+    <!-- ==============================
+         SCRIPT – DADOS DOS FLASHCARDS
+    ================================== -->
     <script>
         const flashcardData = {{ flashcard_data | tojson }};
     </script>
-    
+
+    <!-- ==============================
+         SCRIPT – LÓGICA DE FUNCIONAMENTO
+    ================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Seletores principais
             const subjectSelectionDiv = document.getElementById('subject-selection');
             const flashcardViewerDiv = document.getElementById('flashcard-viewer');
             const subjectButtons = document.querySelectorAll('.subject-item');
             const backToSubjectsBtn = document.getElementById('back-to-subjects');
             
+            // Elementos do flashcard
             const viewerTitle = document.getElementById('viewer-title');
             const flashcard = document.getElementById('flashcard');
             const cardQuestion = document.getElementById('card-question');
@@ -66,10 +98,14 @@
             const nextCardBtn = document.getElementById('next-card-btn');
             const cardCounter = document.getElementById('card-counter');
 
+            // Variáveis de controle
             let currentSubject = '';
             let currentCards = [];
             let currentIndex = 0;
 
+            // ==============================
+            // Função: Mostra o cartão atual
+            // ==============================
             function showCard(index) {
                 flashcard.classList.remove('is-flipped');
                 setTimeout(() => {
@@ -78,9 +114,12 @@
                         cardAnswer.textContent = currentCards[index].resposta;
                         cardCounter.textContent = `${index + 1} / ${currentCards.length}`;
                     }
-                }, 150); 
+                }, 150);
             }
 
+            // ==============================
+            // Evento: Selecionar disciplina
+            // ==============================
             subjectButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     currentSubject = button.dataset.subject;
@@ -100,15 +139,24 @@
                 });
             });
 
+            // ==============================
+            // Evento: Voltar à lista de disciplinas
+            // ==============================
             backToSubjectsBtn.addEventListener('click', () => {
                 subjectSelectionDiv.classList.remove('hidden');
                 flashcardViewerDiv.classList.add('hidden');
             });
 
+            // ==============================
+            // Evento: Virar o cartão
+            // ==============================
             flashcard.addEventListener('click', () => {
                 flashcard.classList.toggle('is-flipped');
             });
 
+            // ==============================
+            // Evento: Navegar para o cartão anterior
+            // ==============================
             prevCardBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
@@ -116,6 +164,9 @@
                 }
             });
 
+            // ==============================
+            // Evento: Navegar para o próximo cartão
+            // ==============================
             nextCardBtn.addEventListener('click', () => {
                 if (currentIndex < currentCards.length - 1) {
                     currentIndex++;

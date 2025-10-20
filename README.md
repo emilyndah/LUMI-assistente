@@ -88,7 +88,7 @@ Agradecimento especial aos professores orientadores:
 
 - [@EmilyRodrigues](https://github.com/EmilyRodrigues) 
 - [@FrancielleGoncalves](https://github.com/Francielle84)  
-- [JordanVidal]
+- JordanVidal
 - [@JoaoPedroCarlos](https://github.com/joaopcds77-max) 
 - [@LaviniaCarvalhaes](https://github.com/Laviniacarvalhaes)  
 - [@RafaelOliveira](https://github.com/rafaeloliveiraa2902)  
