@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Método de Estudo - Lumi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header-metodo">
+      <h1>Método de Estudo Personalizado</h1>
+      <p>Responda às perguntas e descubra seu estilo de aprendizagem 🎯</p>
+    </header>
+
+
+    <main class="metodo-container">
+        <!-- FORMULÁRIO DO QUESTIONÁRIO -->
+        <form id="quizForm" method="POST" {% if resultado %}style="display:none;"{% endif %}>
+            {% for i in range(perguntas|length) %}
+            <div class="pergunta" id="pergunta{{ i }}" {% if i != 0 %}style="display:none;"{% endif %}>
+                <p><strong>{{ i+1 }}.</strong> {{ perguntas[i]['texto'] }}</p>
+                <label><input type="radio" name="q{{ i+1 }}" value="visual" required> {{ perguntas[i]['a'] }}</label><br>
+                <label><input type="radio" name="q{{ i+1 }}" value="auditivo"> {{ perguntas[i]['b'] }}</label><br>
+                <label><input type="radio" name="q{{ i+1 }}" value="pratico"> {{ perguntas[i]['c'] }}</label>
+            </div>
+            {% endfor %}
+            <div id="finalizacao" style="display:none;">
+                <button type="submit">Ver Resultado</button>
+            </div>
+        </form>
+
+        <!-- RESULTADO FINAL -->
+        {% if resultado %}
+        <section class="resultado">
+            <h2>🎯 Seu Resultado</h2>
+            <canvas id="graficoEstilos" width="300" height="300"></canvas>
+
+            <h3>Principal: {{ resultado['principal']|capitalize }}</h3>
+            <h4>Secundário: {{ resultado['secundario']|capitalize }}</h4>
+
+            <h4>💡 Recomendações Principais</h4>
+            <ul>
+                {% for r in resultado['recomendacoes_principal'] %}
+                <li>{{ r }}</li>
+                {% endfor %}
+            </ul>
+
+            <h4>✨ Recomendações Secundárias</h4>
+            <ul>
+                {% for r in resultado['recomendacoes_secundario'] %}
+                <li>{{ r }}</li>
+                {% endfor %}
+            </ul>
+
+            <!-- GRÁFICO -->
+            <script>
+            const ctx = document.getElementById('graficoEstilos');
+            new Chart(ctx, {
+              type: 'doughnut', // 🍩 formato mais limpo
+              data: {
+                labels: ['Visual', 'Auditivo', 'Prático'],
+                datasets: [{
+                  data: [{{ resultado['visual'] }}, {{ resultado['auditivo'] }}, {{ resultado['pratico'] }}],
+                  backgroundColor: ['#4B6FFF', '#8A7CFF', '#57D9A3'],
+                  borderWidth: 2,
+                  borderColor: '#fff',
+                  hoverOffset: 12,
+                }]
+              },
+              options: {
+                cutout: '70%',
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: {
+                      color: '#444',
+                      font: { size: 14, family: 'Poppins' },
+                      usePointStyle: true,
+                      pointStyle: 'circle'
+                    }
+                  },
+                  title: {
+                    display: true,
+                    text: 'Distribuição dos Estilos de Aprendizagem',
+                    color: '#4B6FFF',
+                    font: { size: 18, family: 'Poppins', weight: 'bold' },
+                    padding: { top: 20, bottom: 10 }
+                  }
+                }
+              }
+            });
+            </script>
+        </section>
+        {% endif %}
+    </main>
+
+    <!-- SCRIPT PARA MOSTRAR UMA PERGUNTA POR VEZ -->
+    <script>
+        const perguntas = document.querySelectorAll('.pergunta');
+        perguntas.forEach((p, index) => {
+            const inputs = p.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    p.style.display = 'none';
+                    if (index + 1 < perguntas.length) {
+                        perguntas[index + 1].style.display = 'block';
+                    } else {
+                        document.getElementById('finalizacao').style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
