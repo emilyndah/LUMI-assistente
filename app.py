@@ -158,6 +158,131 @@ def flashcards():
     return render_template('flashcards.html', flashcard_data=flashcard_data)
 
 # =======================================================
+# 4.5 MÉTODO DE ESTUDO PERSONALIZADO
+# =======================================================
+
+@app.route('/metodo_estudo', methods=['GET', 'POST'])
+def metodo_estudo():
+    """
+    Página que exibe o questionário de estilo de aprendizagem e gera
+    recomendações personalizadas com base nas respostas.
+    """
+
+    # --- 15 perguntas base ---
+    perguntas = [
+        {"texto": "Quando aprende algo novo, você:",
+         "a": "Gosta de ver exemplos visuais ou gráficos.",
+         "b": "Prefere ouvir alguém explicar o assunto.",
+         "c": "Aprende fazendo por conta própria."},
+        {"texto": "Ao estudar para uma prova, você prefere:",
+         "a": "Usar cores e fazer resumos visuais.",
+         "b": "Explicar o conteúdo em voz alta.",
+         "c": "Resolver exercícios e simulados."},
+        {"texto": "Em uma aula, o que mais chama sua atenção?",
+         "a": "Slides e imagens.",
+         "b": "A explicação do professor.",
+         "c": "As atividades práticas."},
+        {"texto": "Quando tenta lembrar algo, você:",
+         "a": "Visualiza a imagem do conteúdo.",
+         "b": "Lembra das palavras ditas.",
+         "c": "Recorda o que fez para aprender."},
+        {"texto": "Em grupo, você prefere:",
+         "a": "Criar os slides e resumos.",
+         "b": "Falar e liderar discussões.",
+         "c": "Cuidar das demonstrações práticas."},
+        {"texto": "Você entende melhor um conteúdo quando:",
+         "a": "Tem imagens ou esquemas.",
+         "b": "Alguém explica em voz alta.",
+         "c": "Pode testar na prática."},
+        {"texto": "O que mais te ajuda a manter o foco?",
+         "a": "Ver o ambiente limpo e organizado.",
+         "b": "Ouvir música suave ou silêncio total.",
+         "c": "Fazer pausas para se movimentar."},
+        {"texto": "Quando lê algo complexo, você:",
+         "a": "Faz anotações e resumos visuais.",
+         "b": "Lê em voz alta.",
+         "c": "Procura aplicar o que aprendeu."},
+        {"texto": "Você aprende mais facilmente com:",
+         "a": "Infográficos e vídeos.",
+         "b": "Aulas narradas.",
+         "c": "Exercícios práticos."},
+        {"texto": "Durante uma apresentação, você:",
+         "a": "Observa o design dos slides.",
+         "b": "Foca no discurso.",
+         "c": "Gosta de interagir e demonstrar."},
+        {"texto": "Quando alguém te ensina algo, você entende melhor se:",
+         "a": "Ver o que está sendo feito.",
+         "b": "Ouvir explicações passo a passo.",
+         "c": "Fizer junto."},
+        {"texto": "Em provas, você se lembra melhor quando:",
+         "a": "Vê o conteúdo mentalmente.",
+         "b": "Recorda o que ouviu o professor dizer.",
+         "c": "Lembra da atividade prática."},
+        {"texto": "O que mais te incomoda ao aprender?",
+         "a": "Explicações sem imagens.",
+         "b": "Ficar muito tempo lendo em silêncio.",
+         "c": "Ficar parado só ouvindo."},
+        {"texto": "Você se sente mais produtivo quando:",
+         "a": "Usa listas, cores e gráficos.",
+         "b": "Conversa e explica o conteúdo.",
+         "c": "Faz algo com as mãos enquanto aprende."},
+        {"texto": "Ao revisar, você prefere:",
+         "a": "Reler e reorganizar visualmente.",
+         "b": "Ouvir áudios ou podcasts.",
+         "c": "Refazer exercícios e simulações."}
+    ]
+
+    # --- Quando o usuário envia as respostas ---
+    if request.method == 'POST':
+        contagem = {"visual": 0, "auditivo": 0, "pratico": 0}
+        for i in range(1, len(perguntas) + 1):
+            escolha = request.form.get(f'q{i}')
+            if escolha:
+                contagem[escolha] += 1
+
+        # Ordena estilos por pontuação
+        ordenados = sorted(contagem.items(), key=lambda x: x[1], reverse=True)
+        principal, secundario = ordenados[0][0], ordenados[1][0]
+
+        # --- Recomendações personalizadas ---
+        recomendacoes = {
+            "visual": [
+                "Use mapas mentais e resumos com cores.",
+                "Veja vídeos e diagramas explicativos.",
+                "Use flashcards visuais e post-its coloridos."
+            ],
+            "auditivo": [
+                "Explique o conteúdo em voz alta.",
+                "Ouça podcasts e áudios educativos.",
+                "Participe de discussões e grupos de estudo."
+            ],
+            "pratico": [
+                "Faça exercícios e experimentos.",
+                "Simule provas e aplique o conteúdo.",
+                "Estude com exemplos reais e projetos."
+            ]
+        }
+
+        resultado = {
+            "visual": contagem["visual"],
+            "auditivo": contagem["auditivo"],
+            "pratico": contagem["pratico"],
+            "principal": principal,
+            "secundario": secundario,
+            "recomendacoes_principal": recomendacoes[principal],
+            "recomendacoes_secundario": recomendacoes[secundario]
+        }
+
+        return render_template(
+            'metodo_estudo.html',
+            perguntas=perguntas,
+            resultado=resultado
+        )
+
+    # --- Primeira visita (GET) ---
+    return render_template('metodo_estudo.html', perguntas=perguntas, resultado=None)
+
+# =======================================================
 # 5. EXECUÇÃO DO SERVIDOR FLASK
 # =======================================================
 if __name__ == '__main__':
