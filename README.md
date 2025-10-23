@@ -1,96 +1,86 @@
+# 🌟 Lumi – Assistente Acadêmica Inteligente
 
-## 🧭 Índice
+## 🧾 Descrição Geral
+A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto universitário para apoiar estudantes em suas rotinas acadêmicas. A plataforma combina automação de respostas, recursos de organização pessoal e materiais de apoio interativos, permitindo que discentes encontrem informações institucionais, consultem um calendário acadêmico dinâmico e obtenham recomendações de estudo personalizadas em um único ambiente web.
 
-- [📝 Descrição do Projeto](#-descrição-do-projeto)
-- [🚧 Status do Projeto](#-status-do-projeto)
-- [✨ Funcionalidades Principais](#-funcionalidades-Principais)
-- [🔗 Acesso ao Projeto](#-acesso-ao-projeto)
-- [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
-- [🤝 Pessoas Contribuidoras](#-pessoas-contribuidoras)
-- [👩‍💻 Pessoas Desenvolvedoras](#-pessoas-desenvolvedoras)
+## 🤖 Funcionalidades Principais
+- **Chat inteligente com IA local (Ollama)** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
+- **Calendário acadêmico interativo** com ordenação automática de eventos e descrição detalhada de atividades.
+- **FAQ dinâmico** alimentado por arquivo JSON para garantir facilidade de manutenção das perguntas frequentes.
+- **Flashcards personalizáveis** para revisão rápida de conteúdos e disciplinas.
+- **Questionário de estilo de aprendizagem** que sugere métodos de estudo individualizados com base nas respostas do estudante.
+- **Integração completa com Flask** para gerenciamento de rotas, sessões e comunicação com o modelo de linguagem.
 
----
-
-## 📝 Descrição do Projeto
-
-A **Lumi** é uma assistente acadêmica inteligente criada para facilitar a rotina dos estudantes.  
-Ela responde perguntas sobre a vida universitária, ajuda a organizar estudos e entrega respostas em tempo real por meio de uma **IA local (Ollama)** integrada ao **Flask**.
-
-Essa é a **primeira versão funcional** do projeto desenvolvido na disciplina de **Inteligência Artificial – UniEVANGÉLICA (2025/2)**.
-
----
-
-## 🚧 Status do Projeto
-
-✅ **Em desenvolvimento funcional**  
-🧠 Interface rodando no navegador via Flask  
-🤖 Integração com IA local (Ollama) já configurada  
-🎯 Próximo passo: melhorar a interface e adicionar funcionalidades
-
----
-
-## ✨ Funcionalidades Principais
-
-- Recebe e responde perguntas.  
-- IA local via **Ollama** (respostas dinâmicas).  
-- Interface simples feita em **HTML + Flask**.  
-- Integração total entre **frontend e backend**.  
-- (FAQ), flashcards e calendário acadêmico já executavel
-
----
-
-## 🔗 Acesso ao Projeto
-
-Para executar a **Lumi** localmente, siga os passos abaixo:
-
-**1. Clone o repositório:**  
-`git clone https://github.com/seu-usuario/lumi-assistente.git`
-
-**2. Entre na pasta do projeto:**  
-`cd lumi-assistente`
-
-**3. Instale as dependências:**  
-`pip install flask requests`
-
-**4. Execute o servidor Flask:**  
-`python app.py`
-
-**5. Abra no navegador:**  
-👉 [http://127.0.0.1:5000](http://127.0.0.1:5000)
-
-Pronto! A assistente Lumi já estará rodando no seu navegador. 🚀
+## 🗂️ Estrutura do Projeto
+```text
+LUMI-assistente/
+├── app.py                # Aplicação Flask com rotas, integração com IA e regras de negócio
+├── requirements.txt      # Lista de dependências Python necessárias para execução
+├── calendario.txt        # Fonte textual dos eventos exibidos no calendário acadêmico
+├── faq.json              # Perguntas frequentes consumidas pela rota /faq
+├── flashcards.json       # Conteúdos utilizados na página de flashcards
+├── informacoes.txt       # Materiais complementares e anotações do projeto
+├── static/
+│   ├── style.css         # Estilos visuais da interface web
+│   └── lumi_logo.jpg     # Identidade visual utilizada no frontend
+└── templates/
+    ├── index.html        # Página principal com o chat da assistente Lumi
+    ├── calendario.html   # Visualização do calendário acadêmico
+    ├── faq.html          # Página de perguntas frequentes
+    ├── flashcards.html   # Lista de flashcards interativos
+    └── metodo_estudo.html# Questionário para recomendações personalizadas de estudo
+```
 
 ## 🛠️ Tecnologias Utilizadas
+- **Python 3.12** – linguagem principal do backend.
+- **Flask** – framework web para roteamento, templates e sessões.
+- **HTML5 & CSS3** – estrutura e estilo das páginas.
+- **JavaScript** – interação assíncrona no chat e demais componentes.
+- **Ollama** – plataforma local para execução do modelo de linguagem utilizado pela assistente.
+- **Jinja2** – engine de templates empregada pelo Flask.
 
-- **Python 3.12** → lógica principal e integração com IA  
-- **Flask** → framework web para o backend  
-- **HTML & CSS** → interface e layout  
-- **Ollama API** → modelo de linguagem local  
-- **VS Code / PyCharm** → ambientes de desenvolvimento  
-- **Trello (Kanban)** → organização das tarefas  
-- **GitHub** → versionamento e portfólio  
+## 🚀 Como Executar o Projeto Localmente
+1. **Clone o repositório e acesse a pasta:**
+   ```bash
+   git clone https://github.com/<usuario>/LUMI-assistente.git
+   cd LUMI-assistente
+   ```
+2. **(Opcional) Crie e ative um ambiente virtual:**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # Linux/macOS
+   .venv\Scripts\activate    # Windows PowerShell
+   ```
+3. **Instale as dependências:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Certifique-se de que o serviço Ollama esteja em execução** e que o modelo configurado em `app.py` esteja disponível localmente.
+5. **Inicie o servidor Flask:**
+   ```bash
+   python app.py
+   ```
+6. **Acesse a aplicação no navegador:**
+   - URL padrão: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+## 📈 Próximos Passos e Melhorias Futuras
+- Aperfeiçoar o modelo de IA com técnicas avançadas de NLP e contextualização acadêmica.
+- Integrar um banco de dados relacional para persistência de histórico de conversas, eventos e usuários.
+- Disponibilizar painel administrativo para edição de FAQs, flashcards e calendário diretamente pela web.
+- Desenvolver uma interface responsiva aprimorada com componentes modernos e acessíveis.
+- Implementar autenticação de usuários e personalização de experiências baseadas no perfil acadêmico.
+
+## 👥 Autores e Créditos
+- **Coordenador(a) / Orientador(a):** _Nome do(a) professor(a) responsável_
+- **Equipe de Desenvolvimento:**
+  - _Nome 1_ – função / responsabilidade
+  - _Nome 2_ – função / responsabilidade
+  - _Nome 3_ – função / responsabilidade
+
+Sinta-se à vontade para adicionar ou atualizar os nomes conforme a composição da equipe.
+
+## 📄 Licença
+Este projeto é distribuído sob a **Licença MIT**. Consulte o arquivo `LICENSE` (ou inclua-o) para obter o texto completo e detalhes sobre permissões, limitações e condições.
 
 ---
-
-## 🤝 Pessoas Contribuidoras
-
-Agradecimento especial aos professores orientadores:
-
-- Henrique Valle  
-- Eder José  
-- Fábio Botelho  
-- Jeferson Silva  
-
----
-
-## 👩‍💻 Pessoas Desenvolvedoras
-
-
-- [@EmilyRodrigues](https://github.com/EmilyRodrigues) 
-- [@FrancielleGoncalves](https://github.com/Francielle84)  
-- JordanVidal
-- [@JoaoPedroCarlos](https://github.com/joaopcds77-max) 
-- [@LaviniaCarvalhaes](https://github.com/Laviniacarvalhaes)  
-- [@RafaelOliveira](https://github.com/rafaeloliveiraa2902)  
-- [@SamuellFaleiro](https://github.com/Samukreuviski) 
-
+Projeto desenvolvido no contexto acadêmico, promovendo aprendizagem colaborativa e aplicação prática de tecnologias emergentes.
