@@ -32,10 +32,9 @@ LUMI-assistente/
 ```
 
 ## 🛠️ Tecnologias Utilizadas
-- **Python 3.12** – linguagem principal do backend.
+- **Python** – linguagem principal do backend.
 - **Flask** – framework web para roteamento, templates e sessões.
-- **HTML5 & CSS3** – estrutura e estilo das páginas.
-- **JavaScript** – interação assíncrona no chat e demais componentes.
+- **HTML5 & CSS** – estrutura e estilo das páginas.
 - **Ollama** – plataforma local para execução do modelo de linguagem utilizado pela assistente.
 - **Jinja2** – engine de templates empregada pelo Flask.
 
@@ -70,17 +69,30 @@ LUMI-assistente/
 - Desenvolver uma interface responsiva aprimorada com componentes modernos e acessíveis.
 - Implementar autenticação de usuários e personalização de experiências baseadas no perfil acadêmico.
 
-## 👥 Autores e Créditos
-- **Coordenador(a) / Orientador(a):** _Nome do(a) professor(a) responsável_
-- **Equipe de Desenvolvimento:**
-  - _Nome 1_ – função / responsabilidade
-  - _Nome 2_ – função / responsabilidade
-  - _Nome 3_ – função / responsabilidade
+## **👥 Orientadores**
 
-Sinta-se à vontade para adicionar ou atualizar os nomes conforme a composição da equipe.
+  - Henrique Lima
+  - Eder José
+  - Fábio Botelho 
+  - Jeferson Silva
 
-## 📄 Licença
-Este projeto é distribuído sob a **Licença MIT**. Consulte o arquivo `LICENSE` (ou inclua-o) para obter o texto completo e detalhes sobre permissões, limitações e condições.
+### 👥 **Pessoas Desenvolvedoras**
 
----
-Projeto desenvolvido no contexto acadêmico, promovendo aprendizagem colaborativa e aplicação prática de tecnologias emergentes.
+Agradecimento especial a todos que contribuíram para o desenvolvimento do projeto **Lumi – Assistente Acadêmica Inteligente** 💡  
+
+- [@EmilyRodrigues](https://github.com/EmilyRodrigues)  
+- [@FrancielleGoncalves](https://github.com/Francielle84)  
+- [@JordanVidal](https://github.com/JordanVidal)  
+- [@JoaoPedroCarlos](https://github.com/joaopcds77-max)  
+- [@Laviniacarvalhaes](https://github.com/Laviniacarvalhaes)  
+- [@RafaelOliveira](https://github.com/rafaeloliveira2902)  
+- [@Samuelfaleiro](https://github.com/Samukreuvski)
+
+  ---
+
+> 🧩 Projeto desenvolvido no contexto acadêmico, promovendo aprendizado colaborativo e aplicação prática de tecnologias emergentes.
+
+
+
+
+
