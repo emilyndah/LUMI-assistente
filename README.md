@@ -80,13 +80,13 @@ LUMI-assistente/
 
 Agradecimento especial a todos que contribuíram para o desenvolvimento do projeto **Lumi – Assistente Acadêmica Inteligente** 💡  
 
-- [@EmilyRodrigues](https://github.com/EmilyRodrigues)  
+- [@EmilyRodrigues](https://github.com/emilyndah)  
 - [@FrancielleGoncalves](https://github.com/Francielle84)  
 - [@JordanVidal](https://github.com/JordanVidal)  
 - [@JoaoPedroCarlos](https://github.com/joaopcds77-max)  
 - [@Laviniacarvalhaes](https://github.com/Laviniacarvalhaes)  
 - [@RafaelOliveira](https://github.com/rafaeloliveira2902)  
-- [@Samuelfaleiro](https://github.com/Samukreuvski)
+- [@Samuelfaleiro](https://github.com/Samukreuviski)
 
   ---
 
