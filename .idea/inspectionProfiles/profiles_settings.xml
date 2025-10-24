@@ -3,14 +3,11 @@
      DESCRIÇÃO: Este arquivo faz parte das configurações do IntelliJ IDEA.
      FUNÇÃO: Define se o projeto usa um perfil próprio de inspeção de código
               (verificação de erros, avisos e boas práticas).
-     DICA: Se "USE_PROJECT_PROFILE" estiver como "false", o IntelliJ usa
-           as regras globais do usuário. Se estiver "true", usa regras
-           específicas deste projeto.
      ========================================================== -->
 
-<component name="InspectionProjectProfileManager">
-  <settings>
-    <option name="USE_PROJECT_PROFILE" value="false" />
-    <version value="1.0" />
-  </settings>
-</component>
+<component name="InspectionProjectProfileManager"> <!-- Gerencia as configurações de inspeção de código do projeto -->
+  <settings> <!-- Início do bloco de configurações -->
+    <option name="USE_PROJECT_PROFILE" value="false" /> <!-- Define se o projeto usa um perfil próprio de inspeção (false = usa o perfil global do IDE) -->
+    <version value="1.0" /> <!-- Versão do formato de configuração -->
+  </settings> <!-- Fim do bloco de configurações -->
+</component> <!-- Encerra o componente de gerenciamento de inspeções -->
