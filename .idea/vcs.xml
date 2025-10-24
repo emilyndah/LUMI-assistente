@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
-  </component>
-</project>
+<?xml version="1.0" encoding="UTF-8"?> <!-- Indica que este arquivo segue o formato XML e usa a codificação de caracteres UTF-8 -->
+<project version="4"> <!-- Início do bloco de configuração do projeto, na versão de esquema número 4 -->
+  <component name="VcsDirectoryMappings"> <!-- Define ajustes específicos para mapeamentos de controle de versão -->
+    <mapping directory="$PROJECT_DIR$" vcs="Git" /> <!-- Diz que a pasta principal do projeto ($PROJECT_DIR$) está ligada ao sistema de controle de versão Git -->
+  </component> <!-- Fim das configurações de mapeamento de controle de versão -->
+</project> <!-- Encerra todo o bloco de configuração do projeto -->
