@@ -64,25 +64,29 @@ Observações: Arquivo gerado automaticamente pela IDE; evite editar manualmente
     <option name="hideEmptyMiddlePackages" value="true" /> <!-- Oculta pacotes intermediários vazios na visualização -->
     <option name="showLibraryContents" value="true" /> <!-- Mostra o conteúdo de bibliotecas diretamente na visão do projeto -->
   </component> <!-- Fecha o componente ProjectViewState -->
-  <component name="PropertiesComponent"><![CDATA[{ <!-- Abre o componente PropertiesComponent com dados em CDATA -->
+  
+<!-- Dentro do CDATA há dados em formato JSON com preferências do usuário. -->
+<!-- Por exemplo: o Python padrão de execução é 'Run' e o teste 'teste_api' também usa Run. -->
+<!-- Abre o componente PropertiesComponent com dados em CDATA -->
+  <component name="PropertiesComponent"><![CDATA[{ 
   "keyToString": { <!-- Começa o bloco JSON que guarda pares de chave e texto -->
-    "DefaultHtmlFileTemplate": "HTML File", <!-- Define o modelo padrão para novos arquivos HTML -->
-    "ModuleVcsDetector.initialDetectionPerformed": "true", <!-- Marca que a detecção inicial de controle de versão já foi feita -->
-    "Python.app.executor": "Run", <!-- Diz que a execução padrão para o app Python é Run -->
-    "Python.teste_api.executor": "Run", <!-- Diz que o teste chamado teste_api também roda com Run -->
-    "RunOnceActivity.ShowReadmeOnStart": "true", <!-- Mostra que a atividade de abrir o readme na primeira vez já ocorreu -->
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true", <!-- Indica que as abas do terminal foram copiadas de outra configuração -->
-    "RunOnceActivity.git.unshallow": "true", <!-- Registra que o comando git unshallow já foi executado uma vez -->
-    "git-widget-placeholder": "main", <!-- Define que o texto mostrado no widget do Git é main -->
-    "list.type.of.created.stylesheet": "CSS", <!-- Guarda que o tipo de folha de estilo criado foi CSS -->
-    "node.js.detected.package.eslint": "true", <!-- Diz que o pacote eslint foi detectado automaticamente -->
-    "node.js.detected.package.tslint": "true", <!-- Diz que o pacote tslint também foi detectado -->
-    "node.js.selected.package.eslint": "(autodetect)", <!-- Informa que o pacote eslint selecionado é autodetectado -->
-    "node.js.selected.package.tslint": "(autodetect)", <!-- Informa que o pacote tslint selecionado é autodetectado -->
-    "nodejs_package_manager_path": "npm", <!-- Define que o gerenciador de pacotes Node.js usado é o npm -->
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable", <!-- Indica qual tela de configuração Python estava aberta -->
-    "vue.rearranger.settings.migration": "true" <!-- Marca que as configurações do rearranjo do Vue já foram migradas -->
-  } <!-- Fecha o objeto keyToString -->
+    "DefaultHtmlFileTemplate": "HTML File",
+    "ModuleVcsDetector.initialDetectionPerformed": "true", 
+    "Python.app.executor": "Run", 
+    "Python.teste_api.executor": "Run", 
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true", 
+    "RunOnceActivity.git.unshallow": "true", 
+    "git-widget-placeholder": "main", 
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true", 
+    "node.js.detected.package.tslint": "true", 
+    "node.js.selected.package.eslint": "(autodetect)", 
+    "node.js.selected.package.tslint": "(autodetect)", 
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable", 
+    "vue.rearranger.settings.migration": "true" 
+  } 
 }]]></component> <!-- Fecha o CDATA e o componente PropertiesComponent -->
   <component name="SharedIndexes"> <!-- Abre o componente SharedIndexes -->
     <attachedChunks> <!-- Abre a lista de pacotes de índice anexados -->
