@@ -4,8 +4,6 @@
      FUNÇÃO: Define qual interpretador Python (SDK) o projeto e o plugin Black usam.
      ========================================================== -->
 
-
-
 <?xml version="1.0" encoding="UTF-8"?> <!-- Informa que é um arquivo XML e usa codificação UTF-8 -->
 <project version="4">      <!-- Marca o início da configuração geral do projeto -->
   <component name="Black">  <!-- Define as configurações do plugin Black (formatador de código Python) -->

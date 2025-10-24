@@ -1,3 +1,11 @@
+<!-- ==========================================================
+     DESCRIÇÃO: Arquivo de configuração do controle de versão
+                 do projeto no IntelliJ IDEA / PyCharm.
+     FUNÇÃO: Define qual sistema de versionamento está ligado
+              ao projeto e em qual diretório ele atua.
+     ========================================================== -->
+
+
 <?xml version="1.0" encoding="UTF-8"?> <!-- Indica que este arquivo segue o formato XML e usa a codificação de caracteres UTF-8 -->
 <project version="4"> <!-- Início do bloco de configuração do projeto, na versão de esquema número 4 -->
   <component name="VcsDirectoryMappings"> <!-- Define ajustes específicos para mapeamentos de controle de versão -->

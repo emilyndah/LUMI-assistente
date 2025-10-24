@@ -1,8 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/LUMIassistente.iml" filepath="$PROJECT_DIR$/.idea/LUMIassistente.iml" />
-    </modules>
-  </component>
-</project>
+<!-- ==========================================================
+     DESCRIÇÃO: Define os módulos que compõem o projeto no
+                 IntelliJ IDEA / PyCharm.
+     FUNÇÃO: Indica quais arquivos .iml estão associados ao
+              projeto e seus respectivos caminhos.
+     ========================================================== -->
+
+<?xml version="1.0" encoding="UTF-8"?> <!-- Informa que este arquivo segue o formato XML e usa codificação UTF-8 -->
+<project version="4"> <!-- Início do bloco principal do projeto, usando a versão 4 do esquema XML -->
+  <component name="ProjectModuleManager"> <!-- Define o componente responsável por gerenciar os módulos do projeto -->
+    <modules>  <!-- Início da lista de módulos do projeto -->
+      <module fileurl="file://$PROJECT_DIR$/.idea/LUMIassistente.iml" filepath="$PROJECT_DIR$/.idea/LUMIassistente.iml" /> <!-- Caminho e URL do arquivo de módulo (.iml) e caminho físico no disco para o arquivo .iml -->
+    </modules> <!-- Fim da lista de módulos -->
+  </component>  <!-- Encerra o componente de gerenciamento de módulos -->
+</project>   <!-- Fim do bloco principal de configuração do projeto -->
