@@ -1,124 +1,130 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
-  <component name="ChangeListManager">
-    <list default="true" id="3e8c760b-4b7e-4029-85bf-7134a5164ae8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/LUMIassistente.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/LUMIassistente.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-    </list>
-    <option name="SHOW_DIALOG" value="false" />
-    <option name="HIGHLIGHT_CONFLICTS" value="true" />
-    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
-    <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-        <option value="HTML File" />
-        <option value="CSS File" />
-      </list>
-    </option>
-  </component>
-  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
-    <envs>
-      <env key="FLASK_APP" value="app" />
-    </envs>
-    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
-    <option name="myEnvs">
-      <map>
-        <entry key="FLASK_APP" value="app" />
-      </map>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Samukreuviski&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/emilyndah/LUMI-assistente.git&quot;,
-    &quot;accountId&quot;: &quot;cddb2895-2ecf-4cd9-8c93-a0a2efd5102c&quot;
-  }
-}</component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
-}</component>
-  <component name="ProjectId" id="33tF5lXvEZ1JIy5K19MZ6V0UF5V" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.app.executor": "Run",
-    "Python.teste_api.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
-  }
-}]]></component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.26830.99" />
-        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" />
-      </set>
-    </attachedChunks>
-  </component>
-  <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="3e8c760b-4b7e-4029-85bf-7134a5164ae8" name="Changes" comment="" />
-      <created>1760128283998</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1760128283998</updated>
-      <workItem from="1760128285097" duration="12819000" />
-      <workItem from="1760291213387" duration="719000" />
-      <workItem from="1760384051126" duration="3861000" />
-      <workItem from="1760388421323" duration="5077000" />
-      <workItem from="1760397242557" duration="666000" />
-      <workItem from="1760397939309" duration="2388000" />
-    </task>
-    <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/LUMIassistente$teste_api.coverage" NAME="teste_api Coverage Results" MODIFIED="1760203648700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/LUMI_assistente$app.coverage" NAME="app Coverage Results" MODIFIED="1760399723306" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-  </component>
-</project>
+<!--
+Arquivo: workspace.xml
+Resumo: Guarda configurações e históricos usados pela IDE para este projeto.
+Função no projeto Python: Mantém preferências do PyCharm que ajudam a rodar e depurar o app Flask.
+Observações: Arquivo gerado automaticamente pela IDE; evite editar manualmente para não corromper as configurações.
+-->
+<?xml version="1.0" encoding="UTF-8"?> <!-- Declara que o arquivo está em formato XML com texto em UTF-8 -->
+<project version="4"> <!-- Abre o projeto salvo pela IDE e diz que está na versão 4 do formato -->
+  <component name="AutoImportSettings"> <!-- Começa um bloco de configurações chamado AutoImportSettings -->
+    <option name="autoReloadType" value="SELECTIVE" /> <!-- Define que os imports automáticos só recarregam arquivos ligados ao que mudou -->
+  </component> <!-- Fecha o bloco AutoImportSettings -->
+  <component name="ChangeListManager"> <!-- Inicia o bloco que registra listas de alterações controladas pela IDE -->
+    <list default="true" id="3e8c760b-4b7e-4029-85bf-7134a5164ae8" name="Changes" comment=""> <!-- Define a lista padrão de mudanças, com identificador e nome dados pela IDE -->
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" /> <!-- Mostra que o arquivo .env está rastreado antes e depois no diretório do projeto -->
+      <change beforePath="$PROJECT_DIR$/.idea/LUMIassistente.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/LUMIassistente.iml" afterDir="false" /> <!-- Mostra que o arquivo LUMIassistente.iml estava e continua presente -->
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" /> <!-- Indica que o arquivo misc.xml também está sendo acompanhado -->
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" /> <!-- Exibe o rastreio para o próprio workspace.xml antes e depois -->
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" /> <!-- Marca que o arquivo app.py faz parte dessas mudanças -->
+    </list> <!-- Fecha a lista de arquivos monitorados -->
+    <option name="SHOW_DIALOG" value="false" /> <!-- Diz para não abrir janela pedindo confirmação ao aplicar a lista -->
+    <option name="HIGHLIGHT_CONFLICTS" value="true" /> <!-- Ativa realce quando há conflitos na lista de mudanças -->
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" /> <!-- Desativa o destaque para listas de mudança que não estão ativas -->
+    <option name="LAST_RESOLUTION" value="IGNORE" /> <!-- Guarda que a última resolução de conflito foi ignorar -->
+  </component> <!-- Fecha o bloco ChangeListManager -->
+  <component name="FileTemplateManagerImpl"> <!-- Abre o bloco com informações sobre modelos recentes de arquivos -->
+    <option name="RECENT_TEMPLATES"> <!-- Começa a opção que lista os modelos usados por último -->
+      <list> <!-- Abre a lista desses modelos -->
+        <option value="Python Script" /> <!-- Registra que o usuário criou recentemente um arquivo de script Python -->
+        <option value="HTML File" /> <!-- Registra que um arquivo HTML foi criado usando o modelo padrão -->
+        <option value="CSS File" /> <!-- Registra o uso recente do modelo de arquivo CSS -->
+      </list> <!-- Fecha a lista de modelos -->
+    </option> <!-- Fecha a opção de modelos recentes -->
+  </component> <!-- Fecha o bloco FileTemplateManagerImpl -->
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass"> <!-- Abre as opções do console Flask, com um script inicial para achar o app -->
+    <envs> <!-- Abre a seção de variáveis de ambiente usadas pelo console -->
+      <env key="FLASK_APP" value="app" /> <!-- Define a variável FLASK_APP apontando para o módulo app -->
+    </envs> <!-- Fecha a lista de variáveis de ambiente -->
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" /> <!-- Salva novamente o script customizado que prepara o console Flask -->
+    <option name="myEnvs"> <!-- Abre a opção que guarda o conjunto de variáveis personalizados -->
+      <map> <!-- Abre um mapa chave-valor para essas variáveis -->
+        <entry key="FLASK_APP" value="app" /> <!-- Repete a variável FLASK_APP dentro desse mapa -->
+      </map> <!-- Fecha o mapa das variáveis -->
+    </option> <!-- Fecha a opção myEnvs -->
+  </component> <!-- Encerra o bloco FlaskConsoleOptions -->
+  <component name="Git.Settings"> <!-- Abre as configurações ligadas ao Git -->
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" /> <!-- Define o caminho recente do repositório Git como a pasta do projeto -->
+  </component> <!-- Fecha o bloco Git.Settings -->
+  <component name="GitHubPullRequestSearchHistory">{ <!-- Abre dados salvos sobre buscas em pull requests do GitHub -->
+  &quot;lastFilter&quot;: { <!-- Começa um objeto JSON indicando o último filtro -->
+    &quot;state&quot;: &quot;OPEN&quot;, <!-- Salva que o filtro buscava PRs em estado aberto -->
+    &quot;assignee&quot;: &quot;Samukreuviski&quot; <!-- Salva que o filtro estava atribuído ao usuário Samukreuviski -->
+  } <!-- Fecha o objeto do filtro -->
+}</component> <!-- Fecha o componente de histórico de busca de PRs -->
+  <component name="GithubPullRequestsUISettings">{ <!-- Abre as configurações da interface de pull requests do GitHub -->
+  &quot;selectedUrlAndAccountId&quot;: { <!-- Abre um objeto com a URL e conta selecionadas -->
+    &quot;url&quot;: &quot;https://github.com/emilyndah/LUMI-assistente.git&quot;, <!-- Registra a URL do repositório no GitHub -->
+    &quot;accountId&quot;: &quot;cddb2895-2ecf-4cd9-8c93-a0a2efd5102c&quot; <!-- Informa o identificador da conta GitHub usada -->
+  } <!-- Fecha o objeto de URL e conta -->
+}</component> <!-- Encerra o componente de interface de PRs -->
+  <component name="ProjectColorInfo">{ <!-- Abre informações sobre a cor atribuída ao projeto na IDE -->
+  &quot;associatedIndex&quot;: 4 <!-- Define qual índice de cor foi associado -->
+}</component> <!-- Fecha o componente ProjectColorInfo -->
+  <component name="ProjectId" id="33tF5lXvEZ1JIy5K19MZ6V0UF5V" /> <!-- Define o identificador único do projeto dentro da IDE -->
+  <component name="ProjectViewState"> <!-- Abre configurações de como a árvore de arquivos é exibida -->
+    <option name="hideEmptyMiddlePackages" value="true" /> <!-- Oculta pacotes intermediários vazios na visualização -->
+    <option name="showLibraryContents" value="true" /> <!-- Mostra o conteúdo de bibliotecas diretamente na visão do projeto -->
+  </component> <!-- Fecha o componente ProjectViewState -->
+  <component name="PropertiesComponent"><![CDATA[{ <!-- Abre o componente PropertiesComponent com dados em CDATA -->
+  "keyToString": { <!-- Começa o bloco JSON que guarda pares de chave e texto -->
+    "DefaultHtmlFileTemplate": "HTML File", <!-- Define o modelo padrão para novos arquivos HTML -->
+    "ModuleVcsDetector.initialDetectionPerformed": "true", <!-- Marca que a detecção inicial de controle de versão já foi feita -->
+    "Python.app.executor": "Run", <!-- Diz que a execução padrão para o app Python é Run -->
+    "Python.teste_api.executor": "Run", <!-- Diz que o teste chamado teste_api também roda com Run -->
+    "RunOnceActivity.ShowReadmeOnStart": "true", <!-- Mostra que a atividade de abrir o readme na primeira vez já ocorreu -->
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true", <!-- Indica que as abas do terminal foram copiadas de outra configuração -->
+    "RunOnceActivity.git.unshallow": "true", <!-- Registra que o comando git unshallow já foi executado uma vez -->
+    "git-widget-placeholder": "main", <!-- Define que o texto mostrado no widget do Git é main -->
+    "list.type.of.created.stylesheet": "CSS", <!-- Guarda que o tipo de folha de estilo criado foi CSS -->
+    "node.js.detected.package.eslint": "true", <!-- Diz que o pacote eslint foi detectado automaticamente -->
+    "node.js.detected.package.tslint": "true", <!-- Diz que o pacote tslint também foi detectado -->
+    "node.js.selected.package.eslint": "(autodetect)", <!-- Informa que o pacote eslint selecionado é autodetectado -->
+    "node.js.selected.package.tslint": "(autodetect)", <!-- Informa que o pacote tslint selecionado é autodetectado -->
+    "nodejs_package_manager_path": "npm", <!-- Define que o gerenciador de pacotes Node.js usado é o npm -->
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable", <!-- Indica qual tela de configuração Python estava aberta -->
+    "vue.rearranger.settings.migration": "true" <!-- Marca que as configurações do rearranjo do Vue já foram migradas -->
+  } <!-- Fecha o objeto keyToString -->
+}]]></component> <!-- Fecha o CDATA e o componente PropertiesComponent -->
+  <component name="SharedIndexes"> <!-- Abre o componente SharedIndexes -->
+    <attachedChunks> <!-- Abre a lista de pacotes de índice anexados -->
+      <set> <!-- Começa o conjunto de índices compartilhados -->
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.26830.99" /> <!-- Registra o pacote de índices pré-definido para JavaScript -->
+        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" /> <!-- Registra o pacote de índices compartilhados para o SDK Python -->
+      </set> <!-- Fecha o conjunto de índices -->
+    </attachedChunks> <!-- Fecha a seção attachedChunks -->
+  </component> <!-- Fecha o componente SharedIndexes -->
+  <component name="TaskManager"> <!-- Abre o gerenciador de tarefas da IDE -->
+    <task active="true" id="Default" summary="Default task"> <!-- Inicia a tarefa padrão marcada como ativa -->
+      <changelist id="3e8c760b-4b7e-4029-85bf-7134a5164ae8" name="Changes" comment="" /> <!-- Liga a tarefa à mesma lista de mudanças com nome e id -->
+      <created>1760128283998</created> <!-- Registra a data de criação da tarefa em formato de milissegundos -->
+      <option name="number" value="Default" /> <!-- Guarda o número identificador da tarefa -->
+      <option name="presentableId" value="Default" /> <!-- Guarda o identificador legível da tarefa -->
+      <updated>1760128283998</updated> <!-- Registra quando a tarefa foi atualizada por último -->
+      <workItem from="1760128285097" duration="12819000" /> <!-- Aponta quanto tempo foi trabalhado a partir de um horário inicial -->
+      <workItem from="1760291213387" duration="719000" /> <!-- Adiciona outro registro de tempo gasto na tarefa -->
+      <workItem from="1760384051126" duration="3861000" /> <!-- Mais um período de trabalho salvo -->
+      <workItem from="1760388421323" duration="5077000" /> <!-- Outro intervalo de trabalho contado -->
+      <workItem from="1760397242557" duration="666000" /> <!-- Mais um registro de duração nessa tarefa -->
+      <workItem from="1760397939309" duration="2388000" /> <!-- Último registro de tempo trabalhado -->
+    </task> <!-- Fecha a definição da tarefa -->
+    <servers /> <!-- Mostra que não há servidores configurados aqui -->
+  </component> <!-- Fecha o componente TaskManager -->
+  <component name="TypeScriptGeneratedFilesManager"> <!-- Abre configurações sobre arquivos TypeScript gerados -->
+    <option name="version" value="3" /> <!-- Define que essa configuração está na versão 3 -->
+  </component> <!-- Fecha o componente TypeScriptGeneratedFilesManager -->
+  <component name="Vcs.Log.Tabs.Properties"> <!-- Abre as propriedades das abas do log de versionamento -->
+    <option name="TAB_STATES"> <!-- Abre a opção que guarda estados de abas -->
+      <map> <!-- Abre o mapa de estados -->
+        <entry key="MAIN"> <!-- Inicia a entrada identificada como MAIN -->
+          <value> <!-- Abre o valor armazenado para essa entrada -->
+            <State /> <!-- Indica que não há configuração extra dentro do estado -->
+          </value> <!-- Fecha o valor -->
+        </entry> <!-- Fecha a entrada MAIN -->
+      </map> <!-- Fecha o mapa -->
+    </option> <!-- Fecha a opção TAB_STATES -->
+  </component> <!-- Fecha o componente Vcs.Log.Tabs.Properties -->
+  <component name="com.intellij.coverage.CoverageDataManagerImpl"> <!-- Abre o gerenciador de dados de cobertura de testes -->
+    <SUITE FILE_PATH="coverage/LUMIassistente$teste_api.coverage" NAME="teste_api Coverage Results" MODIFIED="1760203648700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" /> <!-- Descreve um arquivo de cobertura para o teste teste_api usando coverage.py -->
+    <SUITE FILE_PATH="coverage/LUMI_assistente$app.coverage" NAME="app Coverage Results" MODIFIED="1760399723306" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" /> <!-- Descreve outro arquivo de cobertura para a aplicação principal -->
+  </component> <!-- Fecha o componente de cobertura -->
+</project> <!-- Fecha o projeto salvo -->
