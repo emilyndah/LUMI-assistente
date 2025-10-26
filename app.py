@@ -1,28 +1,69 @@
 # =======================================================
 # TÍTULO: SERVIDOR FLASK (APP.PY) - ASSISTENTE LUMI
+# (ADAPTADO PARA GOOGLE GEMINI)
 # =======================================================
 
 # =======================================================
 # IMPORTAÇÕES
 # =======================================================
-from flask import Flask, render_template, request, session, redirect, url_for, jsonify, Response, stream_with_context
-import requests
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 import json
 import os
 from datetime import datetime
-import time  # Adicionado para simulação de lentidão em debug, se necessário
+import google.generativeai as genai
+from dotenv import load_dotenv  # <<< MUDANÇA: Para carregar o .env
+
+# Carrega variáveis de ambiente do arquivo .env (se ele existir)
+load_dotenv()
 
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
 # =======================================================
 app = Flask(__name__)
-app.secret_key = "segredo_da_lumi"  # Em produção, use uma chave forte e secreta
+# Em produção, use uma chave forte e secreta
+app.secret_key = os.environ.get(
+    "FLASK_SECRET_KEY", "segredo_da_lumi_para_desenvolvimento"
+)
 
 # =======================================================
-# 1. CONSTANTES DO OLLAMA
+# 1. CONSTANTES DO GEMINI
 # =======================================================
-OLLAMA_URL_CHAT = "http://localhost:11434/api/chat"
-OLLAMA_MODELO = "gemma:2b"
+
+# --- Configuração do Gemini ---
+try:
+    # Tenta carregar a chave de um variável de ambiente (MAIS SEGURO)
+    GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
+except KeyError:
+    # Se não encontrar, o app não pode funcionar.
+    print("=" * 80)
+    print(" [ ERRO CRÍTICO ] ".center(80, "="))
+    print("A variável de ambiente 'GEMINI_API_KEY' não foi definida.")
+    print("Crie um arquivo chamado '.env' neste diretório e adicione a linha:")
+    print("GEMINI_API_KEY=SUA_CHAVE_REAL_AQUI")
+    print("=" * 80)
+    # Define como None para que a próxima etapa falhe de forma controlada
+    GEMINI_API_KEY = None  # CORREÇÃO: Usar None em vez de ()
+
+GEMINI_MODELO = "gemini-2.5-flash"  # Rápido e eficiente para chat
+
+# Configura a biblioteca do Gemini
+try:
+    ### CORREÇÃO PRINCIPAL AQUI ###
+    # A checagem anterior (GEMINI_API_KEY is GEMINI_API_KEY) estava errada.
+    # A forma correta é checar se a chave é nula ou vazia.
+    if not GEMINI_API_KEY:
+        raise ValueError(
+            "API Key não foi fornecida. Verifique as mensagens de erro."
+        )
+
+    genai.configure(api_key=GEMINI_API_KEY)
+    print("API Key do Gemini carregada com sucesso.")
+
+except Exception as e:
+    print(f"ERRO ao configurar a API do Gemini: {e}")
+    print("Verifique se a API Key é válida.")
+    GEMINI_API_KEY = None  # CORREÇÃO: Usar None em vez de ()
+
 
 # =======================================================
 # 2. FUNÇÕES DE CARREGAMENTO DE DADOS
@@ -34,7 +75,7 @@ def carregar_dados_json(nome_ficheiro):
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         json_path = os.path.join(base_dir, nome_ficheiro)
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
         print(f"AVISO: O ficheiro {nome_ficheiro} não foi encontrado.")
@@ -52,17 +93,22 @@ def carregar_calendario():
     eventos = []
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        txt_path = os.path.join(base_dir, 'calendario.txt')
-        with open(txt_path, 'r', encoding='utf-8') as f:
+        txt_path = os.path.join(base_dir, "calendario.txt")
+        with open(txt_path, "r", encoding="utf-8") as f:
             for linha in f:
                 linha = linha.strip()
-                if ':' in linha:
-                    partes = linha.split(':', 1)
+                if ":" in linha:
+                    partes = linha.split(":", 1)
                     data_str, evento_desc = partes[0].strip(
                     ), partes[1].strip()
-                    data_obj = datetime.strptime(data_str, '%d/%m/%Y')
+                    data_obj = datetime.strptime(data_str, "%d/%m/%Y")
                     eventos.append(
-                        {"data_obj": data_obj, "data_str": data_str, "evento": evento_desc})
+                        {
+                            "data_obj": data_obj,
+                            "data_str": data_str,
+                            "evento": evento_desc,
+                        }
+                    )
         eventos.sort(key=lambda x: x["data_obj"])
         return eventos
     except FileNotFoundError:
@@ -72,169 +118,134 @@ def carregar_calendario():
         print(f"ERRO ao carregar calendario.txt: {e}")
         return []
 
+
 # =======================================================
-# 3. FUNÇÃO DO ASSISTENTE (OLLAMA)
+# 3. FUNÇÃO DO ASSISTENTE (GEMINI)
 # =======================================================
+def responder_avancado(pergunta, historico_conversa):
+    """Envia uma pergunta para o modelo de linguagem do Gemini."""
 
+    # Verifica se a API Key foi carregada corretamente
+    # Esta checagem agora funciona, pois padronizamos para None
+    if GEMINI_API_KEY is None:
+        return "⚠️ Desculpe, o serviço de IA não está configurado. O administrador precisa definir a GEMINI_API_KEY."
 
-def construir_mensagens_ia(pergunta, historico_conversa):
-    """Constrói a lista de mensagens no formato exigido pelo Ollama/OpenAI."""
-    now = datetime.now()
-    data_hora_atual = now.strftime("%A, %d de %B de %Y, %H:%M")
-    prompt_sistema = (
-        f"Você é a Lumi, uma assistente académica da UniEVANGÉLICA. "
-        f"A data e hora atuais são: {data_hora_atual}. "
-        f"Seja sempre simpática, prestativa e inteligente. "
-        f"Não repita palavras desnecessariamente e mantenha as respostas concisas."
-    )
-    mensagens = [{"role": "system", "content": prompt_sistema}]
-
-    # Adiciona o histórico da sessão
-    if historico_conversa:
-        for interacao in historico_conversa:
-            mensagens.append({"role": "user", "content": interacao["usuario"]})
-            mensagens.append(
-                {"role": "assistant", "content": interacao["lumi"]})
-
-    mensagens.append({"role": "user", "content": pergunta})
-    return mensagens
-
-
-def generate_stream(pergunta_usuario):
-    """
-    Função Geradora que envia a pergunta para o Ollama
-    e retorna a resposta em pedaços (chunks) para o streaming.
-    """
-    historico = session.get("historico", [])
-    mensagens = construir_mensagens_ia(pergunta_usuario, historico)
-
-    # O payload deve ter "stream": True para que o Ollama envie dados em chunks
-    payload = {
-        "model": OLLAMA_MODELO,
-        "messages": mensagens,
-        "stream": True
-    }
-
-    full_response = ""
     try:
-        # requests.post com stream=True é crucial
-        response = requests.post(
-            OLLAMA_URL_CHAT, json=payload, stream=True, timeout=120)
-        response.raise_for_status()
+        now = datetime.now()
+        data_hora_atual = now.strftime("%A, %d de %B de %Y, %H:%M")
 
-        # Itera sobre o stream de linhas da resposta HTTP
-        for line in response.iter_lines():
-            if line:
-                try:
-                    # Cada linha é um objeto JSON que contém um pedaço da resposta
-                    chunk = json.loads(line.decode('utf-8'))
-                    token = chunk.get("message", {}).get("content", "")
+        # --- Prompt do Sistema para o Gemini ---
+        prompt_sistema = (
+            f"Você é a Lumi, uma assistente académica da UniEVANGÉLICA. "
+            f"A data e hora atuais são: {data_hora_atual}. "
+            f"Seja sempre simpática, prestativa e inteligente. "
+            f"Não repita palavras desnecessariamente e mantenha as respostas concisas."
+        )
 
-                    # O "done": true sinaliza o fim da resposta, ignoramos o metadado final.
-                    if chunk.get("done") is False and token:
-                        full_response += token
-                        # Envia o pedaço (token) de volta ao cliente imediatamente
-                        yield token
+        # --- Inicializa o modelo do Gemini ---
+        model = genai.GenerativeModel(
+            model_name=GEMINI_MODELO, system_instruction=prompt_sistema
+        )
 
-                except json.JSONDecodeError:
-                    continue
+        # --- Converte o histórico para o formato do Gemini ---
+        # Formato Flask Session: [{"usuario": "...", "lumi": "..."}]
+        # Formato Gemini: [{"role": "user", "parts": ["..."]}, {"role": "model", "parts": ["..."]}]
+        historico_gemini = []
+        for interacao in historico_conversa:
+            historico_gemini.append(
+                {"role": "user", "parts": [interacao["usuario"]]})
+            # Importante: Ollama usa "assistant", Gemini usa "model"
+            historico_gemini.append(
+                {"role": "model", "parts": [interacao["lumi"]]})
 
-        # Após o streaming, atualiza o histórico na sessão com a resposta completa
-        # Isso é fundamental para manter o contexto da conversa
-        if full_response.strip():
-            session["historico"].append(
-                {"usuario": pergunta_usuario, "lumi": full_response.strip()})
-            session.modified = True
+        # Inicia o chat com o histórico convertido
+        chat = model.start_chat(history=historico_gemini)
 
-    except requests.exceptions.RequestException as e:
-        error_msg = f"⚠️ ERRO de conexão com o Ollama: {e}. Verifique se o serviço está em execução."
-        print(error_msg)
-        yield error_msg
+        # Envia a nova pergunta
+        response = chat.send_message(pergunta)
+
+        return response.text.strip()
+
+    # <<< MUDANÇA: Captura de exceção genérica da API do Gemini
     except Exception as e:
-        error_msg = f"⚠️ Ocorreu um erro inesperado na IA: {e}"
-        print(error_msg)
-        yield error_msg
+        print(f"ERRO de conexão com o Gemini: {e}")
+        if "API_KEY_INVALID" in str(e):
+            return "⚠️ Desculpe, sua API Key do Gemini parece ser inválida. Verifique a configuração."
+        return f"⚠️ Desculpe, não consegui me conectar ao meu cérebro (Gemini). Ocorreu um erro: {e}"
 
 
 # =======================================================
 # 4. ROTAS DO SITE
 # =======================================================
-@app.route('/')
+@app.route("/")
 def index():
     """Renderiza a página inicial com o chat."""
     if "historico" not in session:
         session["historico"] = []
-    # Nota: A rota index só renderiza a página. O JavaScript fará a chamada POST para /stream_ask
-    return render_template('index.html', historico=session.get("historico", []))
+    return render_template("index.html", historico=session.get("historico", []))
 
 
-@app.route('/stream_ask', methods=['POST'])
-def stream_ask():
-    """
-    NOVA ROTA: Processa a pergunta do usuário e envia a resposta
-    em tempo real (streaming) para o navegador.
-    """
-    pergunta = request.form.get('pergunta')
-    if not pergunta or not pergunta.strip():
-        # Retorna uma resposta simples de erro para o streaming
-        return Response(stream_with_context(iter(["Pergunta vazia ou inválida."])), mimetype='text/event-stream', status=400)
-
-    # Cria a resposta como um stream de texto
-    return Response(stream_with_context(generate_stream(pergunta)),
-                    mimetype='text/event-stream')
-
-
-@app.route('/ask', methods=['POST'])
+@app.route("/ask", methods=["POST"])
 def ask():
-    """
-    ROTA ANTIGA (SEM STREAMING): Mantida por conveniência ou para uso futuro 
-    com Cache. Por enquanto, redireciona para o streaming.
-    """
-    # Para usar o streaming, o front-end deve chamar /stream_ask.
-    # Esta rota pode ser usada para um cache futuro (não implementado aqui).
-    # Por agora, está configurada para retornar erro, forçando o uso do streaming.
-    return jsonify({'erro': 'Use a rota /stream_ask para interagir com a IA.'}), 400
+    """Processa a pergunta do usuário e retorna a resposta da IA."""
+    if "historico" not in session:
+        session["historico"] = []
+
+    pergunta = request.json.get("pergunta")
+
+    if not pergunta or not pergunta.strip():
+        return jsonify({"erro": "Pergunta vazia"}), 400
+
+    # Esta função agora chama o Gemini
+    resposta = responder_avancado(pergunta, session.get("historico", []))
+
+    session["historico"].append({"usuario": pergunta, "lumi": resposta})
+    session.modified = True
+
+    return jsonify({"resposta": resposta})
 
 
-@app.route('/limpar_chat')
+@app.route("/limpar_chat")
 def limpar_chat():
     """Limpa o histórico do chat na sessão."""
     session.pop("historico", None)
-    return redirect(url_for('index'))
+    return redirect(url_for("index"))
 
 
-@app.route('/faq')
+@app.route("/faq")
 def faq():
     """Renderiza a página de Perguntas Frequentes (FAQ)."""
-    faq_data = carregar_dados_json('faq.json')
+    faq_data = carregar_dados_json("faq.json")
     if not isinstance(faq_data, list):
         faq_data = []
-    return render_template('faq.html', faq_data=faq_data)
+    return render_template("faq.html", faq_data=faq_data)
 
 
-@app.route('/calendario')
+@app.route("/calendario")
 def calendario():
     """Renderiza a página do Calendário Acadêmico."""
     eventos_data = carregar_calendario()
-    return render_template('calendario.html', eventos_data=eventos_data)
+    return render_template("calendario.html", eventos_data=eventos_data)
 
 
-@app.route('/flashcards')
+@app.route("/flashcards")
 def flashcards():
     """Renderiza a página de Flashcards."""
-    dados = carregar_dados_json('flashcards.json')
-    flashcard_data = dados.get('flash_cards', dados)
-    return render_template('flashcards.html', flashcard_data=flashcard_data)
+    dados = carregar_dados_json("flashcards.json")
+    flashcard_data = dados.get("flash_cards", dados)
+    return render_template("flashcards.html", flashcard_data=flashcard_data)
+
 
 # =======================================================
 # ============ ROTA DO MÉTODO DE ESTUDO (VARK) ============
 # =======================================================
-
-
-@app.route('/metodo_de_estudo')
+@app.route("/metodo_de_estudo")
 def metodo_de_estudo():
     """Renderiza o quiz para descobrir o método de estudo (VARK)."""
-    return render_template('metodo_estudo.html')
+    # Apenas renderiza o HTML. Os dados estão dentro dele.
+    return render_template("metodo_estudo.html")
+
+
 # =======================================================
 # ================== FIM DA ROTA ===================
 # =======================================================
@@ -243,7 +254,10 @@ def metodo_de_estudo():
 # =======================================================
 # 5. EXECUÇÃO DO SERVIDOR FLASK
 # =======================================================
-if __name__ == '__main__':
-    # Executa escutando em todos IPs locais na porta 5000 com debug
-    app.run(host='0.0.0.0', port=5000, debug=True)
-# ========================================================
+if __name__ == "__main__":
+    # Esta checagem agora funciona, pois padronizamos para None
+    if GEMINI_API_KEY is None:
+        print("Servidor Flask NÃO foi iniciado. Verifique o erro da API Key acima.")
+    else:
+        # Executa escutando em todos IPs locais na porta 5000 com debug
+        app.run(host="0.0.0.0", port=5000, debug=True)
