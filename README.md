@@ -82,7 +82,7 @@ Agradecimento especial a todos que contribuíram para o desenvolvimento do proje
 
 - [@EmilyRodrigues](https://github.com/emilyndah)  
 - [@FrancielleGoncalves](https://github.com/Francielle84)  
-- [@JordanVidal](https://github.com/JordanVidal)  
+- [@JordanVidal](https://github.com/JordanVidall)  
 - [@JoaoPedroCarlos](https://github.com/joaopcds77-max)  
 - [@Laviniacarvalhaes](https://github.com/Laviniacarvalhaes)  
 - [@RafaelOliveira](https://github.com/rafaeloliveira2902)  
