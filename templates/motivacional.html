@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumi – Assistente Acadêmica</title>
+    <title>Lumi – Chat Motivacional</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
-
 <body>
     <header>
         <a href="{{ url_for('index') }}">
@@ -17,27 +16,23 @@
 
     <main>
         <section class="funcoes">
-            <h2>Funcionalidades</h2>
-            <a href="{{ url_for('chat_motivacional') }}" class="func-item">Chat Motivacional</a>
-            <a href="#" class="func-item disabled">Recomendações de estudo</a>
-            <a href="#" class="func-item disabled">Simulador de provas</a>
+            <h2>Outras páginas</h2>
+            <a href="{{ url_for('index') }}" class="func-item">Chat Acadêmico</a>
             <a href="{{ url_for('flashcards') }}" class="func-item">Flashcards</a>
             <a href="{{ url_for('metodo_de_estudo') }}" class="func-item">Método de Estudo</a>
-            <a href="#" class="func-item disabled">Análise de desempenho</a>
             <a href="{{ url_for('calendario') }}" class="func-item">Calendário</a>
-            <a href="#" class="func-item disabled">Gerador de Resumos</a>
             <a href="{{ url_for('faq') }}" class="func-item">FAQ</a>
         </section>
 
         <section class="chat-container">
             <div class="chat-header">
-                <h1>Chat Acadêmico</h1>
-                <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">Limpar</a>
+                <h1>Chat Motivacional</h1>
+                <a href="{{ url_for('limpar_chat_motivacional') }}" class="clear-chat-btn" title="Limpar Conversa">Limpar</a>
             </div>
             <div class="chat-box" id="chat-box">
-                </div>
+            </div>
             <form class="chat-input" id="chat-form">
-                <input type="text" id="user-input" placeholder="Digite sua dúvida..." autocomplete="off">
+                <input type="text" id="user-input" placeholder="Compartilhe como está se sentindo..." autocomplete="off">
                 <button type="submit" id="submit-btn" title="Enviar">➤</button>
             </form>
         </section>
@@ -54,10 +49,9 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Adiciona a primeira mensagem da Lumi ao carregar
         const lumiIntro = document.createElement('div');
         lumiIntro.className = 'msg lumi';
-        lumiIntro.textContent = 'Olá! Eu sou a Lumi, sua assistente acadêmica. Como posso te ajudar hoje?';
+        lumiIntro.textContent = 'Olá! Estou aqui para te apoiar e manter sua motivação em alta. Como posso te ajudar hoje?';
         chatBox.appendChild(lumiIntro);
         scrollToBottom();
 
@@ -66,48 +60,40 @@
             const userMessage = userInput.value.trim();
             if (userMessage === '') return;
 
-            // 1. Adiciona a mensagem do usuário
             const userMsgDiv = document.createElement('div');
             userMsgDiv.className = 'msg user';
             userMsgDiv.textContent = userMessage;
             chatBox.appendChild(userMsgDiv);
-            
-            // 2. Limpa o input e desabilita
+
             userInput.value = '';
             userInput.disabled = true;
             submitBtn.disabled = true;
             scrollToBottom();
 
-            // 3. Adiciona indicador "digitando..."
             const typingIndicator = document.createElement('div');
             typingIndicator.className = 'msg lumi typing';
-            typingIndicator.textContent = 'Lumi está digitando...';
+            typingIndicator.textContent = 'Lumi está refletindo...';
             chatBox.appendChild(typingIndicator);
             scrollToBottom();
 
-            // 4. Envia para o backend
             try {
-                const response = await fetch('/ask', {
+                const response = await fetch('/ask_motivacional', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ pergunta: userMessage })
                 });
                 if (!response.ok) throw new Error('Erro na resposta do servidor.');
-                
+
                 const data = await response.json();
-                
-                // 5. Remove "digitando" e adiciona resposta
+
                 chatBox.removeChild(typingIndicator);
                 const lumiMsgDiv = document.createElement('div');
                 lumiMsgDiv.className = 'msg lumi';
-                // Substitui quebras de linha \n por <br>
                 lumiMsgDiv.innerHTML = data.resposta.replace(/\n/g, '<br>');
                 chatBox.appendChild(lumiMsgDiv);
                 scrollToBottom();
-
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);
-                // Remove "digitando" e mostra erro
                 chatBox.removeChild(typingIndicator);
                 const errorMsgDiv = document.createElement('div');
                 errorMsgDiv.className = 'msg lumi';
@@ -115,16 +101,10 @@
                 chatBox.appendChild(errorMsgDiv);
                 scrollToBottom();
             } finally {
-                // 6. Reabilita o input
                 userInput.disabled = false;
                 submitBtn.disabled = false;
                 userInput.focus();
             }
-        });
-
-        // Desabilitar links
-        document.querySelectorAll('a.func-item.disabled').forEach(link => {
-            link.addEventListener('click', (e) => e.preventDefault());
         });
     });
     </script>
