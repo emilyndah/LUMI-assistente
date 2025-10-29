@@ -40,6 +40,7 @@ main {
     gap: 30px;
     flex-grow: 1;
     box-sizing: border-box;
+    align-items: flex-start; /* Alinha sidebar e chat no topo */
 }
 
 /* Layout de página inteira (FAQ, Flashcards, Calendário, Perfil) */
@@ -55,12 +56,12 @@ main.profile-page { /* Adicionada classe para perfil */
 /* === ÁREA DO UTILIZADOR (NO HEADER) === */
 .user-area {
     position: absolute;
-    right: 25px;
+    right: 25px; /* Distância da direita */
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%); /* Centraliza verticalmente */
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 15px; /* Espaço entre os elementos */
     font-size: 0.9em;
 }
 .welcome-msg {
@@ -70,15 +71,15 @@ main.profile-page { /* Adicionada classe para perfil */
 }
 .profile-link {
     text-decoration: none;
-    display: flex;
+    display: flex; /* Para alinhar com o texto se necessário */
     align-items: center;
 }
 .profile-icon {
     width: 36px;
     height: 36px;
-    background-color: #4B8BEA;
-    color: white;
-    border-radius: 50%;
+    background-color: #4B8BEA; /* Cor de fundo do ícone */
+    color: white; /* Cor da letra */
+    border-radius: 50%; /* Faz o círculo */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,13 +87,14 @@ main.profile-page { /* Adicionada classe para perfil */
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
+    text-transform: uppercase; /* Deixa a inicial maiúscula */
 }
 .profile-link:hover .profile-icon {
-    background-color: #3a74d3;
+    background-color: #3a74d3; /* Escurece no hover */
     transform: scale(1.1); /* Efeito de zoom suave */
 }
 .logout-link {
-    color: #e74c3c;
+    color: #e74c3c; /* Vermelho para logout */
     text-decoration: none;
     font-weight: 500;
     padding: 5px 8px;
@@ -101,7 +103,7 @@ main.profile-page { /* Adicionada classe para perfil */
     white-space: nowrap;
 }
 .logout-link:hover {
-    background-color: #fbecec;
+    background-color: #fbecec; /* Fundo vermelho claro no hover */
     color: #c73c2c;
 }
 .login-link { /* Estilo para o link de login se não autenticado */
@@ -112,7 +114,7 @@ main.profile-page { /* Adicionada classe para perfil */
 
 
 /* === FUNCIONALIDADES (Sidebar) === */
-.funcoes {
+.funcoes { /* Mudado para <aside> no HTML */
     width: 300px; /* Ligeiramente mais estreito */
     background: white;
     border-radius: 15px;
@@ -170,7 +172,7 @@ main.profile-page { /* Adicionada classe para perfil */
     flex-direction: column;
     flex-grow: 1;
     /* Ajusta altura máxima para caber na tela com header e margens */
-    max-height: calc(100vh - 100px - 60px); /* 100px header aprox, 60px margens top/bottom */
+    max-height: calc(100vh - /* altura header */ 80px - /* margem top/bottom main */ 60px);
     min-height: 400px; /* Altura mínima */
 }
 .chat-header {
@@ -296,7 +298,7 @@ main.profile-page { /* Adicionada classe para perfil */
 .faq-container h1 {
     text-align: center; color: #4B8BEA; margin-bottom: 10px; font-size: 2.2em; font-weight: 600;
 }
-.faq-container p {
+.faq-container > p { /* Seletor > p para o parágrafo logo abaixo do h1 */
     text-align: center; color: #666; font-size: 1.1em; margin-bottom: 30px;
 }
 .faq-search {
@@ -399,7 +401,7 @@ main.profile-page { /* Adicionada classe para perfil */
     width: 45px; height: 45px; /* Botões de nav menores */ border-radius: 50%; background: #4B8BEA; color: white; border: none; font-size: 18px; cursor: pointer; transition: background-color 0.3s; display: flex; justify-content: center; align-items: center;
 }
 .flashcard-nav button:hover { background: #3a74d3; }
-.flashcard-nav button:disabled { background: #ccc; cursor: not-allowed; } /* Estilo para desabilitado (se implementar) */
+.flashcard-nav button:disabled { background: #ccc; cursor: not-allowed; } /* Estilo para desabilitado */
 .flashcard-nav span {
     font-size: 1em; /* Contador menor */ font-weight: 500; min-width: 50px; text-align: center; color: #555;
 }
@@ -421,6 +423,9 @@ main.profile-page { /* Adicionada classe para perfil */
     display: inline-block; margin-top: 30px; color: #4B8BEA; text-decoration: none; font-weight: 500; transition: color 0.2s ease;
 }
 .back-link:hover { text-decoration: underline; color: #3a74d3; }
+
+/* === ESTILOS PÁGINA LOGIN/REGISTER === */
+/* (Estilos movidos para dentro dos templates login.html e register.html) */
 
 /* ======================================================= */
 /* ====== ESTILOS DO CALENDÁRIO ACADÊMICO ====== */
@@ -460,10 +465,9 @@ main.profile-page { /* Adicionada classe para perfil */
 .fc-daygrid-event:hover { background-color: #6a9edb; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 
 /* Indicador de dia com evento (ponto azul) */
-.fc-daygrid-day:not(.fc-day-other) .fc-daygrid-day-events + .fc-daygrid-day-bg::before, /* Para dias sem número */
-.fc-daygrid-day:not(.fc-day-other) .fc-daygrid-event-harness ~ .fc-daygrid-day-bg::before /* Para dias com eventos */
- {
-    content: ''; position: absolute; bottom: 4px; /* Ajuste posição */ left: 50%; transform: translateX(-50%); width: 6px; /* Ponto menor */ height: 6px; background-color: #4B8BEA; border-radius: 50%; z-index: 1; /* Tenta garantir visibilidade */
+/* Seletor mais robusto para tentar pegar o dia */
+.fc-daygrid-day:has(.fc-daygrid-event-harness):not(.fc-day-other)::after {
+    content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background-color: #4B8BEA; border-radius: 50%; z-index: 4; /* Tenta ficar mais acima */
 }
 /* Dias de outros meses */
 .fc-day-other .fc-daygrid-day-number { color: #ccc; }
@@ -483,31 +487,36 @@ main.profile-page { /* Adicionada classe para perfil */
 .simple-btn.hidden { display: none; }
 
 /* Lista e Itens de Eventos */
-.agenda-list { display: flex; flex-direction: column; gap: 8px; /* Menos espaço entre itens */ }
-.agenda-item { display: flex; align-items: center; background: linear-gradient(135deg, #f9fcff 0%, #eef5fa 100%); border: 1px solid #e0e0e0; border-left: 4px solid #4B8BEA; /* Borda lateral mais fina */ border-radius: 10px; /* Menos redondo */ padding: 8px 12px; /* Itens mais compactos */ box-shadow: 0 1px 5px rgba(0,0,0,0.04); /* Sombra mais suave */ transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.agenda-list { display: block; /* Alterado de flex para block */ max-height: 400px; /* Limita altura da lista */ overflow-y: auto; /* Adiciona scroll se necessário */ padding-right: 5px; /* Espaço para scrollbar */}
+/* Scrollbar para agenda-list (opcional) */
+.agenda-list::-webkit-scrollbar { width: 6px; }
+.agenda-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+.agenda-item { display: flex; align-items: center; background: linear-gradient(135deg, #f9fcff 0%, #eef5fa 100%); border: 1px solid #e0e0e0; border-left: 4px solid #4B8BEA; border-radius: 10px; padding: 8px 12px; box-shadow: 0 1px 5px rgba(0,0,0,0.04); transition: transform 0.2s ease, box-shadow 0.2s ease; margin-bottom: 8px; /* Adiciona espaço entre itens */ }
+.agenda-item:last-child { margin-bottom: 0; }
 .agenda-item:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-.agenda-date { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 12px; padding-right: 12px; border-right: 1px solid #eee; min-width: 45px; /* Mais estreito */ text-align: center; }
-.agenda-day { font-size: 1.5em; /* Dia menor */ font-weight: 700; color: #4B8BEA; line-height: 1; }
-.agenda-month { font-size: 0.75em; /* Mês menor */ font-weight: 600; color: #777; text-transform: uppercase; }
-.agenda-details { flex-grow: 1; }
-.agenda-title { font-size: 0.95em; /* Título menor */ font-weight: 600; color: #333; margin: 0; line-height: 1.4; /* Ajuste espaçamento */ }
-.agenda-full-date { display: none; /* Data cinza removida */ }
+.agenda-date { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 12px; padding-right: 12px; border-right: 1px solid #eee; min-width: 45px; text-align: center; flex-shrink: 0;}
+.agenda-day { font-size: 1.5em; font-weight: 700; color: #4B8BEA; line-height: 1; }
+.agenda-month { font-size: 0.75em; font-weight: 600; color: #777; text-transform: uppercase; }
+.agenda-details { flex-grow: 1; min-width: 0; /* Permite quebrar texto se necessário */ }
+.agenda-title { font-size: 0.95em; font-weight: 600; color: #333; margin: 0; line-height: 1.4; word-break: break-word; /* Quebra palavras longas */}
+.agenda-full-date { display: block; font-size: 0.8em; color: #888; margin-top: 3px; } /* Mostra data final */
+/* Mensagem de Nenhum Evento */
 .no-events-message { text-align: center; color: #666; font-size: 1em; padding: 15px; background: #f9f9f9; border-radius: 8px; margin-top: 15px; }
 
 /* ======================================================= */
 /* ====== RESPONSIVIDADE ====== */
 /* ======================================================= */
-@media (max-width: 992px) { /* Ajuste para tablets maiores */
+@media (max-width: 992px) { /* Tablets maiores e Desktops pequenos */
     main { flex-direction: column; align-items: center; }
     .funcoes { width: 100%; max-width: 700px; order: 1; /* Sidebar vem primeiro */ }
-    .chat-container { width: 100%; max-width: 700px; order: 2; /* Chat vem depois */ max-height: 60vh; /* Limita altura em telas menores */ }
-    .faq-container, .calendar-section, .profile-container { max-width: 90%; /* Usa % para largura */ padding: 20px 25px; }
-    .user-area { right: 15px; gap: 10px; } /* Ajusta user area */
-    .welcome-msg { display: none; } /* Esconde saudação em telas menores */
+    .chat-container { width: 100%; max-width: 700px; order: 2; max-height: 60vh; }
+    .faq-container, .calendar-section, .profile-container { max-width: 90%; padding: 20px 25px; }
+    .user-area { right: 15px; gap: 10px; }
+    .welcome-msg { display: none; } /* Esconde saudação */
 }
 
-@media (max-width: 768px) {
-    /* Ajustes Gerais */
+@media (max-width: 768px) { /* Tablets */
     header { padding: 10px 15px; }
     .logo { height: 45px; }
     main { margin-top: 20px; margin-bottom: 20px; gap: 20px;}
@@ -515,8 +524,7 @@ main.profile-page { /* Adicionada classe para perfil */
     .funcoes h2 { font-size: 1.2em; }
     .func-item { padding: 10px 12px; font-size: 0.9em; }
 
-    /* Chat */
-    .chat-container { max-height: calc(100vh - 80px - 40px - 100px); /* Ajusta altura */ } /* header - margens - input */
+    .chat-container { max-height: calc(100vh - 70px - 40px - 100px); }
     .chat-header { padding: 12px 20px; }
     .chat-header h1 { font-size: 1.3em; }
     .chat-box { padding: 15px; gap: 10px;}
@@ -525,74 +533,68 @@ main.profile-page { /* Adicionada classe para perfil */
     .chat-input input { padding: 8px 15px; font-size: 0.9em; }
     .chat-input button { width: 38px; height: 38px; font-size: 14px; }
 
-    /* User Area */
     .user-area { gap: 8px; }
     .profile-icon { width: 32px; height: 32px; font-size: 1em;}
     .logout-link { font-size: 0.85em; padding: 4px 6px;}
 
-    /* FAQ, Calendário, Perfil Containers */
-    .faq-container, .calendar-section, .profile-container { padding: 20px; max-width: 100%; }
+    .faq-container, .calendar-section, .profile-container { padding: 20px; max-width: calc(100% - 40px); } /* Usa calc */
     .faq-container h1, .calendar-section h1, .profile-container h1 { font-size: 1.8em; }
 
-    /* Calendário Específico */
     #calendar-wrapper { padding: 15px; }
-    .fc-header-toolbar { flex-direction: column; align-items: stretch; gap: 10px; } /* Ajusta toolbar */
-    .fc-toolbar-chunk { text-align: center; } /* Centraliza botões */
+    .fc-header-toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .fc-toolbar-chunk { text-align: center; }
     .fc-toolbar-title { font-size: 1.6em !important; margin-bottom: 10px; }
     .fc-button { padding: 6px 10px; font-size: 0.9em; }
-    .fc-col-header-cell-cushion { font-size: 0.9em; } /* Dias da semana menores */
-    .fc-daygrid-day-number { width: 26px; height: 26px; font-size: 0.9em;} /* Números menores */
-    .fc-daygrid-event { font-size: 0.75em; padding: 1px 4px;} /* Eventos menores */
-    .fc-daygrid-day:not(.fc-day-other) .fc-daygrid-day-events + .fc-daygrid-day-bg::before,
-    .fc-daygrid-day:not(.fc-day-other) .fc-daygrid-event-harness ~ .fc-daygrid-day-bg::before { width: 5px; height: 5px; bottom: 3px; } /* Ponto menor */
-    #event-list-title { font-size: 1.4em; } /* Título lista menor */
-    .agenda-item { flex-direction: column; align-items: flex-start; padding: 10px 12px; } /* Itens da lista em coluna */
+    .fc-col-header-cell-cushion { font-size: 0.9em; }
+    .fc-daygrid-day-number { width: 26px; height: 26px; font-size: 0.9em;}
+    .fc-daygrid-event { font-size: 0.75em; padding: 1px 4px;}
+    .fc-daygrid-day:has(.fc-daygrid-event-harness):not(.fc-day-other)::after { width: 5px; height: 5px; bottom: 3px; }
+    #event-list-title { font-size: 1.4em; }
+    .agenda-list { max-height: 300px;} /* Limita altura em tablet */
+    .agenda-item { flex-direction: column; align-items: flex-start; padding: 10px 12px; }
     .agenda-date { flex-direction: row; border-right: none; padding-right: 0; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 8px; width: 100%; justify-content: flex-start; gap: 10px; min-width: auto; }
     .agenda-day { font-size: 1.6em; }
     .agenda-month { font-size: 0.75em; }
     .agenda-title { font-size: 0.9em; }
 
-    /* Flashcards Específico */
-    #flashcard-scene { height: 280px; /* Altura ajustada */ }
+    #flashcard-scene { height: 280px; }
     .card-face { font-size: 1.2em; padding: 15px;}
     .flashcard-nav button { width: 40px; height: 40px; }
     .flashcard-nav span { font-size: 0.9em; }
     .back-btn-flashcard-subject { top: 15px; left: 20px; font-size: 0.9em; }
 
-    /* Perfil Específico */
     .profile-info p { font-size: 1em; }
     .profile-info strong { width: 90px; }
-
 }
 
-@media (max-width: 480px) { /* Ajustes finos para telemóveis */
-    main { width: 100%; margin-top: 15px; margin-bottom: 15px; gap: 15px;}
-    .funcoes { width: calc(100% - 30px); padding: 15px; } /* Usa largura total menos padding */
-    .chat-container { width: calc(100% - 30px); max-height: calc(100vh - 70px - 30px - 90px); } /* header - margens - input */
+@media (max-width: 480px) { /* Telemóveis */
+    main { width: 100%; margin-top: 15px; margin-bottom: 15px; gap: 15px; padding: 0 10px; /* Adiciona padding lateral */ box-sizing: border-box;}
+    .funcoes { width: 100%; padding: 15px; } /* Usa largura total */
+    .chat-container { width: 100%; max-height: calc(100vh - 60px - 30px - 80px); } /* header - margens - input */
     .chat-header h1 { font-size: 1.2em; }
     .chat-input { padding: 10px; }
     .chat-input input { padding: 8px 12px; font-size: 0.9em;}
     .chat-input button { width: 35px; height: 35px; }
     .msg { max-width: 85%; }
 
-    /* FAQ, Calendário, Perfil Containers */
-    .faq-container, .calendar-section, .profile-container { width: calc(100% - 30px); padding: 15px; }
+    .faq-container, .calendar-section, .profile-container { width: 100%; padding: 15px; margin: 0 auto 20px auto; /* Centraliza */}
     .faq-container h1, .calendar-section h1, .profile-container h1 { font-size: 1.6em; }
     .faq-question span { font-size: 1em;}
     .faq-answer p { font-size: 0.9em;}
 
-    /* User Area */
-    .user-area { right: 10px; }
+    .user-area { right: 10px; gap: 5px;} /* Mais perto e menos espaçado */
     .profile-icon { width: 30px; height: 30px; font-size: 0.9em;}
-    .logout-link { display: none; } /* Opcional: Esconder texto logout, deixar só ícone */
+    .logout-link { display: none; } /* Esconde texto logout */
+    .profile-link:has(+ .logout-link) { /* Adiciona margem se logout estivesse visível */
+       /* margin-right: 5px; */
+    }
 
-    /* Calendário */
+
     #calendar-wrapper { padding: 10px; }
     .fc-toolbar-title { font-size: 1.4em !important; }
     .fc-col-header-cell-cushion { font-size: 0.8em; }
     .fc-daygrid-day-number { width: 24px; height: 24px; font-size: 0.8em;}
 
-    /* Flashcards */
     #flashcard-scene { height: 240px; }
     .card-face { font-size: 1.1em; }
     .back-btn-flashcard-subject { top: 10px; left: 15px; }

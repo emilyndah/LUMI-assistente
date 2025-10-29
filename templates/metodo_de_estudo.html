@@ -6,104 +6,82 @@
     <title>Lumi – Método de Estudo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Chart.js para o gráfico -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Container principal do conteúdo (caixa branca) */
+        /* Container principal */
         .quiz-container {
-            width: 100%;
-            max-width: 800px;
-            background: white;
-            border-radius: 15px;
-            padding: 30px 40px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            margin: 0 auto 40px auto; /* Centraliza */
-            position: relative; /* FUNDAMENTAL para posicionar o botão Voltar */
-            margin-top: 50px; /* Adiciona espaço acima para o botão Voltar */
+            width: 100%; max-width: 800px; background: white; border-radius: 15px;
+            padding: 30px 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin: 50px auto 40px auto; /* Aumenta margem superior */
+            position: relative; /* Contexto para botão voltar */
         }
-        .quiz-container h1 { text-align: center; color: #4B8BEA; margin-bottom: 10px; font-size: 2.2em; }
+        .quiz-container h1 { text-align: center; color: #4B8BEA; margin-bottom: 10px; font-size: 2em; }
         .quiz-container > p { text-align: center; color: #666; font-size: 1.1em; margin-bottom: 30px; }
 
-        /* --- CORREÇÃO DO BOTÃO VOLTAR --- */
+        /* Botão Voltar (Global) */
         .back-btn-global {
-            position: absolute; /* Posicionamento absoluto */
-            top: 15px;          /* Ajuste a distância do topo */
-            left: 25px;         /* Ajuste a distância da esquerda */
-            text-decoration: none;
-            color: #4B8BEA;
-            font-weight: 500;
-            font-size: 1em;
-            background: none; /* Garante fundo transparente */
-            border: none;     /* Sem borda */
-            padding: 5px;     /* Pequeno espaço interno */
-            cursor: pointer;
-            transition: color 0.2s ease;
-            z-index: 10; /* Garante que fique acima de outros elementos se necessário */
+            position: absolute; top: 15px; left: 25px; text-decoration: none;
+            color: #4B8BEA; font-weight: 500; font-size: 1em; background: none;
+            border: none; padding: 5px; cursor: pointer; transition: color 0.2s ease;
+            z-index: 10;
         }
-        .back-btn-global:hover {
-            color: #3a74d3;
-        }
+        .back-btn-global:hover { color: #3a74d3; }
 
-        /* --- Área do Quiz --- */
-        #quiz-area p { font-size: 1.1em; /* Ligeiramente menor */ font-weight: 500; color: #333; margin-bottom: 20px; }
-        .options-container { display: flex; flex-direction: column; gap: 12px; /* Menos espaço */ }
+        /* Área do Quiz */
+        #quiz-area p#pergunta-texto { font-size: 1.1em; font-weight: 500; color: #333; margin-bottom: 20px; line-height: 1.5;}
+        .options-container { display: flex; flex-direction: column; gap: 12px; }
         .option-label {
-            display: flex; /* Para alinhar o radio button e o texto */
-            align-items: center;
-            background: #f0f5ff;
-            padding: 12px 18px; /* Menor padding */
-            border-radius: 10px;
-            border: 2px solid transparent; /* Borda transparente inicial */
-            cursor: pointer;
-            transition: border-color 0.2s ease, background-color 0.2s ease;
-            font-size: 0.95em; /* Ligeiramente menor */
+            display: flex; align-items: center; background: #f0f5ff;
+            padding: 12px 18px; border-radius: 10px; border: 2px solid transparent;
+            cursor: pointer; transition: border-color 0.2s ease, background-color 0.2s ease;
+            font-size: 0.95em;
         }
         .option-label:hover { background-color: #e6edff; }
-        .option-label input { margin-right: 12px; flex-shrink: 0; } /* Impede que o radio encolha */
-        .option-label span { flex-grow: 1; } /* Texto ocupa o espaço restante */
-        .option-label.selected {
-            background-color: #e0e8ff;
-            border-color: #4B8BEA;
-            font-weight: 500;
-        }
+        .option-label input[type="checkbox"] { margin-right: 12px; flex-shrink: 0; transform: scale(1.1); /* Checkbox ligeiramente maior */ accent-color: #4B8BEA;}
+        .option-label span { flex-grow: 1; }
+        .option-label.selected { background-color: #e0e8ff; border-color: #4B8BEA; font-weight: 500; }
         .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
         .quiz-nav button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background: #4B8BEA;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            padding: 10px 20px; font-size: 1em; background: #4B8BEA; color: white;
+            border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s;
         }
         .quiz-nav button:hover { background: #3a74d3; }
         .quiz-nav button:disabled { background: #ccc; cursor: not-allowed; }
         .quiz-nav button.prev-btn { background: #f0f0f0; color: #555; }
         .quiz-nav button.prev-btn:hover { background: #e0e0e0; }
+        #question-counter { font-size: 0.9em; color: #777; font-weight: 500;}
 
-        /* --- Área do Resultado --- */
-        #resultado-area h2 { text-align: center; color: #2c3e50; font-size: 1.8em; }
-        #resultado-area p { color: #555; line-height: 1.6; font-size: 1em; /* Ajuste se necessário */ }
-        #resultado-area .destaque { color: #4B8BEA; font-weight: 600; font-size: 1.1em; }
-        #resultado-area ul { list-style-type: '✔  '; padding-left: 20px; }
-        #resultado-area li { margin-bottom: 10px; font-size: 0.95em; /* Ligeiramente menor */ }
-        #chart-container { width: 100%; max-width: 350px; /* Gráfico redondo pode ser menor */ margin: 20px auto; }
-        .restart-btn {
-            display: block;
-            width: 200px;
-            margin: 30px auto 0 auto;
-            padding: 12px 20px;
-            font-size: 1.1em;
-            font-weight: 500;
-            text-align: center;
-            background: #4B8BEA;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        /* Área do Resultado */
+        #resultado-area h2 { text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 20px;}
+        #resultado-area p#resultado-descricao { color: #555; line-height: 1.6; font-size: 1em; margin-bottom: 25px; text-align: justify;} /* Justifica descrição */
+        #resultado-area h3 { color: #4B8BEA; font-size: 1.3em; margin-top: 30px; margin-bottom: 15px; font-weight: 600;}
+        #resultado-area ul { list-style-type: none; /* Remove bolinha padrão */ padding-left: 5px; }
+        #resultado-area li {
+             margin-bottom: 12px; font-size: 0.95em; position: relative; padding-left: 25px; /* Espaço para o ícone */
+             line-height: 1.5;
         }
-        .restart-btn:hover { background: #3a74d3; }
+        #resultado-area li::before { /* Adiciona ícone check */
+            content: '✔'; /* Ou outro ícone: ✓, ➤ */
+            position: absolute; left: 0; top: 1px; /* Ajusta posição */
+            color: #34D399; /* Cor do ícone */
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        #chart-container { width: 100%; max-width: 350px; margin: 25px auto; }
+        .restart-btn {
+            display: block; width: 200px; margin: 30px auto 0 auto; padding: 12px 20px;
+            font-size: 1em; font-weight: 500; text-align: center; background: #555; /* Cor diferente para refazer */
+            color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s;
+        }
+        .restart-btn:hover { background: #444; }
+
+         /* Mensagem de Erro */
+        #error-area h1 { color: #dc3545; }
+        #error-area p { color: #555; }
+        #error-area .restart-btn { background-color: #6c757d; }
+        #error-area .restart-btn:hover { background-color: #5a6268; }
+
 
         .hidden { display: none; }
     </style>
@@ -113,27 +91,47 @@
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
+         <!-- Área do Usuário -->
+        <div class="user-area">
+            {% if current_user.is_authenticated %}
+                <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
+                <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                    <div class="profile-icon">{{ current_user.username[0]|upper if current_user.username else '?' }}</div>
+                </a>
+                <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
+            {% endif %}
+        </div>
     </header>
 
+    <!-- Usa a classe 'faq-page' para layout de página inteira -->
     <main class="faq-page">
 
         <section class="quiz-container">
-            <a href="{{ url_for('index') }}" class="back-btn-global">← Voltar para o Chat</a>
+            <!-- Botão voltar é mostrado pelo JS -->
+            <a href="{{ url_for('index') }}" class="back-btn-global hidden">← Voltar para o Chat</a>
 
+            <!-- ==============================\r
+                 ÁREA DO QUIZ (Começa visível por padrão, JS esconde se resultado existir)
+            ================================== -->
             <div id="quiz-area">
-                <h1 id="quiz-titulo"></h1>
+                <h1 id="quiz-titulo">Carregando Quiz...</h1>
                 <p id="quiz-descricao"></p>
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
-                <p id="pergunta-texto"></p>
-                <div class="options-container" id="options-container"></div>
+                <p id="pergunta-texto">Carregando pergunta...</p>
+                <div class="options-container" id="options-container">
+                    <!-- Opções são carregadas aqui -->
+                </div>
                 <div class="quiz-nav">
-                    <button id="prev-btn" class="prev-btn">Anterior</button>
-                    <span id="question-counter"></span>
-                    <button id="next-btn">Próxima</button>
-                    <button id="finish-btn" class="hidden">Finalizar</button>
+                    <button id="prev-btn" class="prev-btn" disabled>Anterior</button>
+                    <span id="question-counter">-- / --</span>
+                    <button id="next-btn" disabled>Próxima</button>
+                    <button id="finish-btn" class="hidden" disabled>Finalizar</button>
                 </div>
             </div>
 
+            <!-- ==============================\r
+                 ÁREA DO RESULTADO (Começa escondida)
+            ================================== -->
             <div id="resultado-area" class="hidden">
                 <h2>Seu resultado: <span id="resultado-titulo" class="destaque"></span></h2>
                 <div id="chart-container">
@@ -145,21 +143,26 @@
                 <button id="restart-btn" class="restart-btn">Refazer Quiz</button>
             </div>
 
+            <!-- ==============================\r
+                 ÁREA DE ERRO (Começa escondida)
+            ================================== -->
             <div id="error-area" class="hidden">
                 <h1>Oops! Algo deu errado.</h1>
-                <p>Não foi possível carregar os dados do quiz. Verifique se o ficheiro 'metodo_estudo.json' existe e está formatado corretamente.</p>
-                 <a href="{{ url_for('index') }}" class="restart-btn" style="width: fit-content; margin-top: 20px;">Voltar para o Início</a>
+                <p>Não foi possível carregar os dados do quiz. Por favor, tente recarregar a página ou contacte o suporte.</p>
+                 <a href="{{ url_for('index') }}" class="restart-btn" style="width: fit-content; margin-top: 20px; background-color: #6c757d;">Voltar para o Início</a>
             </div>
+
         </section>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
             // --- 1. Referências do DOM ---
             const quizArea = document.getElementById('quiz-area');
             const resultadoArea = document.getElementById('resultado-area');
             const errorArea = document.getElementById('error-area');
-            const backBtnGlobal = document.querySelector('.back-btn-global'); // Referência ao botão voltar
+            const backBtnGlobal = document.querySelector('.back-btn-global');
 
             const quizTitulo = document.getElementById('quiz-titulo');
             const quizDescricao = document.getElementById('quiz-descricao');
@@ -180,270 +183,224 @@
 
             // --- 2. Variáveis de Estado ---
             let currentQuestion = 0;
-            let userAnswers = {}; // Armazena as respostas {0: ['V'], 1: ['K', 'A'], ...}
-            let fullQuizData = null; // Será preenchido com dados do JSON
+            let userAnswers = {}; // Respostas da tentativa ATUAL {0: ['V'], 1: ['K', 'A']}
+            let fullQuizData = null; // Perguntas e opções carregadas do JSON
             let perguntas = [];
-            let resultados = {};
+            let resultadosVARK = {}; // Descrições dos resultados V,A,R,K
 
-            // --- 3. Carregar Dados do JSON ---
-            // Usamos os dados passados pelo Flask agora
-             try {
-                fullQuizData = {{ quiz_data | tojson }};
-                if (!fullQuizData || !fullQuizData.perguntas || !fullQuizData.resultados) {
-                    throw new Error("Dados do quiz inválidos ou ausentes no JSON.");
+            // **** DADOS VINDOS DO FLASK ****
+            // 'quiz_data' contém as perguntas/opções OU null se erro
+            // 'saved_vark_result' contém {primaryType: 'X', scores: {V:.., A:..}} OU null
+            const flaskQuizData = {{ quiz_data | tojson | safe }};
+            const savedResultData = {{ saved_vark_result | tojson | safe }};
+
+            // --- 3. Inicialização ---
+            try {
+                // Verifica se os dados das perguntas foram carregados
+                if (!flaskQuizData || !flaskQuizData.perguntas || !flaskQuizData.resultados) {
+                    throw new Error("Dados essenciais do quiz não foram carregados do servidor.");
                 }
+                fullQuizData = flaskQuizData;
                 perguntas = fullQuizData.perguntas;
-                resultados = fullQuizData.resultados;
-                initializeQuiz(); // Chama a inicialização SÓ APÓS carregar os dados
+                resultadosVARK = fullQuizData.resultados; // Guarda as descrições
+
+                initializeQuizOrResult(); // Chama a função que decide o que mostrar
+
             } catch (error) {
-                console.error("Erro ao carregar ou processar dados do quiz:", error);
-                showError();
+                console.error("Erro Crítico na Inicialização:", error);
+                showErrorState(`Erro ao inicializar o quiz: ${error.message}`);
             }
 
+            // --- 4. Funções Principais ---
 
-            // --- 4. Funções ---
-             function initializeQuiz() {
-                if (!fullQuizData) { showError(); return; } // Verificação extra
-                quizTitulo.textContent = fullQuizData.titulo;
-                quizDescricao.textContent = fullQuizData.descricao;
-                // Exibe o botão voltar SÓ QUANDO o quiz é inicializado com sucesso
+            function initializeQuizOrResult() {
+                // Mostra o botão voltar global AGORA, pois sabemos que a página carregou
                 backBtnGlobal.classList.remove('hidden');
-                showQuestion(0);
+
+                // Verifica se HÁ um resultado salvo E se ele é válido
+                if (savedResultData && savedResultData.primaryType && savedResultData.scores) {
+                    console.log("Exibindo resultado VARK salvo.");
+                    // Mostra a área de resultado diretamente com os dados salvos
+                    displayVarkResult(savedResultData.scores, savedResultData.primaryType);
+                    quizArea.classList.add('hidden');       // Esconde quiz
+                    resultadoArea.classList.remove('hidden'); // Mostra resultado
+                    errorArea.classList.add('hidden');      // Esconde erro
+                } else {
+                    console.log("Iniciando quiz VARK (sem resultado salvo ou inválido).");
+                    // Prepara e mostra o quiz
+                    quizTitulo.textContent = fullQuizData.titulo;
+                    quizDescricao.textContent = fullQuizData.descricao;
+                    userAnswers = {}; // Limpa respostas de tentativas anteriores
+                    currentQuestion = 0;
+                    showQuestion(currentQuestion); // Mostra a primeira pergunta
+                    quizArea.classList.remove('hidden');    // Mostra quiz
+                    resultadoArea.classList.add('hidden');  // Esconde resultado
+                    errorArea.classList.add('hidden');      // Esconde erro
+                }
             }
 
-            function showError() {
+            // Mostra o estado de erro
+            function showErrorState(message) {
                  quizArea.classList.add('hidden');
                  resultadoArea.classList.add('hidden');
                  errorArea.classList.remove('hidden');
-                 // Esconde o botão voltar global se der erro
-                 backBtnGlobal.classList.add('hidden');
+                 const errorP = errorArea.querySelector('p');
+                 if(errorP) errorP.textContent = message || "Não foi possível carregar os dados. Tente recarregar.";
+                 backBtnGlobal.classList.remove('hidden'); // Permite voltar mesmo com erro
             }
 
-
+            // Mostra uma pergunta específica
             function showQuestion(index) {
-                if (index < 0 || index >= perguntas.length) return; // Segurança
+                if (index < 0 || index >= perguntas.length) return;
 
                 const q = perguntas[index];
                 perguntaTexto.textContent = q.texto;
-                optionsContainer.innerHTML = ''; // Limpa opções anteriores
+                optionsContainer.innerHTML = ''; // Limpa opções
 
                 q.opcoes.forEach(opt => {
-                    const optionId = `q${index}_${opt.tipo}`;
-                    const label = document.createElement('label');
-                    label.className = 'option-label';
-                    label.htmlFor = optionId; // Permite clicar no texto
+                    const optionId = `q${index}_${opt.tipo}`; // ID único para o input
+                    const label = document.createElement('label'); label.className = 'option-label'; label.htmlFor = optionId;
+                    const input = document.createElement('input'); input.type = 'checkbox'; input.name = `question_${index}`; input.id = optionId; input.value = opt.tipo;
 
-                    const input = document.createElement('input');
-                    // MUDANÇA: Usar checkbox para permitir múltiplas seleções
-                    input.type = 'checkbox';
-                    input.name = `question_${index}`; // Nome pode ser o mesmo para checkboxes
-                    input.id = optionId;
-                    input.value = opt.tipo;
-
+                    // Evento para atualizar respostas e UI ao marcar/desmarcar
                     input.addEventListener('change', () => {
-                        // Atualiza as respostas do usuário
                         const currentAnswers = userAnswers[index] || [];
-                        if (input.checked) {
-                            if (!currentAnswers.includes(opt.tipo)) {
-                                currentAnswers.push(opt.tipo);
-                            }
-                        } else {
-                            const pos = currentAnswers.indexOf(opt.tipo);
-                            if (pos > -1) {
-                                currentAnswers.splice(pos, 1);
-                            }
-                        }
-                        userAnswers[index] = currentAnswers;
+                        if (input.checked) { if (!currentAnswers.includes(opt.tipo)) currentAnswers.push(opt.tipo); }
+                        else { const pos = currentAnswers.indexOf(opt.tipo); if (pos > -1) currentAnswers.splice(pos, 1); }
+                        userAnswers[index] = currentAnswers; // Salva respostas da tentativa atual
 
-                        // Atualiza estilo visual da label
-                        if (input.checked) {
-                            label.classList.add('selected');
-                        } else {
-                            label.classList.remove('selected');
-                        }
-                        updateNavButtons(); // Atualiza os botões
+                        label.classList.toggle('selected', input.checked); // Atualiza estilo visual
+                        updateNavButtons(); // Habilita/desabilita botões de navegação
                     });
 
-                    // Verifica se esta opção já estava selecionada
+                    // Marca a caixa se já foi respondida nesta tentativa
                     if (userAnswers[index] && userAnswers[index].includes(opt.tipo)) {
-                        input.checked = true;
-                        label.classList.add('selected');
+                        input.checked = true; label.classList.add('selected');
                     }
 
-                    // Adiciona o texto da opção
-                    const textSpan = document.createElement('span');
-                    textSpan.textContent = ` ${opt.texto}`;
-
-                    label.appendChild(input);
-                    label.appendChild(textSpan);
-                    optionsContainer.appendChild(label);
+                    const textSpan = document.createElement('span'); textSpan.textContent = ` ${opt.texto}`;
+                    label.appendChild(input); label.appendChild(textSpan); optionsContainer.appendChild(label);
                 });
 
-                questionCounter.textContent = `${index + 1} / ${perguntas.length}`;
-                updateNavButtons();
+                questionCounter.textContent = `${index + 1} / ${perguntas.length}`; // Atualiza contador
+                updateNavButtons(); // Atualiza estado dos botões
             }
 
+            // Atualiza o estado dos botões Anterior/Próxima/Finalizar
             function updateNavButtons() {
                 prevBtn.disabled = currentQuestion === 0;
-
-                // Habilita Próxima/Finalizar se PELO MENOS uma opção foi marcada
                 const hasAnswered = userAnswers[currentQuestion] && userAnswers[currentQuestion].length > 0;
-                nextBtn.disabled = !hasAnswered;
 
-                if (currentQuestion === perguntas.length - 1) {
-                    nextBtn.classList.add('hidden');
-                    finishBtn.classList.remove('hidden');
-                    finishBtn.disabled = !hasAnswered;
-                } else {
-                    nextBtn.classList.remove('hidden');
-                    finishBtn.classList.add('hidden');
-                    // Next não deve ficar desabilitado se já respondeu
-                    nextBtn.disabled = !hasAnswered;
+                if (currentQuestion === perguntas.length - 1) { // Última pergunta
+                    nextBtn.classList.add('hidden'); finishBtn.classList.remove('hidden');
+                    finishBtn.disabled = !hasAnswered; // Habilita Finalizar só se respondeu
+                } else { // Perguntas intermédias
+                    nextBtn.classList.remove('hidden'); finishBtn.classList.add('hidden');
+                    nextBtn.disabled = !hasAnswered; // Habilita Próxima só se respondeu
                 }
             }
 
-            function showResults() {
-                // 1. Calcular pontuação (agora soma todas as escolhas)
+            // Chamada quando clica em Finalizar
+            async function finishQuiz() {
+                // 1. Calcular pontuação final
                 const scores = { V: 0, A: 0, R: 0, K: 0 };
-                Object.values(userAnswers).forEach(tiposEscolhidos => {
-                     if (tiposEscolhidos) {
-                        tiposEscolhidos.forEach(tipo => {
-                            if (scores.hasOwnProperty(tipo)) {
-                                scores[tipo]++;
-                            }
+                Object.values(userAnswers).forEach(tipos => { if (tipos) tipos.forEach(t => scores[t]++); });
+
+                // 2. Determinar tipo(s) primário(s)
+                let maxScore = 0; let primaryTypesList = [];
+                Object.values(scores).forEach(s => { if (s > maxScore) maxScore = s; });
+                if (maxScore > 0) { Object.entries(scores).forEach(([t, s]) => { if (s === maxScore) primaryTypesList.push(t); }); }
+                const primaryTypeString = primaryTypesList.join('/') || "N/A"; // Ex: "V/R" ou "N/A"
+
+                // 3. Exibir o resultado calculado
+                displayVarkResult(scores, primaryTypeString);
+
+                // 4. Salvar o resultado no backend (APENAS se for um resultado válido)
+                if (maxScore > 0) {
+                    try {
+                        const response = await fetch('/save_vark_result', {
+                            method: 'POST', headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ scores: scores, primaryType: primaryTypeString })
                         });
-                     }
+                        const result = await response.json();
+                        if (!result.success) { console.error("Falha ao salvar VARK:", result.message); /* Opcional: alert */ }
+                        else { console.log("Resultado VARK salvo."); savedResultData = {scores: scores, primaryType: primaryTypeString}; } // Atualiza estado local
+                    } catch (error) { console.error("Erro de rede ao salvar VARK:", error); /* Opcional: alert */ }
+                }
+
+                // 5. Mostrar a área de resultado
+                quizArea.classList.add('hidden');
+                resultadoArea.classList.remove('hidden');
+                backBtnGlobal.classList.remove('hidden');
+            }
+
+            // Função para RENDERIZAR a área de resultado (usada por finishQuiz e initializeQuizOrResult)
+            function displayVarkResult(scores, primaryTypeString) {
+                let tituloFinal = ""; let descricaoFinal = ""; let metodosFinais = new Set();
+                const primaryTypesList = primaryTypeString === "N/A" ? [] : primaryTypeString.split('/');
+
+                primaryTypesList.forEach((tipo, index) => {
+                    if (resultadosVARK[tipo]) {
+                        const resultData = resultadosVARK[tipo];
+                        tituloFinal += resultData.titulo + (index < primaryTypesList.length - 1 ? " / " : "");
+                        descricaoFinal += resultData.descricao + (index < primaryTypesList.length - 1 ? "\n\n" : ""); // Adiciona quebra de linha entre descrições
+                        if(resultData.metodos) resultData.metodos.forEach(m => metodosFinais.add(m));
+                    }
                 });
 
-                // 2. Encontrar a(s) maior(es) pontuação(ões)
-                let maxScore = 0;
-                let primaryTypes = []; // Pode haver empate
-                for (const score of Object.values(scores)) {
-                    if (score > maxScore) {
-                        maxScore = score;
-                    }
-                }
-                 // Se não respondeu nada, maxScore será 0, evita erro
-                if (maxScore === 0) {
-                     // Define um resultado padrão ou mostra uma mensagem
-                     resultadoTitulo.textContent = "Indefinido";
-                     resultadoDescricao.textContent = "Você não selecionou nenhuma opção. Refaça o quiz para descobrir seu estilo.";
-                     resultadoMetodos.innerHTML = '';
-                     // Esconder gráfico se não houver pontuação
-                      document.getElementById('chart-container').style.display = 'none';
-
+                // Lida com caso sem resultado (maxScore=0 ou tipo 'N/A')
+                if (!tituloFinal) {
+                    resultadoTitulo.textContent = "Indefinido";
+                    resultadoDescricao.textContent = "Não foi possível determinar o estilo predominante com as respostas fornecidas.";
+                    resultadoMetodos.innerHTML = '<li>Tente refazer o quiz selecionando as opções que mais se aplicam.</li>';
+                    document.getElementById('chart-container').style.display = 'none'; // Esconde gráfico
                 } else {
-                    for (const [tipo, score] of Object.entries(scores)) {
-                        if (score === maxScore) {
-                            primaryTypes.push(tipo);
-                        }
+                    resultadoTitulo.textContent = tituloFinal;
+                    resultadoDescricao.innerHTML = descricaoFinal.replace(/\n/g, '<br>'); // Transforma quebras de linha em <br>
+                    resultadoMetodos.innerHTML = ''; // Limpa
+                    if (metodosFinais.size > 0) {
+                        metodosFinais.forEach(metodo => { const li = document.createElement('li'); li.textContent = metodo; resultadoMetodos.appendChild(li); });
+                    } else {
+                         resultadoMetodos.innerHTML = '<li>Nenhum método específico encontrado.</li>';
                     }
 
-                    // 3. Montar o resultado (pode ser multimodal)
-                    let tituloFinal = "";
-                    let descricaoFinal = "";
-                    let metodosFinais = new Set(); // Evita métodos repetidos
-
-                    primaryTypes.forEach((tipo, index) => {
-                        const resultData = resultados[tipo];
-                        tituloFinal += resultData.titulo + (index < primaryTypes.length - 1 ? " / " : "");
-                        descricaoFinal += resultData.descricao + (index < primaryTypes.length - 1 ? "\n\n" : "");
-                        resultData.metodos.forEach(m => metodosFinais.add(m));
-                    });
-
-                    resultadoTitulo.textContent = tituloFinal;
-                    resultadoDescricao.textContent = descricaoFinal;
-
-                    resultadoMetodos.innerHTML = '';
-                    metodosFinais.forEach(metodo => {
-                        const li = document.createElement('li');
-                        li.textContent = metodo;
-                        resultadoMetodos.appendChild(li);
-                    });
-
-                     // 4. Desenhar o gráfico redondo (Doughnut)
-                    // Mostrar o container do gráfico
+                    // Desenha/Atualiza o gráfico Doughnut
                     document.getElementById('chart-container').style.display = 'block';
                     if (varkChart) varkChart.destroy();
                     varkChart = new Chart(chartCtx, {
-                        // **** MUDANÇA AQUI ****
-                        type: 'doughnut', // Tipo de gráfico redondo
+                        type: 'doughnut',
                         data: {
                             labels: ['Visual (V)', 'Auditivo (A)', 'Leitura/Escrita (R)', 'Cinestésico (K)'],
                             datasets: [{
-                                label: 'Pontuação VARK',
-                                data: [scores.V, scores.A, scores.R, scores.K],
-                                backgroundColor: [
-                                    '#4B8BEA', // Azul para Visual
-                                    '#34D399', // Verde para Auditivo
-                                    '#F59E0B', // Amarelo/Laranja para Leitura/Escrita
-                                    '#EF4444'  // Vermelho para Cinestésico
-                                ],
-                                hoverOffset: 4
+                                data: [scores?.V || 0, scores?.A || 0, scores?.R || 0, scores?.K || 0],
+                                backgroundColor: ['#4B8BEA', '#34D399', '#F59E0B', '#EF4444'], hoverOffset: 4
                             }]
                         },
                         options: {
-                            responsive: true,
-                            maintainAspectRatio: true, // Mantém proporção
-                            plugins: {
-                                legend: {
-                                    position: 'top', // Posição da legenda
-                                },
-                                tooltip: {
-                                     callbacks: {
-                                        label: function(context) {
-                                            let label = context.label || '';
-                                            if (label) {
-                                                label += ': ';
-                                            }
-                                            if (context.parsed !== null) {
-                                                // Mostra a pontuação bruta
-                                                label += context.parsed;
-                                            }
-                                            return label;
-                                        }
-                                    }
-                                }
-                            }
+                             responsive: true, maintainAspectRatio: true,
+                             plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed}` } } }
                         }
                     });
-                } // Fim do else (maxScore > 0)
-
-
-                // 5. Trocar as telas
-                quizArea.classList.add('hidden');
-                resultadoArea.classList.remove('hidden');
-                backBtnGlobal.classList.remove('hidden'); // Mostra o botão voltar
+                }
             }
 
+
+            // Chamada quando clica em "Refazer Quiz"
             function restartQuiz() {
+                userAnswers = {}; // Limpa respostas da tentativa atual
                 currentQuestion = 0;
-                userAnswers = {}; // Limpa respostas
                 resultadoArea.classList.add('hidden');
                 quizArea.classList.remove('hidden');
-                // Esconder o botão voltar global ao reiniciar
-                backBtnGlobal.classList.add('hidden');
+                backBtnGlobal.classList.remove('hidden'); // Botão voltar continua visível
                 showQuestion(0);
+                quizArea.scrollIntoView({ behavior: 'smooth' }); // Rola para o topo do quiz
             }
 
             // --- 5. EVENT LISTENERS ---
-            nextBtn.addEventListener('click', () => {
-                if (currentQuestion < perguntas.length - 1) {
-                    currentQuestion++;
-                    showQuestion(currentQuestion);
-                }
-            });
-            prevBtn.addEventListener('click', () => {
-                if (currentQuestion > 0) {
-                    currentQuestion--;
-                    showQuestion(currentQuestion);
-                }
-            });
-            finishBtn.addEventListener('click', showResults);
+            nextBtn.addEventListener('click', () => { if (currentQuestion < perguntas.length - 1) { currentQuestion++; showQuestion(currentQuestion); } });
+            prevBtn.addEventListener('click', () => { if (currentQuestion > 0) { currentQuestion--; showQuestion(currentQuestion); } });
+            finishBtn.addEventListener('click', finishQuiz); // Chama a função que calcula, mostra E SALVA
             restartBtn.addEventListener('click', restartQuiz);
-
-            // --- 6. INICIALIZAÇÃO ---
-            // A inicialização agora é chamada DENTRO do bloco try/catch de carregar dados
 
         });
     </script>
