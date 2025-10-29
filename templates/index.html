@@ -13,6 +13,22 @@
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
+
+        <!-- **** ÁREA DO UTILIZADOR **** -->
+        <div class="user-area">
+            {% if current_user.is_authenticated %}
+                <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
+                <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                    <!-- Ícone Placeholder -->
+                    <div class="profile-icon">{{ current_user.username[0]|upper }}</div>
+                </a>
+                <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
+            {% else %}
+                 <!-- Fallback caso algo dê errado com a proteção da rota -->
+                 <a href="{{ url_for('login') }}" class="login-link">Login</a>
+            {% endif %}
+        </div>
+        <!-- ************************** -->
     </header>
 
     <main>
@@ -34,7 +50,9 @@
                 <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">Limpar</a>
             </div>
             <div class="chat-box" id="chat-box">
-                </div>
+                <!-- Mensagens são inseridas aqui via JS -->
+                <!-- Histórico inicial será carregado aqui pelo JS se não vier da sessão -->
+            </div>
             <form class="chat-input" id="chat-form">
                 <input type="text" id="user-input" placeholder="Digite sua dúvida..." autocomplete="off">
                 <button type="submit" id="submit-btn" title="Enviar">➤</button>
@@ -53,75 +71,94 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Adiciona a primeira mensagem da Lumi ao carregar
-        const lumiIntro = document.createElement('div');
-        lumiIntro.className = 'msg lumi';
-        lumiIntro.textContent = 'Olá! Eu sou a Lumi, sua assistente acadêmica. Como posso te ajudar hoje?';
-        chatBox.appendChild(lumiIntro);
-        scrollToBottom();
+        // Função para adicionar uma mensagem ao chat
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg ${sender}`; // sender é 'user' ou 'lumi'
+             // Substitui quebras de linha \n por <br> APENAS para Lumi
+            msgDiv.innerHTML = (sender === 'lumi') ? text.replace(/\n/g, '<br>') : text;
+            chatBox.appendChild(msgDiv);
+        }
+
+        // Tenta carregar histórico da sessão (se existir)
+        // Isso normalmente é feito pelo backend, mas podemos adicionar
+        // mensagens iniciais se o chatBox estiver vazio.
+        // O Flask agora inicializa a session['historico']
+        // Vamos apenas garantir a primeira mensagem visual se necessário
+        if (chatBox.children.length === 0) {
+             // Pega o nome do usuário do Flask (se disponível)
+             const userName = "{{ current_user.username if current_user.is_authenticated else 'Aluno' }}";
+             addMessage(`Olá ${userName}! Eu sou a Lumi. Como posso te ajudar hoje?`, 'lumi');
+             scrollToBottom();
+        } else {
+            // Se já tem conteúdo (vindo da sessão via reload), rola para baixo
+            scrollToBottom();
+        }
+
 
         chatForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const userMessage = userInput.value.trim();
             if (userMessage === '') return;
 
-            // 1. Adiciona a mensagem do usuário
-            const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = 'msg user';
-            userMsgDiv.textContent = userMessage;
-            chatBox.appendChild(userMsgDiv);
-            
-            // 2. Limpa o input e desabilita
-            userInput.value = '';
-            userInput.disabled = true;
+            // 1. Adiciona mensagem do usuário
+            addMessage(userMessage, 'user');
+            userInput.value = ''; // Limpa logo
+            userInput.disabled = true; // Desabilita enquanto espera
             submitBtn.disabled = true;
             scrollToBottom();
 
-            // 3. Adiciona indicador "digitando..."
+            // 2. Adiciona indicador "digitando..."
             const typingIndicator = document.createElement('div');
             typingIndicator.className = 'msg lumi typing';
             typingIndicator.textContent = 'Lumi está digitando...';
             chatBox.appendChild(typingIndicator);
             scrollToBottom();
 
-            // 4. Envia para o backend
+            // 3. Envia para o backend
             try {
                 const response = await fetch('/ask', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ pergunta: userMessage })
                 });
-                if (!response.ok) throw new Error('Erro na resposta do servidor.');
-                
+
+                // Remove "digitando" independentemente da resposta
+                if(chatBox.contains(typingIndicator)) {
+                     chatBox.removeChild(typingIndicator);
+                }
+
+                if (!response.ok) {
+                     // Tenta ler a mensagem de erro do JSON, se houver
+                     let errorMsg = 'Erro na resposta do servidor.';
+                     try {
+                         const errorData = await response.json();
+                         errorMsg = errorData.resposta || errorMsg;
+                     } catch (jsonError) { /* Ignora se não for JSON */ }
+                     throw new Error(errorMsg);
+                }
+
                 const data = await response.json();
-                
-                // 5. Remove "digitando" e adiciona resposta
-                chatBox.removeChild(typingIndicator);
-                const lumiMsgDiv = document.createElement('div');
-                lumiMsgDiv.className = 'msg lumi';
-                // Substitui quebras de linha \n por <br>
-                lumiMsgDiv.innerHTML = data.resposta.replace(/\n/g, '<br>');
-                chatBox.appendChild(lumiMsgDiv);
+                addMessage(data.resposta, 'lumi'); // Adiciona resposta da Lumi
                 scrollToBottom();
 
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);
-                // Remove "digitando" e mostra erro
-                chatBox.removeChild(typingIndicator);
-                const errorMsgDiv = document.createElement('div');
-                errorMsgDiv.className = 'msg lumi';
-                errorMsgDiv.textContent = 'Desculpe, ocorreu um erro ao conectar.';
-                chatBox.appendChild(errorMsgDiv);
+                // Remove indicador se ainda existir (caso o erro ocorra antes)
+                if(chatBox.contains(typingIndicator)) {
+                     chatBox.removeChild(typingIndicator);
+                }
+                addMessage(`Desculpe, ocorreu um erro: ${error.message}`, 'lumi');
                 scrollToBottom();
             } finally {
-                // 6. Reabilita o input
+                // 4. Reabilita o input
                 userInput.disabled = false;
                 submitBtn.disabled = false;
                 userInput.focus();
             }
         });
 
-        // Desabilitar links
+        // Desabilitar links desativados
         document.querySelectorAll('a.func-item.disabled').forEach(link => {
             link.addEventListener('click', (e) => e.preventDefault());
         });

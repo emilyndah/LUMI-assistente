@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Lumi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos básicos para a página de perfil */
+        .profile-container {
+            width: 100%;
+            max-width: 600px; /* Largura da caixa */
+            margin: 30px auto;
+            background: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .profile-container h1 {
+            color: #4B8BEA;
+            margin-bottom: 25px;
+        }
+        .profile-info p {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: left; /* Alinha informações à esquerda */
+            border-bottom: 1px solid #eee; /* Linha separadora */
+            padding-bottom: 10px;
+        }
+        .profile-info strong {
+            color: #4B8BEA;
+            display: inline-block;
+            width: 120px; /* Largura fixa para os rótulos */
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #4B8BEA;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">
+             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
+        </a>
+       <div style="position: absolute; right: 20px; top: 20px; font-size: 0.9em;">
+           {% if current_user.is_authenticated %}
+               <span>Olá, {{ current_user.username }}!</span>
+               <a href="{{ url_for('logout') }}" style="margin-left: 15px; color: #e74c3c; text-decoration: none;">Logout</a>
+           {% endif %}
+       </div>
+    </header>
+
+    <main class="faq-page"> <section class="profile-container">
+            <h1>Meu Perfil</h1>
+            {% if current_user.is_authenticated %}
+            <div class="profile-info">
+                <p><strong>Utilizador:</strong> {{ current_user.username }}</p>
+                <p><strong>Email:</strong> {{ current_user.email }}</p>
+                <p><strong>Matrícula:</strong> {{ current_user.matricula }}</p>
+                </div>
+            {% else %}
+            <p>Erro: Não foi possível carregar as informações do utilizador.</p>
+            {% endif %}
+            <a href="{{ url_for('index') }}" class="back-link">← Voltar para o Chat</a>
+        </section>
+    </main>
+
+</body>
+</html>

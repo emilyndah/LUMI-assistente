@@ -1,0 +1,212 @@
+{
+    "titulo": "Questionário de Estilo de Aprendizagem (VARK)",
+    "descricao": "Escolha a resposta que melhor explica a sua preferência e clique no botão. Pode escolher mais de uma resposta se várias se aplicarem.",
+    "perguntas": [
+        {
+            "id": 1,
+            "texto": "Você vai cozinhar algo especial para a sua família. Você faria:",
+            "opcoes": [
+                {"texto": "Perguntaria a amigos por sugestões.", "tipo": "A"},
+                {"texto": "Consultaria um livro de culinária com fotos dos pratos.", "tipo": "V"},
+                {"texto": "Usaria uma receita bem conhecida.", "tipo": "R"},
+                {"texto": "Cozinharia algo que você já fez antes sem precisar de receita.", "tipo": "K"}
+            ]
+        },
+        {
+            "id": 2,
+            "texto": "Você vai escolher um livro de férias. Você provavelmente:",
+            "opcoes": [
+                {"texto": "Leria resenhas ou ouviria recomendações.", "tipo": "R"},
+                {"texto": "Escolheria um com base na capa ou nas imagens.", "tipo": "V"},
+                {"texto": "Escolheria um tópico que você conhece e gosta.", "tipo": "K"},
+                {"texto": "Ouviria amigos falando sobre ele.", "tipo": "A"}
+            ]
+        },
+        {
+            "id": 3,
+            "texto": "Você precisa aprender a usar um novo programa de computador. Você faria:",
+            "opcoes": [
+                {"texto": "Sentaria na frente do teclado e começaria a experimentar.", "tipo": "K"},
+                {"texto": "Seguiria os diagramas no livro que acompanha o programa.", "tipo": "V"},
+                {"texto": "Ligaria para um amigo e perguntaria.", "tipo": "A"},
+                {"texto": "Leria as instruções escritas.", "tipo": "R"}
+            ]
+        },
+        {
+            "id": 4,
+            "texto": "Você não tem certeza se uma palavra se escreve 'dependente' ou 'dependente'. Você faria:",
+            "opcoes": [
+                {"texto": "Procuraria a palavra no dicionário.", "tipo": "R"},
+                {"texto": "Visualizaria a palavra na sua mente e escolheria a que parece certa.", "tipo": "V"},
+                {"texto": "Soletraria as duas versões em voz alta.", "tipo": "A"},
+                {"texto": "Escreveria as duas versões num papel para ver qual parece melhor.", "tipo": "K"}
+            ]
+        },
+        {
+            "id": 5,
+            "texto": "Você está planejando uma viagem para amigos. O que você faria:",
+            "opcoes": [
+                {"texto": "Ligaria ou falaria com eles sobre o plano.", "tipo": "A"},
+                {"texto": "Mostraria a eles um mapa ou site sobre o lugar.", "tipo": "V"},
+                {"texto": "Daria a eles uma cópia impressa do itinerário.", "tipo": "R"},
+                {"texto": "Imaginaria a viagem e as atividades que fariam.", "tipo": "K"}
+            ]
+        },
+        {
+            "id": 6,
+            "texto": "Você vai fazer uma apresentação importante. Para se preparar, você:",
+            "opcoes": [
+                {"texto": "Faria diagramas ou gráficos para ajudar a explicar.", "tipo": "V"},
+                {"texto": "Escreveria a apresentação e a leria várias vezes.", "tipo": "R"},
+                {"texto": "Ensaiaria a apresentação em voz alta, talvez gravando-se.", "tipo": "A"},
+                {"texto": "Reuniria exemplos e histórias para tornar a apresentação mais real.", "tipo": "K"}
+            ]
+        },
+        {
+            "id": 7,
+            "texto": "Você tem um problema com o joelho. Você preferiria que o médico:",
+            "opcoes": [
+                {"texto": "Usasse um modelo de plástico para mostrar o que está errado.", "tipo": "K"},
+                {"texto": "Mostrasse um diagrama do que está errado.", "tipo": "V"},
+                {"texto": "Desse a você um artigo explicando o problema.", "tipo": "R"},
+                {"texto": "Explorasse verbalmente o que está errado.", "tipo": "A"}
+            ]
+        },
+        {
+            "id": 8,
+            "texto": "Você quer aprender sobre um novo projeto. Você preferiria:",
+            "opcoes": [
+                {"texto": "Diagramas mostrando as etapas do projeto.", "tipo": "V"},
+                {"texto": "Uma oportunidade de participar de um piloto ou simulação.", "tipo": "K"},
+                {"texto": "Um relatório escrito descrevendo os pontos principais.", "tipo": "R"},
+                {"texto": "Uma discussão com as pessoas envolvidas.", "tipo": "A"}
+            ]
+        },
+        {
+            "id": 9,
+            "texto": "Você precisa encontrar o caminho para uma loja que um amigo recomendou. Você faria:",
+            "opcoes": [
+                {"texto": "Usaria um mapa.", "tipo": "V"},
+                {"texto": "Pediria instruções escritas para o seu amigo.", "tipo": "R"},
+                {"texto": "Pediria ao amigo para lhe dizer as direções.", "tipo": "A"},
+                {"texto": "Seguiria o seu amigo até lá.", "tipo": "K"}
+            ]
+        },
+        {
+            "id": 10,
+            "texto": "Você está aprendendo a tirar fotos com sua nova câmera digital. Você faria:",
+            "opcoes": [
+                {"texto": "Usaria os controles e experimentaria.", "tipo": "K"},
+                {"texto": "Pediria conselhos e dicas a outras pessoas.", "tipo": "A"},
+                {"texto": "Leria o manual de instruções.", "tipo": "R"},
+                {"texto": "Olharia os diagramas no manual.", "tipo": "V"}
+            ]
+        },
+        {
+            "id": 11,
+            "texto": "Você prefere um professor ou apresentador que use:",
+            "opcoes": [
+                {"texto": "Demonstrações, modelos ou sessões práticas.", "tipo": "K"},
+                {"texto": "Folhetos, livros ou leituras.", "tipo": "R"},
+                {"texto": "Diagramas, gráficos, mapas ou slides.", "tipo": "V"},
+                {"texto": "Perguntas e respostas, palestras com convidados ou discussões.", "tipo": "A"}
+            ]
+        },
+        {
+            "id": 12,
+            "texto": "Você comprou um aparelho eletrônico novo. Além do aparelho, o que mais você gostaria que viesse na caixa:",
+            "opcoes": [
+                {"texto": "Um vídeo mostrando como usá-lo.", "tipo": "V"},
+                {"texto": "A oportunidade de experimentar ou testá-lo.", "tipo": "K"},
+                {"texto": "Instruções escritas claras.", "tipo": "R"},
+                {"texto": "Um número de telefone para ligar se tiver problemas.", "tipo": "A"}
+            ]
+        },
+        {
+            "id": 13,
+            "texto": "Lembre-se de uma vez em que você aprendeu algo novo. Você aprendeu melhor:",
+            "opcoes": [
+                {"texto": "Ouvindo alguém explicar.", "tipo": "A"},
+                {"texto": "Através de experiência prática.", "tipo": "K"},
+                {"texto": "Lendo sobre o assunto.", "tipo": "R"},
+                {"texto": "Vendo diagramas ou imagens.", "tipo": "V"}
+            ]
+        },
+        {
+            "id": 14,
+            "texto": "Você tem um teste ou prova chegando. Como você se prepararia?",
+            "opcoes": [
+                {"texto": "Faria resumos ou listas dos tópicos.", "tipo": "R"},
+                {"texto": "Estudaria exemplos práticos ou questões de provas antigas.", "tipo": "K"},
+                {"texto": "Conversaria sobre os tópicos com outros alunos.", "tipo": "A"},
+                {"texto": "Usaria diagramas ou mapas mentais para visualizar os conceitos.", "tipo": "V"}
+            ]
+        },
+        {
+            "id": 15,
+            "texto": "Você precisa fazer uma apresentação para um grupo. Você prefere:",
+            "opcoes": [
+                {"texto": "Usar recursos visuais como slides ou gráficos.", "tipo": "V"},
+                {"texto": "Entregar folhetos ou materiais escritos.", "tipo": "R"},
+                {"texto": "Focar na sua fala e na interação com o público.", "tipo": "A"},
+                {"texto": "Incluir uma demonstração ou atividade prática.", "tipo": "K"}
+            ]
+        },
+         {
+            "id": 16,
+            "texto": "Você está em um hotel e ouve o alarme de incêndio. O que você faria primeiro?",
+            "opcoes": [
+                {"texto": "Procuraria o mapa de saída de emergência na porta.", "tipo": "V"},
+                {"texto": "Ouviria as instruções ou outros hóspedes.", "tipo": "A"},
+                {"texto": "Iria direto para a saída mais próxima que você se lembra.", "tipo": "K"},
+                {"texto": "Leria as instruções de emergência.", "tipo": "R"}
+            ]
+        }
+    ],
+    "resultados": {
+        "V": {
+            "titulo": "Visual (Visual)",
+            "descricao": "Você aprende melhor vendo. Gráficos, diagramas, mapas mentais, cores e vídeos são seus maiores aliados. Organizar a informação visualmente ajuda a fixar o conteúdo.",
+            "metodos": [
+                "Use mapas mentais e fluxogramas para conectar ideias.", 
+                "Assista vídeos, documentários e tutoriais sobre o assunto.", 
+                "Utilize marcadores coloridos e canetas de cores diferentes em suas anotações.", 
+                "Transforme listas e textos em diagramas ou desenhos.",
+                "Prefira materiais com muitas ilustrações e gráficos."
+            ]
+        },
+        "A": {
+            "titulo": "Auditivo (Auditory)",
+            "descricao": "Você aprende melhor ouvindo e falando. Debates, discussões, explicar conceitos em voz alta e ouvir gravações ou podcasts são muito eficazes para você.",
+            "metodos": [
+                "Participe ativamente de discussões em grupo e debates.", 
+                "Grave as aulas (se permitido) ou seus próprios resumos em áudio e ouça novamente.", 
+                "Estude explicando a matéria em voz alta para si mesmo ou para outros.", 
+                "Use músicas ou rimas para memorizar informações (mnemônicos auditivos).",
+                "Prefira audiobooks e podcasts como material complementar."
+            ]
+        },
+        "R": {
+            "titulo": "Leitura/Escrita (Read/Write)",
+            "descricao": "Você prefere informações apresentadas como palavras, seja lendo ou escrevendo. Fazer anotações detalhadas, ler manuais, livros, artigos e criar listas funcionam muito bem para você.",
+            "metodos": [
+                "Faça resumos detalhados e anotações escritas.", 
+                "Leia os livros didáticos, artigos e materiais de referência.", 
+                "Crie listas, glossários e organize a matéria em tópicos escritos.", 
+                "Reescreva os conceitos importantes com suas próprias palavras.",
+                "Utilize dicionários e outras fontes textuais para aprofundar o conhecimento."
+            ]
+        },
+        "K": {
+            "titulo": "Cinestésico (Kinesthetic)",
+            "descricao": "Você aprende melhor fazendo, tocando, experimentando e se movendo. O aprendizado está conectado à prática, ao movimento e à experiência real. Você precisa 'sentir' o conteúdo.",
+            "metodos": [
+                "Estude usando exemplos práticos, estudos de caso e simulações.", 
+                "Use flashcards físicos que você possa manusear e organizar.", 
+                "Faça experimentos, construa modelos ou realize atividades práticas relacionadas ao estudo.", 
+                "Associe o estudo a movimentos (ex: andar enquanto revisa, gesticular ao explicar).",
+                "Faça pausas frequentes para se movimentar durante longos períodos de estudo."
+            ]
+        }
+    }
+}
