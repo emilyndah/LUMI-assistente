@@ -4,7 +4,12 @@
 A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto universitário para apoiar estudantes em suas rotinas acadêmicas. A plataforma combina automação de respostas, recursos de organização pessoal e materiais de apoio interativos, permitindo que discentes encontrem informações institucionais, consultem um calendário acadêmico dinâmico e obtenham recomendações de estudo personalizadas em um único ambiente web.
 
 ## 🤖 Funcionalidades Principais
+<<<<<<< HEAD
 - **Chat inteligente com IA local gemini 2.5 flash** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
+=======
+- **Chat inteligente com IA local (Ollama)** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
+- **Chat motivacional** com mensagens de apoio e estratégias para manter a motivação nos estudos.
+>>>>>>> a01a3d0977938e54634b6bc7a914c48a4477321b
 - **Calendário acadêmico interativo** com ordenação automática de eventos e descrição detalhada de atividades.
 - **FAQ dinâmico** alimentado por arquivo JSON para garantir facilidade de manutenção das perguntas frequentes.
 - **Flashcards personalizáveis** para revisão rápida de conteúdos e disciplinas.
@@ -25,6 +30,7 @@ LUMI-assistente/
 │   └── lumi_logo.jpg     # Identidade visual utilizada no frontend
 └── templates/
     ├── index.html        # Página principal com o chat da assistente Lumi
+    ├── motivacional.html # Chat com foco em acolhimento e motivação
     ├── calendario.html   # Visualização do calendário acadêmico
     ├── faq.html          # Página de perguntas frequentes
     ├── flashcards.html   # Lista de flashcards interativos
