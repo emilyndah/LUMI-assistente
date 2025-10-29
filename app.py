@@ -90,6 +90,14 @@ def carregar_contexto_inicial():
 
 CONTEXTO_INICIAL = carregar_contexto_inicial()
 
+# Contexto específico para o chat motivacional
+CONTEXTO_MOTIVACIONAL = (
+    "Você é uma mentora motivacional chamada Lumi. Ofereça mensagens encorajadoras, "
+    "estratégias para manter o foco nos estudos e lembretes positivos. Foque em "
+    "empatia, acolhimento e em ajudar o aluno a lidar com desafios acadêmicos com "
+    "otimismo realista."
+)
+
 
 # =======================================================
 # 2. FUNÇÕES AUXILIARES (CARREGAMENTO DE DADOS)
@@ -177,9 +185,30 @@ def index():
     if "historico" not in session:
         session["historico"] = [
             {"role": "user", "parts": [CONTEXTO_INICIAL]},
-            {"role": "model", "parts": ["Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje?"]}
+            {
+                "role": "model",
+                "parts": [
+                    "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje?"
+                ],
+            },
         ]
     return render_template("index.html")
+
+
+@app.route("/motivacional")
+def chat_motivacional():
+    """Renderiza a página do chat motivacional."""
+    if "historico_motivacional" not in session:
+        session["historico_motivacional"] = [
+            {"role": "user", "parts": [CONTEXTO_MOTIVACIONAL]},
+            {
+                "role": "model",
+                "parts": [
+                    "Olá! Eu sou a Lumi, sua mentora motivacional. Vamos encontrar energia e foco para os estudos juntos?"
+                ],
+            },
+        ]
+    return render_template("motivacional.html")
 
 
 @app.route("/faq")
@@ -211,15 +240,38 @@ def flashcards():
 @app.route("/limpar")
 def limpar_chat():
     """Limpa o histórico do chat da sessão e redireciona para o início."""
-    
+
     # Reinicia o histórico da sessão para o estado inicial
     session["historico"] = [
         {"role": "user", "parts": [CONTEXTO_INICIAL]},
-        {"role": "model", "parts": ["Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje?"]}
+        {
+            "role": "model",
+            "parts": ["Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje?"],
+        },
     ]
-    
+
     # Redireciona o usuário de volta para a página principal (index)
     return redirect(url_for('index'))
+
+
+# =======================================================
+# ============ ROTA PARA LIMPAR O CHAT MOTIVACIONAL ======
+# =======================================================
+@app.route("/limpar_motivacional")
+def limpar_chat_motivacional():
+    """Limpa o histórico do chat motivacional e redireciona para a página dele."""
+
+    session["historico_motivacional"] = [
+        {"role": "user", "parts": [CONTEXTO_MOTIVACIONAL]},
+        {
+            "role": "model",
+            "parts": [
+                "Olá! Eu sou a Lumi, sua mentora motivacional. Vamos encontrar energia e foco para os estudos juntos?"
+            ],
+        },
+    ]
+
+    return redirect(url_for('chat_motivacional'))
 
 
 # =======================================================
@@ -268,6 +320,49 @@ def ask():
 
     except Exception as e:
         print(f"Erro na API do Gemini: {e}")
+        return jsonify({"resposta": f"Desculpe, ocorreu um erro ao processar sua solicitação: {e}"}), 500
+
+
+@app.route("/ask_motivacional", methods=["POST"])
+def ask_motivacional():
+    """Recebe perguntas do chat motivacional e retorna respostas do Gemini."""
+
+    if not model:
+        return jsonify({"resposta": "Desculpe, o serviço de chat não está configurado. O administrador precisa verificar a API Key do Gemini."}), 500
+
+    data = request.json
+    pergunta = data.get("pergunta")
+
+    if not pergunta:
+        return jsonify({"resposta": "Nenhuma pergunta recebida."}), 400
+
+    try:
+        historico_chat = session.get("historico_motivacional", [])
+
+        if not historico_chat:
+            historico_chat = [
+                {"role": "user", "parts": [CONTEXTO_MOTIVACIONAL]},
+                {
+                    "role": "model",
+                    "parts": [
+                        "Olá! Eu sou a Lumi, sua mentora motivacional. Vamos encontrar energia e foco para os estudos juntos?"
+                    ],
+                },
+            ]
+
+        chat = model.start_chat(history=historico_chat)
+
+        response = chat.send_message(pergunta)
+
+        historico_chat.append({"role": "user", "parts": [pergunta]})
+        historico_chat.append({"role": "model", "parts": [response.text]})
+
+        session["historico_motivacional"] = historico_chat
+
+        return jsonify({"resposta": response.text})
+
+    except Exception as e:
+        print(f"Erro na API do Gemini (motivacional): {e}")
         return jsonify({"resposta": f"Desculpe, ocorreu um erro ao processar sua solicitação: {e}"}), 500
 
 
