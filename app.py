@@ -11,7 +11,7 @@ import json
 import os
 from datetime import datetime
 import google.generativeai as genai
-from dotenv import load_dotenv  # <<< MUDANÇA: Para carregar o .env
+from dotenv import load_dotenv  # Para carregar o .env
 
 # Carrega variáveis de ambiente do arquivo .env (se ele existir)
 load_dotenv()
@@ -26,199 +26,167 @@ app.secret_key = os.environ.get(
 )
 
 # =======================================================
-# 1. CONSTANTES DO GEMINI
+# 1. CONSTANTES E CONFIGURAÇÃO DO GEMINI
 # =======================================================
 
-# --- Configuração do Gemini ---
+# --- Configuração da API Key ---
 try:
     # Tenta carregar a chave de um variável de ambiente (MAIS SEGURO)
     GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 except KeyError:
     # Se não encontrar, o app não pode funcionar.
     print("=" * 80)
-    print(" [ ERRO CRÍTICO ] ".center(80, "="))
-    print("A variável de ambiente 'GEMINI_API_KEY' não foi definida.")
-    print("Crie um arquivo chamado '.env' neste diretório e adicione a linha:")
-    print("GEMINI_API_KEY=SUA_CHAVE_REAL_AQUI")
+    print("ERRO: Variável de ambiente GEMINI_API_KEY não encontrada.")
+    print("Por favor, crie um arquivo .env e adicione a linha:")
+    print("GEMINI_API_KEY=SUA_CHAVE_AQUI")
     print("=" * 80)
-    # Define como None para que a próxima etapa falhe de forma controlada
-    GEMINI_API_KEY = None  # CORREÇÃO: Usar None em vez de ()
+    GEMINI_API_KEY = None  # Define como None para checagem posterior
 
-GEMINI_MODELO = "gemini-2.5-flash"  # Rápido e eficiente para chat
-
-# Configura a biblioteca do Gemini
-try:
-    ### CORREÇÃO PRINCIPAL AQUI ###
-    # A checagem anterior (GEMINI_API_KEY is GEMINI_API_KEY) estava errada.
-    # A forma correta é checar se a chave é nula ou vazia.
-    if not GEMINI_API_KEY:
-        raise ValueError(
-            "API Key não foi fornecida. Verifique as mensagens de erro."
-        )
-
+# --- Configuração do Modelo ---
+model = None
+if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
-    print("API Key do Gemini carregada com sucesso.")
 
-except Exception as e:
-    print(f"ERRO ao configurar a API do Gemini: {e}")
-    print("Verifique se a API Key é válida.")
-    GEMINI_API_KEY = None  # CORREÇÃO: Usar None em vez de ()
+    generation_config = {
+        "temperature": 0.8,
+        "top_p": 0.9,
+        "top_k": 40,
+        "max_output_tokens": 1500,
+    }
 
+    safety_settings = [
+        {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+        {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+        {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+        {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+    ]
 
-# =======================================================
-# 2. FUNÇÕES DE CARREGAMENTO DE DADOS
-# =======================================================
-
-
-def carregar_dados_json(nome_ficheiro):
-    """Função genérica para carregar dados de um ficheiro JSON."""
     try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        json_path = os.path.join(base_dir, nome_ficheiro)
-        with open(json_path, "r", encoding="utf-8") as f:
+        model = genai.GenerativeModel(
+            model_name="gemini-1.5-flash-latest", # Ou o modelo que preferir
+            generation_config=generation_config,
+            safety_settings=safety_settings
+        )
+        print("Modelo Gemini inicializado com sucesso.")
+    except Exception as e:
+        print(f"Erro ao inicializar o modelo Gemini: {e}")
+        GEMINI_API_KEY = None # Falha na inicialização
+else:
+    print("API Key do Gemini não encontrada. O Chatbot não funcionará.")
+
+
+# --- Contexto Inicial (Sistema) ---
+def carregar_contexto_inicial():
+    """Carrega o contexto base do arquivo informacoes.txt."""
+    try:
+        with open("informacoes.txt", "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        print("Aviso: 'informacoes.txt' não encontrado. O chatbot pode não ter contexto.")
+        return "Você é um assistente acadêmico chamado Lumi, focado em ajudar alunos da UniEVANGÉLICA."
+    except Exception as e:
+        print(f"Erro ao ler 'informacoes.txt': {e}")
+        return "Você é um assistente acadêmico chamado Lumi."
+
+CONTEXTO_INICIAL = carregar_contexto_inicial()
+
+
+# =======================================================
+# 2. FUNÇÕES AUXILIARES (CARREGAMENTO DE DADOS)
+# =======================================================
+
+def carregar_dados_json(arquivo):
+    """Função genérica para carregar dados de um arquivo JSON."""
+    try:
+        with open(arquivo, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"AVISO: O ficheiro {nome_ficheiro} não foi encontrado.")
-        return {}  # Retorna dict vazio para .get() funcionar
+        print(f"Arquivo {arquivo} não encontrado.")
+        return {}
     except json.JSONDecodeError:
-        print(f"ERRO: O ficheiro {nome_ficheiro} contém JSON inválido.")
+        print(f"Erro ao decodificar o JSON em {arquivo}.")
         return {}
     except Exception as e:
-        print(f"ERRO desconhecido ao carregar {nome_ficheiro}: {e}")
+        print(f"Erro inesperado ao ler {arquivo}: {e}")
         return {}
 
-
+# ===================================================
+# FUNÇÃO DO CALENDÁRIO (JÁ MODIFICADA)
+# ===================================================
 def carregar_calendario():
-    """Lê o ficheiro calendario.txt e retorna uma lista de eventos ordenados."""
+    """Carrega, formata e ordena os eventos do calendário a partir de um TXT.
+
+    Retorna:
+        list: Lista de dicionários, cada um contendo 'data', 'evento',
+              'data_obj' (para ordenação), 'data_iso' (para JS) e 'mes_curto'.
+    """
     eventos = []
+    meses_map = {
+        1: "JAN", 2: "FEV", 3: "MAR", 4: "ABR", 5: "MAI", 6: "JUN",
+        7: "JUL", 8: "AGO", 9: "SET", 10: "OUT", 11: "NOV", 12: "DEZ"
+    }
+
     try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        txt_path = os.path.join(base_dir, "calendario.txt")
-        with open(txt_path, "r", encoding="utf-8") as f:
+        with open("calendario.txt", "r", encoding="utf-8") as f:
             for linha in f:
                 linha = linha.strip()
-                if ":" in linha:
-                    partes = linha.split(":", 1)
-                    data_str, evento_desc = partes[0].strip(
-                    ), partes[1].strip()
+                if not linha:
+                    continue
+
+                # Divide a linha no primeiro ":" encontrado
+                partes = linha.split(":", 1)
+                if len(partes) < 2:
+                    continue  # Ignora linhas mal formatadas
+
+                data_str = partes[0].strip()
+                evento_str = partes[1].strip()
+
+                try:
+                    # Tenta analisar a data no formato DD/MM/YYYY
                     data_obj = datetime.strptime(data_str, "%d/%m/%Y")
-                    eventos.append(
-                        {
-                            "data_obj": data_obj,
-                            "data_str": data_str,
-                            "evento": evento_desc,
-                        }
-                    )
-        eventos.sort(key=lambda x: x["data_obj"])
-        return eventos
+                    
+                    eventos.append({
+                        "data": data_str,                      # Formato original: DD/MM/YYYY
+                        "evento": evento_str,                  # Texto do evento
+                        "data_obj": data_obj,                  # Objeto datetime para ordenar
+                        "data_iso": data_obj.strftime("%Y-%m-%d"), # Formato YYYY-MM-DD para o FullCalendar
+                        "mes_curto": meses_map.get(data_obj.month) # Mês abreviado para a lista
+                    })
+                except ValueError:
+                    print(f"Formato de data inválido ignorado: {data_str}")
+
     except FileNotFoundError:
-        print("AVISO: O ficheiro calendario.txt não foi encontrado.")
+        print("Arquivo calendario.txt não encontrado.")
         return []
     except Exception as e:
-        print(f"ERRO ao carregar calendario.txt: {e}")
+        print(f"Erro ao ler o calendário: {e}")
         return []
 
+    # Ordena os eventos pela data
+    eventos_ordenados = sorted(eventos, key=lambda x: x["data_obj"])
+    return eventos_ordenados
 
 # =======================================================
-# 3. FUNÇÃO DO ASSISTENTE (GEMINI)
+# 3. ROTAS PRINCIPAIS (PÁGINAS HTML)
 # =======================================================
-def responder_avancado(pergunta, historico_conversa):
-    """Envia uma pergunta para o modelo de linguagem do Gemini."""
 
-    # Verifica se a API Key foi carregada corretamente
-    # Esta checagem agora funciona, pois padronizamos para None
-    if GEMINI_API_KEY is None:
-        return "⚠️ Desculpe, o serviço de IA não está configurado. O administrador precisa definir a GEMINI_API_KEY."
-
-    try:
-        now = datetime.now()
-        data_hora_atual = now.strftime("%A, %d de %B de %Y, %H:%M")
-
-        # --- Prompt do Sistema para o Gemini ---
-        prompt_sistema = (
-            f"Você é a Lumi, uma assistente académica da UniEVANGÉLICA. "
-            f"A data e hora atuais são: {data_hora_atual}. "
-            f"Seja sempre simpática, prestativa e inteligente. "
-            f"Não repita palavras desnecessariamente e mantenha as respostas concisas."
-        )
-
-        # --- Inicializa o modelo do Gemini ---
-        model = genai.GenerativeModel(
-            model_name=GEMINI_MODELO, system_instruction=prompt_sistema
-        )
-
-        # --- Converte o histórico para o formato do Gemini ---
-        # Formato Flask Session: [{"usuario": "...", "lumi": "..."}]
-        # Formato Gemini: [{"role": "user", "parts": ["..."]}, {"role": "model", "parts": ["..."]}]
-        historico_gemini = []
-        for interacao in historico_conversa:
-            historico_gemini.append(
-                {"role": "user", "parts": [interacao["usuario"]]})
-            # Importante: Ollama usa "assistant", Gemini usa "model"
-            historico_gemini.append(
-                {"role": "model", "parts": [interacao["lumi"]]})
-
-        # Inicia o chat com o histórico convertido
-        chat = model.start_chat(history=historico_gemini)
-
-        # Envia a nova pergunta
-        response = chat.send_message(pergunta)
-
-        return response.text.strip()
-
-    # <<< MUDANÇA: Captura de exceção genérica da API do Gemini
-    except Exception as e:
-        print(f"ERRO de conexão com o Gemini: {e}")
-        if "API_KEY_INVALID" in str(e):
-            return "⚠️ Desculpe, sua API Key do Gemini parece ser inválida. Verifique a configuração."
-        return f"⚠️ Desculpe, não consegui me conectar ao meu cérebro (Gemini). Ocorreu um erro: {e}"
-
-
-# =======================================================
-# 4. ROTAS DO SITE
-# =======================================================
 @app.route("/")
 def index():
-    """Renderiza a página inicial com o chat."""
+    """Renderiza a página inicial do chat."""
+    # Limpa/Inicia o histórico de sessão
     if "historico" not in session:
-        session["historico"] = []
-    return render_template("index.html", historico=session.get("historico", []))
-
-
-@app.route("/ask", methods=["POST"])
-def ask():
-    """Processa a pergunta do usuário e retorna a resposta da IA."""
-    if "historico" not in session:
-        session["historico"] = []
-
-    pergunta = request.json.get("pergunta")
-
-    if not pergunta or not pergunta.strip():
-        return jsonify({"erro": "Pergunta vazia"}), 400
-
-    # Esta função agora chama o Gemini
-    resposta = responder_avancado(pergunta, session.get("historico", []))
-
-    session["historico"].append({"usuario": pergunta, "lumi": resposta})
-    session.modified = True
-
-    return jsonify({"resposta": resposta})
-
-
-@app.route("/limpar_chat")
-def limpar_chat():
-    """Limpa o histórico do chat na sessão."""
-    session.pop("historico", None)
-    return redirect(url_for("index"))
+        session["historico"] = [
+            {"role": "user", "parts": [CONTEXTO_INICIAL]},
+            {"role": "model", "parts": ["Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje?"]}
+        ]
+    return render_template("index.html")
 
 
 @app.route("/faq")
 def faq():
-    """Renderiza a página de Perguntas Frequentes (FAQ)."""
-    faq_data = carregar_dados_json("faq.json")
-    if not isinstance(faq_data, list):
-        faq_data = []
-    return render_template("faq.html", faq_data=faq_data)
+    """Renderiza a página de FAQ."""
+    dados = carregar_dados_json("faq.json")
+    return render_template("faq.html", faq_data=dados)
 
 
 @app.route("/calendario")
@@ -232,8 +200,26 @@ def calendario():
 def flashcards():
     """Renderiza a página de Flashcards."""
     dados = carregar_dados_json("flashcards.json")
+    # Pega a chave "flash_cards" dentro do JSON
     flashcard_data = dados.get("flash_cards", dados)
     return render_template("flashcards.html", flashcard_data=flashcard_data)
+
+
+# =======================================================
+# ============ ROTA PARA LIMPAR O CHAT (CORRIGIDA) ======
+# =======================================================
+@app.route("/limpar")
+def limpar_chat():
+    """Limpa o histórico do chat da sessão e redireciona para o início."""
+    
+    # Reinicia o histórico da sessão para o estado inicial
+    session["historico"] = [
+        {"role": "user", "parts": [CONTEXTO_INICIAL]},
+        {"role": "model", "parts": ["Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje?"]}
+    ]
+    
+    # Redireciona o usuário de volta para a página principal (index)
+    return redirect(url_for('index'))
 
 
 # =======================================================
@@ -242,22 +228,57 @@ def flashcards():
 @app.route("/metodo_de_estudo")
 def metodo_de_estudo():
     """Renderiza o quiz para descobrir o método de estudo (VARK)."""
-    # Apenas renderiza o HTML. Os dados estão dentro dele.
-    return render_template("metodo_estudo.html")
+    return render_template("metodo_de_estudo.html")
 
 
 # =======================================================
-# ================== FIM DA ROTA ===================
+# 4. ROTA DA API DO CHAT (LÓGICA DO GEMINI)
 # =======================================================
+@app.route("/ask", methods=["POST"])
+def ask():
+    """Recebe perguntas do usuário e retorna respostas do Gemini."""
+    
+    # Verifica se a API Key está configurada e o modelo foi carregado
+    if not model:
+        return jsonify({"resposta": "Desculpe, o serviço de chat não está configurado. O administrador precisa verificar a API Key do Gemini."}), 500
+
+    data = request.json
+    pergunta = data.get("pergunta")
+
+    if not pergunta:
+        return jsonify({"resposta": "Nenhuma pergunta recebida."}), 400
+
+    try:
+        # Pega o histórico da sessão
+        historico_chat = session.get("historico", [])
+
+        # Inicia uma nova sessão de chat com o histórico
+        chat = model.start_chat(history=historico_chat)
+
+        # Envia a nova pergunta para o Gemini
+        response = chat.send_message(pergunta)
+
+        # Atualiza o histórico na sessão
+        historico_chat.append({"role": "user", "parts": [pergunta]})
+        historico_chat.append({"role": "model", "parts": [response.text]})
+        
+        session["historico"] = historico_chat
+
+        return jsonify({"resposta": response.text})
+
+    except Exception as e:
+        print(f"Erro na API do Gemini: {e}")
+        return jsonify({"resposta": f"Desculpe, ocorreu um erro ao processar sua solicitação: {e}"}), 500
 
 
 # =======================================================
 # 5. EXECUÇÃO DO SERVIDOR FLASK
 # =======================================================
 if __name__ == "__main__":
-    # Esta checagem agora funciona, pois padronizamos para None
+    # Checa se a API Key foi carregada antes de iniciar
     if GEMINI_API_KEY is None:
         print("Servidor Flask NÃO foi iniciado. Verifique o erro da API Key acima.")
     else:
-        # Executa escutando em todos IPs locais na porta 5000 com debug
-        app.run(host="0.0.0.0", port=5000, debug=True)
+        # Executa o app
+        print("Iniciando servidor Flask em http://127.0.0.1:5000")
+        app.run(debug=True, host="0.0.0.0", port=5000)
