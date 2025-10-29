@@ -24,68 +24,67 @@
             <a href="{{ url_for('metodo_de_estudo') }}" class="func-item">Método de Estudo</a>
             <a href="#" class="func-item disabled">Análise de desempenho</a>
             <a href="{{ url_for('calendario') }}" class="func-item">Calendário</a>
-            <a href="#" class="func-item disabled">Chat motivacional</a>
-            <a href="{{ url_for('faq') }}" class="func-item">Dúvidas frequentes (FAQ)</a>
-            <a href="#" class="func-item disabled">Quiz</a>
+            <a href="#" class="func-item disabled">Gerador de Resumos</a>
+            <a href="{{ url_for('faq') }}" class="func-item">FAQ</a>
         </section>
 
-        <section class="chat">
-            <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">
-                Limpar Conversa
-            </a>
-            <div class="chat-box" id="chat-box">
-                {% if not historico %}
-                    <div class="msg lumi">Olá! Sou a Lumi 💡. Como posso te ajudar hoje?</div>
-                {% else %}
-                    {% for msg in historico %}
-                        <div class="msg user">{{ msg.usuario }}</div>
-                        <div class="msg lumi">{{ msg.lumi | safe }}</div>
-                    {% endfor %}
-                {% endif %}
+        <section class="chat-container">
+            <div class="chat-header">
+                <h1>Chat Acadêmico</h1>
+                <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">Limpar</a>
             </div>
-            <form id="chat-form">
-                <input
-                    type="text"
-                    id="pergunta-input"
-                    name="pergunta"
-                    placeholder="Digite sua pergunta..."
-                    required
-                    autocomplete="off"
-                >
-                <button
-                    type="submit"
-                    id="submit-btn"
-                    aria-label="Enviar Pergunta"
-                >
-                    &#x27A4;
-                </button>
+            <div class="chat-box" id="chat-box">
+                </div>
+            <form class="chat-input" id="chat-form">
+                <input type="text" id="user-input" placeholder="Digite sua dúvida..." autocomplete="off">
+                <button type="submit" id="submit-btn" title="Enviar">➤</button>
             </form>
         </section>
     </main>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const chatBox = document.getElementById('chat-box');
-        function scrollToBottom() { chatBox.scrollTop = chatBox.scrollHeight; }
-        scrollToBottom();
         const chatForm = document.getElementById('chat-form');
-        const userInput = document.getElementById('pergunta-input');
+        const userInput = document.getElementById('user-input');
         const submitBtn = document.getElementById('submit-btn');
 
-        chatForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
+        function scrollToBottom() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Adiciona a primeira mensagem da Lumi ao carregar
+        const lumiIntro = document.createElement('div');
+        lumiIntro.className = 'msg lumi';
+        lumiIntro.textContent = 'Olá! Eu sou a Lumi, sua assistente acadêmica. Como posso te ajudar hoje?';
+        chatBox.appendChild(lumiIntro);
+        scrollToBottom();
+
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
             const userMessage = userInput.value.trim();
             if (userMessage === '') return;
+
+            // 1. Adiciona a mensagem do usuário
             const userMsgDiv = document.createElement('div');
             userMsgDiv.className = 'msg user';
             userMsgDiv.textContent = userMessage;
             chatBox.appendChild(userMsgDiv);
-            userInput.value = ''; userInput.disabled = true; submitBtn.disabled = true;
+            
+            // 2. Limpa o input e desabilita
+            userInput.value = '';
+            userInput.disabled = true;
+            submitBtn.disabled = true;
+            scrollToBottom();
+
+            // 3. Adiciona indicador "digitando..."
             const typingIndicator = document.createElement('div');
-            typingIndicator.className = 'msg lumi typing-indicator';
-            typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+            typingIndicator.className = 'msg lumi typing';
+            typingIndicator.textContent = 'Lumi está digitando...';
             chatBox.appendChild(typingIndicator);
             scrollToBottom();
+
+            // 4. Envia para o backend
             try {
                 const response = await fetch('/ask', {
                     method: 'POST',
@@ -93,15 +92,21 @@
                     body: JSON.stringify({ pergunta: userMessage })
                 });
                 if (!response.ok) throw new Error('Erro na resposta do servidor.');
+                
                 const data = await response.json();
+                
+                // 5. Remove "digitando" e adiciona resposta
                 chatBox.removeChild(typingIndicator);
                 const lumiMsgDiv = document.createElement('div');
                 lumiMsgDiv.className = 'msg lumi';
+                // Substitui quebras de linha \n por <br>
                 lumiMsgDiv.innerHTML = data.resposta.replace(/\n/g, '<br>');
                 chatBox.appendChild(lumiMsgDiv);
                 scrollToBottom();
+
             } catch (error) {
                 console.error('Erro ao enviar mensagem:', error);
+                // Remove "digitando" e mostra erro
                 chatBox.removeChild(typingIndicator);
                 const errorMsgDiv = document.createElement('div');
                 errorMsgDiv.className = 'msg lumi';
@@ -109,9 +114,14 @@
                 chatBox.appendChild(errorMsgDiv);
                 scrollToBottom();
             } finally {
-                userInput.disabled = false; submitBtn.disabled = false; userInput.focus();
+                // 6. Reabilita o input
+                userInput.disabled = false;
+                submitBtn.disabled = false;
+                userInput.focus();
             }
         });
+
+        // Desabilitar links
         document.querySelectorAll('a.func-item.disabled').forEach(link => {
             link.addEventListener('click', (e) => e.preventDefault());
         });
