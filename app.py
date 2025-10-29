@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # =======================================================
 # TÍTULO: SERVIDOR FLASK (APP.PY) - ASSISTENTE LUMI
 # (ADAPTADO PARA GOOGLE GEMINI)
@@ -261,3 +262,115 @@ if __name__ == "__main__":
     else:
         # Executa escutando em todos IPs locais na porta 5000 com debug
         app.run(host="0.0.0.0", port=5000, debug=True)
+=======
+/* =========================================
+   MÉTODO DE ESTUDO PERSONALIZADO - LUMI
+   ========================================= */
+
+.metodo-container, form {
+    background: #ffffff;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 20px;
+    width: 85%;
+    max-width: 850px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+.metodo-container h1, 
+.metodo-container h2, 
+.metodo-container h3 {
+    text-align: center;
+    color: #4B6FFF;
+    margin-bottom: 20px;
+}
+
+.metodo-container p {
+    margin-bottom: 10px;
+}
+
+.pergunta {
+    background: #f8faff;
+    border-left: 5px solid #4B6FFF;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.pergunta:hover {
+    background: #f0f4ff;
+}
+
+label {
+    display: block;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    accent-color: #4B6FFF;
+    margin-right: 8px;
+}
+
+button {
+    display: block;
+    background-color: #4B6FFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    margin: 20px auto;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #3b58db;
+}
+
+/* ===== RESULTADO ===== */
+.resultado {
+    text-align: center;
+    background: #f8faff;
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.resultado h2 {
+    color: #4B6FFF;
+}
+
+.resultado canvas {
+    display: block;
+    margin: 20px auto;
+    max-width: 350px;
+}
+
+.resultado ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.resultado li {
+    background: #eaf0ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 4px solid #4B6FFF;
+}
+
+.resultado h4 {
+    color: #555;
+    margin-top: 25px;
+}
+>>>>>>> Stashed changes
