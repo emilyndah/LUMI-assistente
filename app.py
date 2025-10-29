@@ -195,7 +195,7 @@ def ask():
 
     if not pergunta or not pergunta.strip():
         return jsonify({"erro": "Pergunta vazia"}), 400
-
+    
     # Esta função agora chama o Gemini
     resposta = responder_avancado(pergunta, session.get("historico", []))
 
