@@ -4,7 +4,7 @@
 A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto universitário para apoiar estudantes em suas rotinas acadêmicas. A plataforma combina automação de respostas, recursos de organização pessoal e materiais de apoio interativos, permitindo que discentes encontrem informações institucionais, consultem um calendário acadêmico dinâmico e obtenham recomendações de estudo personalizadas em um único ambiente web.
 
 ## 🤖 Funcionalidades Principais
-- **Chat inteligente com IA local (Ollama)** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
+- **Chat inteligente com IA local gemini 2.5 flash** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
 - **Calendário acadêmico interativo** com ordenação automática de eventos e descrição detalhada de atividades.
 - **FAQ dinâmico** alimentado por arquivo JSON para garantir facilidade de manutenção das perguntas frequentes.
 - **Flashcards personalizáveis** para revisão rápida de conteúdos e disciplinas.
@@ -35,7 +35,7 @@ LUMI-assistente/
 - **Python** – linguagem principal do backend.
 - **Flask** – framework web para roteamento, templates e sessões.
 - **HTML5 & CSS** – estrutura e estilo das páginas.
-- **Ollama** – plataforma local para execução do modelo de linguagem utilizado pela assistente.
+- **gemini 2.5** – plataforma local para execução do modelo de linguagem utilizado pela assistente.
 - **Jinja2** – engine de templates empregada pelo Flask.
 
 ## 🚀 Como Executar o Projeto Localmente
