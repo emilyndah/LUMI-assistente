@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumi – Método de Estudo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Container principal do conteúdo (caixa branca) */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin: 0 auto 40px auto; /* Centraliza */
+            position: relative; /* FUNDAMENTAL para posicionar o botão Voltar */
+            margin-top: 50px; /* Adiciona espaço acima para o botão Voltar */
+        }
+        .quiz-container h1 { text-align: center; color: #4B8BEA; margin-bottom: 10px; font-size: 2.2em; }
+        .quiz-container > p { text-align: center; color: #666; font-size: 1.1em; margin-bottom: 30px; }
+
+        /* --- CORREÇÃO DO BOTÃO VOLTAR --- */
+        .back-btn-global {
+            position: absolute; /* Posicionamento absoluto */
+            top: 15px;          /* Ajuste a distância do topo */
+            left: 25px;         /* Ajuste a distância da esquerda */
+            text-decoration: none;
+            color: #4B8BEA;
+            font-weight: 500;
+            font-size: 1em;
+            background: none; /* Garante fundo transparente */
+            border: none;     /* Sem borda */
+            padding: 5px;     /* Pequeno espaço interno */
+            cursor: pointer;
+            transition: color 0.2s ease;
+            z-index: 10; /* Garante que fique acima de outros elementos se necessário */
+        }
+        .back-btn-global:hover {
+            color: #3a74d3;
+        }
+
+        /* --- Área do Quiz --- */
+        #quiz-area p { font-size: 1.1em; /* Ligeiramente menor */ font-weight: 500; color: #333; margin-bottom: 20px; }
+        .options-container { display: flex; flex-direction: column; gap: 12px; /* Menos espaço */ }
+        .option-label {
+            display: flex; /* Para alinhar o radio button e o texto */
+            align-items: center;
+            background: #f0f5ff;
+            padding: 12px 18px; /* Menor padding */
+            border-radius: 10px;
+            border: 2px solid transparent; /* Borda transparente inicial */
+            cursor: pointer;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+            font-size: 0.95em; /* Ligeiramente menor */
+        }
+        .option-label:hover { background-color: #e6edff; }
+        .option-label input { margin-right: 12px; flex-shrink: 0; } /* Impede que o radio encolha */
+        .option-label span { flex-grow: 1; } /* Texto ocupa o espaço restante */
+        .option-label.selected {
+            background-color: #e0e8ff;
+            border-color: #4B8BEA;
+            font-weight: 500;
+        }
+        .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .quiz-nav button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background: #4B8BEA;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .quiz-nav button:hover { background: #3a74d3; }
+        .quiz-nav button:disabled { background: #ccc; cursor: not-allowed; }
+        .quiz-nav button.prev-btn { background: #f0f0f0; color: #555; }
+        .quiz-nav button.prev-btn:hover { background: #e0e0e0; }
+
+        /* --- Área do Resultado --- */
+        #resultado-area h2 { text-align: center; color: #2c3e50; font-size: 1.8em; }
+        #resultado-area p { color: #555; line-height: 1.6; font-size: 1em; /* Ajuste se necessário */ }
+        #resultado-area .destaque { color: #4B8BEA; font-weight: 600; font-size: 1.1em; }
+        #resultado-area ul { list-style-type: '✔  '; padding-left: 20px; }
+        #resultado-area li { margin-bottom: 10px; font-size: 0.95em; /* Ligeiramente menor */ }
+        #chart-container { width: 100%; max-width: 350px; /* Gráfico redondo pode ser menor */ margin: 20px auto; }
+        .restart-btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0 auto;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-align: center;
+            background: #4B8BEA;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .restart-btn:hover { background: #3a74d3; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
+        </a>
+    </header>
+
+    <main class="faq-page">
+
+        <section class="quiz-container">
+            <a href="{{ url_for('index') }}" class="back-btn-global">← Voltar para o Chat</a>
+
+            <div id="quiz-area">
+                <h1 id="quiz-titulo"></h1>
+                <p id="quiz-descricao"></p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+                <p id="pergunta-texto"></p>
+                <div class="options-container" id="options-container"></div>
+                <div class="quiz-nav">
+                    <button id="prev-btn" class="prev-btn">Anterior</button>
+                    <span id="question-counter"></span>
+                    <button id="next-btn">Próxima</button>
+                    <button id="finish-btn" class="hidden">Finalizar</button>
+                </div>
+            </div>
+
+            <div id="resultado-area" class="hidden">
+                <h2>Seu resultado: <span id="resultado-titulo" class="destaque"></span></h2>
+                <div id="chart-container">
+                    <canvas id="vark-chart"></canvas>
+                </div>
+                <p id="resultado-descricao"></p>
+                <h3>Métodos de Estudo Recomendados:</h3>
+                <ul id="resultado-metodos"></ul>
+                <button id="restart-btn" class="restart-btn">Refazer Quiz</button>
+            </div>
+
+            <div id="error-area" class="hidden">
+                <h1>Oops! Algo deu errado.</h1>
+                <p>Não foi possível carregar os dados do quiz. Verifique se o ficheiro 'metodo_estudo.json' existe e está formatado corretamente.</p>
+                 <a href="{{ url_for('index') }}" class="restart-btn" style="width: fit-content; margin-top: 20px;">Voltar para o Início</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Referências do DOM ---
+            const quizArea = document.getElementById('quiz-area');
+            const resultadoArea = document.getElementById('resultado-area');
+            const errorArea = document.getElementById('error-area');
+            const backBtnGlobal = document.querySelector('.back-btn-global'); // Referência ao botão voltar
+
+            const quizTitulo = document.getElementById('quiz-titulo');
+            const quizDescricao = document.getElementById('quiz-descricao');
+            const perguntaTexto = document.getElementById('pergunta-texto');
+            const optionsContainer = document.getElementById('options-container');
+            const questionCounter = document.getElementById('question-counter');
+
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const finishBtn = document.getElementById('finish-btn');
+            const restartBtn = document.getElementById('restart-btn');
+
+            const resultadoTitulo = document.getElementById('resultado-titulo');
+            const resultadoDescricao = document.getElementById('resultado-descricao');
+            const resultadoMetodos = document.getElementById('resultado-metodos');
+            const chartCtx = document.getElementById('vark-chart').getContext('2d');
+            let varkChart = null;
+
+            // --- 2. Variáveis de Estado ---
+            let currentQuestion = 0;
+            let userAnswers = {}; // Armazena as respostas {0: ['V'], 1: ['K', 'A'], ...}
+            let fullQuizData = null; // Será preenchido com dados do JSON
+            let perguntas = [];
+            let resultados = {};
+
+            // --- 3. Carregar Dados do JSON ---
+            // Usamos os dados passados pelo Flask agora
+             try {
+                fullQuizData = {{ quiz_data | tojson }};
+                if (!fullQuizData || !fullQuizData.perguntas || !fullQuizData.resultados) {
+                    throw new Error("Dados do quiz inválidos ou ausentes no JSON.");
+                }
+                perguntas = fullQuizData.perguntas;
+                resultados = fullQuizData.resultados;
+                initializeQuiz(); // Chama a inicialização SÓ APÓS carregar os dados
+            } catch (error) {
+                console.error("Erro ao carregar ou processar dados do quiz:", error);
+                showError();
+            }
+
+
+            // --- 4. Funções ---
+             function initializeQuiz() {
+                if (!fullQuizData) { showError(); return; } // Verificação extra
+                quizTitulo.textContent = fullQuizData.titulo;
+                quizDescricao.textContent = fullQuizData.descricao;
+                // Exibe o botão voltar SÓ QUANDO o quiz é inicializado com sucesso
+                backBtnGlobal.classList.remove('hidden');
+                showQuestion(0);
+            }
+
+            function showError() {
+                 quizArea.classList.add('hidden');
+                 resultadoArea.classList.add('hidden');
+                 errorArea.classList.remove('hidden');
+                 // Esconde o botão voltar global se der erro
+                 backBtnGlobal.classList.add('hidden');
+            }
+
+
+            function showQuestion(index) {
+                if (index < 0 || index >= perguntas.length) return; // Segurança
+
+                const q = perguntas[index];
+                perguntaTexto.textContent = q.texto;
+                optionsContainer.innerHTML = ''; // Limpa opções anteriores
+
+                q.opcoes.forEach(opt => {
+                    const optionId = `q${index}_${opt.tipo}`;
+                    const label = document.createElement('label');
+                    label.className = 'option-label';
+                    label.htmlFor = optionId; // Permite clicar no texto
+
+                    const input = document.createElement('input');
+                    // MUDANÇA: Usar checkbox para permitir múltiplas seleções
+                    input.type = 'checkbox';
+                    input.name = `question_${index}`; // Nome pode ser o mesmo para checkboxes
+                    input.id = optionId;
+                    input.value = opt.tipo;
+
+                    input.addEventListener('change', () => {
+                        // Atualiza as respostas do usuário
+                        const currentAnswers = userAnswers[index] || [];
+                        if (input.checked) {
+                            if (!currentAnswers.includes(opt.tipo)) {
+                                currentAnswers.push(opt.tipo);
+                            }
+                        } else {
+                            const pos = currentAnswers.indexOf(opt.tipo);
+                            if (pos > -1) {
+                                currentAnswers.splice(pos, 1);
+                            }
+                        }
+                        userAnswers[index] = currentAnswers;
+
+                        // Atualiza estilo visual da label
+                        if (input.checked) {
+                            label.classList.add('selected');
+                        } else {
+                            label.classList.remove('selected');
+                        }
+                        updateNavButtons(); // Atualiza os botões
+                    });
+
+                    // Verifica se esta opção já estava selecionada
+                    if (userAnswers[index] && userAnswers[index].includes(opt.tipo)) {
+                        input.checked = true;
+                        label.classList.add('selected');
+                    }
+
+                    // Adiciona o texto da opção
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = ` ${opt.texto}`;
+
+                    label.appendChild(input);
+                    label.appendChild(textSpan);
+                    optionsContainer.appendChild(label);
+                });
+
+                questionCounter.textContent = `${index + 1} / ${perguntas.length}`;
+                updateNavButtons();
+            }
+
+            function updateNavButtons() {
+                prevBtn.disabled = currentQuestion === 0;
+
+                // Habilita Próxima/Finalizar se PELO MENOS uma opção foi marcada
+                const hasAnswered = userAnswers[currentQuestion] && userAnswers[currentQuestion].length > 0;
+                nextBtn.disabled = !hasAnswered;
+
+                if (currentQuestion === perguntas.length - 1) {
+                    nextBtn.classList.add('hidden');
+                    finishBtn.classList.remove('hidden');
+                    finishBtn.disabled = !hasAnswered;
+                } else {
+                    nextBtn.classList.remove('hidden');
+                    finishBtn.classList.add('hidden');
+                    // Next não deve ficar desabilitado se já respondeu
+                    nextBtn.disabled = !hasAnswered;
+                }
+            }
+
+            function showResults() {
+                // 1. Calcular pontuação (agora soma todas as escolhas)
+                const scores = { V: 0, A: 0, R: 0, K: 0 };
+                Object.values(userAnswers).forEach(tiposEscolhidos => {
+                     if (tiposEscolhidos) {
+                        tiposEscolhidos.forEach(tipo => {
+                            if (scores.hasOwnProperty(tipo)) {
+                                scores[tipo]++;
+                            }
+                        });
+                     }
+                });
+
+                // 2. Encontrar a(s) maior(es) pontuação(ões)
+                let maxScore = 0;
+                let primaryTypes = []; // Pode haver empate
+                for (const score of Object.values(scores)) {
+                    if (score > maxScore) {
+                        maxScore = score;
+                    }
+                }
+                 // Se não respondeu nada, maxScore será 0, evita erro
+                if (maxScore === 0) {
+                     // Define um resultado padrão ou mostra uma mensagem
+                     resultadoTitulo.textContent = "Indefinido";
+                     resultadoDescricao.textContent = "Você não selecionou nenhuma opção. Refaça o quiz para descobrir seu estilo.";
+                     resultadoMetodos.innerHTML = '';
+                     // Esconder gráfico se não houver pontuação
+                      document.getElementById('chart-container').style.display = 'none';
+
+                } else {
+                    for (const [tipo, score] of Object.entries(scores)) {
+                        if (score === maxScore) {
+                            primaryTypes.push(tipo);
+                        }
+                    }
+
+                    // 3. Montar o resultado (pode ser multimodal)
+                    let tituloFinal = "";
+                    let descricaoFinal = "";
+                    let metodosFinais = new Set(); // Evita métodos repetidos
+
+                    primaryTypes.forEach((tipo, index) => {
+                        const resultData = resultados[tipo];
+                        tituloFinal += resultData.titulo + (index < primaryTypes.length - 1 ? " / " : "");
+                        descricaoFinal += resultData.descricao + (index < primaryTypes.length - 1 ? "\n\n" : "");
+                        resultData.metodos.forEach(m => metodosFinais.add(m));
+                    });
+
+                    resultadoTitulo.textContent = tituloFinal;
+                    resultadoDescricao.textContent = descricaoFinal;
+
+                    resultadoMetodos.innerHTML = '';
+                    metodosFinais.forEach(metodo => {
+                        const li = document.createElement('li');
+                        li.textContent = metodo;
+                        resultadoMetodos.appendChild(li);
+                    });
+
+                     // 4. Desenhar o gráfico redondo (Doughnut)
+                    // Mostrar o container do gráfico
+                    document.getElementById('chart-container').style.display = 'block';
+                    if (varkChart) varkChart.destroy();
+                    varkChart = new Chart(chartCtx, {
+                        // **** MUDANÇA AQUI ****
+                        type: 'doughnut', // Tipo de gráfico redondo
+                        data: {
+                            labels: ['Visual (V)', 'Auditivo (A)', 'Leitura/Escrita (R)', 'Cinestésico (K)'],
+                            datasets: [{
+                                label: 'Pontuação VARK',
+                                data: [scores.V, scores.A, scores.R, scores.K],
+                                backgroundColor: [
+                                    '#4B8BEA', // Azul para Visual
+                                    '#34D399', // Verde para Auditivo
+                                    '#F59E0B', // Amarelo/Laranja para Leitura/Escrita
+                                    '#EF4444'  // Vermelho para Cinestésico
+                                ],
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true, // Mantém proporção
+                            plugins: {
+                                legend: {
+                                    position: 'top', // Posição da legenda
+                                },
+                                tooltip: {
+                                     callbacks: {
+                                        label: function(context) {
+                                            let label = context.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed !== null) {
+                                                // Mostra a pontuação bruta
+                                                label += context.parsed;
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } // Fim do else (maxScore > 0)
+
+
+                // 5. Trocar as telas
+                quizArea.classList.add('hidden');
+                resultadoArea.classList.remove('hidden');
+                backBtnGlobal.classList.remove('hidden'); // Mostra o botão voltar
+            }
+
+            function restartQuiz() {
+                currentQuestion = 0;
+                userAnswers = {}; // Limpa respostas
+                resultadoArea.classList.add('hidden');
+                quizArea.classList.remove('hidden');
+                // Esconder o botão voltar global ao reiniciar
+                backBtnGlobal.classList.add('hidden');
+                showQuestion(0);
+            }
+
+            // --- 5. EVENT LISTENERS ---
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestion < perguntas.length - 1) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                }
+            });
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion(currentQuestion);
+                }
+            });
+            finishBtn.addEventListener('click', showResults);
+            restartBtn.addEventListener('click', restartQuiz);
+
+            // --- 6. INICIALIZAÇÃO ---
+            // A inicialização agora é chamada DENTRO do bloco try/catch de carregar dados
+
+        });
+    </script>
+</body>
+</html>
