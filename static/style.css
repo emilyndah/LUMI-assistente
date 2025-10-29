@@ -6,7 +6,11 @@
 body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f7f9fc; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
 header { width: 100%; background-color: white; display: flex; align-items: center; justify-content: center; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); flex-shrink: 0; }
 .logo { height: 60px; }
+<<<<<<< Updated upstream
 main { display: flex; justify-content: center; width: 95%; max-width: 1200px; margin-top: 30px; gap: 30px; flex-grow: 1; box-sizing: border-box; /* Adicionado para calc() funcionar melhor */}
+=======
+main { display: flex; justify-content: center; width: 95%; max-width: 1200px; margin-top: 30px; gap: 30px; flex-grow: 1; }
+>>>>>>> Stashed changes
 
 /* === FUNCIONALIDADES === */
 .funcoes { width: 320px; background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 12px; height: fit-content; flex-shrink: 0; }
@@ -33,6 +37,7 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
 .typing-indicator { display: flex; align-items: center; padding: 10px 15px; } .typing-indicator .dot { height: 8px; width: 8px; background-color: #a7c5f8; border-radius: 50%; margin: 0 2px; animation: blink 1.4s infinite both; } .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; } .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes blink { 0% { opacity: 0.2; } 20% { opacity: 1; } 100% { opacity: 0.2; } }
 
+<<<<<<< Updated upstream
 /* === ESTILOS DAS PÁGINAS DE CONTEÚDO === */
 /* Ajuste para faq-page (usado também pelo metodo_estudo) */
 .faq-page {
@@ -45,11 +50,18 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
     box-sizing: border-box; /* Garante que padding não aumente largura */
     flex-grow: 1; /* Ocupa espaço vertical restante */
 }
+=======
+/* As regras .mascote e .mascote:hover foram REMOVIDAS daqui */
+
+/* === ESTILOS DAS PÁGINAS DE CONTEÚDO === */
+.faq-page { justify-content: center; }
+>>>>>>> Stashed changes
 .faq-container { width: 100%; max-width: 800px; background: white; border-radius: 15px; padding: 30px 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 40px; }
 .faq-container h1 { text-align: center; color: #4B8BEA; margin-top: 0; }
 .faq-container > p { text-align: center; color: #555; margin-top: -10px; margin-bottom: 30px; }
 .search-wrapper { margin-bottom: 20px; }
 
+<<<<<<< Updated upstream
 /* --- Estilo para caixas de busca --- */
 #faq-search, #calendario-search {
     width: 100%;
@@ -62,6 +74,20 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
 }
 #faq-search:focus, #calendario-search:focus { border-color: #4B8BEA; }
 /* --- FIM ESTILO --- */
+=======
+/* --- NOVO: Estilo para caixas de busca --- */
+#faq-search, #calendario-search { 
+    width: 100%; 
+    box-sizing: border-box; 
+    padding: 12px; 
+    border-radius: 10px; 
+    border: 1px solid #ccc; 
+    outline: none; 
+    font-size: 15px;
+}
+#faq-search:focus, #calendario-search:focus { border-color: #4B8BEA; }
+/* --- FIM DO NOVO ESTILO --- */
+>>>>>>> Stashed changes
 
 .faq-list { border-top: 1px solid #eee; } .faq-item { border-bottom: 1px solid #eee; } .faq-question { width: 100%; background: none; border: none; text-align: left; padding: 20px 0; font-size: 1em; font-weight: 500; color: #333; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color 0.2s; } .faq-question:hover { color: #4B8BEA; } .faq-icon { font-size: 1.2em; font-weight: 600; color: #4B8BEA; transition: transform 0.3s ease; } .faq-item.active .faq-icon { transform: rotate(45deg); } .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; color: #555; line-height: 1.6; } .faq-answer p { text-align: left; padding-bottom: 20px; margin: 0; }
 .calendario-list { border-top: 1px solid #eee; } .calendario-item { display: flex; align-items: center; padding: 15px 5px; border-bottom: 1px solid #eee; transition: background-color 0.2s; } .calendario-item:hover { background-color: #f9fafc; } .calendario-data { background-color: #4B8BEA; color: white; font-weight: 600; padding: 8px 12px; border-radius: 8px; text-align: center; min-width: 90px; } .calendario-evento { padding-left: 20px; color: #333; }
@@ -71,7 +97,11 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
     padding: 20px 0;
 }
 
+<<<<<<< Updated upstream
 /* --- Estilos do Calendário --- */
+=======
+/* --- NOVO: Estilos do Calendário --- */
+>>>>>>> Stashed changes
 .calendar-grid-container { border: 1px solid #eee; border-radius: 10px; margin-bottom: 30px; }
 .calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #f9fafc; border-bottom: 1px solid #eee; }
 .calendar-header h2 { margin: 0; color: #4B8BEA; font-size: 1.2em; }
@@ -88,12 +118,17 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
 .list-header h3 { margin: 0; color: #333; }
 .list-header button { background: #f0f5ff; border: 1px solid #e0e8ff; color: #4B8BEA; padding: 5px 10px; border-radius: 6px; cursor: pointer; }
 .list-header button.hidden { display: none; }
+<<<<<<< Updated upstream
 /* --- FIM ESTILOS DO CALENDÁRIO --- */
+=======
+/* --- FIM DOS ESTILOS DO CALENDÁRIO --- */
+>>>>>>> Stashed changes
 
 
 /* ======================================= */
 /* === ESTILOS DOS FLASHCARDS === */
 /* ======================================= */
+<<<<<<< Updated upstream
 .hidden { display: none !important; } /* Reutilizado pelo quiz */
 .subject-list { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #eee; padding-top: 20px; }
 .subject-item {
@@ -108,6 +143,23 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
     cursor: pointer;
     transition: all 0.2s;
     color: #1e3a8a;
+=======
+.hidden { display: none !important; }
+.subject-list { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #eee; padding-top: 20px; }
+.subject-item { 
+    width: 100%; 
+    background-color: #f9fafc; 
+    border: 1px solid #eee; 
+    border-radius: 10px; 
+    padding: 15px; 
+    font-size: 1.1em; 
+    font-weight: 500; 
+    text-align: left; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    /* --- CORREÇÃO DO TEXTO FANTASMA --- */
+    color: #1e3a8a; 
+>>>>>>> Stashed changes
 }
 .subject-item:hover { border-color: #4B8BEA; color: #4B8BEA; background-color: #f0f5ff; }
 .back-button { background: none; border: none; color: #4B8BEA; font-size: 0.9em; font-weight: 500; cursor: pointer; margin-bottom: 20px; padding: 0; }
@@ -124,6 +176,7 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
 .card-front { background: #f0f5ff; border: 1px solid #e0e8ff; color: #1e3a8a; }
 .card-back { background: #4B8BEA; color: white; transform: rotateY(180deg); }
 .flashcard-nav { display: flex; justify-content: center; align-items: center; gap: 20px; }
+<<<<<<< Updated upstream
 .flashcard-nav button {
     width: 50px;
     height: 50px;
@@ -132,6 +185,16 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
     color: white;
     border: none;
     font-size: 18px;
+=======
+.flashcard-nav button { 
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    background: #4B8BEA; 
+    color: white; 
+    border: none; 
+    font-size: 18px; 
+>>>>>>> Stashed changes
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -144,9 +207,128 @@ button:hover:not(:disabled) { background: #3a74d3; } button:disabled { backgroun
     .funcoes { width: 100%; margin-bottom: 20px; }
     .chat { width: 100%; height: 70vh; }
     .faq-container { padding: 20px; }
+<<<<<<< Updated upstream
     .card-face { font-size: 1.1em; }
     .calendar-days-grid div { min-height: 40px; padding: 5px; }
     .calendar-weekdays { font-size: 0.8em; }
     /* Ajuste para faq-page em telas menores */
     .faq-page { padding-top: 40px; }
 }
+=======
+    /* A regra .mascote { display: none; } foi REMOVIDA daqui */
+    .card-face { font-size: 1.1em; }
+    .calendar-days-grid div { min-height: 40px; padding: 5px; }
+    .calendar-weekdays { font-size: 0.8em; }
+}
+
+/* =========================================
+   MÉTODO DE ESTUDO PERSONALIZADO - LUMI
+   ========================================= */
+
+.metodo-container, form {
+    background: #ffffff;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 20px;
+    width: 85%;
+    max-width: 850px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+}
+
+.metodo-container h1, 
+.metodo-container h2, 
+.metodo-container h3 {
+    text-align: center;
+    color: #4B6FFF;
+    margin-bottom: 20px;
+}
+
+.metodo-container p {
+    margin-bottom: 10px;
+}
+
+.pergunta {
+    background: #f8faff;
+    border-left: 5px solid #4B6FFF;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.pergunta:hover {
+    background: #f0f4ff;
+}
+
+label {
+    display: block;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    accent-color: #4B6FFF;
+    margin-right: 8px;
+}
+
+button {
+    display: block;
+    background-color: #4B6FFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    margin: 20px auto;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #3b58db;
+}
+
+/* ===== RESULTADO ===== */
+.resultado {
+    text-align: center;
+    background: #f8faff;
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.resultado h2 {
+    color: #4B6FFF;
+}
+
+.resultado canvas {
+    display: block;
+    margin: 20px auto;
+    max-width: 350px;
+}
+
+.resultado ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.resultado li {
+    background: #eaf0ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 4px solid #4B6FFF;
+}
+
+.resultado h4 {
+    color: #555;
+    margin-top: 25px;
+}
+>>>>>>> Stashed changes
