@@ -3,5 +3,5 @@ requests
 Flask-Login
 Flask-SQLAlchemy
 Werkzeug
-python-dotenv # Adiciona esta também, é boa prática
+python-dotenv 
 google-generativeai

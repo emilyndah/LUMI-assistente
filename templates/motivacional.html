@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumi – Chat Motivacional</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
+        </a>
+    </header>
+
+    <main>
+        <section class="funcoes">
+            <h2>Outras páginas</h2>
+            <a href="{{ url_for('index') }}" class="func-item">Chat Acadêmico</a>
+            <a href="{{ url_for('flashcards') }}" class="func-item">Flashcards</a>
+            <a href="{{ url_for('metodo_de_estudo') }}" class="func-item">Método de Estudo</a>
+            <a href="{{ url_for('calendario') }}" class="func-item">Calendário</a>
+            <a href="{{ url_for('faq') }}" class="func-item">FAQ</a>
+        </section>
+
+        <section class="chat-container">
+            <div class="chat-header">
+                <h1>Chat Motivacional</h1>
+                <a href="{{ url_for('limpar_chat_motivacional') }}" class="clear-chat-btn" title="Limpar Conversa">Limpar</a>
+            </div>
+            <div class="chat-box" id="chat-box">
+            </div>
+            <form class="chat-input" id="chat-form">
+                <input type="text" id="user-input" placeholder="Compartilhe como está se sentindo..." autocomplete="off">
+                <button type="submit" id="submit-btn" title="Enviar">➤</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatBox = document.getElementById('chat-box');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const submitBtn = document.getElementById('submit-btn');
+
+        function scrollToBottom() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        const lumiIntro = document.createElement('div');
+        lumiIntro.className = 'msg lumi';
+        lumiIntro.textContent = 'Olá! Estou aqui para te apoiar e manter sua motivação em alta. Como posso te ajudar hoje?';
+        chatBox.appendChild(lumiIntro);
+        scrollToBottom();
+
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const userMessage = userInput.value.trim();
+            if (userMessage === '') return;
+
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'msg user';
+            userMsgDiv.textContent = userMessage;
+            chatBox.appendChild(userMsgDiv);
+
+            userInput.value = '';
+            userInput.disabled = true;
+            submitBtn.disabled = true;
+            scrollToBottom();
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'msg lumi typing';
+            typingIndicator.textContent = 'Lumi está refletindo...';
+            chatBox.appendChild(typingIndicator);
+            scrollToBottom();
+
+            try {
+                const response = await fetch('/ask_motivacional', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ pergunta: userMessage })
+                });
+                if (!response.ok) throw new Error('Erro na resposta do servidor.');
+
+                const data = await response.json();
+
+                chatBox.removeChild(typingIndicator);
+                const lumiMsgDiv = document.createElement('div');
+                lumiMsgDiv.className = 'msg lumi';
+                lumiMsgDiv.innerHTML = data.resposta.replace(/\n/g, '<br>');
+                chatBox.appendChild(lumiMsgDiv);
+                scrollToBottom();
+            } catch (error) {
+                console.error('Erro ao enviar mensagem:', error);
+                chatBox.removeChild(typingIndicator);
+                const errorMsgDiv = document.createElement('div');
+                errorMsgDiv.className = 'msg lumi';
+                errorMsgDiv.textContent = 'Desculpe, ocorreu um erro ao conectar.';
+                chatBox.appendChild(errorMsgDiv);
+                scrollToBottom();
+            } finally {
+                userInput.disabled = false;
+                submitBtn.disabled = false;
+                userInput.focus();
+            }
+        });
+    });
+    </script>
+</body>
+</html>
