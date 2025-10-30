@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumi - Modo Foco</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foco.css') }}">
+</head>
+<body>
+
+    <div class="foco-container">
+        
+        <a href="{{ url_for('index') }}" class="voltar-btn-box">&larr;</a>
+
+        
+        <div class="foco-header">
+            <h1>Modo Foco</h1>
+            <p>Selecione seu tempo de concentração. A interface será limpa.</p>
+        </div>
+
+        <div class="timer-display">
+            <h2 id="timer-relogio">30:00</h2>
+        </div>
+
+        <div id="botoes-tempo" class="botoes-selecao">
+            <button class="btn-tempo" data-minutos="15">15 min</button>
+            <button class="btn-tempo" data-minutos="30">30 min</button>
+            <button class="btn-tempo" data-minutos="60">60 min</button>
+        </div>
+
+        <div id="controles-timer" class="controles">
+            <button id="btn-parar" class="btn-controle">Parar</button>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/foco.js') }}"></script>
+</body>
+</html>
