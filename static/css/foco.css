@@ -1,0 +1,119 @@
+/* --- Importação da Fonte (para unificar com o projeto) --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* --- Reset Básico e Tema Escuro --- */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* Usando a fonte do seu projeto principal */
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #121212; /* Fundo escuro principal */
+    color: #e0e0e0; /* Cor de texto principal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.foco-container {
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    background-color: #1e1e1e; /* Um pouco mais claro que o fundo */
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    
+    /* Crucial para posicionar o botão de voltar */
+    position: relative;
+}
+
+/* --- Botão Voltar (Apenas Seta) --- */
+.voltar-btn-box {
+    /* Posicionamento */
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    
+    /* Estilo de ícone (sem fundo) */
+    color: #888; /* Cinza sutil */
+    text-decoration: none;
+    font-size: 1.8rem; /* Seta um pouco maior */
+    font-weight: 600;
+    line-height: 1; /* Garante que não tenha altura extra */
+    
+    transition: color 0.2s ease;
+}
+
+.voltar-btn-box:hover {
+    color: #fff; /* Fica branco no hover */
+}
+
+
+/* --- Tipografia --- */
+h1 {
+    color: #ffffff;
+    margin-top: 0;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #b0b0b0; /* Cinza claro para descrição */
+}
+
+.timer-display h2 {
+    font-size: 6rem; /* Timer bem grande */
+    font-weight: 600;
+    color: #ffffff;
+    margin: 20px 0;
+    letter-spacing: 2px;
+}
+
+/* --- Botões de Seleção de Tempo --- */
+.botoes-selecao {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Espaço entre os botões */
+    margin-top: 20px;
+}
+
+.btn-tempo {
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Cor :hover azul, para combinar com o seu projeto principal */
+.btn-tempo:hover {
+    background-color: #4B8BEA; 
+    transform: translateY(-2px);
+}
+
+/* --- Botões de Controle (Parar) --- */
+.btn-controle {
+    padding: 12px 40px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    background-color: #dc3545; /* Vermelho para "Parar" */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-controle:hover {
+    background-color: #c82333; /* Vermelho mais escuro */
+}
+
+/* --- Classes de Controle (usadas pelo JS) --- */
+.escondido {
+    display: none !important;
+}

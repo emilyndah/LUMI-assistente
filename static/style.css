@@ -163,6 +163,7 @@ main.profile-page { /* Adicionada classe para perfil */
 
 
 /* === CHAT === */
+/* IMPORTANTE: No index.html, use <section class="chat-container"> */
 .chat-container {
     width: 100%; /* Ocupa espaço restante */
     background: white;
@@ -174,7 +175,12 @@ main.profile-page { /* Adicionada classe para perfil */
     /* Ajusta altura máxima para caber na tela com header e margens */
     max-height: calc(100vh - /* altura header */ 80px - /* margem top/bottom main */ 60px);
     min-height: 400px; /* Altura mínima */
+    position: relative; /* Para o .clear-chat-btn */
 }
+/* NOTA: O .chat-header foi removido do HTML. 
+   O .clear-chat-btn agora é posicionado absolutamente.
+   Estilos do .chat-header mantidos caso sejam usados em outro lugar. 
+*/
 .chat-header {
     display: flex;
     justify-content: space-between;
@@ -189,7 +195,12 @@ main.profile-page { /* Adicionada classe para perfil */
     font-size: 1.4em; /* Ligeiramente menor */
     font-weight: 600;
 }
+/* Estilo para o .clear-chat-btn (como no index.html) */
 .clear-chat-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 10;
     text-decoration: none;
     color: #888;
     font-size: 0.9em;
@@ -207,6 +218,7 @@ main.profile-page { /* Adicionada classe para perfil */
     display: flex;
     flex-direction: column;
     gap: 12px; /* Espaço menor entre mensagens */
+    scroll-behavior: smooth;
 }
 /* Estilo da barra de scroll (opcional, para Chrome/Edge/Safari) */
 .chat-box::-webkit-scrollbar { width: 8px; }
@@ -234,24 +246,39 @@ main.profile-page { /* Adicionada classe para perfil */
     border-bottom-left-radius: 5px;
     align-self: flex-start;
 }
-.msg.lumi.typing {
-    color: #888;
-    font-style: italic;
-    background-color: #f8f9fa; /* Fundo diferente para typing */
-}
-.chat-input {
+.msg.lumi.typing-indicator { /* Estilo para "digitando..." */
     display: flex;
+    align-items: center;
+    padding: 10px 15px; 
+    background-color: #f8f9fa;
+}
+.typing-indicator .dot { 
+    height: 8px; 
+    width: 8px; 
+    background-color: #a7c5f8; 
+    border-radius: 50%; 
+    margin: 0 2px; 
+    animation: blink 1.4s infinite both; 
+}
+.typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0% { opacity: 0.2; } 20% { opacity: 1; } 100% { opacity: 0.2; } }
+
+/* IMPORTANTE: No index.html, use <form id="chat-form" class="chat-input"> */
+/* Ou renomeie os seletores abaixo para #chat-form */
+.chat-input { /* Esta é a tag <form> */
+    display: flex;
+    gap: 10px;
     padding: 15px 20px; /* Padding menor */
     border-top: 1px solid #eee;
     flex-shrink: 0; /* Impede que input encolha */
 }
-.chat-input input {
+.chat-input input { /* Input dentro do form */
     flex-grow: 1;
     border: 1px solid #ddd;
     border-radius: 20px; /* Menos redondo */
     padding: 10px 18px; /* Padding ajustado */
     font-size: 0.95em;
-    margin-right: 10px; /* Menos espaço */
     outline: none;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -259,13 +286,13 @@ main.profile-page { /* Adicionada classe para perfil */
     border-color: #4B8BEA;
     box-shadow: 0 0 0 3px rgba(75, 139, 234, 0.2);
 }
-.chat-input button {
+.chat-input button { /* Botão dentro do form */
+    width: 42px; /* Botão menor */
+    height: 42px; /* Botão menor */
+    border-radius: 50%;
     background: #4B8BEA;
     color: white;
     border: none;
-    border-radius: 50%;
-    width: 42px; /* Botão menor */
-    height: 42px; /* Botão menor */
     font-size: 16px; /* Ícone/seta menor */
     cursor: pointer;
     transition: background-color 0.3s;
@@ -284,6 +311,7 @@ main.profile-page { /* Adicionada classe para perfil */
 
 
 /* === ESTILOS PÁGINA FAQ === */
+/* Usado também por metodo_estudo.html */
 .faq-container {
     width: 100%;
     max-width: 900px;
@@ -337,6 +365,13 @@ main.profile-page { /* Adicionada classe para perfil */
 .faq-item.active .faq-answer {
     max-height: 300px; /* Aumenta altura máxima permitida */ padding-top: 5px; padding-bottom: 20px; /* Adiciona padding vertical quando aberto */
 }
+/* Mensagem de "vazio" (reutilizada) */
+.calendario-vazio, .empty-message, .no-events-message {
+    text-align: center;
+    color: #777;
+    padding: 20px 0;
+}
+.hidden { display: none !important; } /* Reutilizado pelo quiz e flashcards */
 
 
 /* === ESTILOS PÁGINA FLASHCARDS === */
@@ -405,7 +440,7 @@ main.profile-page { /* Adicionada classe para perfil */
 .flashcard-nav span {
     font-size: 1em; /* Contador menor */ font-weight: 500; min-width: 50px; text-align: center; color: #555;
 }
-.hidden { display: none !important; }
+
 
 /* === ESTILOS PÁGINA PERFIL === */
 .profile-container {
@@ -428,7 +463,7 @@ main.profile-page { /* Adicionada classe para perfil */
 /* (Estilos movidos para dentro dos templates login.html e register.html) */
 
 /* ======================================================= */
-/* ====== ESTILOS DO CALENDÁRIO ACADÊMICO ====== */
+/* ====== ESTILOS DO CALENDÁRIO ACADÊMICO (FullCalendar) === */
 /* ======================================================= */
 /* Container da seção do calendário */
 .calendar-section {
@@ -500,9 +535,6 @@ main.profile-page { /* Adicionada classe para perfil */
 .agenda-month { font-size: 0.75em; font-weight: 600; color: #777; text-transform: uppercase; }
 .agenda-details { flex-grow: 1; min-width: 0; /* Permite quebrar texto se necessário */ }
 .agenda-title { font-size: 0.95em; font-weight: 600; color: #333; margin: 0; line-height: 1.4; word-break: break-word; /* Quebra palavras longas */}
-.agenda-full-date { display: block; font-size: 0.8em; color: #888; margin-top: 3px; } /* Mostra data final */
-/* Mensagem de Nenhum Evento */
-.no-events-message { text-align: center; color: #666; font-size: 1em; padding: 15px; background: #f9f9f9; border-radius: 8px; margin-top: 15px; }
 
 /* ======================================================= */
 /* ====== RESPONSIVIDADE ====== */
@@ -525,6 +557,7 @@ main.profile-page { /* Adicionada classe para perfil */
     .func-item { padding: 10px 12px; font-size: 0.9em; }
 
     .chat-container { max-height: calc(100vh - 70px - 40px - 100px); }
+    /* .chat-header foi removido do HTML principal, mas mantido para responsividade */
     .chat-header { padding: 12px 20px; }
     .chat-header h1 { font-size: 1.3em; }
     .chat-box { padding: 15px; gap: 10px;}
@@ -585,10 +618,6 @@ main.profile-page { /* Adicionada classe para perfil */
     .user-area { right: 10px; gap: 5px;} /* Mais perto e menos espaçado */
     .profile-icon { width: 30px; height: 30px; font-size: 0.9em;}
     .logout-link { display: none; } /* Esconde texto logout */
-    .profile-link:has(+ .logout-link) { /* Adiciona margem se logout estivesse visível */
-       /* margin-right: 5px; */
-    }
-
 
     #calendar-wrapper { padding: 10px; }
     .fc-toolbar-title { font-size: 1.4em !important; }
@@ -598,5 +627,4 @@ main.profile-page { /* Adicionada classe para perfil */
     #flashcard-scene { height: 240px; }
     .card-face { font-size: 1.1em; }
     .back-btn-flashcard-subject { top: 10px; left: 15px; }
-
 }
