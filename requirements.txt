@@ -1,2 +1,7 @@
 Flask
 requests
+Flask-Login
+Flask-SQLAlchemy
+Werkzeug
+python-dotenv # Adiciona esta também, é boa prática
+google-generativeai
