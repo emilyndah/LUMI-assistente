@@ -7,13 +7,11 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css' rel='stylesheet' />
 
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.11/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/list@6.1.11/index.global.min.js'></script>
-    
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/locales-all.global.min.js'></script>
 
 </head>
@@ -23,21 +21,40 @@
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
+         <div class="user-area">
+            {% if current_user.is_authenticated %}
+                <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
+                <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                    <div class="profile-icon">{{ current_user.username[0]|upper }}</div>
+                </a>
+                <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
+            {% endif %}
+        </div>
     </header>
 
     <main class="calendar-page">
-        
         <section class="calendar-section">
             <h1>Calendário Acadêmico</h1>
             <p>Selecione um dia no calendário ou utilize a busca para encontrar eventos.</p>
 
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <ul class="flash-messages" style="list-style: none; padding: 0; margin-bottom: 20px;">
+                {% for category, message in messages %}
+                  {% set category_class = 'warning' if category == 'message' else category %} {# Default to warning style #}
+                  <li class="{{ category_class }}" style="padding: 10px 15px; border-radius: 5px; margin-bottom: 10px; font-size: 0.9em; text-align: left; border: 1px solid transparent; background-color: #fff3cd; color: #856404; border-color: #ffeeba;">{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+
             <div id="calendar-wrapper">
-                <div id="calendar"></div>
-            </div>
+                <div id="calendar"></div> </div>
 
             <div class="agenda-section">
                 <input type="text" id="event-search" class="event-search" placeholder="Buscar evento na lista...">
-                
+
                 <div class="agenda-header">
                     <h2 id="event-list-title">Todos os Eventos</h2>
                     <button id="show-all-btn" class="simple-btn hidden">Mostrar Todos</button>
@@ -48,146 +65,227 @@
                         {% for evento in eventos_data %}
                         <div class="agenda-item" data-date="{{ evento.data_iso }}">
                             <div class="agenda-date">
-                                <span class="agenda-day">{{ evento.data.split('/')[0] }}</span>
-                                <span class="agenda-month">{{ evento.mes_curto }}</span>
+                                <span class="agenda-day">{{ evento.data.split('/')[0] if evento.data else '?' }}</span>
+                                <span class="agenda-month">{{ evento.mes_curto if evento.mes_curto else '???' }}</span>
                             </div>
                             <div class="agenda-details">
-                                <h3 class="agenda-title">{{ evento.evento }}</h3>
-                                <p class="agenda-full-date">{{ evento.data }}</p>
+                                <h3 class="agenda-title">{{ evento.evento if evento.evento else 'Evento sem descrição' }}</h3>
+                                {% if evento.data_fim and evento.data_fim != evento.data_iso %}
+                                    <p class="agenda-full-date" style="display: block; font-size: 0.8em; color: #888; margin-top: 3px;">Até: {{ evento.data_fim | format_date_br }}</p>
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
                     {% else %}
-                        <p class="no-events-message">Nenhum evento encontrado.</p>
+                        <p class="no-events-message">Nenhum evento carregado. Verifique o ficheiro 'calendario.json'.</p>
                     {% endif %}
-                </div>
-            </div>
-        </section>
-    </main>
+                </div> <p class="no-events-message" id="no-filter-results" style="display: none; margin-top: 15px;">Nenhum evento encontrado para a data ou busca selecionada.</p>
+
+            </div> </section> </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- 1. PREPARAÇÃO DOS DADOS ---
-            const eventosData = {{ eventos_data|tojson }};
+            // --- 1. PREPARAÇÃO DOS DADOS (Vindos do Flask já formatados) ---
+            // 'eventos_data' vem do render_template no app.py
+            const eventosData = {{ eventos_data|tojson | safe }}; // Usa safe para dados JSON
 
-            const eventosFormatados = eventosData.map(evento => {
-                return {
-                    title: evento.evento,
-                    start: evento.data_iso,
+            // Formata os dados recebidos para o formato que FullCalendar espera
+            const eventosFormatadosParaFullCalendar = eventosData.map(evento => {
+                const fcEvent = {
+                    title: evento.evento || 'Evento', // Usa 'evento' (descrição) como título
+                    start: evento.data_iso,            // Usa 'data_iso' (YYYY-MM-DD) como data de início
+                    // Guarda dados extras que podem ser úteis
+                    extendedProps: {
+                        data_br: evento.data, // DD/MM/YYYY
+                        data_fim_iso: evento.data_fim,
+                        mes_curto: evento.mes_curto
+                    }
                 };
+                // Adiciona data final para FullCalendar se existir e for diferente
+                // Lembre-se: 'end' no FullCalendar é EXCLUSIVO (o dia seguinte ao último dia do evento)
+                if (evento.data_fim && evento.data_fim !== evento.data_iso) {
+                    try {
+                        let endDate = new Date(evento.data_fim + 'T00:00:00Z'); // Interpreta como UTC
+                        endDate.setUTCDate(endDate.getUTCDate() + 1); // Adiciona 1 dia para tornar exclusivo
+                        fcEvent.end = endDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                    } catch(e) { console.warn("Could not parse or adjust end date:", evento.data_fim); }
+                }
+                return fcEvent;
             });
 
             // --- 2. INICIALIZAÇÃO DO FULLCALENDAR ---
             const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                
-                initialView: 'dayGridMonth',
-                locale: 'pt-br', // Esta linha agora vai funcionar por causa do script "locales-all"
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,listWeek'
-                },
-                buttonText: { // Força a tradução dos botões se 'locale' falhar
-                    today: 'Hoje',
-                    month: 'Mês',
-                    week: 'Semana',
-                    list: 'Lista'
-                },
-                events: eventosFormatados,
-                selectable: true,
-                
-                // --- AÇÃO AO CLICAR EM UM DIA DO CALENDÁRIO ---
-                dateClick: function(info) {
-                    filterEventsByDate(info.dateStr);
-                    document.getElementById('agenda-list').scrollIntoView({ behavior: 'smooth' });
+            let calendar = null; // Variável para guardar a instância do calendário
+            try {
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth', // Visão inicial
+                    locale: 'pt-br', // Define a localização para português do Brasil
+                    headerToolbar: { // Configura os botões do cabeçalho
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,listWeek' // Opções de visualização
+                    },
+                    buttonText: { // Textos dos botões (caso locale falhe)
+                        today: 'Hoje', month: 'Mês', week: 'Semana', list: 'Lista'
+                    },
+                    events: eventosFormatadosParaFullCalendar, // Passa os eventos formatados
+                    selectable: true, // Permite clicar/selecionar dias
+                    eventTimeFormat: { hour: 'numeric', minute: '2-digit', omitZeroMinute: true, meridiem: false }, // Formato da hora (se evento tiver hora)
+                    displayEventEnd: false, // Não mostra hora de fim por padrão
+                    fixedWeekCount: false, // Mostra 4, 5 ou 6 semanas conforme o mês
+                    dayMaxEvents: true, // Mostra "+X eventos" se não couberem todos
 
-                    document.querySelectorAll('.fc-daygrid-day.fc-day-selected').forEach(el => {
-                        el.classList.remove('fc-day-selected');
-                    });
-                    if (info.dayEl) { 
-                        info.dayEl.classList.add('fc-day-selected');
-                    }
-                },
-                 // --- AÇÃO AO CLICAR EM UM EVENTO (NO PRÓPRIO CALENDÁRIO) ---
-                eventClick: function(info) {
-                    info.jsEvent.preventDefault(); 
-                    const dataISO = info.event.start.toISOString().split('T')[0];
-                    filterEventsByDate(dataISO);
-                    document.getElementById('agenda-list').scrollIntoView({ behavior: 'smooth' });
-                     
-                    document.querySelectorAll('.fc-daygrid-day.fc-day-selected').forEach(el => {
-                        el.classList.remove('fc-day-selected');
-                    });
-                     if (info.el && info.el.closest('.fc-daygrid-day')) {
-                        info.el.closest('.fc-daygrid-day').classList.add('fc-day-selected');
-                    }
-                },
-            });
+                    // --- Ações ---
+                    dateClick: function(info) { // Clicar num dia
+                        filterEventsByDate(info.dateStr); // info.dateStr é YYYY-MM-DD
+                        scrollToAgenda();
+                        highlightSelectedDay(info.dayEl); // Destaca o dia clicado
+                    },
+                    eventClick: function(info) { // Clicar num evento
+                        info.jsEvent.preventDefault(); // Impede ação padrão (ex: seguir link)
+                        const startISO = info.event.start ? info.event.start.toISOString().split('T')[0] : null;
+                        if(startISO){
+                            filterEventsByDate(startISO); // Filtra pela data de início do evento
+                            scrollToAgenda();
+                            // Tenta destacar o dia correspondente
+                            const dayEl = calendarEl.querySelector(`.fc-day[data-date="${startISO}"]`);
+                            highlightSelectedDay(dayEl || info.el.closest('.fc-daygrid-day'));
+                        }
+                    },
+                     eventMouseEnter: function(info) { // Mostrar tooltip ao passar o mouse
+                        let title = info.event.title;
+                        if (info.event.end) { // Adiciona datas se for evento longo
+                           const startStr = info.event.start.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+                           let endDate = new Date(info.event.end); // End é exclusivo
+                           endDate.setUTCDate(endDate.getUTCDate() - 1); // Volta 1 dia para mostrar data correta
+                           const endStr = endDate.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+                           if (startStr !== endStr) { title += ` (${startStr} - ${endStr})`; }
+                        }
+                        info.el.setAttribute('title', title); // Define o tooltip padrão do navegador
+                     }
+                });
 
-            calendar.render();
+                calendar.render(); // Desenha o calendário na tela
+                 console.log("FullCalendar rendered successfully.");
+
+            } catch (error) {
+                 console.error("Error initializing FullCalendar:", error);
+                 // Mostra mensagem de erro no lugar do calendário
+                 document.getElementById('calendar-wrapper').innerHTML = '<p class="no-events-message" style="color: red;">Erro ao carregar o componente do calendário.</p>';
+            }
 
 
             // --- 3. FUNCIONALIDADE DA LISTA DE AGENDA ---
             const searchInput = document.getElementById('event-search');
-            const allEventItems = document.querySelectorAll('.agenda-item');
+            const agendaListContainer = document.getElementById('agenda-list');
+            const allEventItems = agendaListContainer.querySelectorAll('.agenda-item'); // Seleciona os itens da lista
             const eventListTitle = document.getElementById('event-list-title');
             const showAllBtn = document.getElementById('show-all-btn');
+            // Referência à mensagem de "Nenhum resultado" para filtros
+            const noFilterResultsMessage = document.getElementById('no-filter-results');
+
+            // Função para rolar até a seção da agenda
+            function scrollToAgenda() {
+                 document.getElementById('agenda-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Função para destacar o dia selecionado no calendário
+            function highlightSelectedDay(dayElement) {
+                // Remove destaque de qualquer dia anteriormente selecionado
+                document.querySelectorAll('.fc-daygrid-day.fc-day-selected').forEach(el => el.classList.remove('fc-day-selected'));
+                // Adiciona destaque ao novo dia, se ele for válido
+                if (dayElement && dayElement.classList.contains('fc-daygrid-day')) {
+                    dayElement.classList.add('fc-day-selected');
+                }
+            }
+
+            // Função para mostrar/esconder a mensagem de "Nenhum evento/resultado"
+            function updateNoEventsMessage(show) {
+                if (noFilterResultsMessage) {
+                    noFilterResultsMessage.style.display = show ? 'block' : 'none';
+                }
+                // Esconde a lista se não houver resultados
+                agendaListContainer.style.display = show ? 'none' : 'block';
+                 // Ajusta o título principal se não houver resultados
+                 if(show && !searchInput.value) { // Se for filtro por data sem resultados
+                     // eventListTitle.textContent já é atualizado em filterEventsByDate
+                 } else if (show && searchInput.value) { // Se for busca sem resultados
+                      eventListTitle.textContent = 'Nenhum resultado encontrado';
+                 }
+            }
+
 
             function showAllEvents() {
                 eventListTitle.textContent = 'Todos os Eventos';
                 showAllBtn.classList.add('hidden');
-                searchInput.value = ''; 
+                searchInput.value = '';
+                let hasEvents = false;
                 allEventItems.forEach(item => {
-                    item.style.display = 'flex';
+                    item.style.display = 'flex'; // Mostra todos os itens
+                    hasEvents = true;
                 });
-                document.querySelectorAll('.fc-daygrid-day.fc-day-selected').forEach(el => {
-                    el.classList.remove('fc-day-selected');
-                });
+                updateNoEventsMessage(!hasEvents && eventosData.length === 0); // Mostra msg só se lista original estava vazia
+                 if (eventosData.length > 0) updateNoEventsMessage(false); // Garante que não mostra msg se há eventos
+                highlightSelectedDay(null); // Remove destaque do calendário
             }
 
-            function filterEventsByDate(dateISO) {
-                let count = 0;
+            function filterEventsByDate(dateISO) { // dateISO é YYYY-MM-DD
+                let hasEventsOnDate = false;
+                const dateClicked = parseDateISO(dateISO); // Converte para objeto Date (UTC)
+
+                // Formata a data para PT-BR para o título
                 const [year, month, day] = dateISO.split('-');
                 const formattedDate = `${day}/${month}/${year}`;
-                
                 eventListTitle.textContent = `Eventos para ${formattedDate}`;
-                showAllBtn.classList.remove('hidden');
-                searchInput.value = ''; 
+                showAllBtn.classList.remove('hidden'); // Mostra o botão "Mostrar Todos"
+                searchInput.value = ''; // Limpa a busca
 
                 allEventItems.forEach(item => {
-                    if (item.dataset.date === dateISO) {
-                        item.style.display = 'flex';
-                        count++;
+                    const itemStartDateISO = item.dataset.date; // YYYY-MM-DD do item
+                    // Tenta obter a data final do item (do atributo data-fim ou do texto, se existir)
+                    const itemEndDateElement = item.querySelector('.agenda-full-date');
+                    let itemEndDateISO = itemStartDateISO; // Assume data única
+                    if (itemEndDateElement && itemEndDateElement.textContent.includes('Até: ')) {
+                         try {
+                             const dateParts = itemEndDateElement.textContent.split(': ')[1].split('/');
+                             itemEndDateISO = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+                         } catch (e) { /* Usa data de início se falhar */ }
+                    }
+
+                    const itemStartDate = parseDateISO(itemStartDateISO);
+                    const itemEndDate = parseDateISO(itemEndDateISO);
+
+                    // Verifica se a data clicada está DENTRO do intervalo do evento
+                    if (dateClicked && itemStartDate && itemEndDate && dateClicked >= itemStartDate && dateClicked <= itemEndDate) {
+                        item.style.display = 'flex'; // Mostra o item
+                        hasEventsOnDate = true;
                     } else {
-                        item.style.display = 'none';
+                        item.style.display = 'none'; // Esconde o item
                     }
                 });
 
-                if (count === 0) {
+                // Atualiza a mensagem "Nenhum evento..."
+                updateNoEventsMessage(!hasEventsOnDate);
+                // Ajusta o título se realmente não houver eventos
+                if (!hasEventsOnDate) {
                      eventListTitle.textContent = `Nenhum evento para ${formattedDate}`;
                 }
             }
-            
+
+            // Event listener para o botão "Mostrar Todos"
             showAllBtn.addEventListener('click', showAllEvents);
 
+            // Event listener para o campo de busca
             searchInput.addEventListener('keyup', function () {
                 const filter = searchInput.value.toLowerCase();
-                showAllBtn.classList.add('hidden'); 
-
-                eventListTitle.textContent = 
-                    filter === '' ? 'Todos os Eventos' : 'Resultados da Busca';
-
+                showAllBtn.classList.toggle('hidden', filter === ''); // Mostra/Esconde "Mostrar Todos"
+                eventListTitle.textContent = filter === '' ? 'Todos os Eventos' : 'Resultados da Busca';
                 let foundCount = 0;
-                allEventItems.forEach(item => {
-                    const eventoText = item
-                        .querySelector('.agenda-title')
-                        .textContent.toLowerCase();
-                    const fullDateText = item
-                        .querySelector('.agenda-full-date')
-                        .textContent.toLowerCase();
 
-                    if (eventoText.includes(filter) || fullDateText.includes(filter)) {
+                allEventItems.forEach(item => {
+                    const eventoText = item.querySelector('.agenda-title').textContent.toLowerCase();
+                    // Busca apenas no título do evento
+                    if (eventoText.includes(filter)) {
                         item.style.display = 'flex';
                         foundCount++;
                     } else {
@@ -195,17 +293,34 @@
                     }
                 });
 
-                if (foundCount === 0 && filter !== '') {
-                    eventListTitle.textContent = 'Nenhum resultado encontrado.';
-                } else if (filter === '') {
-                    showAllEvents();
-                }
+                // Atualiza a mensagem "Nenhum evento..."
+                updateNoEventsMessage(foundCount === 0 && filter !== '');
+                if (filter === '') { showAllEvents(); } // Chama showAll se limpar a busca
 
-                document.querySelectorAll('.fc-daygrid-day.fc-day-selected').forEach(el => {
-                    el.classList.remove('fc-day-selected');
-                });
+                highlightSelectedDay(null); // Remove destaque do calendário ao buscar
             });
+
+            // --- Inicialização da Lista e Mensagem ---
+            // Verifica se a lista inicial está vazia
+            const initialHasEvents = allEventItems.length > 0;
+            // Mostra/Esconde a mensagem de "Nenhum evento carregado" vinda do HTML
+            const initialNoEventsMessage = document.querySelector('.no-events-message');
+            if(initialNoEventsMessage) initialNoEventsMessage.style.display = initialHasEvents ? 'none' : 'block';
+            // Garante que a mensagem de filtro comece escondida
+            if(noFilterResultsMessage) noFilterResultsMessage.style.display = 'none';
+            // Ajusta título inicial se não houver eventos
+            if (!initialHasEvents) eventListTitle.textContent = 'Nenhum Evento Carregado';
+
+             // --- Funções Helper ---
+             function parseDateISO(str) { // Converte YYYY-MM-DD para Date UTC
+                 if (!str) return null;
+                 try {
+                     const [year, month, day] = str.split('-').map(Number);
+                     return new Date(Date.UTC(year, month - 1, day));
+                 } catch (e) { return null; }
+             }
+
         });
     </script>
-</body>
+    </body>
 </html>

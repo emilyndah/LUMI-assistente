@@ -1,98 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- ==============================
-         META E CONFIGURAÇÕES BÁSICAS
-    ================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ – Dúvidas Frequentes</title>
 
-    <!-- ==============================
-         IMPORTAÇÃO DE ESTILOS E FONTES
-    ================================== -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <!-- ==============================
-         CABEÇALHO E LOGO
-    ================================== -->
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
     </header>
 
-    <!-- ==============================
-         CONTEÚDO PRINCIPAL – SEÇÃO FAQ
-    ================================== -->
     <main class="faq-page">
+        
         <section class="faq-container">
             <h1>Dúvidas Frequentes (FAQ)</h1>
             <p>Encontre respostas rápidas para as perguntas mais comuns.</p>
 
-            <!-- Campo de busca -->
-            <div class="search-wrapper">
-                <input type="text" id="faq-search" placeholder="Digite uma palavra-chave para filtrar...">
-            </div>
+            <input type="text" id="faq-search" class="faq-search" placeholder="Buscar por palavra-chave...">
 
-            <!-- Lista de perguntas e respostas -->
-            <div class="faq-list">
+            {% if faq_data %}
                 {% for item in faq_data %}
                 <div class="faq-item">
-                    <!-- Botão da pergunta -->
-                    <button class="faq-question">
+                    <div class="faq-question">
                         <span>{{ item.pergunta }}</span>
                         <span class="faq-icon">+</span>
-                    </button>
-
-                    <!-- Resposta correspondente -->
+                    </div>
                     <div class="faq-answer">
-                        <p>{{ item.resposta | safe | replace('\n', '<br>') }}</p>
+                        <p>{{ item.resposta | safe }}</p>
                     </div>
                 </div>
-
-                {% else %}
-                <p class="empty-message">Nenhuma dúvida frequente foi encontrada.</p>
                 {% endfor %}
-            </div>
+            {% else %}
+                <p>Nenhuma pergunta frequente encontrada.</p>
+            {% endif %}
+            
         </section>
     </main>
 
-    <!-- ==============================
-         SCRIPT – LÓGICA INTERATIVA DO FAQ
-    ================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            
             const faqItems = document.querySelectorAll('.faq-item');
 
-            // ==============================
-            // Função: Expande e recolhe respostas
+            // ==============================\r
+            // Função: Abre e fecha o acordeão\r
             // ==============================
             faqItems.forEach(item => {
                 const question = item.querySelector('.faq-question');
-                
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('.faq-icon');
+
                 question.addEventListener('click', () => {
-                    const answer = item.querySelector('.faq-answer');
-                    const icon = question.querySelector('.faq-icon');
                     const isActive = item.classList.contains('active');
 
-                    // Fecha qualquer outro item aberto
+                    // Fecha todos os outros itens
                     faqItems.forEach(otherItem => {
-                        if (otherItem !== item) {
-                            otherItem.classList.remove('active');
-                            otherItem.querySelector('.faq-answer').style.maxHeight = null;
-                            otherItem.querySelector('.faq-icon').textContent = '+';
-                        }
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                        otherItem.querySelector('.faq-icon').textContent = '+';
                     });
 
                     // Abre ou fecha o item clicado
                     if (!isActive) {
                         item.classList.add('active');
                         answer.style.maxHeight = answer.scrollHeight + "px";
-                        icon.textContent = '-';
+                        icon.textContent = '−'; // (Sinal de menos)
                     } else {
                         item.classList.remove('active');
                         answer.style.maxHeight = null;
@@ -101,8 +79,8 @@
                 });
             });
 
-            // ==============================
-            // Função: Filtra perguntas pelo campo de busca
+            // ==============================\r
+            // Função: Filtra perguntas pelo campo de busca\r
             // ==============================
             const searchInput = document.getElementById('faq-search');
             

@@ -10,6 +10,7 @@ A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto un
 - **Chat inteligente com IA local (Ollama)** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
 - **Chat motivacional** com mensagens de apoio e estratégias para manter a motivação nos estudos.
 >>>>>>> a01a3d0977938e54634b6bc7a914c48a4477321b
+
 - **Calendário acadêmico interativo** com ordenação automática de eventos e descrição detalhada de atividades.
 - **FAQ dinâmico** alimentado por arquivo JSON para garantir facilidade de manutenção das perguntas frequentes.
 - **Flashcards personalizáveis** para revisão rápida de conteúdos e disciplinas.
