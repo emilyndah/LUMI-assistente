@@ -64,9 +64,11 @@ login_manager.login_message_category = "warning"
 # =======================================================
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False, index=True)
+    username = db.Column(db.String(80), unique=True,
+                         nullable=False, index=True)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    matricula = db.Column(db.String(20), unique=True, nullable=False, index=True)
+    matricula = db.Column(db.String(20), unique=True,
+                          nullable=False, index=True)
     password_hash = db.Column(db.String(200), nullable=False)
     # **** NOVAS COLUNAS PARA RESULTADO VARK ****
     vark_scores_json = db.Column(
@@ -159,7 +161,7 @@ if GEMINI_API_KEY:
         ]
 
         model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",  # Usei o 1.5-flash, mas pode ser o "gemini-pro"
+            model_name="gemini-2.5-flash",  # Usei o 1.5-flash, mas pode ser o "gemini-pro"
             generation_config=generation_config,
             safety_settings=safety_settings,
         )
@@ -415,7 +417,8 @@ def ask():
     """Recebe perguntas do usuário e retorna respostas do Gemini."""
     if not model:
         return (
-            jsonify({"resposta": "Desculpe, o serviço de chat não está configurado."}),
+            jsonify(
+                {"resposta": "Desculpe, o serviço de chat não está configurado."}),
             500,
         )
 
@@ -462,10 +465,12 @@ def save_vark_result():
 
     # Bloco de validação (estava ótimo, mantive)
     if scores is None or primary_type is None:
-        print(f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
+        print(
+            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
     if not isinstance(scores, dict) or not isinstance(primary_type, str):
-        print(f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
+        print(
+            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
         return jsonify({"success": False, "message": "Tipos de dados inválidos."}), 400
     if not all(
         k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]
@@ -499,7 +504,8 @@ def save_vark_result():
         # --- BOA PRÁTICA ---
         # Se der erro, reverter quaisquer mudanças na sessão
         db.session.rollback()
-        print(f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
+        print(
+            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
         traceback.print_exc()
         return (
             jsonify({"success": False, "message": f"Erro interno do servidor: {e}"}),
