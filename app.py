@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 # =======================================================
 # TÍTULO: SERVIDOR FLASK (APP.PY) - ASSISTENTE LUMI
 # (Login, BD, Salvar VARK, Quiz JSON, Calendário JSON, Matriz JSON)
