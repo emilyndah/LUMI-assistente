@@ -1,163 +1,141 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- ==============================
-         META E CONFIGURAÇÕES BÁSICAS
-    ================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcards de Estudo</title>
-
-    <!-- ==============================
-         IMPORTAÇÃO DE ESTILOS E FONTES
-    ================================== -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <!-- ==============================
-         CABEÇALHO E LOGO
-    ================================== -->
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
     </header>
 
-    <!-- ==============================
-         CONTEÚDO PRINCIPAL (FLASHCARDS)
-    ================================== -->
     <main class="faq-page">
-        <section class="faq-container">
-            
-            <!-- ==============================
-                 SEÇÃO DE SELEÇÃO DE DISCIPLINAS
-            ================================== -->
-            <div id="subject-selection">
-                <h1>Flashcards de Estudo</h1>
-                <p>Escolha uma disciplina para começar a revisar.</p>
 
-                <div class="subject-list">
-                    {% for subject in flashcard_data.keys() %}
-                        <button class="subject-item" data-subject="{{ subject }}">{{ subject }}</button>
-                    {% else %}
-                        <p class="empty-message">Nenhuma disciplina com flashcards foi encontrada.</p>
-                    {% endfor %}
-                </div>
+        <section class="faq-container">
+
+            <div id="subject-selection">
+
+                <a href="{{ url_for('index') }}" class="back-btn-flashcard-subject">← Voltar para o Chat</a>
+
+                <h2>Flashcards</h2>
+                <p>Selecione uma disciplina para revisar:</p>
+                <div id="subject-buttons">
+                    </div>
             </div>
 
-            <!-- ==============================
-                 SEÇÃO DO VISUALIZADOR DE FLASHCARDS
-            ================================== -->
             <div id="flashcard-viewer" class="hidden">
-                <button id="back-to-subjects" class="back-button">&larr; Voltar</button>
-                <h2 id="viewer-title"></h2>
-                
-                <!-- Cartão -->
-                <div class="flashcard-container">
-                    <div class="flashcard" id="flashcard">
-                        <div class="card-face card-front" id="card-question"></div>
-                        <div class="card-face card-back" id="card-answer"></div>
+                <button id="back-to-subjects">← Voltar para Disciplinas</button>
+                <h2 id="subject-title"></h2>
+
+                <div id="flashcard-scene">
+                    <div id="flashcard" class="flashcard">
+                        <div class="card-face card-front">
+                            <span id="flashcard-question"></span>
+                        </div>
+                        <div class="card-face card-back">
+                            <span id="flashcard-answer"></span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Navegação entre cartões -->
                 <div class="flashcard-nav">
-                    <button id="prev-card-btn">&larr;</button>
-                    <span id="card-counter"></span>
-                    <button id="next-card-btn">&rarr;</button>
+                    <button id="prev-card">←</button>
+                    <span id="card-counter">1/10</span>
+                    <button id="next-card">→</button>
                 </div>
             </div>
+
         </section>
     </main>
 
-    <!-- ==============================
-         SCRIPT – DADOS DOS FLASHCARDS
-    ================================== -->
     <script>
-        const flashcardData = {{ flashcard_data | tojson }};
-    </script>
-
-    <!-- ==============================
-         SCRIPT – LÓGICA DE FUNCIONAMENTO
-    ================================== -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Seletores principais
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Referências do DOM ---
             const subjectSelectionDiv = document.getElementById('subject-selection');
+            const subjectButtonsContainer = document.getElementById('subject-buttons');
             const flashcardViewerDiv = document.getElementById('flashcard-viewer');
-            const subjectButtons = document.querySelectorAll('.subject-item');
-            const backToSubjectsBtn = document.getElementById('back-to-subjects');
-            
-            // Elementos do flashcard
-            const viewerTitle = document.getElementById('viewer-title');
-            const flashcard = document.getElementById('flashcard');
-            const cardQuestion = document.getElementById('card-question');
-            const cardAnswer = document.getElementById('card-answer');
-            const prevCardBtn = document.getElementById('prev-card-btn');
-            const nextCardBtn = document.getElementById('next-card-btn');
-            const cardCounter = document.getElementById('card-counter');
+            const subjectTitle = document.getElementById('subject-title');
+            const backToSubjectsBtn = document.getElementById('back-to-subjects'); // Botão dentro do viewer
 
-            // Variáveis de controle
-            let currentSubject = '';
+            const flashcardElement = document.getElementById('flashcard');
+            const questionEl = document.getElementById('flashcard-question');
+            const answerEl = document.getElementById('flashcard-answer');
+            const cardCounter = document.getElementById('card-counter');
+            const prevCardBtn = document.getElementById('prev-card');
+            const nextCardBtn = document.getElementById('next-card');
+
+            // --- 2. Variáveis de Estado ---
+            let allFlashcards = {{ flashcard_data|tojson }};
             let currentCards = [];
             let currentIndex = 0;
 
-            // ==============================
-            // Função: Mostra o cartão atual
-            // ==============================
+            // --- 3. Funções ---
             function showCard(index) {
-                flashcard.classList.remove('is-flipped');
+                if (flashcardElement.classList.contains('is-flipped')) {
+                    flashcardElement.classList.remove('is-flipped');
+                }
                 setTimeout(() => {
                     if (currentCards && currentCards[index]) {
-                        cardQuestion.textContent = currentCards[index].pergunta;
-                        cardAnswer.textContent = currentCards[index].resposta;
-                        cardCounter.textContent = `${index + 1} / ${currentCards.length}`;
+                        questionEl.textContent = currentCards[index].pergunta;
+                        answerEl.textContent = currentCards[index].resposta;
+                        cardCounter.textContent = `${index + 1}/${currentCards.length}`;
+                    } else {
+                        console.error("Erro: Tentando acessar cartão inválido.");
+                        questionEl.textContent = "Erro";
+                        answerEl.textContent = "Erro";
+                        cardCounter.textContent = `?/${currentCards ? currentCards.length : '?'}`;
                     }
                 }, 150);
             }
 
-            // ==============================
-            // Evento: Selecionar disciplina
-            // ==============================
-            subjectButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    currentSubject = button.dataset.subject;
-                    currentCards = flashcardData[currentSubject];
-                    currentIndex = 0;
-                    
+            // --- 4. Inicialização ---
+            const subjects = Object.keys(allFlashcards);
+            subjects.forEach(subject => {
+                const btn = document.createElement('button');
+                btn.className = 'subject-btn';
+                btn.textContent = subject;
+                subjectButtonsContainer.appendChild(btn);
+
+                btn.addEventListener('click', () => {
+                    currentCards = allFlashcards[subject];
                     if (currentCards && currentCards.length > 0) {
-                        viewerTitle.textContent = currentSubject;
+                        currentIndex = 0;
+                        subjectTitle.textContent = subject;
                         showCard(currentIndex);
 
+                        // Esconde seleção e mostra o visualizador
                         subjectSelectionDiv.classList.add('hidden');
                         flashcardViewerDiv.classList.remove('hidden');
                     } else {
-                        console.warn("Nenhum card encontrado para:", currentSubject);
-                        alert("Esta disciplina ainda não possui flashcards.");
+                        const p = document.createElement('p');
+                        p.textContent = `Nenhum flashcard encontrado para "${subject}".`;
+                        p.style.color = 'red';
+                        p.style.textAlign = 'center';
+                        subjectButtonsContainer.appendChild(p);
+                        setTimeout(() => p.remove(), 3000);
                     }
                 });
             });
 
-            // ==============================
-            // Evento: Voltar à lista de disciplinas
-            // ==============================
+            // --- 5. Event Listeners ---
+            // Botão DENTRO do viewer para voltar à seleção de matérias
             backToSubjectsBtn.addEventListener('click', () => {
                 subjectSelectionDiv.classList.remove('hidden');
                 flashcardViewerDiv.classList.add('hidden');
             });
 
-            // ==============================
-            // Evento: Virar o cartão
-            // ==============================
-            flashcard.addEventListener('click', () => {
-                flashcard.classList.toggle('is-flipped');
+            // Virar o cartão
+            flashcardElement.addEventListener('click', () => {
+                flashcardElement.classList.toggle('is-flipped');
             });
 
-            // ==============================
-            // Evento: Navegar para o cartão anterior
-            // ==============================
+            // Navegação
             prevCardBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
@@ -165,9 +143,6 @@
                 }
             });
 
-            // ==============================
-            // Evento: Navegar para o próximo cartão
-            // ==============================
             nextCardBtn.addEventListener('click', () => {
                 if (currentIndex < currentCards.length - 1) {
                     currentIndex++;

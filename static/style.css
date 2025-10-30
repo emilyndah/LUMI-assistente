@@ -1,784 +1,602 @@
 /* =======================================================
- * TÍTULO: FOLHA DE ESTILOS PRINCIPAL (STYLE.CSS)
- * (COMBINANDO ESTILOS GERAIS + CALENDÁRIO)
- * (CORRIGIDO PARA MANTER O LAYOUT LADO-A-LADO)
+ * TÍTULO: FOLHA DE ESTILOS PRINCIPAL (STYLE.CSS) - vFinal
+ * (Layout Base + Componentes + Login + Perfil)
  * ======================================================= */
 
 /* === GERAL === */
-body { 
-    font-family: 'Poppins', sans-serif; 
-    margin: 0; 
-    background-color: #f7f9fc; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    min-height: 100vh; 
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #f7f9fc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
-header { 
-    width: 100%; 
-    background-color: white; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    padding: 20px; 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
-    flex-shrink: 0; 
-}
-.logo { 
-    height: 60px; 
-}
-
-/* Layout principal (index) com sidebar - ESTE É O CORRETO */
-main { 
-    display: flex; 
-    justify-content: center; 
-    width: 95%; 
-    max-width: 1200px; 
-    margin-top: 30px; 
-    gap: 30px; 
-    flex-grow: 1; 
-    box-sizing: border-box; 
-}
-
-/* Layout de página inteira (FAQ, Flashcards, Calendário) */
-/* Esta classe anula o 'display: flex' do 'main' */
-main.faq-page,
-main.calendar-page {
-    display: block; /* Garante que estas páginas não usem flexbox */
+header {
     width: 100%;
-    max-width: 1200px; /* Mantém a largura máxima */
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza o logo por padrão */
+    padding: 15px 20px; /* Reduzido padding vertical */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+    position: relative; /* Necessário para posicionar user-area */
+    box-sizing: border-box; /* Inclui padding na largura total */
+}
+.logo {
+    height: 50px; /* Logo ligeiramente menor */
+}
+
+/* Layout principal (index) com sidebar */
+main {
+    display: flex;
+    justify-content: center;
+    width: 95%;
+    max-width: 1200px;
+    margin-top: 30px;
+    margin-bottom: 30px; /* Adiciona margem inferior */
+    gap: 30px;
+    flex-grow: 1;
+    box-sizing: border-box;
+    align-items: flex-start; /* Alinha sidebar e chat no topo */
+}
+
+/* Layout de página inteira (FAQ, Flashcards, Calendário, Perfil) */
+main.faq-page,
+main.calendar-page,
+main.profile-page { /* Adicionada classe para perfil */
+    display: block;
+    width: 100%;
+    max-width: 1200px; /* Mantém largura máxima geral */
     margin: 30px auto;
 }
 
+/* === ÁREA DO UTILIZADOR (NO HEADER) === */
+.user-area {
+    position: absolute;
+    right: 25px; /* Distância da direita */
+    top: 50%;
+    transform: translateY(-50%); /* Centraliza verticalmente */
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaço entre os elementos */
+    font-size: 0.9em;
+}
+.welcome-msg {
+    color: #555;
+    font-weight: 500;
+    white-space: nowrap; /* Evita quebra de linha no nome */
+}
+.profile-link {
+    text-decoration: none;
+    display: flex; /* Para alinhar com o texto se necessário */
+    align-items: center;
+}
+.profile-icon {
+    width: 36px;
+    height: 36px;
+    background-color: #4B8BEA; /* Cor de fundo do ícone */
+    color: white; /* Cor da letra */
+    border-radius: 50%; /* Faz o círculo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    text-transform: uppercase; /* Deixa a inicial maiúscula */
+}
+.profile-link:hover .profile-icon {
+    background-color: #3a74d3; /* Escurece no hover */
+    transform: scale(1.1); /* Efeito de zoom suave */
+}
+.logout-link {
+    color: #e74c3c; /* Vermelho para logout */
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 8px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+}
+.logout-link:hover {
+    background-color: #fbecec; /* Fundo vermelho claro no hover */
+    color: #c73c2c;
+}
+.login-link { /* Estilo para o link de login se não autenticado */
+    color: #4B8BEA;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+
 /* === FUNCIONALIDADES (Sidebar) === */
-.funcoes { 
-    width: 320px; 
-    background: white; 
-    border-radius: 15px; 
-    padding: 25px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-    display: flex; 
-    flex-direction: column; 
-    gap: 12px; 
-    height: fit-content; 
-    flex-shrink: 0; /* Impede que a sidebar encolha */
+.funcoes { /* Mudado para <aside> no HTML */
+    width: 300px; /* Ligeiramente mais estreito */
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: fit-content; /* Altura ajusta ao conteúdo */
+    flex-shrink: 0;
 }
-.funcoes h2 { 
-    color: #4B8BEA; 
-    text-align: left; 
-    font-size: 1.4em; 
-    margin-top: 0; 
-    margin-bottom: 15px; 
+.funcoes h2 {
+    color: #4B8BEA;
+    text-align: left;
+    font-size: 1.3em; /* Ligeiramente menor */
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
-.func-item { 
-    text-decoration: none; 
-    color: #333; 
-    background-color: #f0f5ff; 
-    padding: 12px 15px; 
-    border-radius: 8px; 
-    font-weight: 500; 
-    transition: background-color 0.3s, color 0.3s; 
+.func-item {
+    text-decoration: none;
+    color: #333;
+    background-color: #f0f5ff;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95em; /* Ligeiramente menor */
+    transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
+    display: block; /* Garante que ocupa a largura toda */
 }
-.func-item:hover { 
-    background-color: #e0e8ff; 
-    color: #1e3a8a; 
+.func-item:hover {
+    background-color: #e0e8ff;
+    color: #1e3a8a;
+    transform: translateX(3px); /* Pequeno efeito ao passar o mouse */
 }
-.func-item.disabled { 
-    background-color: #f1f1f1; 
-    color: #aaa; 
-    cursor: not-allowed; 
+.func-item.disabled {
+    background-color: #f1f1f1;
+    color: #aaa;
+    cursor: not-allowed;
+    transform: none; /* Remove efeito hover */
 }
+.func-item.disabled:hover {
+    background-color: #f1f1f1; /* Mantém cor no hover */
+    color: #aaa;
+}
+
 
 /* === CHAT === */
-.chat-container { 
-    width: 100%; /* Ocupa o espaço restante */
-    max-width: 800px; /* Limite máximo */
-    background: white; 
-    border-radius: 15px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-    display: flex; 
-    flex-direction: column; 
-    flex-grow: 1; /* Permite que o chat estique */
-    height: calc(100vh - 160px); /* Altura calculada */ 
+.chat-container {
+    width: 100%; /* Ocupa espaço restante */
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* Ajusta altura máxima para caber na tela com header e margens */
+    max-height: calc(100vh - /* altura header */ 80px - /* margem top/bottom main */ 60px);
+    min-height: 400px; /* Altura mínima */
 }
-.chat-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 15px 25px; 
-    border-bottom: 1px solid #eee; 
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid #eee;
+    flex-shrink: 0; /* Impede que header encolha */
 }
-.chat-header h1 { 
-    color: #4B8BEA; 
-    margin: 0; 
-    font-size: 1.5em; 
+.chat-header h1 {
+    color: #4B8BEA;
+    margin: 0;
+    font-size: 1.4em; /* Ligeiramente menor */
+    font-weight: 600;
 }
-.clear-chat-btn { 
-    text-decoration: none; 
-    color: #888; 
-    font-size: 0.9em; 
-    transition: color 0.3s; 
+.clear-chat-btn {
+    text-decoration: none;
+    color: #888;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: color 0.3s;
+    padding: 5px; /* Área de clique maior */
 }
-.clear-chat-btn:hover { 
-    color: #e74c3c; 
+.clear-chat-btn:hover {
+    color: #e74c3c;
 }
-.chat-box { 
-    flex-grow: 1; 
-    padding: 25px; 
-    overflow-y: auto; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 15px; 
+.chat-box {
+    flex-grow: 1;
+    padding: 20px; /* Padding ligeiramente menor */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaço menor entre mensagens */
 }
-.msg { 
-    max-width: 80%; 
-    padding: 12px 18px; 
-    border-radius: 20px; 
-    line-height: 1.5; 
-    word-wrap: break-word; /* Garante quebra de linha */
-}
-.msg.user { 
-    background-color: #4B8BEA; 
-    color: white; 
-    border-bottom-right-radius: 5px; 
-    align-self: flex-end; 
-}
-.msg.lumi { 
-    background-color: #f1f3f5; 
-    color: #333; 
-    border-bottom-left-radius: 5px; 
-    align-self: flex-start; 
-}
-.msg.lumi.typing { 
-    color: #888; 
-    font-style: italic; 
-}
-.chat-input { 
-    display: flex; 
-    padding: 20px; 
-    border-top: 1px solid #eee; 
-}
-.chat-input input { 
-    flex-grow: 1; 
-    border: 1px solid #ddd; 
-    border-radius: 25px; 
-    padding: 12px 20px; 
-    font-size: 1em; 
-    margin-right: 15px; 
-    outline: none; 
-    transition: border-color 0.3s; 
-}
-.chat-input input:focus { 
-    border-color: #4B8BEA; 
-}
-.chat-input button { 
-    background: #4B8BEA; 
-    color: white; 
-    border: none; 
-    border-radius: 50%; 
-    width: 50px; 
-    height: 50px; 
-    font-size: 18px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
-    flex-shrink: 0; /* Impede que o botão encolha */
-}
-.chat-input button:hover { 
-    background: #3a74d3; 
-}
-.chat-input button:disabled { 
-    background: #ccc; 
-}
+/* Estilo da barra de scroll (opcional, para Chrome/Edge/Safari) */
+.chat-box::-webkit-scrollbar { width: 8px; }
+.chat-box::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px;}
+.chat-box::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px;}
+.chat-box::-webkit-scrollbar-thumb:hover { background: #aaa; }
 
-/* === ESTILOS PÁGINA FAQ === */
-.faq-container { 
-    width: 100%; 
-    max-width: 900px; 
-    background: white; 
-    border-radius: 15px; 
-    padding: 30px 40px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-    margin: 0 auto 40px auto; 
-    box-sizing: border-box; 
+.msg {
+    max-width: 75%; /* Mensagens um pouco mais estreitas */
+    padding: 10px 15px; /* Padding menor */
+    border-radius: 18px; /* Bordas ligeiramente menos redondas */
+    line-height: 1.45; /* Espaçamento entre linhas */
+    word-wrap: break-word;
+    font-size: 0.95em; /* Fonte ligeiramente menor */
 }
-.faq-container h1 { 
-    text-align: center; 
-    color: #4B8BEA; 
-    margin-bottom: 10px; 
-    font-size: 2.2em; 
+.msg.user {
+    background-color: #4B8BEA;
+    color: white;
+    border-bottom-right-radius: 5px;
+    align-self: flex-end;
 }
-.faq-container p { 
-    text-align: center; 
-    color: #666; 
-    font-size: 1.1em; 
-    margin-bottom: 30px; 
+.msg.lumi {
+    background-color: #f1f3f5;
+    color: #333;
+    border-bottom-left-radius: 5px;
+    align-self: flex-start;
 }
-.faq-search { 
-    width: 100%; 
-    padding: 12px 15px; 
-    margin-bottom: 20px; 
-    border: 1px solid #ddd; 
-    border-radius: 8px; 
-    font-size: 1em; 
-    box-sizing: border-box; 
+.msg.lumi.typing {
+    color: #888;
+    font-style: italic;
+    background-color: #f8f9fa; /* Fundo diferente para typing */
 }
-.faq-item { 
-    border-bottom: 1px solid #eee; 
+.chat-input {
+    display: flex;
+    padding: 15px 20px; /* Padding menor */
+    border-top: 1px solid #eee;
+    flex-shrink: 0; /* Impede que input encolha */
 }
-.faq-question { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 18px 0; 
-    cursor: pointer; 
+.chat-input input {
+    flex-grow: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px; /* Menos redondo */
+    padding: 10px 18px; /* Padding ajustado */
+    font-size: 0.95em;
+    margin-right: 10px; /* Menos espaço */
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
-.faq-question span { 
-    font-size: 1.1em; 
-    font-weight: 500; 
-    color: #333; 
+.chat-input input:focus {
+    border-color: #4B8BEA;
+    box-shadow: 0 0 0 3px rgba(75, 139, 234, 0.2);
 }
-.faq-icon { 
-    font-size: 1.5em; 
-    font-weight: bold; 
-    color: #4B8BEA; 
-}
-.faq-answer { 
-    max-height: 0; 
-    overflow: hidden; 
-    transition: max-height 0.3s ease-out; 
-}
-.faq-answer p { 
-    color: #555; 
-    font-size: 1em; 
-    text-align: left; 
-    padding: 0 10px 15px 10px; 
-    line-height: 1.6; 
-}
-.faq-item.active .faq-answer { 
-    max-height: 200px; /* Ajuste conforme necessário */ 
-}
-
-/* === ESTILOS PÁGINA FLASHCARDS === */
-.flashcard-container { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    gap: 30px; 
-}
-#subject-selection h2, #flashcard-viewer h2 { 
-    text-align: center; 
-    color: #333; 
-    font-size: 1.8em; 
-}
-#subject-buttons { 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 15px; 
-}
-.subject-btn { 
-    padding: 12px 20px; 
-    font-size: 1em; 
-    background: #4B8BEA; 
-    color: white; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
-}
-.subject-btn:hover { 
-    background: #3a74d3; 
-}
-#flashcard-viewer { 
-    width: 100%; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    gap: 25px; 
-}
-#back-to-subjects { 
-    align-self: flex-start; 
-    background: none; 
-    border: none; 
-    color: #4B8BEA; 
-    font-size: 1em; 
-    cursor: pointer; 
-}
-#flashcard-scene { 
-    width: 100%; 
-    max-width: 500px; 
-    height: 300px; 
-    perspective: 1000px; 
-}
-#flashcard { 
-    width: 100%; 
-    height: 100%; 
-    position: relative; 
-    transition: transform 0.6s; 
-    transform-style: preserve-3d; 
-    cursor: pointer; 
-}
-.flashcard.is-flipped { 
-    transform: rotateY(180deg); 
-}
-.card-face { 
-    position: absolute; 
-    width: 100%; 
-    height: 100%; 
-    backface-visibility: hidden; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    text-align: center; 
-    padding: 20px; 
-    box-sizing: border-box; 
-    border-radius: 15px; 
-    font-size: 1.4em; 
-}
-.card-front { 
-    background: #f0f5ff; 
-    border: 1px solid #e0e8ff; 
-    color: #1e3a8a; 
-}
-.card-back { 
-    background: #4B8BEA; 
-    color: white; 
-    transform: rotateY(180deg); 
-}
-.flashcard-nav { 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    gap: 20px; 
-}
-.flashcard-nav button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+.chat-input button {
     background: #4B8BEA;
     color: white;
     border: none;
-    font-size: 18px;
+    border-radius: 50%;
+    width: 42px; /* Botão menor */
+    height: 42px; /* Botão menor */
+    font-size: 16px; /* Ícone/seta menor */
     cursor: pointer;
     transition: background-color 0.3s;
-}
-.flashcard-nav button:hover { 
-    background: #3a74d3; 
-}
-.flashcard-nav span { 
-    font-size: 1.1em; 
-    font-weight: 500; 
-    min-width: 50px; 
-    text-align: center; 
-}
-.hidden { 
-    display: none; 
-}
-
-/* ======================================================= */
-/* ====== INÍCIO: NOVOS ESTILOS DO CALENDÁRIO ACADÊMICO ====== */
-/* ======================================================= */
-
-.calendar-section {
-    width: 100%; 
-    max-width: 960px; /* Calendário um pouco menor */
-    background: white; 
-    border-radius: 15px; 
-    padding: 30px 40px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-    margin: 0 auto 40px auto; 
-    box-sizing: border-box;
-}
-
-.calendar-section h1 {
-    text-align: center; 
-    color: #4B8BEA; 
-    margin-bottom: 10px; 
-    font-size: 2.2em;
-}
-
-.calendar-section p {
-    text-align: center; 
-    color: #666; 
-    font-size: 1.1em; 
-    margin-bottom: 30px;
-}
-
-#calendar-wrapper {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
-    border-radius: 20px; /* Cantos arredondados para o calendário */
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    padding: 25px;
-    overflow: hidden; /* Garante que o conteúdo respeite o border-radius */
-    margin-bottom: 30px;
-}
-
-#calendar {
-    font-family: 'Poppins', sans-serif;
-    color: #333;
-}
-
-/* Cores dos botões e destaque de hoje */
-:root {
-    --fc-button-bg-color: #4B8BEA;
-    --fc-button-border-color: #4B8BEA;
-    --fc-button-hover-bg-color: #3a74d3;
-    --fc-button-hover-border-color: #3a74d3;
-    --fc-button-active-bg-color: #3a74d3;
-    --fc-button-active-border-color: #3a74d3;
-    --fc-today-bg-color: #e0e8ff; /* Fundo mais claro para o dia atual */
-    --fc-border-color: #e0e0e0; /* Cor da borda da grade */
-}
-
-/* Estilo do cabeçalho do calendário (mês, botões de navegação) */
-.fc-header-toolbar {
-    margin-bottom: 25px !important;
-    font-size: 1.1em;
-    color: #333;
-    display: flex;
-    flex-wrap: wrap; /* Para responsividade */
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-}
-
-.fc-toolbar-title {
-    font-size: 1.8em !important;
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-/* Estilo dos botões do FullCalendar */
-.fc-button {
-    text-transform: capitalize; /* Deixa a primeira letra maiúscula */
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-/* Nomes dos dias da semana */
-.fc-col-header-cell-cushion {
-    font-weight: 600;
-    color: #4B8BEA;
-    padding: 10px 0;
-    font-size: 1.05em;
-}
-
-/* Células dos dias */
-.fc-daygrid-day {
-    padding: 5px;
-    border-radius: 5px; /* Bordas levemente arredondadas para os dias */
-    transition: background-color 0.2s ease;
-}
-
-/* Estilo dos números dos dias */
-.fc-daygrid-day-top {
-    display: flex;
+    flex-shrink: 0;
+    display: flex; /* Para centralizar o ícone */
     justify-content: center;
     align-items: center;
-    padding-bottom: 5px;
-    font-weight: 500;
-    font-size: 1.1em;
+}
+.chat-input button:hover {
+    background: #3a74d3;
+}
+.chat-input button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
 
-.fc-daygrid-day-number {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35px; /* Tamanho da bolinha do número */
-    height: 35px;
-    border-radius: 50%; /* Faz a bolinha do número */
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
 
-/* Dia atual */
-.fc-day-today .fc-daygrid-day-number {
-    background-color: var(--fc-today-bg-color);
-    color: #4B8BEA;
-    font-weight: 600;
-}
-
-/* Estilo para dias com eventos (indicador visual) */
-.fc-daygrid-event {
-    background-color: #8bbdeb; /* Cor de fundo para eventos */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 3px 7px;
-    margin-bottom: 2px;
-    font-size: 0.85em;
-    white-space: nowrap; /* Evita quebra de texto */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
-    cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.fc-daygrid-event:hover {
-    background-color: #6a9edb;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* Indicador visual de dias com eventos (o que você pediu) */
-.fc-daygrid-day:not(.fc-day-other) .fc-daygrid-event-harness:not(:empty) + .fc-daygrid-day-bottom::before {
-    content: '';
-    position: absolute;
-    bottom: 5px; /* Ajuste a posição do ponto */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 7px;
-    height: 7px;
-    background-color: #4B8BEA; /* Cor do ponto */
-    border-radius: 50%;
-    z-index: 1; /* Para garantir que apareça acima de outros elementos se houver */
-}
-
-/* Dias do mês anterior/próximo */
-.fc-day-other .fc-daygrid-day-number {
-    color: #ccc;
-}
-.fc-day-other {
-    opacity: 0.7; /* Suaviza os dias de outros meses */
-}
-
-/* Dia selecionado pelo clique (para realçar na interface) */
-.fc-daygrid-day.fc-day-selected {
-    background-color: #e6f2ff !important; /* Cor de fundo para o dia clicado */
-    border: 1px solid #4B8BEA; /* Borda para o dia clicado */
-    border-radius: 10px;
-}
-
-/* ======================================================= */
-/* ====== ESTILOS PARA A NOVA LISTA DE EVENTOS (AGENDA) ====== */
-/* ======================================================= */
-.agenda-section {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    padding: 25px;
-}
-
-.event-search {
+/* === ESTILOS PÁGINA FAQ === */
+.faq-container {
     width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 1em;
+    max-width: 900px;
+    background: white;
+    border-radius: 15px;
+    padding: 30px 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin: 0 auto 40px auto;
     box-sizing: border-box;
-    transition: border-color 0.3s ease;
+    position: relative; /* Contexto para botões Voltar (flashcards) */
+}
+.faq-container h1 {
+    text-align: center; color: #4B8BEA; margin-bottom: 10px; font-size: 2.2em; font-weight: 600;
+}
+.faq-container > p { /* Seletor > p para o parágrafo logo abaixo do h1 */
+    text-align: center; color: #666; font-size: 1.1em; margin-bottom: 30px;
+}
+.faq-search {
+    width: 100%; padding: 12px 15px; margin-bottom: 25px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; box-sizing: border-box; transition: border-color 0.3s, box-shadow 0.3s;
+}
+.faq-search:focus {
+    border-color: #4B8BEA; outline: none; box-shadow: 0 0 0 3px rgba(75, 139, 234, 0.2);
+}
+.faq-item {
+    border-bottom: 1px solid #eee;
+}
+.faq-item:last-child {
+    border-bottom: none; /* Remove borda do último item */
+}
+.faq-question {
+    display: flex; justify-content: space-between; align-items: center; padding: 18px 5px; /* Adiciona padding lateral */ cursor: pointer; transition: background-color 0.2s ease;
+}
+.faq-question:hover {
+    background-color: #f9f9f9; /* Leve destaque ao passar o mouse */
+}
+.faq-question span {
+    font-size: 1.05em; /* Ligeiramente menor */ font-weight: 500; color: #333; padding-right: 15px; /* Espaço para o ícone */
+}
+.faq-icon {
+    font-size: 1.4em; font-weight: bold; color: #4B8BEA; transition: transform 0.3s ease; flex-shrink: 0; /* Impede que ícone encolha */
+}
+.faq-item.active .faq-icon {
+    transform: rotate(45deg); /* Rotaciona o + para parecer um X ou - */
+}
+.faq-answer {
+    max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Adiciona transição no padding */ padding: 0 15px; /* Padding lateral */
+}
+.faq-answer p {
+    color: #555; font-size: 0.95em; /* Ligeiramente menor */ text-align: left; line-height: 1.6; margin: 0; /* Remove margem padrão */ padding-bottom: 15px; /* Adiciona padding apenas embaixo */
+}
+.faq-item.active .faq-answer {
+    max-height: 300px; /* Aumenta altura máxima permitida */ padding-top: 5px; padding-bottom: 20px; /* Adiciona padding vertical quando aberto */
 }
 
-.event-search:focus {
-    border-color: #4B8BEA;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(75, 139, 234, 0.2);
+
+/* === ESTILOS PÁGINA FLASHCARDS === */
+.flashcard-container {
+    display: flex; flex-direction: column; align-items: center; gap: 30px;
+}
+#subject-selection h2, #flashcard-viewer h2 {
+    text-align: center; color: #333; font-size: 1.8em; margin-bottom: 15px; font-weight: 600;
+}
+#subject-selection p {
+     text-align: center; color: #666; font-size: 1.1em; margin-bottom: 25px;
+}
+#subject-buttons {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;
+}
+.subject-btn {
+    padding: 12px 25px; /* Botões um pouco mais largos */ font-size: 1em; background: #4B8BEA; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s, transform 0.2s ease;
+}
+.subject-btn:hover {
+    background: #3a74d3; transform: translateY(-2px);
 }
 
-.agenda-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap; /* Para responsividade */
+/* Botão Voltar na seleção de disciplina */
+.back-btn-flashcard-subject {
+    position: absolute; top: 20px; left: 30px; text-decoration: none; color: #4B8BEA; font-weight: 500; font-size: 1em; background: none; border: none; cursor: pointer; transition: color 0.2s ease; padding: 5px; /* Área de clique */
 }
+.back-btn-flashcard-subject:hover { color: #3a74d3; }
 
-#event-list-title {
-    font-size: 1.8em;
-    color: #2c3e50;
-    font-weight: 600;
-    margin: 0;
+#flashcard-viewer {
+    width: 100%; display: flex; flex-direction: column; align-items: center; gap: 25px;
 }
+/* Botão Voltar DENTRO do visualizador */
+#back-to-subjects {
+    align-self: flex-start; background: none; border: none; color: #4B8BEA; font-size: 1em; cursor: pointer; font-weight: 500; padding: 5px; /* Área de clique */ transition: color 0.2s ease;
+}
+#back-to-subjects:hover { color: #3a74d3; }
 
-.simple-btn {
-    background-color: #f0f0f0;
-    color: #555;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.2s ease, color 0.2s ease;
+#flashcard-scene {
+    width: 100%; max-width: 600px; /* Mais largo */ height: 300px; /* Menos alto */ perspective: 1000px;
 }
+.flashcard {
+    width: 100%; height: 100%; position: relative; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer;
+}
+.flashcard.is-flipped { transform: rotateY(180deg); }
+.card-face {
+    position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; justify-content: center; align-items: center; text-align: center; padding: 25px; /* Mais padding interno */ box-sizing: border-box; border-radius: 15px; font-size: 1.3em; /* Fonte ligeiramente menor */ line-height: 1.5; overflow-y: auto; /* Permite scroll se texto for muito grande */
+}
+/* Scrollbar para card-face (opcional) */
+.card-face::-webkit-scrollbar { width: 6px; }
+.card-face::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
 
-.simple-btn:hover {
-    background-color: #e0e0e0;
-    color: #333;
+.card-front {
+    background: #f0f5ff; border: 1px solid #e0e8ff; color: #1e3a8a; font-weight: 500;
 }
+.card-back {
+    background: #4B8BEA; color: white; transform: rotateY(180deg);
+}
+.flashcard-nav {
+    display: flex; justify-content: center; align-items: center; gap: 20px;
+}
+.flashcard-nav button {
+    width: 45px; height: 45px; /* Botões de nav menores */ border-radius: 50%; background: #4B8BEA; color: white; border: none; font-size: 18px; cursor: pointer; transition: background-color 0.3s; display: flex; justify-content: center; align-items: center;
+}
+.flashcard-nav button:hover { background: #3a74d3; }
+.flashcard-nav button:disabled { background: #ccc; cursor: not-allowed; } /* Estilo para desabilitado */
+.flashcard-nav span {
+    font-size: 1em; /* Contador menor */ font-weight: 500; min-width: 50px; text-align: center; color: #555;
+}
+.hidden { display: none !important; }
 
-.simple-btn.hidden {
-    display: none;
+/* === ESTILOS PÁGINA PERFIL === */
+.profile-container {
+    width: 100%; max-width: 600px; margin: 50px auto; background: white; padding: 30px 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;
 }
+.profile-container h1 { color: #4B8BEA; margin-bottom: 30px; font-weight: 600;}
+.profile-info p {
+    font-size: 1.05em; color: #333; margin-bottom: 18px; text-align: left; border-bottom: 1px solid #eee; padding-bottom: 12px;
+}
+.profile-info p:last-child { border-bottom: none; margin-bottom: 0;} /* Remove borda do último */
+.profile-info strong {
+    color: #4B8BEA; display: inline-block; width: 100px; /* Largura ajustada */ font-weight: 600; margin-right: 10px;
+}
+.back-link { /* Link Voltar na página de perfil */
+    display: inline-block; margin-top: 30px; color: #4B8BEA; text-decoration: none; font-weight: 500; transition: color 0.2s ease;
+}
+.back-link:hover { text-decoration: underline; color: #3a74d3; }
 
-.agenda-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Espaço reduzido entre itens */
-}
-
-.agenda-item {
-    display: flex;
-    align-items: center;
-    background: linear-gradient(135deg, #f9fcff 0%, #eef5fa 100%);
-    border: 1px solid #e0e0e0;
-    border-left: 5px solid #4B8BEA; /* Barra colorida lateral */
-    border-radius: 12px;
-    padding: 8px 15px; /* Abas de eventos muito menores */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.agenda-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.agenda-date {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px; /* Menos espaço na data */
-    padding-right: 15px; /* Menos espaço na data */
-    border-right: 1px solid #eee;
-    min-width: 50px; /* Reduzido de 60px */
-    text-align: center;
-}
-
-.agenda-day {
-    font-size: 1.6em; /* Fonte do dia muito menor */
-    font-weight: 700;
-    color: #4B8BEA;
-    line-height: 1;
-}
-
-.agenda-month {
-    font-size: 0.8em; /* Fonte do mês menor */
-    font-weight: 600;
-    color: #777;
-    text-transform: uppercase;
-}
-
-.agenda-details {
-    flex-grow: 1;
-}
-
-.agenda-title {
-    font-size: 1.0em; /* Fonte do título menor */
-    font-weight: 600;
-    color: #333;
-    margin: 0 0 2px 0; /* Espaço reduzido */
-}
-
-.agenda-full-date {
-    /* ================================================== */
-    /* ==== MUDANÇA: Data cinza removida (display: none) ==== */
-    /* ================================================== */
-    display: none; 
-    font-size: 0.8em;
-    color: #888;
-    margin: 0;
-}
-
-.no-events-message {
-    text-align: center;
-    color: #666;
-    font-size: 1.1em;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    margin-top: 20px;
-}
+/* === ESTILOS PÁGINA LOGIN/REGISTER === */
+/* (Estilos movidos para dentro dos templates login.html e register.html) */
 
 /* ======================================================= */
-/* ====== RESPONSIVIDADE (PARA TELAS MENORES) ====== */
+/* ====== ESTILOS DO CALENDÁRIO ACADÊMICO ====== */
 /* ======================================================= */
+/* Container da seção do calendário */
+.calendar-section {
+    width: 100%; max-width: 960px; background: white; border-radius: 15px; padding: 30px 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin: 0 auto 40px auto; box-sizing: border-box;
+}
+.calendar-section h1 { text-align: center; color: #4B8BEA; margin-bottom: 10px; font-size: 2.2em; font-weight: 600;}
+.calendar-section p { text-align: center; color: #666; font-size: 1.1em; margin-bottom: 30px;}
 
-/* Removemos o @media (max-width: 900px) que quebrava o layout */
+/* Wrapper do FullCalendar */
+#calendar-wrapper {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%); border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); padding: 25px; overflow: hidden; margin-bottom: 30px;
+}
+#calendar { font-family: 'Poppins', sans-serif; color: #333; }
 
-@media (max-width: 768px) {
-    /* Estilos específicos do calendário para tablet */
-    .fc-header-toolbar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .fc-toolbar-title {
-        margin-bottom: 10px;
-    }
-    .fc-button-group {
-        margin-top: 10px;
-    }
-    .agenda-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px 15px;
-    }
-    .agenda-date {
-        flex-direction: row;
-        border-right: none;
-        padding-right: 0;
-        margin-bottom: 10px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 5px;
-        width: 100%;
-        justify-content: flex-start;
-        gap: 10px;
-    }
-    .agenda-day {
-        font-size: 1.8em;
-    }
-    .agenda-month {
-        font-size: 0.8em;
-    }
-    .agenda-title {
-        font-size: 1.1em;
-    }
-    .agenda-full-date {
-        font-size: 0.8em;
-    }
+/* Variáveis de Cor do FullCalendar */
+:root {
+    --fc-button-bg-color: #4B8BEA; --fc-button-border-color: #4B8BEA; --fc-button-hover-bg-color: #3a74d3; --fc-button-hover-border-color: #3a74d3; --fc-button-active-bg-color: #3a74d3; --fc-button-active-border-color: #3a74d3; --fc-today-bg-color: #e0e8ff; --fc-border-color: #e0e0e0;
 }
 
-@media (max-width: 480px) {
-    /* Estilos gerais para telemóvel */
-    .chat-header h1 { 
-        font-size: 1.2em; 
-    }
-    .chat-input {
-        padding: 15px;
-    }
-    .chat-input input { 
-        padding: 10px 15px; 
-    }
-    .chat-input button { 
-        width: 45px; 
-        height: 45px; 
-    }
-    .msg { 
-        padding: 10px 15px; 
-    }
-    .faq-container, .calendar-section { 
-        padding: 15px; 
-    }
-    .faq-container h1, .calendar-section h1 { 
-        font-size: 1.8em; 
+/* Cabeçalho do FullCalendar */
+.fc-header-toolbar { margin-bottom: 25px !important; font-size: 1.1em; color: #333; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;}
+.fc-toolbar-title { font-size: 1.8em !important; font-weight: 600; color: #2c3e50; }
+.fc-button { text-transform: capitalize; padding: 8px 15px; border-radius: 8px; font-weight: 500; transition: background-color 0.2s ease, border-color 0.2s ease; }
+
+/* Dias da Semana e Células */
+.fc-col-header-cell-cushion { font-weight: 600; color: #4B8BEA; padding: 10px 0; font-size: 1.0em; /* Ligeiramente menor */}
+.fc-daygrid-day { padding: 4px; /* Menor padding */ border-radius: 5px; transition: background-color 0.2s ease; position: relative; /* Para o ::before */ }
+.fc-daygrid-day-top { display: flex; justify-content: center; align-items: center; padding-bottom: 3px; /* Menos espaço */ font-weight: 500; font-size: 1.0em; /* Números menores */}
+.fc-daygrid-day-number { display: flex; justify-content: center; align-items: center; width: 30px; /* Bolinha menor */ height: 30px; /* Bolinha menor */ border-radius: 50%; transition: background-color 0.2s ease, color 0.2s ease; }
+.fc-day-today .fc-daygrid-day-number { background-color: var(--fc-today-bg-color); color: #4B8BEA; font-weight: 600; }
+
+/* Eventos no Calendário */
+.fc-daygrid-event { background-color: #8bbdeb; color: #fff; border: none; border-radius: 5px; padding: 2px 6px; /* Eventos menores */ margin-bottom: 2px; font-size: 0.8em; /* Fonte menor */ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease; }
+.fc-daygrid-event:hover { background-color: #6a9edb; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+/* Indicador de dia com evento (ponto azul) */
+/* Seletor mais robusto para tentar pegar o dia */
+.fc-daygrid-day:has(.fc-daygrid-event-harness):not(.fc-day-other)::after {
+    content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background-color: #4B8BEA; border-radius: 50%; z-index: 4; /* Tenta ficar mais acima */
+}
+/* Dias de outros meses */
+.fc-day-other .fc-daygrid-day-number { color: #ccc; }
+.fc-day-other { opacity: 0.6; /* Mais suaves */ }
+
+/* Dia selecionado pelo clique */
+.fc-daygrid-day.fc-day-selected { background-color: #e6f2ff !important; border: 1px solid #4B8BEA; border-radius: 8px; }
+
+/* Seção da Lista de Eventos (Abaixo do Calendário) */
+.agenda-section { background: #fff; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); padding: 25px; margin-top: 30px; /* Adiciona espaço acima */}
+.event-search { width: 100%; padding: 12px 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 10px; font-size: 1em; box-sizing: border-box; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+.event-search:focus { border-color: #4B8BEA; outline: none; box-shadow: 0 0 0 3px rgba(75, 139, 234, 0.2); }
+.agenda-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+#event-list-title { font-size: 1.6em; /* Título menor */ color: #2c3e50; font-weight: 600; margin: 0; }
+.simple-btn { background-color: #f0f0f0; color: #555; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: background-color 0.2s ease, color 0.2s ease; }
+.simple-btn:hover { background-color: #e0e0e0; color: #333; }
+.simple-btn.hidden { display: none; }
+
+/* Lista e Itens de Eventos */
+.agenda-list { display: block; /* Alterado de flex para block */ max-height: 400px; /* Limita altura da lista */ overflow-y: auto; /* Adiciona scroll se necessário */ padding-right: 5px; /* Espaço para scrollbar */}
+/* Scrollbar para agenda-list (opcional) */
+.agenda-list::-webkit-scrollbar { width: 6px; }
+.agenda-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+.agenda-item { display: flex; align-items: center; background: linear-gradient(135deg, #f9fcff 0%, #eef5fa 100%); border: 1px solid #e0e0e0; border-left: 4px solid #4B8BEA; border-radius: 10px; padding: 8px 12px; box-shadow: 0 1px 5px rgba(0,0,0,0.04); transition: transform 0.2s ease, box-shadow 0.2s ease; margin-bottom: 8px; /* Adiciona espaço entre itens */ }
+.agenda-item:last-child { margin-bottom: 0; }
+.agenda-item:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+.agenda-date { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 12px; padding-right: 12px; border-right: 1px solid #eee; min-width: 45px; text-align: center; flex-shrink: 0;}
+.agenda-day { font-size: 1.5em; font-weight: 700; color: #4B8BEA; line-height: 1; }
+.agenda-month { font-size: 0.75em; font-weight: 600; color: #777; text-transform: uppercase; }
+.agenda-details { flex-grow: 1; min-width: 0; /* Permite quebrar texto se necessário */ }
+.agenda-title { font-size: 0.95em; font-weight: 600; color: #333; margin: 0; line-height: 1.4; word-break: break-word; /* Quebra palavras longas */}
+.agenda-full-date { display: block; font-size: 0.8em; color: #888; margin-top: 3px; } /* Mostra data final */
+/* Mensagem de Nenhum Evento */
+.no-events-message { text-align: center; color: #666; font-size: 1em; padding: 15px; background: #f9f9f9; border-radius: 8px; margin-top: 15px; }
+
+/* ======================================================= */
+/* ====== RESPONSIVIDADE ====== */
+/* ======================================================= */
+@media (max-width: 992px) { /* Tablets maiores e Desktops pequenos */
+    main { flex-direction: column; align-items: center; }
+    .funcoes { width: 100%; max-width: 700px; order: 1; /* Sidebar vem primeiro */ }
+    .chat-container { width: 100%; max-width: 700px; order: 2; max-height: 60vh; }
+    .faq-container, .calendar-section, .profile-container { max-width: 90%; padding: 20px 25px; }
+    .user-area { right: 15px; gap: 10px; }
+    .welcome-msg { display: none; } /* Esconde saudação */
+}
+
+@media (max-width: 768px) { /* Tablets */
+    header { padding: 10px 15px; }
+    .logo { height: 45px; }
+    main { margin-top: 20px; margin-bottom: 20px; gap: 20px;}
+    .funcoes { padding: 20px; }
+    .funcoes h2 { font-size: 1.2em; }
+    .func-item { padding: 10px 12px; font-size: 0.9em; }
+
+    .chat-container { max-height: calc(100vh - 70px - 40px - 100px); }
+    .chat-header { padding: 12px 20px; }
+    .chat-header h1 { font-size: 1.3em; }
+    .chat-box { padding: 15px; gap: 10px;}
+    .msg { max-width: 80%; padding: 8px 12px; font-size: 0.9em;}
+    .chat-input { padding: 10px 15px; }
+    .chat-input input { padding: 8px 15px; font-size: 0.9em; }
+    .chat-input button { width: 38px; height: 38px; font-size: 14px; }
+
+    .user-area { gap: 8px; }
+    .profile-icon { width: 32px; height: 32px; font-size: 1em;}
+    .logout-link { font-size: 0.85em; padding: 4px 6px;}
+
+    .faq-container, .calendar-section, .profile-container { padding: 20px; max-width: calc(100% - 40px); } /* Usa calc */
+    .faq-container h1, .calendar-section h1, .profile-container h1 { font-size: 1.8em; }
+
+    #calendar-wrapper { padding: 15px; }
+    .fc-header-toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .fc-toolbar-chunk { text-align: center; }
+    .fc-toolbar-title { font-size: 1.6em !important; margin-bottom: 10px; }
+    .fc-button { padding: 6px 10px; font-size: 0.9em; }
+    .fc-col-header-cell-cushion { font-size: 0.9em; }
+    .fc-daygrid-day-number { width: 26px; height: 26px; font-size: 0.9em;}
+    .fc-daygrid-event { font-size: 0.75em; padding: 1px 4px;}
+    .fc-daygrid-day:has(.fc-daygrid-event-harness):not(.fc-day-other)::after { width: 5px; height: 5px; bottom: 3px; }
+    #event-list-title { font-size: 1.4em; }
+    .agenda-list { max-height: 300px;} /* Limita altura em tablet */
+    .agenda-item { flex-direction: column; align-items: flex-start; padding: 10px 12px; }
+    .agenda-date { flex-direction: row; border-right: none; padding-right: 0; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 8px; width: 100%; justify-content: flex-start; gap: 10px; min-width: auto; }
+    .agenda-day { font-size: 1.6em; }
+    .agenda-month { font-size: 0.75em; }
+    .agenda-title { font-size: 0.9em; }
+
+    #flashcard-scene { height: 280px; }
+    .card-face { font-size: 1.2em; padding: 15px;}
+    .flashcard-nav button { width: 40px; height: 40px; }
+    .flashcard-nav span { font-size: 0.9em; }
+    .back-btn-flashcard-subject { top: 15px; left: 20px; font-size: 0.9em; }
+
+    .profile-info p { font-size: 1em; }
+    .profile-info strong { width: 90px; }
+}
+
+@media (max-width: 480px) { /* Telemóveis */
+    main { width: 100%; margin-top: 15px; margin-bottom: 15px; gap: 15px; padding: 0 10px; /* Adiciona padding lateral */ box-sizing: border-box;}
+    .funcoes { width: 100%; padding: 15px; } /* Usa largura total */
+    .chat-container { width: 100%; max-height: calc(100vh - 60px - 30px - 80px); } /* header - margens - input */
+    .chat-header h1 { font-size: 1.2em; }
+    .chat-input { padding: 10px; }
+    .chat-input input { padding: 8px 12px; font-size: 0.9em;}
+    .chat-input button { width: 35px; height: 35px; }
+    .msg { max-width: 85%; }
+
+    .faq-container, .calendar-section, .profile-container { width: 100%; padding: 15px; margin: 0 auto 20px auto; /* Centraliza */}
+    .faq-container h1, .calendar-section h1, .profile-container h1 { font-size: 1.6em; }
+    .faq-question span { font-size: 1em;}
+    .faq-answer p { font-size: 0.9em;}
+
+    .user-area { right: 10px; gap: 5px;} /* Mais perto e menos espaçado */
+    .profile-icon { width: 30px; height: 30px; font-size: 0.9em;}
+    .logout-link { display: none; } /* Esconde texto logout */
+    .profile-link:has(+ .logout-link) { /* Adiciona margem se logout estivesse visível */
+       /* margin-right: 5px; */
     }
 
-    /* Estilos do calendário para telemóvel */
-    #calendar-wrapper {
-        padding: 10px;
-    }
-    .fc-toolbar-title {
-        font-size: 1.5em !important;
-    }
-    .fc-button {
-        padding: 6px 10px;
-        font-size: 0.8em;
-    }
-    .agenda-section {
-        padding: 15px;
-    }
-    #event-list-title {
-        font-size: 1.5em;
-    }
+
+    #calendar-wrapper { padding: 10px; }
+    .fc-toolbar-title { font-size: 1.4em !important; }
+    .fc-col-header-cell-cushion { font-size: 0.8em; }
+    .fc-daygrid-day-number { width: 24px; height: 24px; font-size: 0.8em;}
+
+    #flashcard-scene { height: 240px; }
+    .card-face { font-size: 1.1em; }
+    .back-btn-flashcard-subject { top: 10px; left: 15px; }
+
 }
