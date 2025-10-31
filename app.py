@@ -219,8 +219,7 @@ def carregar_dados_json(arquivo):
 # e usava uma variável 'eventos_json' que não existia.
 # Esta versão faz apenas uma coisa: lê o 'calendario.txt' e retorna os dados.
 def carregar_calendario():
-    """Carrega, formata e ordena os eventos do calendário a partir de calendario.txt."""
-    eventos = []
+    """Carrega, formata e ordena os eventos do calendário."""
     meses_map = {
         1: "JAN",
         2: "FEV",
@@ -236,44 +235,58 @@ def carregar_calendario():
         12: "DEZ",
     }
 
-    try:
-        with open("calendario.txt", "r", encoding="utf-8") as f:
-            for linha in f:
-                linha = linha.strip()
-                if not linha:
-                    continue
+    eventos = []
 
-                partes = linha.split(":", 1)
-                if len(partes) < 2:
-                    continue  # Ignora linhas mal formatadas
-
-                data_str = partes[0].strip()
-                evento_str = partes[1].strip()
-
-                try:
-                    data_obj = datetime.strptime(data_str, "%d/%m/%Y")
-                    eventos.append(
-                        {
-                            "data": data_str,  # Formato original: DD/MM/YYYY
-                            "evento": evento_str,
-                            "data_obj": data_obj,  # Para ordenar
-                            "data_iso": data_obj.strftime(
-                                "%Y-%m-%d"
-                            ),  # Para FullCalendar
-                            "mes_curto": meses_map.get(data_obj.month),
-                        }
-                    )
-                except ValueError:
-                    print(f"Formato de data inválido ignorado: {data_str}")
-
-    except FileNotFoundError:
-        print("Arquivo calendario.txt não encontrado.")
-        return []
-    except Exception as e:
-        print(f"Erro ao ler o calendário: {e}")
+    dados = carregar_dados_json("calendario.json")
+    if dados is None:
+        print("AVISO: calendario.json não foi carregado. Retornando lista vazia.")
         return []
 
-    # Ordena a lista final de eventos pela data
+    if not isinstance(dados, list):
+        print(
+            "AVISO: calendario.json possui formato inválido. Esperada lista de eventos."
+        )
+        return []
+
+    for item in dados:
+        if not isinstance(item, dict):
+            print(f"AVISO: Evento ignorado por formato inválido: {item}")
+            continue
+
+        data_inicio = item.get("data_inicio")
+        descricao = item.get("descricao", "Evento sem descrição")
+        data_fim = item.get("data_fim")
+
+        if not data_inicio:
+            print(f"AVISO: Evento sem data de início ignorado: {item}")
+            continue
+
+        try:
+            data_inicio_obj = datetime.strptime(data_inicio, "%Y-%m-%d")
+        except ValueError:
+            print(f"AVISO: Data de início inválida ignorada: {data_inicio}")
+            continue
+
+        data_fim_iso = None
+        if data_fim:
+            try:
+                data_fim_iso = datetime.strptime(data_fim, "%Y-%m-%d").strftime(
+                    "%Y-%m-%d"
+                )
+            except ValueError:
+                print(f"AVISO: Data final inválida ignorada: {data_fim}")
+
+        eventos.append(
+            {
+                "data": data_inicio_obj.strftime("%d/%m/%Y"),
+                "evento": descricao,
+                "data_obj": data_inicio_obj,
+                "data_iso": data_inicio,
+                "data_fim": data_fim_iso,
+                "mes_curto": meses_map.get(data_inicio_obj.month),
+            }
+        )
+
     return sorted(eventos, key=lambda x: x["data_obj"])
 
 
