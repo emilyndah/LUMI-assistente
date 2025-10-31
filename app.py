@@ -37,8 +37,17 @@ from flask_login import (
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
 load_dotenv()
+
+# =======================================================
+# CONFIGURAÇÃO DE LOGS (Monitoramento)
+# =======================================================
+logging.basicConfig(
+    filename="lumi.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logging.info("Servidor iniciado - monitorando eventos Lumi")
 
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
@@ -56,7 +65,7 @@ db = SQLAlchemy(app)
 # Configuração Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"
+login_manager.login_view = "login"  # type: ignore
 login_manager.login_message = "Você precisa fazer login para acessar esta página."
 login_manager.login_message_category = "warning"
 
@@ -72,6 +81,24 @@ class User(db.Model, UserMixin):
     matricula = db.Column(db.String(80), unique=True, nullable=False)
 
     password_hash = db.Column(db.String(256), nullable=False)
+    
+        # Campos VARK
+        vark_scores_json = db.Column(Text, nullable=True)
+        vark_primary_type = db.Column(db.String(10), nullable=True)
+
+        def __init__(self, username, email, matricula):
+            self.username = username
+            self.email = email
+            self.matricula = matricula
+
+        def get_vark_scores(self):
+            """Retorna os scores VARK como dicionário."""
+            if not self.vark_scores_json:
+                return None
+            try:
+                return json.loads(self.vark_scores_json)
+            except json.JSONDecodeError:
+                return None
 
     # --- MÉTODO CORRIGIDO PARA O REGISTRO ---
 
@@ -128,8 +155,6 @@ except KeyError:
 # --- Configuração do Modelo ---
 if GEMINI_API_KEY:
     try:
-        genai.configure(api_key=GEMINI_API_KEY)
-
         generation_config = {
             "temperature": 0.8,
             "top_p": 0.9,
@@ -158,6 +183,7 @@ if GEMINI_API_KEY:
 
         model = genai.GenerativeModel(
             model_name="gemini-2.5-flash",  # Usei o 1.5-flash, mas pode ser o "gemini-pro"
+                api_key=GEMINI_API_KEY,
             generation_config=generation_config,
             safety_settings=safety_settings,
         )
