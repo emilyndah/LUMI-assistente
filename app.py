@@ -328,6 +328,97 @@ def get_initial_chat_history():
         },
     ]
 
+# =======================================================
+# 5. ROTAS DE AUTENTICAÇÃO (Login, Registro, Logout)
+# (COLE ISSO ANTES DA SUA ROTA "index"!)
+# =======================================================
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Lida com o registro de novos usuários."""
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+
+    if request.method == "POST":
+        email = request.form.get("email")
+        username = request.form.get("username")
+        matricula = request.form.get("matricula")
+        password = request.form.get("password")
+
+        # Verifica se o email ou matrícula já existem
+        user_by_email = User.query.filter_by(email=email).first()
+        user_by_matricula = User.query.filter_by(matricula=matricula).first()
+
+        if user_by_email:
+            flash("Este e-mail já está cadastrado. Tente fazer login.", "warning")
+            return redirect(url_for("login"))
+        
+        if user_by_matricula:
+            flash("Esta matrícula já está cadastrada. Tente fazer login.", "warning")
+            return redirect(url_for("login"))
+
+        # Cria o novo usuário
+        try:
+            new_user = User(
+                email=email,
+                username=username,
+                matricula=matricula
+            )
+            new_user.set_password(password)
+            
+            db.session.add(new_user)
+            db.session.commit()
+
+            # Loga o usuário automaticamente após o registro
+            login_user(new_user)
+            flash("Conta criada com sucesso! Você foi logado.", "success")
+            return redirect(url_for("index"))
+
+        except Exception as e:
+            db.session.rollback()
+            print(f"Erro ao registrar usuário: {e}")
+            flash("Ocorreu um erro ao criar sua conta. Tente novamente.", "danger")
+
+    # Se for GET, apenas mostra a página de registro
+    return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Lida com o login do usuário."""
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+
+    if request.method == "POST":
+        # Usamos 'identifier' para aceitar email ou matrícula
+        identifier = request.form.get("email_ou_matricula") 
+        password = request.form.get("password")
+        
+        # Tenta encontrar o usuário pelo email OU pela matrícula
+        user = User.query.filter(
+            (User.email == identifier) | (User.matricula == identifier)
+        ).first()
+
+        # Verifica o usuário e a senha
+        if user and user.check_password(password):
+            login_user(user)
+            flash("Login realizado com sucesso!", "success")
+            # Redireciona para a página 'index' (ou 'next' se existir)
+            return redirect(url_for("index"))
+        else:
+            flash("E-mail/Matrícula ou senha inválidos. Tente novamente.", "danger")
+
+    # Se for GET, apenas mostra a página de login
+    return render_template("login.html")
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    """Lida com o logout do usuário."""
+    logout_user()
+    flash("Você foi desconectado.", "info")
+    return redirect(url_for("login"))
 
 @app.route("/")
 @login_required
