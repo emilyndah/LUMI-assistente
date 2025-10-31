@@ -34,7 +34,9 @@ from flask_login import (
     login_required,
     current_user,
 )
+
 from werkzeug.security import generate_password_hash, check_password_hash
+
 
 load_dotenv()
 
@@ -62,45 +64,39 @@ login_manager.login_message_category = "warning"
 # =======================================================
 # MODELO DE DADOS (User - Atualizado com VARK)
 # =======================================================
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
+
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True,
-                         nullable=False, index=True)
-    email = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    matricula = db.Column(db.String(20), unique=True,
-                          nullable=False, index=True)
-    password_hash = db.Column(db.String(200), nullable=False)
-    # **** NOVAS COLUNAS PARA RESULTADO VARK ****
-    vark_scores_json = db.Column(
-        db.String(100), nullable=True
-    )  # Guarda scores como {"V":2, "A":5,...}
-    vark_primary_type = db.Column(
-        db.String(10), nullable=True
-    )  # Guarda o tipo principal (ex: 'A', 'V/K')
+    username = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    matricula = db.Column(db.String(80), unique=True, nullable=False)
+
+    password_hash = db.Column(db.String(256), nullable=False)
+
+    # --- MÉTODO CORRIGIDO PARA O REGISTRO ---
 
     def set_password(self, password):
+        """Cria um hash da senha e o armazena."""
+        # Esta função PEGA um texto puro ("123456")
+        # e o TRANSFORMA em um hash ("$pbkdf2-sha256$...")
         self.password_hash = generate_password_hash(password)
 
+    # --- MÉTODO CORRIGIDO PARA O LOGIN ---
     def check_password(self, password):
+        """Verifica se a senha em texto puro bate com o hash armazenado."""
+        # Esta função PEGA o hash do banco (self.password_hash)
+        # e o COMPARA com o texto puro ("123456") que o usuário digitou
+
+        # Adicionamos uma checagem caso o hash não exista por algum motivo
+        if not self.password_hash:
+            return False
+
         return check_password_hash(self.password_hash, password)
 
-    # Função helper para obter scores como dicionário Python
-    def get_vark_scores(self):
-        """Retorna os scores VARK salvos como um dicionário, ou None."""
-        if self.vark_scores_json:
-            try:
-                return json.loads(self.vark_scores_json)
-            except json.JSONDecodeError:
-                print(
-                    f"ERRO: Falha ao decodificar vark_scores_json para user {self.id}"
-                )
-                return None
-        return None
+    # ... (outros métodos que você possa ter, como __repr__) ...
 
-    def __repr__(self):
-        # Atualiza a representação para incluir o tipo VARK, se existir
-        vark_info = self.vark_primary_type or "N/A"
-        return f"<User {self.username} (Matr: {self.matricula} / VARK: {vark_info})>"
+
+# ... (resto do seu app.py, com as rotas @app.route) ...
 
 
 @login_manager.user_loader
@@ -333,6 +329,7 @@ def get_initial_chat_history():
 # (COLE ISSO ANTES DA SUA ROTA "index"!)
 # =======================================================
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Lida com o registro de novos usuários."""
@@ -352,7 +349,7 @@ def register():
         if user_by_email:
             flash("Este e-mail já está cadastrado. Tente fazer login.", "warning")
             return redirect(url_for("login"))
-        
+
         if user_by_matricula:
             flash("Esta matrícula já está cadastrada. Tente fazer login.", "warning")
             return redirect(url_for("login"))
@@ -365,7 +362,7 @@ def register():
                 matricula=matricula
             )
             new_user.set_password(password)
-            
+
             db.session.add(new_user)
             db.session.commit()
 
@@ -391,9 +388,9 @@ def login():
 
     if request.method == "POST":
         # Usamos 'identifier' para aceitar email ou matrícula
-        identifier = request.form.get("email_ou_matricula") 
+        identifier = request.form.get("login_identifier")
         password = request.form.get("password")
-        
+
         # Tenta encontrar o usuário pelo email OU pela matrícula
         user = User.query.filter(
             (User.email == identifier) | (User.matricula == identifier)
@@ -419,6 +416,7 @@ def logout():
     logout_user()
     flash("Você foi desconectado.", "info")
     return redirect(url_for("login"))
+
 
 @app.route("/")
 @login_required
