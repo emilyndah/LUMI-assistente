@@ -42,7 +42,7 @@
             
             <a href="#" class="func-item disabled">Quiz</a>
             <a href="{{ url_for('modo_foco') }}" class="func-item">Modo Foco</a>
-        </aside> <section class="chat">
+        </aside> <section class="chat-container">
             <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">
                 Limpar Conversa
             </a>
@@ -50,7 +50,7 @@
             <div class="chat-box" id="chat-box">
                 </div>
             
-            <form id="chat-form">
+            <form id="chat-form" class="chat-input">
                 <input
                     type="text"
                     id="pergunta-input"
