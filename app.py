@@ -1,4 +1,3 @@
-
 # =======================================================
 # TÍTULO: SERVIDOR FLASK (APP.PY) - ASSISTENTE LUMI
 # (Login, BD, Salvar VARK, Quiz JSON, Calendário JSON, Matriz JSON)
@@ -8,10 +7,11 @@
 # IMPORTAÇÕES (Limpas e Agrupadas)
 # =======================================================
 import json
+import logging
 import os
-import re
 import traceback
 from datetime import datetime
+
 from dotenv import load_dotenv
 
 import google.generativeai as genai
@@ -74,31 +74,25 @@ login_manager.login_message_category = "warning"
 # MODELO DE DADOS (User - Atualizado com VARK)
 # =======================================================
 class User(db.Model, UserMixin):
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     matricula = db.Column(db.String(80), unique=True, nullable=False)
 
     password_hash = db.Column(db.String(256), nullable=False)
-    
-        # Campos VARK
-        vark_scores_json = db.Column(Text, nullable=True)
-        vark_primary_type = db.Column(db.String(10), nullable=True)
 
-        def __init__(self, username, email, matricula):
-            self.username = username
-            self.email = email
-            self.matricula = matricula
+    # Campos VARK
+    vark_scores_json = db.Column(db.Text, nullable=True)
+    vark_primary_type = db.Column(db.String(10), nullable=True)
 
-        def get_vark_scores(self):
-            """Retorna os scores VARK como dicionário."""
-            if not self.vark_scores_json:
-                return None
-            try:
-                return json.loads(self.vark_scores_json)
-            except json.JSONDecodeError:
-                return None
+    def get_vark_scores(self):
+        """Retorna os scores VARK como dicionário."""
+        if not self.vark_scores_json:
+            return None
+        try:
+            return json.loads(self.vark_scores_json)
+        except json.JSONDecodeError:
+            return None
 
     # --- MÉTODO CORRIGIDO PARA O REGISTRO ---
 
@@ -181,13 +175,13 @@ if GEMINI_API_KEY:
             },
         ]
 
+        genai.configure(api_key=GEMINI_API_KEY)
         model = genai.GenerativeModel(
             model_name="gemini-2.5-flash",  # Usei o 1.5-flash, mas pode ser o "gemini-pro"
-                api_key=GEMINI_API_KEY,
             generation_config=generation_config,
             safety_settings=safety_settings,
         )
-        print("Modelo Gemini inicializado com sucesso.")
+        print("✅ Modelo Gemini inicializado com sucesso.")
     except Exception as e:
         print(f"Erro ao inicializar o modelo Gemini: {e}")
         GEMINI_API_KEY = None  # Falha na inicialização
@@ -350,6 +344,7 @@ def get_initial_chat_history():
         },
     ]
 
+
 # =======================================================
 # 5. ROTAS DE AUTENTICAÇÃO (Login, Registro, Logout)
 # (COLE ISSO ANTES DA SUA ROTA "index"!)
@@ -385,7 +380,7 @@ def register():
             new_user = User(
                 email=email,
                 username=username,
-                matricula=matricula
+                matricula=matricula,
             )
             new_user.set_password(password)
 
@@ -545,8 +540,7 @@ def ask():
     """Recebe perguntas do usuário e retorna respostas do Gemini."""
     if not model:
         return (
-            jsonify(
-                {"resposta": "Desculpe, o serviço de chat não está configurado."}),
+            jsonify({"resposta": "Desculpe, o serviço de chat não está configurado."}),
             500,
         )
 
@@ -594,11 +588,13 @@ def save_vark_result():
     # Bloco de validação (estava ótimo, mantive)
     if scores is None or primary_type is None:
         print(
-            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
+            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}"
+        )
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
     if not isinstance(scores, dict) or not isinstance(primary_type, str):
         print(
-            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
+            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}"
+        )
         return jsonify({"success": False, "message": "Tipos de dados inválidos."}), 400
     if not all(
         k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]
@@ -633,7 +629,8 @@ def save_vark_result():
         # Se der erro, reverter quaisquer mudanças na sessão
         db.session.rollback()
         print(
-            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
+            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}"
+        )
         traceback.print_exc()
         return (
             jsonify({"success": False, "message": f"Erro interno do servidor: {e}"}),
