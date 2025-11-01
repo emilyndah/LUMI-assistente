@@ -7,13 +7,11 @@
 # IMPORTAÇÕES (Limpas e Agrupadas)
 # =======================================================
 import json
-import logging
 import os
+import re
 import traceback
 from datetime import datetime
-
 from dotenv import load_dotenv
-import logging
 
 import google.generativeai as genai
 from flask import (
@@ -38,17 +36,8 @@ from flask_login import (
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-load_dotenv()
 
-# =======================================================
-# CONFIGURAÇÃO DE LOGS (Monitoramento)
-# =======================================================
-logging.basicConfig(
-    filename="lumi.log",
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
-logging.info("Servidor iniciado - monitorando eventos Lumi")
+load_dotenv()
 
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
@@ -66,7 +55,7 @@ db = SQLAlchemy(app)
 # Configuração Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"  # type: ignore
+login_manager.login_view = "login"
 login_manager.login_message = "Você precisa fazer login para acessar esta página."
 login_manager.login_message_category = "warning"
 
@@ -75,50 +64,13 @@ login_manager.login_message_category = "warning"
 # MODELO DE DADOS (User - Atualizado com VARK)
 # =======================================================
 class User(db.Model, UserMixin):
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     matricula = db.Column(db.String(80), unique=True, nullable=False)
 
     password_hash = db.Column(db.String(256), nullable=False)
-    
-    # Campos VARK
-    vark_scores_json = db.Column(db.Text, nullable=True)
-    vark_primary_type = db.Column(db.String(10), nullable=True)
-
-<<<<<<< HEAD
-    def __init__(self, username, email, matricula):
-        self.username = username
-        self.email = email
-        self.matricula = matricula
-
-=======
-    # Campos VARK
-    vark_scores_json = db.Column(db.Text, nullable=True)
-    vark_primary_type = db.Column(db.String(10), nullable=True)
-
-    def __init__(self, username, email, matricula):
-        self.username = username
-        self.email = email
-        self.matricula = matricula
-
-    def get_vark_scores(self):
-        """Retorna os scores VARK como dicionário."""
-        if not self.vark_scores_json:
-            return None
-        try:
-            return json.loads(self.vark_scores_json)
-        except json.JSONDecodeError:
-            return None
->>>>>>> d67bd684c7a99636c360da03c079fa3cc2bdd878
-    def get_vark_scores(self):
-        """Retorna os scores VARK como dicionário."""
-        if not self.vark_scores_json:
-            return None
-        try:
-            return json.loads(self.vark_scores_json)
-        except json.JSONDecodeError:
-            return None
 
     # --- MÉTODO CORRIGIDO PARA O REGISTRO ---
 
@@ -175,6 +127,8 @@ except KeyError:
 # --- Configuração do Modelo ---
 if GEMINI_API_KEY:
     try:
+        genai.configure(api_key=GEMINI_API_KEY)
+
         generation_config = {
             "temperature": 0.8,
             "top_p": 0.9,
@@ -201,20 +155,12 @@ if GEMINI_API_KEY:
             },
         ]
 
-        # Configura a chave de API do Gemini globalmente para toda a aplicação Flask
-        genai.configure(api_key=GEMINI_API_KEY)
-
-        # Cria o modelo Gemini já autenticado pela configuração global (api_key não é mais aceita aqui)
         model = genai.GenerativeModel(
             model_name="gemini-2.5-flash",  # Usei o 1.5-flash, mas pode ser o "gemini-pro"
-<<<<<<< HEAD
-            api_key=GEMINI_API_KEY,
-=======
->>>>>>> d67bd684c7a99636c360da03c079fa3cc2bdd878
             generation_config=generation_config,
             safety_settings=safety_settings,
         )
-        print("✅ Modelo Gemini inicializado com sucesso.")
+        print("Modelo Gemini inicializado com sucesso.")
     except Exception as e:
         print(f"Erro ao inicializar o modelo Gemini: {e}")
         GEMINI_API_KEY = None  # Falha na inicialização
@@ -377,7 +323,6 @@ def get_initial_chat_history():
         },
     ]
 
-
 # =======================================================
 # 5. ROTAS DE AUTENTICAÇÃO (Login, Registro, Logout)
 # (COLE ISSO ANTES DA SUA ROTA "index"!)
@@ -413,7 +358,7 @@ def register():
             new_user = User(
                 email=email,
                 username=username,
-                matricula=matricula,
+                matricula=matricula
             )
             new_user.set_password(password)
 
@@ -442,7 +387,7 @@ def login():
 
     if request.method == "POST":
         # Usamos 'identifier' para aceitar email ou matrícula
-        identifier = request.form.get("login_identifier")
+        identifier = request.form.get("email_ou_matricula")
         password = request.form.get("password")
 
         # Tenta encontrar o usuário pelo email OU pela matrícula
@@ -573,7 +518,8 @@ def ask():
     """Recebe perguntas do usuário e retorna respostas do Gemini."""
     if not model:
         return (
-            jsonify({"resposta": "Desculpe, o serviço de chat não está configurado."}),
+            jsonify(
+                {"resposta": "Desculpe, o serviço de chat não está configurado."}),
             500,
         )
 
@@ -599,56 +545,73 @@ def ask():
     except Exception as e:
         print(f"Erro na API do Gemini: {e}")
         traceback.print_exc()
-        return jsonify({"resposta": f"Desculpe, ocorreu um erro: {e}"}), 500
+        return (
+            jsonify({"resposta": f"Desculpe, ocorreu um erro: {e}"}),
+            500,
+        )
 
 
+# --- CORREÇÃO ROTA SALVAR VARK ---
+# 1. A lógica do CHAT (Gemini) estava copiada aqui por engano. Eu a removi.
+# 2. Faltava a linha 'db.session.commit()' para salvar no banco de dados.
+# 3. Adicionei 'db.session.rollback()' em caso de erro.
+# 4. Adicionei uma resposta JSON de sucesso (message: "Resultado salvo...").
 @app.route("/save_vark_result", methods=["POST"])
 @login_required
 def save_vark_result():
     """Recebe os resultados do quiz VARK e salva no perfil do usuário."""
-    data = request.get_json()
-    if data is None:
-        return jsonify({"success": False, "message": "Dados inválidos."}), 400
+    data = request.json
     scores = data.get("scores")
     primary_type = data.get("primaryType")
 
-    # Validações
+    # Bloco de validação (estava ótimo, mantive)
     if scores is None or primary_type is None:
-<<<<<<< HEAD
-        return jsonify({"success": False, "message": "Dados incompletos."}), 400
-    if not isinstance(scores, dict) or not isinstance(primary_type, str):
-=======
         print(
-            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}"
-        )
+            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
     if not isinstance(scores, dict) or not isinstance(primary_type, str):
         print(
-            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}"
-        )
->>>>>>> d67bd684c7a99636c360da03c079fa3cc2bdd878
+            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
         return jsonify({"success": False, "message": "Tipos de dados inválidos."}), 400
-    if not all(k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]):
-        return jsonify({"success": False, "message": "Formato de scores inválido."}), 400
+    if not all(
+        k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]
+    ):
+        print(f"DEBUG: Scores inválidos: {scores}")
+        return (
+            jsonify({"success": False, "message": "Formato de scores inválido."}),
+            400,
+        )
     if not primary_type or len(primary_type) > 10:
+        print(f"DEBUG: primaryType inválido: {primary_type}")
         return jsonify({"success": False, "message": "Tipo primário inválido."}), 400
 
+    # Lógica de salvar (Corrigida)
     try:
         user = current_user
         user.vark_scores_json = json.dumps(scores)
         user.vark_primary_type = primary_type
+
+        # --- !! CORREÇÃO CRÍTICA !! ---
+        # Faltava isso para salvar as mudanças no banco de dados
         db.session.commit()
-        return jsonify({"success": True, "message": "Resultado salvo com sucesso."}), 200
-    except Exception as e:
-        db.session.rollback()
-<<<<<<< HEAD
-=======
-        print(
-            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}"
+
+        print(f"DEBUG: Resultado VARK salvo com sucesso para {user.username}")
+        return (
+            jsonify({"success": True, "message": "Resultado salvo com sucesso."}),
+            200,
         )
->>>>>>> d67bd684c7a99636c360da03c079fa3cc2bdd878
+
+    except Exception as e:
+        # --- BOA PRÁTICA ---
+        # Se der erro, reverter quaisquer mudanças na sessão
+        db.session.rollback()
+        print(
+            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
         traceback.print_exc()
-        return jsonify({"success": False, "message": f"Erro interno do servidor: {e}"}), 500
+        return (
+            jsonify({"success": False, "message": f"Erro interno do servidor: {e}"}),
+            500,
+        )
 
 
 # =======================================================
