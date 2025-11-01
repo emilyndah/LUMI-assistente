@@ -193,10 +193,12 @@ if GEMINI_API_KEY:
             },
         ]
 
+        # Configura a chave de API do Gemini globalmente para toda a aplicação Flask
         genai.configure(api_key=GEMINI_API_KEY)
+
+        # Cria o modelo Gemini já autenticado pela configuração global (api_key não é mais aceita aqui)
         model = genai.GenerativeModel(
             model_name="gemini-2.5-flash",  # Usei o 1.5-flash, mas pode ser o "gemini-pro"
-            api_key=GEMINI_API_KEY,
             generation_config=generation_config,
             safety_settings=safety_settings,
         )
