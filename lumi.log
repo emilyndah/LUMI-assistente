@@ -1,0 +1,53 @@
+2025-10-31 20:49:04,420 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-10-31 20:49:04,597 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.201.249:5000
+2025-10-31 20:49:04,598 [INFO] [33mPress CTRL+C to quit[0m
+2025-10-31 20:49:04,616 [INFO]  * Restarting with watchdog (windowsapi)
+2025-10-31 20:49:06,467 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-10-31 20:49:06,529 [WARNING]  * Debugger is active!
+2025-10-31 20:49:06,534 [INFO]  * Debugger PIN: 122-727-421
+2025-10-31 20:49:13,799 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:13] "GET / HTTP/1.1" 200 -
+2025-10-31 20:49:13,843 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-10-31 20:49:13,850 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:13] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-10-31 20:49:16,004 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:16] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-10-31 20:49:16,019 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:16] "GET / HTTP/1.1" 200 -
+2025-10-31 20:49:16,106 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-10-31 20:49:16,122 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:16] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-10-31 20:49:16,659 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:16] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-10-31 20:49:16,678 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:16] "GET /login HTTP/1.1" 200 -
+2025-10-31 20:49:16,724 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:16] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-10-31 20:49:24,033 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:24] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-10-31 20:49:24,042 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:24] "GET / HTTP/1.1" 200 -
+2025-10-31 20:49:24,095 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-10-31 20:49:24,099 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:24] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-10-31 20:49:37,746 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:37] "POST /ask HTTP/1.1" 200 -
+2025-10-31 20:49:47,791 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:47] "GET /foco HTTP/1.1" 200 -
+2025-10-31 20:49:47,887 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:47] "[36mGET /static/css/foco.css HTTP/1.1[0m" 304 -
+2025-10-31 20:49:47,921 [INFO] 127.0.0.1 - - [31/Oct/2025 20:49:47] "[36mGET /static/js/foco.js HTTP/1.1[0m" 304 -
+2025-10-31 20:50:00,932 [INFO] 127.0.0.1 - - [31/Oct/2025 20:50:00] "GET / HTTP/1.1" 200 -
+2025-10-31 20:50:00,990 [INFO] 127.0.0.1 - - [31/Oct/2025 20:50:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-10-31 20:50:00,996 [INFO] 127.0.0.1 - - [31/Oct/2025 20:50:00] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-10-31 20:51:37,503 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:51:37,503 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:51:37,524 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:51:40,426 [INFO]  * Restarting with watchdog (windowsapi)
+2025-10-31 20:51:42,196 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-10-31 20:51:42,300 [WARNING]  * Debugger is active!
+2025-10-31 20:51:42,304 [INFO]  * Debugger PIN: 122-727-421
+2025-10-31 20:51:51,941 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:51:51,946 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:51:52,701 [INFO]  * Restarting with watchdog (windowsapi)
+2025-10-31 20:51:54,934 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-10-31 20:51:55,142 [WARNING]  * Debugger is active!
+2025-10-31 20:51:55,146 [INFO]  * Debugger PIN: 122-727-421
+2025-10-31 20:51:55,735 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:51:55,757 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:51:56,525 [INFO]  * Restarting with watchdog (windowsapi)
+2025-10-31 20:51:58,209 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-10-31 20:51:58,272 [WARNING]  * Debugger is active!
+2025-10-31 20:51:58,276 [INFO]  * Debugger PIN: 122-727-421
+2025-10-31 20:52:24,942 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:52:24,962 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-10-31 20:52:25,684 [INFO]  * Restarting with watchdog (windowsapi)
