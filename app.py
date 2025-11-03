@@ -45,9 +45,9 @@ load_dotenv()
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
 # =======================================================
 logging.basicConfig(
-     filename="lumi.log",
-     level=logging.INFO,
-     format="%(asctime)s [%(levelname)s] %(message)s",
+    filename="lumi.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logging.info("Servidor iniciado - monitorando eventos Lumi")
 
@@ -64,7 +64,8 @@ db = SQLAlchemy(app)
 # Configuração Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"  # redireciona para /login se não estiver autenticado
+# redireciona para /login se não estiver autenticado
+login_manager.login_view = "login"
 login_manager.login_message = "Você precisa fazer login para acessar esta página."
 login_manager.login_message_category = "warning"
 
@@ -112,7 +113,6 @@ class User(db.Model, UserMixin):
 
         return check_password_hash(self.password_hash, password)
 
-
     def __init__(self, username, email, matricula, password=None):
         self.username = username
         self.email = email
@@ -157,13 +157,18 @@ except KeyError:
 if GEMINI_API_KEY:
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel("gemini-pro")
-        print("Modelo Gemini inicializado com sucesso.")
+
+        # Atualizado para versão 2.5 da API
+        model = genai.GenerativeModel(
+            "gemini-2.5-flash")  # ou "gemini-2.5-pro"
+
+        print("✅ Modelo Gemini inicializado com sucesso (gemini-2.5-flash).")
     except Exception as e:
-        print(f"Erro ao inicializar o modelo Gemini: {e}")
-        GEMINI_API_KEY = None  # Falha na inicialização
+        print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
+        GEMINI_API_KEY = None
+
 else:
-    print("API Key do Gemini não encontrada. O Chatbot não funcionará.")
+    print("⚠️ API Key do Gemini não encontrada. O Chatbot não funcionará.")
 
 
 # --- Contexto Inicial (Sistema) ---
@@ -389,7 +394,8 @@ def login():
         password = request.form.get("password")
         # Tenta encontrar o usuário pelo email OU pela matrícula
         user = User.query.filter(
-            (getattr(User, "email") == identifier) | (getattr(User, "matricula") == identifier)
+            (getattr(User, "email") == identifier) | (
+                getattr(User, "matricula") == identifier)
         ).first()
         # Verifica o usuário e a senha
         if user and user.check_password(password):
@@ -558,12 +564,14 @@ def save_vark_result():
     """Recebe os resultados do quiz VARK e salva no perfil do usuário."""
     data = request.json
     if not data or "scores" not in data or "primaryType" not in data:
-        print(f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
+        print(
+            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
     scores = data["scores"]
     primary_type = data["primaryType"]
     if not isinstance(scores, dict) or not isinstance(primary_type, str):
-        print(f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
+        print(
+            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
         return jsonify({"success": False, "message": "Tipos de dados inválidos."}), 400
     if not all(k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]):
         print(f"DEBUG: Scores inválidos: {scores}")
@@ -585,7 +593,8 @@ def save_vark_result():
         )
     except Exception as e:
         db.session.rollback()
-        print(f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
+        print(
+            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
         traceback.print_exc()
         return (
             jsonify({"success": False, "message": f"Erro interno do servidor: {e}"}),
