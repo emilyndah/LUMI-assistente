@@ -270,3 +270,16 @@
 2025-11-03 20:21:44,379 [INFO] 127.0.0.1 - - [03/Nov/2025 20:21:44] "GET / HTTP/1.1" 200 -
 2025-11-03 20:21:44,421 [INFO] 127.0.0.1 - - [03/Nov/2025 20:21:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
 2025-11-03 20:21:44,423 [INFO] 127.0.0.1 - - [03/Nov/2025 20:21:44] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 20:25:38,484 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 20:25:41,180 [INFO]  * Restarting with stat
+2025-11-03 20:25:44,013 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:25:44,061 [WARNING] python-dotenv could not parse statement starting at line 1
+2025-11-03 20:25:44,062 [WARNING] python-dotenv could not parse statement starting at line 3
+2025-11-03 20:25:44,062 [WARNING] python-dotenv could not parse statement starting at line 5
+2025-11-03 20:25:44,092 [WARNING]  * Debugger is active!
+2025-11-03 20:25:44,095 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 20:26:48,775 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 20:26:49,038 [INFO]  * Restarting with stat
+2025-11-03 20:26:51,425 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:26:51,483 [WARNING]  * Debugger is active!
+2025-11-03 20:26:51,486 [INFO]  * Debugger PIN: 135-211-840
