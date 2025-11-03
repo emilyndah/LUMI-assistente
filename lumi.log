@@ -283,3 +283,46 @@
 2025-11-03 20:26:51,425 [INFO] Servidor iniciado - monitorando eventos Lumi
 2025-11-03 20:26:51,483 [WARNING]  * Debugger is active!
 2025-11-03 20:26:51,486 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 20:29:05,753 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 20:29:05,993 [INFO]  * Restarting with stat
+2025-11-03 20:29:08,220 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:29:08,277 [WARNING] python-dotenv could not parse statement starting at line 1
+2025-11-03 20:29:08,278 [WARNING] python-dotenv could not parse statement starting at line 3
+2025-11-03 20:29:08,279 [WARNING] python-dotenv could not parse statement starting at line 5
+2025-11-03 20:29:08,313 [WARNING]  * Debugger is active!
+2025-11-03 20:29:08,317 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 20:29:15,394 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 20:29:15,633 [INFO]  * Restarting with stat
+2025-11-03 20:29:18,076 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:29:18,136 [WARNING]  * Debugger is active!
+2025-11-03 20:29:18,141 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 20:29:27,565 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:29:27,658 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.204.141:5000
+2025-11-03 20:29:27,658 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-03 20:29:27,660 [INFO]  * Restarting with stat
+2025-11-03 20:29:30,851 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:29:30,954 [WARNING]  * Debugger is active!
+2025-11-03 20:29:30,970 [INFO]  * Debugger PIN: 129-842-282
+2025-11-03 20:29:38,062 [INFO] 127.0.0.1 - - [03/Nov/2025 20:29:38] "GET / HTTP/1.1" 200 -
+2025-11-03 20:29:38,089 [INFO] 127.0.0.1 - - [03/Nov/2025 20:29:38] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-03 20:29:38,092 [INFO] 127.0.0.1 - - [03/Nov/2025 20:29:38] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 20:29:41,217 [INFO] 127.0.0.1 - - [03/Nov/2025 20:29:41] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-11-03 20:29:41,240 [INFO] 127.0.0.1 - - [03/Nov/2025 20:29:41] "GET /login HTTP/1.1" 200 -
+2025-11-03 20:29:41,277 [INFO] 127.0.0.1 - - [03/Nov/2025 20:29:41] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 20:30:19,622 [INFO] 127.0.0.1 - - [03/Nov/2025 20:30:19] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-03 20:30:19,632 [INFO] 127.0.0.1 - - [03/Nov/2025 20:30:19] "GET / HTTP/1.1" 200 -
+2025-11-03 20:30:19,665 [INFO] 127.0.0.1 - - [03/Nov/2025 20:30:19] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 20:30:19,667 [INFO] 127.0.0.1 - - [03/Nov/2025 20:30:19] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 20:43:15,381 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:43:15,527 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.204.141:5000
+2025-11-03 20:43:15,528 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-03 20:43:15,531 [INFO]  * Restarting with stat
+2025-11-03 20:43:17,687 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 20:43:17,778 [WARNING]  * Debugger is active!
+2025-11-03 20:43:17,792 [INFO]  * Debugger PIN: 129-842-282
