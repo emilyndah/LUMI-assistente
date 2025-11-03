@@ -38,29 +38,7 @@ from flask_login import (
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-# =======================================================
-# IMPORTAÇÕES ADICIONAIS PARA OTIMIZAÇÃO E PRÓXIMO CICLO
-# =======================================================
-import time
-from functools import lru_cache
-from sqlalchemy import Text, DateTime
-from sqlalchemy.sql import func
-import logging
-from flask import send_from_directory
-from pathlib import Path
-
-
 load_dotenv()
-
-# =======================================================
-# CONFIGURAÇÃO DE LOGS (Monitoramento)
-# =======================================================
-logging.basicConfig(
-    filename="lumi.log",
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
-logging.info("Servidor iniciado - monitorando eventos Lumi")
 
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
@@ -410,7 +388,7 @@ def login():
 
     if request.method == "POST":
         # Usamos 'identifier' para aceitar email ou matrícula
-        identifier = request.form.get("login_identifier")
+        identifier = request.form.get("email_ou_matricula")
         password = request.form.get("password")
 
         # Tenta encontrar o usuário pelo email OU pela matrícula
