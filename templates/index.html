@@ -187,5 +187,62 @@
         
     });
     </script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="toast-container">
+      {% for category, message in messages %}
+        <div class="toast-message {{ category }}">
+          {{ message }}
+          <span class="toast-close-btn">&times;</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 </body>
 </html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Encontra todos os toasts que o Flask criou
+  const toasts = document.querySelectorAll('.toast-message');
+  
+  toasts.forEach((toast, index) => {
+    
+    // Para animação de "cascata" se houver múltiplos
+    const delay = 300 * index; 
+
+    // 2. MOSTRAR: Adiciona a classe 'show' para a animação de entrada
+    setTimeout(() => {
+      toast.classList.add('show');
+    }, delay);
+
+    // 3. AUTO-FECHAR: Define um timer para esconder após 5 segundos
+    const hideTimer = setTimeout(() => {
+      toast.classList.add('hide');
+      // Remove o elemento do HTML após a animação de saída
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      }, 500); // 500ms = 0.5s (duração da transição do CSS)
+    }, 5000); // 5000ms = 5 segundos
+
+    // 4. FECHAR MANUALMENTE: Adiciona o clique no botão 'X'
+    const closeBtn = toast.querySelector('.toast-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        clearTimeout(hideTimer); // Cancela o auto-fechamento
+        toast.classList.add('hide');
+        // Remove o elemento
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
+        }, 500);
+      });
+    }
+  });
+});
+</script>
