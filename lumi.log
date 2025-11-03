@@ -110,3 +110,126 @@
 2025-11-01 00:40:07,083 [INFO] 127.0.0.1 - - [01/Nov/2025 00:40:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
 2025-11-01 00:40:07,102 [INFO] 127.0.0.1 - - [01/Nov/2025 00:40:07] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
 2025-11-01 00:40:12,674 [INFO] 127.0.0.1 - - [01/Nov/2025 00:40:12] "[35m[1mPOST /ask HTTP/1.1[0m" 500 -
+2025-11-01 01:12:53,039 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-01 01:12:55,446 [INFO]  * Restarting with stat
+2025-11-01 01:12:58,897 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-01 01:12:59,100 [WARNING]  * Debugger is active!
+2025-11-01 01:12:59,105 [INFO]  * Debugger PIN: 129-842-282
+2025-11-02 16:50:47,023 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-02 16:50:47,229 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.65:5000
+2025-11-02 16:50:47,230 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-02 16:50:47,235 [INFO]  * Restarting with stat
+2025-11-02 16:50:54,323 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-02 16:50:54,428 [WARNING]  * Debugger is active!
+2025-11-02 16:50:54,434 [INFO]  * Debugger PIN: 135-211-840
+2025-11-02 16:51:00,467 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:00] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-02 16:51:00,940 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:00] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-02 16:51:01,021 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:01] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-02 16:51:01,064 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-02 16:51:15,093 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:15] "POST /login HTTP/1.1" 200 -
+2025-11-02 16:51:15,182 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:15] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-02 16:51:31,068 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:31] "POST /login HTTP/1.1" 200 -
+2025-11-02 16:51:31,098 [INFO] 127.0.0.1 - - [02/Nov/2025 16:51:31] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-02 16:52:00,465 [INFO] 127.0.0.1 - - [02/Nov/2025 16:52:00] "POST /login HTTP/1.1" 200 -
+2025-11-02 16:52:00,491 [INFO] 127.0.0.1 - - [02/Nov/2025 16:52:00] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-02 16:52:16,224 [INFO] 127.0.0.1 - - [02/Nov/2025 16:52:16] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-02 16:52:16,253 [INFO] 127.0.0.1 - - [02/Nov/2025 16:52:16] "GET / HTTP/1.1" 200 -
+2025-11-02 16:52:16,284 [INFO] 127.0.0.1 - - [02/Nov/2025 16:52:16] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-02 16:52:16,308 [INFO] 127.0.0.1 - - [02/Nov/2025 16:52:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-02 16:52:21,604 [INFO] 127.0.0.1 - - [02/Nov/2025 16:52:21] "[35m[1mPOST /ask HTTP/1.1[0m" 500 -
+2025-11-03 19:24:50,335 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:24:50,781 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.204.141:5000
+2025-11-03 19:24:50,782 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-03 19:24:50,786 [INFO]  * Restarting with stat
+2025-11-03 19:24:53,373 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:24:53,476 [WARNING]  * Debugger is active!
+2025-11-03 19:24:53,482 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 19:27:01,726 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:01] "GET / HTTP/1.1" 200 -
+2025-11-03 19:27:01,768 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:01] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:27:01,771 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:27:05,947 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:05] "[35m[1mPOST /ask HTTP/1.1[0m" 500 -
+2025-11-03 19:27:08,064 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:08] "GET /calendario HTTP/1.1" 200 -
+2025-11-03 19:27:08,101 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:27:08,111 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:08] "[33mGET /static/lumi_mascote.jpg HTTP/1.1[0m" 404 -
+2025-11-03 19:27:08,113 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:08] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:27:13,150 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:13] "GET /flashcards HTTP/1.1" 200 -
+2025-11-03 19:27:13,194 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:27:13,196 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:13] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:27:23,621 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:23] "GET /foco HTTP/1.1" 200 -
+2025-11-03 19:27:23,677 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:23] "[36mGET /static/css/foco.css HTTP/1.1[0m" 304 -
+2025-11-03 19:27:23,727 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:23] "[36mGET /static/js/foco.js HTTP/1.1[0m" 304 -
+2025-11-03 19:27:26,791 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:26] "GET /faq HTTP/1.1" 200 -
+2025-11-03 19:27:26,818 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:27:26,875 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:26] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:27:29,202 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:29] "GET /metodo_de_estudo HTTP/1.1" 200 -
+2025-11-03 19:27:29,238 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:27:29,251 [INFO] 127.0.0.1 - - [03/Nov/2025 19:27:29] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:32:58,661 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:32:58,899 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.204.141:5000
+2025-11-03 19:32:58,900 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-03 19:32:58,903 [INFO]  * Restarting with stat
+2025-11-03 19:33:01,065 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:33:01,136 [WARNING]  * Debugger is active!
+2025-11-03 19:33:01,140 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 19:33:10,322 [INFO] 127.0.0.1 - - [03/Nov/2025 19:33:10] "GET / HTTP/1.1" 200 -
+2025-11-03 19:33:10,362 [INFO] 127.0.0.1 - - [03/Nov/2025 19:33:10] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:33:10,364 [INFO] 127.0.0.1 - - [03/Nov/2025 19:33:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:33:13,797 [INFO] 127.0.0.1 - - [03/Nov/2025 19:33:13] "[35m[1mPOST /ask HTTP/1.1[0m" 500 -
+2025-11-03 19:47:18,440 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 19:47:20,920 [INFO]  * Restarting with stat
+2025-11-03 19:47:23,513 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:47:23,571 [WARNING]  * Debugger is active!
+2025-11-03 19:47:23,574 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 19:48:05,300 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:48:05,395 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.204.141:5000
+2025-11-03 19:48:05,396 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-03 19:48:05,401 [INFO]  * Restarting with stat
+2025-11-03 19:48:07,555 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:48:07,632 [WARNING]  * Debugger is active!
+2025-11-03 19:48:07,645 [INFO]  * Debugger PIN: 129-842-282
+2025-11-03 19:48:12,415 [INFO] 127.0.0.1 - - [03/Nov/2025 19:48:12] "GET / HTTP/1.1" 200 -
+2025-11-03 19:48:12,433 [INFO] 127.0.0.1 - - [03/Nov/2025 19:48:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:48:12,437 [INFO] 127.0.0.1 - - [03/Nov/2025 19:48:12] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:48:17,599 [INFO] 127.0.0.1 - - [03/Nov/2025 19:48:17] "[35m[1mPOST /ask HTTP/1.1[0m" 500 -
+2025-11-03 19:57:25,182 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 19:57:27,548 [INFO]  * Restarting with stat
+2025-11-03 19:57:30,302 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:57:30,399 [WARNING]  * Debugger is active!
+2025-11-03 19:57:30,405 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 19:57:36,482 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 19:57:36,758 [INFO]  * Restarting with stat
+2025-11-03 19:57:39,346 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:57:39,430 [WARNING]  * Debugger is active!
+2025-11-03 19:57:39,434 [INFO]  * Debugger PIN: 135-211-840
+2025-11-03 19:57:47,147 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:57:47,237 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.204.141:5000
+2025-11-03 19:57:47,238 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-03 19:57:47,240 [INFO]  * Restarting with stat
+2025-11-03 19:57:49,405 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:57:49,470 [WARNING]  * Debugger is active!
+2025-11-03 19:57:49,479 [INFO]  * Debugger PIN: 129-842-282
+2025-11-03 19:57:53,105 [INFO] 127.0.0.1 - - [03/Nov/2025 19:57:53] "GET / HTTP/1.1" 200 -
+2025-11-03 19:57:53,126 [INFO] 127.0.0.1 - - [03/Nov/2025 19:57:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-03 19:57:53,129 [INFO] 127.0.0.1 - - [03/Nov/2025 19:57:53] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-03 19:57:57,573 [INFO] 127.0.0.1 - - [03/Nov/2025 19:57:57] "POST /ask HTTP/1.1" 200 -
+2025-11-03 19:58:19,859 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 19:58:20,038 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\app.py', reloading
+2025-11-03 19:58:20,285 [INFO]  * Restarting with stat
+2025-11-03 19:58:22,206 [INFO]  * Restarting with stat
+2025-11-03 19:58:24,518 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-03 19:58:24,593 [WARNING]  * Debugger is active!

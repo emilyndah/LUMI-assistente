@@ -63,7 +63,7 @@ db = SQLAlchemy(app)
 # Configuração Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"  # redireciona para /login se não estiver autenticado
+login_manager.login_view = "login" # redireciona para /login se não estiver autenticado
 login_manager.login_message = "Você precisa fazer login para acessar esta página."
 login_manager.login_message_category = "warning"
 
@@ -156,13 +156,18 @@ except KeyError:
 if GEMINI_API_KEY:
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel("gemini-pro")
-        print("Modelo Gemini inicializado com sucesso.")
+
+        # Atualizado para versão 2.5 da API
+        model = genai.GenerativeModel("gemini-2.5-flash")  # ou "gemini-2.5-pro"
+
+        print("✅ Modelo Gemini inicializado com sucesso (gemini-2.5-flash).")
     except Exception as e:
-        print(f"Erro ao inicializar o modelo Gemini: {e}")
-        GEMINI_API_KEY = None  # Falha na inicialização
+        print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
+        GEMINI_API_KEY = None
+
 else:
-    print("API Key do Gemini não encontrada. O Chatbot não funcionará.")
+    print("⚠️ API Key do Gemini não encontrada. O Chatbot não funcionará.")
+
 
 
 # --- Contexto Inicial (Sistema) ---
