@@ -55,11 +55,28 @@ app = Flask(__name__)
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY", "chave_secreta_final_lumi_app_v6_save_vark"
 )
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-    os.path.dirname(__file__), "lumi_database.db"
-)
+# --- Lógica do Banco de Dados para Produção (Render) ---
+db_url = os.environ.get("DATABASE_URL")
+if db_url:
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+        os.path.dirname(__file__), "lumi_database.db"
+    )
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
+
+
+@app.cli.command("db-create-all")
+def db_create_all():
+    """Cria as tabelas do banco de dados (usado pelo Render)."""
+    with app.app_context():
+        db.create_all()
+        print("Banco de dados e tabelas criados com sucesso.")
+
 
 # Configuração Flask-Login
 login_manager = LoginManager()
@@ -632,4 +649,3 @@ if __name__ == "__main__":
 
         print("Iniciando servidor Flask em http://127.0.0.1:5000")
         app.run(debug=True, host="0.0.0.0", port=5000)
-        
