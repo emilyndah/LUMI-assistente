@@ -142,7 +142,6 @@ except KeyError:
     print("GEMINI_API_KEY=SUA_CHAVE_AQUI")
     print("=" * 80)
 
-<<<<<<< HEAD
 # --- Configuração do Modelo ---
 if GEMINI_API_KEY:
     try:
@@ -178,8 +177,6 @@ def carregar_contexto_inicial():
 
 
 CONTEXTO_INICIAL = carregar_contexto_inicial()
-=======
->>>>>>> 15d02cb98614f28cd681efc4cf8471f717c18d18
 
 # =======================================================
 # 2. FUNÇÕES AUXILIARES (CARREGAMENTO DE DADOS)
@@ -669,22 +666,16 @@ def save_vark_result():
     """Recebe os resultados do quiz VARK e salva no perfil do usuário."""
     data = request.json
     if not data or "scores" not in data or "primaryType" not in data:
-<<<<<<< HEAD
         print(
             f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
-=======
->>>>>>> 15d02cb98614f28cd681efc4cf8471f717c18d18
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
     
     scores = data["scores"]
     primary_type = data["primaryType"]
 
     if not isinstance(scores, dict) or not isinstance(primary_type, str):
-<<<<<<< HEAD
         print(
             f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
-=======
->>>>>>> 15d02cb98614f28cd681efc4cf8471f717c18d18
         return jsonify({"success": False, "message": "Tipos de dados inválidos."}), 400
     if not all(k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]):
         return jsonify({"success": False, "message": "Formato de scores inválido."}), 400
