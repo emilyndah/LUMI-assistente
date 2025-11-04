@@ -44,6 +44,7 @@ load_dotenv()
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
 # =======================================================
+DATABASE_URL = os.getenv('DATABASE_URL')
 logging.basicConfig(
     filename="lumi.log",
     level=logging.INFO,
@@ -58,6 +59,9 @@ app.secret_key = os.environ.get(
 # --- Lógica do Banco de Dados para Produção (Render) ---
 db_url = os.environ.get("DATABASE_URL")
 if db_url:
+    # FIX: Render usa postgres://, mas SQLAlchemy precisa de postgresql://
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
