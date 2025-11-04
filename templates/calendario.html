@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <main class="calendar-page">
-    </main>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendário Acadêmico</title>
@@ -11,307 +9,729 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/main.min.css' rel='stylesheet' />
-
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/locales-all.global.min.js'></script>
 
-</head>
+    <style>
+        /* --- 1. Layout Principal da Página --- */
+        .calendar-page {
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 20px;
+            padding: 20px; 
+            max-width: 1600px;
+            margin: 0 auto; 
+        }
+
+        .calendar-container {
+            flex: 2; 
+            min-width: 500px; 
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .agenda-container {
+            flex: 1; 
+            min-width: 300px; 
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            max-height: 800px; 
+        }
+
+        .agenda-container h2 {
+            color: #4B8BEA; 
+            margin-top: 0;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        /* --- 2. Controles da Agenda (Busca e Botão) --- */
+        .agenda-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #event-search {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 0.9em;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: rgba(240, 240, 240, 0.8);
+        }
+        #event-search:focus {
+            border-color: #4B8BEA;
+            box-shadow: 0 0 0 3px rgba(75, 139, 234, 0.2);
+            background-color: #fff;
+        }
+
+        #add-event-btn {
+            background-color: #4B8BEA;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            white-space: nowrap; 
+        }
+        #add-event-btn:hover {
+            background-color: #3a74d3;
+        }
+
+        /* --- 3. Lista de Eventos (Agenda) --- */
+        
+        /* Título da Agenda Clicável (Substitui o botão) */
+        #event-list-title {
+            margin-bottom: 15px;
+            margin-top: 0;
+            font-size: 1.1em;
+            color: #333;
+        }
+        #event-list-title.is-filtered {
+            cursor: pointer;
+            transition: color 0.2s ease;
+            color: #4B8BEA; 
+        }
+        #event-list-title.is-filtered:hover {
+            color: #3a74d3; 
+        }
+        #event-list-title.is-filtered::after {
+            content: ' (limpar ↻)'; /* Ícone de reset */
+            font-size: 0.9em;
+            font-weight: 400;
+            color: #555;
+            margin-left: 5px;
+        }
+        
+        #event-list {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .agenda-item:hover {
+            border-color: #4B8BEA;
+            box-shadow: 0 2px 8px rgba(75, 139, 234, 0.2);
+            transform: translateX(5px);
+        }
+
+        .agenda-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+            height: 50px;
+            background-color: #e6f0ff; 
+            border-radius: 8px;
+            margin-right: 15px;
+            color: #0056b3;
+        }
+        .agenda-date-day {
+            font-size: 1.2em;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        .agenda-date-month {
+            font-size: 0.8em;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .agenda-details {
+            flex-grow: 1;
+        }
+        .agenda-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        .agenda-type {
+            font-size: 0.85em;
+            color: #555;
+            font-style: italic;
+        }
+
+        /* --- 4. Tema do FullCalendar --- */
+        :root {
+            --fc-border-color: #e0e0e0;
+            --fc-today-bg-color: rgba(230, 247, 255, 0.6); 
+            --fc-event-bg-color: #4B8BEA;
+            --fc-event-border-color: #4B8BEA;
+            --fc-button-bg-color: #4B8BEA;
+            --fc-button-hover-bg-color: #3a74d3;
+            --fc-button-active-bg-color: #3a74d3;
+            --fc-button-border-color: #4B8BEA;
+            --fc-button-hover-border-color: #3a74d3;
+            --fc-button-active-border-color: #3a74d3;
+        }
+        #calendar {
+            max-height: 750px; 
+        }
+        .fc-daygrid-day.fc-day-today {
+            border: 2px solid #4B8BEA; 
+        }
+
+        /* --- 5. Estilo do Modal (Novo) --- */
+        #modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #event-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-show #modal-backdrop,
+        .modal-show #event-modal {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-show #event-modal {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.3em;
+            color: #333;
+        }
+        .close-btn {
+            font-size: 2em;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 0.5;
+            transition: color 0.2s ease;
+        }
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        #event-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9em;
+            color: #555;
+        }
+        #event-form input[type="text"],
+        #event-form input[type="date"],
+        #event-form select,
+        #event-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            box-sizing: border-box; 
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #event-form input[type="text"]:focus,
+        #event-form input[type="date"]:focus,
+        #event-form select:focus,
+        #event-form textarea:focus {
+            border-color: #4B8BEA;
+            box-shadow: 0 0 0 3px rgba(75, 139, 234, 0.2);
+            outline: none;
+        }
+        #event-form textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+            border-radius: 0 0 12px 12px;
+        }
+        
+        .modal-footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #modal-save-btn {
+            background-color: #4B8BEA;
+            color: white;
+        }
+        #modal-save-btn:hover {
+            background-color: #3a74d3;
+        }
+        
+        .modal-cancel-btn {
+            background-color: #f0f0f0;
+            color: #555;
+            margin-right: 10px;
+        }
+        .modal-cancel-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        #modal-delete-btn {
+            background: none;
+            color: #dc3545;
+            font-weight: 500;
+        }
+        #modal-delete-btn:hover {
+            background-color: #fdf2f2;
+            text-decoration: underline;
+        }
+
+        /* --- 6. Classes Utilitárias --- */
+        .hidden {
+            display: none !important;
+        }
+        .highlight-day {
+            background-color: #e6f0ff !important;
+            border-radius: 4px;
+        }
+    </style>
+    </head>
 
 <body>
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
-          <div class="user-area">
+        <div class="user-area">
             {% if current_user.is_authenticated %}
                 <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
                 <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
-                    <div class="profile-icon">{{ current_user.username[0]|upper }}</div>
+                    <div class="profile-icon">{{ current_user.username[0]|upper if current_user.username else '?' }}</div>
                 </a>
                 <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
+            {% else %}
+                 <a href="{{ url_for('login') }}" class="login-link">Login</a>
             {% endif %}
         </div>
     </header>
 
     <main class="calendar-page">
-        <section class="calendar-section">
+        
+        <section class="calendar-container">
+            <div id='calendar'></div>
+        </section>
+
+        <section class="agenda-container">
+            <h2>Agenda de Eventos</h2>
             
-            <h1>Calendário Acadêmico</h1>
-            <p>Selecione um dia no calendário ou utilize a busca para encontrar eventos.</p>
-
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                <ul class="flash-messages" style="list-style: none; padding: 0; margin-bottom: 20px;">
-                {% for category, message in messages %}
-                  {% set category_class = 'warning' if category == 'message' else category %}
-                  <li class="{{ category_class }}" style="padding: 10px 15px; border-radius: 5px; margin-bottom: 10px; font-size: 0.9em; text-align: left; border: 1px solid transparent; background-color: #fff3cd; color: #856404; border-color: #ffeeba;">{{ message }}</li>
-                {% endfor %}
-                </ul>
-              {% endif %}
-            {% endwith %}
-
-            <div id="calendar-wrapper">
-                <div id="calendar"></div>
+            <div class="agenda-controls">
+                <input type="text" id="event-search" placeholder="Buscar na agenda...">
+                <button id="add-event-btn" title="Adicionar novo evento">+ Novo Evento</button>
             </div>
 
-            <div class="agenda-section" id="agenda-section">
-                <input type="text" id="event-search" class="event-search" placeholder="Buscar evento na lista...">
+            <h3 id="event-list-title">Todos os Eventos</h3>
 
-                <div class="agenda-header">
-                    <h2 id="event-list-title">Todos os Eventos</h2>
-                    <button id="show-all-btn" class="simple-btn hidden">Mostrar Todos</button>
-                </div>
-
-                <div class="agenda-list" id="agenda-list">
-                    {% if eventos_data %}
-                        {% for evento in eventos_data %}
-                        <div class="agenda-item" data-date="{{ evento.data_iso }}">
-                            <div class="agenda-date">
-                                <span class="agenda-day">{{ evento.data.split('/')[0] if evento.data else '?' }}</span>
-                                <span class="agenda-month">{{ evento.mes_curto if evento.mes_curto else '???' }}</span>
-                            </div>
-                            <div class="agenda-details">
-                                <h3 class="agenda-title">{{ evento.evento if evento.evento else 'Evento sem descrição' }}</h3>
-                                
-                                {% if evento.data_fim and evento.data_fim != evento.data_iso %}
-                                    <p class="agenda-full-date" style="display: block; font-size: 0.8em; color: #888; margin-top: 3px;">
-                                        Até: {{ evento.data_fim | format_date_br }}
-                                    </p>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <p class="no-events-message">Nenhum evento carregado. Verifique o arquivo 'calendario.json'.</p>
-                    {% endif %}
-                </div>
-                <p class="no-events-message" id="no-filter-results" style="display: none; margin-top: 15px;">
-                    Nenhum evento encontrado para a data ou busca selecionada.
-                </p>
+            <div id="event-list">
+                {% if not eventos_data %}
+                    <p id="no-events-initial-message">Nenhum evento carregado. Adicione um novo evento no calendário!</p>
+                {% endif %}
             </div>
+            
+            <p id="no-events-message" class="hidden">Nenhum evento encontrado para esta data ou busca.</p>
 
         </section>
     </main>
 
-    <img src="{{ url_for('static', filename='lumi_mascote.jpg') }}" alt="Mascote Lumi" class="mascote">
+    <div id="modal-backdrop"></div>
+
+    <div id="event-modal">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <h2 id="modal-title">Adicionar Evento</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            
+            <div class="modal-body">
+                <form id="event-form">
+                    <input type="hidden" id="event-id" name="id">
+                    
+                    <label for="event-title">Título do Evento:</label>
+                    <input type="text" id="event-title" name="title" required>
+                    
+                    <label for="event-date">Data:</label>
+                    <input type="date" id="event-date" name="date" required>
+                    
+                    <label for="event-type">Tipo:</label>
+                    <select id="event-type" name="type">
+                        <option value="Prova">Prova</option>
+                        <option value="Trabalho">Trabalho</option>
+                        <option value="Apresentação">Apresentação</option>
+                        <option value="Lembrete">Lembrete</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                    
+                    <label for="event-description">Descrição (Opcional):</label>
+                    <textarea id="event-description" name="description"></textarea>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" id="modal-delete-btn">Excluir</button>
+                <div>
+                    <button type="button" class="modal-cancel-btn">Cancelar</button>
+                    <button type="submit" id="modal-save-btn" form="event-form">Salvar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- 1. PREPARAÇÃO DOS DADOS (Vindos do Flask) ---
-        const eventosData = {{ eventos_data|tojson | safe }};
-
-        // Formata os dados do Flask para o formato que FullCalendar espera
-        const eventosFormatadosParaFullCalendar = eventosData.map(evento => {
-            const fcEvent = {
-                title: evento.evento || 'Evento', // 'evento' é a descrição
-                start: evento.data_iso,          // 'data_iso' é YYYY-MM-DD
-                extendedProps: {                 // Guarda dados extras
-                    data_br: evento.data,        // DD/MM/YYYY
-                    data_fim_iso: evento.data_fim, // YYYY-MM-DD (data final)
-                    mes_curto: evento.mes_curto
-                }
-            };
-            
-            // Adiciona data final para o FullCalendar se existir e for diferente
-            // Lembre-se: 'end' no FullCalendar é EXCLUSIVO (o dia seguinte ao último dia)
-            if (evento.data_fim && evento.data_fim !== evento.data_iso) {
-                try {
-                    // Interpreta a data final como UTC
-                    let endDate = new Date(evento.data_fim + 'T00:00:00Z'); 
-                    // Adiciona 1 dia para o 'end' exclusivo do FullCalendar
-                    endDate.setUTCDate(endDate.getUTCDate() + 1); 
-                    fcEvent.end = endDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-                } catch(e) { 
-                    console.warn("Não foi possível processar a data final:", evento.data_fim); 
-                }
-            }
-            return fcEvent;
-        });
-
-        // --- 2. INICIALIZAÇÃO DO FULLCALENDAR ---
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        // --- 1. REFERÊNCIAS DO DOM ---
         const calendarEl = document.getElementById('calendar');
-        let calendar = null; 
-        try {
-            calendar = new FullCalendar.Calendar(calendarEl, {
+        const eventList = document.getElementById('event-list');
+        const searchInput = document.getElementById('event-search');
+        const noEventsMsg = document.getElementById('no-events-message');
+        const initialNoEventsMessage = document.getElementById('no-events-initial-message');
+        const eventListTitle = document.getElementById('event-list-title');
+
+        const pageBody = document.body;
+        const modal = document.getElementById('event-modal');
+        const backdrop = document.getElementById('modal-backdrop');
+        const modalTitle = document.getElementById('modal-title');
+        const eventForm = document.getElementById('event-form');
+        const eventIdInput = document.getElementById('event-id');
+        const eventTitleInput = document.getElementById('event-title');
+        const eventDateInput = document.getElementById('event-date');
+        const eventTypeInput = document.getElementById('event-type');
+        const eventDescriptionInput = document.getElementById('event-description');
+        const saveBtn = document.getElementById('modal-save-btn');
+        const deleteBtn = document.getElementById('modal-delete-btn');
+        const closeBtn = modal.querySelector('.close-btn');
+        const cancelBtn = modal.querySelector('.modal-cancel-btn');
+        const addEventBtn = document.getElementById('add-event-btn');
+
+        // --- 2. ESTADO E DADOS ---
+        let allEventItems = []; 
+        let calendarInstance;
+        const initialEvents = {{ eventos_data|tojson|safe }};
+        const MESES_CURTOS = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+
+        // --- 3. FUNÇÕES DO MODAL ---
+        function showModal() { pageBody.classList.add('modal-show'); }
+        function hideModal() { pageBody.classList.remove('modal-show'); }
+
+        function resetModalForm() {
+            eventForm.reset();
+            eventIdInput.value = '';
+            modalTitle.textContent = 'Adicionar Evento';
+            deleteBtn.classList.add('hidden');
+        }
+
+        // --- 4. FUNÇÕES PRINCIPAIS (Calendário e Agenda) ---
+        
+        function initializeCalendar() {
+            calendarInstance = new FullCalendar.Calendar(calendarEl, {
+                locale: 'pt-br', // Traduz dias da semana, etc.
                 initialView: 'dayGridMonth',
-                locale: 'pt-br',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,listWeek'
+                    right: 'dayGridMonth,timeGridWeek,listWeek'
                 },
-                buttonText: {
-                    today: 'Hoje', month: 'Mês', week: 'Semana', list: 'Lista'
-                },
-                events: eventosFormatadosParaFullCalendar,
-                selectable: true,
-                fixedWeekCount: false,
-                dayMaxEvents: true, // Mostra "+X eventos" se não couberem
 
-                // --- Ações ---
-                dateClick: function(info) { // Clicar num dia
-                    filterEventsByDate(info.dateStr); // info.dateStr é YYYY-MM-DD
-                    scrollToAgenda();
-                    highlightSelectedDay(info.dayEl); // Destaca o dia clicado
+                // ===============================================
+                // === CORREÇÃO: Traduz os botões ===
+                // ===============================================
+                buttonText: {
+                    today: 'Hoje',
+                    month: 'Mês',
+                    week:  'Semana',
+                    list:  'Lista'
                 },
-                eventClick: function(info) { // Clicar num evento
-                    info.jsEvent.preventDefault(); 
-                    const startISO = info.event.start ? info.event.start.toISOString().split('T')[0] : null;
-                    if(startISO){
-                        filterEventsByDate(startISO); // Filtra pela data de início
-                        scrollToAgenda();
-                        const dayEl = calendarEl.querySelector(`.fc-day[data-date="${startISO}"]`);
-                        highlightSelectedDay(dayEl || info.el.closest('.fc-daygrid-day'));
+                // ===============================================
+
+                events: initialEvents.map(evt => ({
+                    id: evt.id,
+                    title: evt.title,
+                    start: evt.date,
+                    extendedProps: {
+                        type: evt.type,
+                        description: evt.description
                     }
-                },
-                 eventMouseEnter: function(info) { // Mostrar tooltip ao passar o mouse
-                    let title = info.event.title;
-                    if (info.event.end) { 
-                        const startStr = info.event.start.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
-                        let endDate = new Date(info.event.end); 
-                        endDate.setUTCDate(endDate.getUTCDate() - 1); // Volta 1 dia (pois 'end' é exclusivo)
-                        const endStr = endDate.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
-                        if (startStr !== endStr) { title += ` (${startStr} - ${endStr})`; }
-                    }
-                    info.el.setAttribute('title', title); // Tooltip padrão do navegador
-                 }
+                })),
+                dateClick: handleDateClick,
+                eventClick: handleEventClick,
+                dayCellDidMount: highlightDaysWithEvents, 
+            });
+            calendarInstance.render();
+            buildAgendaList(); 
+        }
+
+        function highlightDaysWithEvents(arg) {
+            const dateStr = arg.date.toISOString().split('T')[0];
+            const hasEvent = initialEvents && initialEvents.some(event => event.date === dateStr);
+            if (hasEvent) {
+                const dot = document.createElement('div');
+                dot.style.width = '6px';
+                dot.style.height = '6px';
+                dot.style.borderRadius = '50%';
+                dot.style.backgroundColor = '#4B8BEA';
+                dot.style.position = 'absolute';
+                dot.style.bottom = '5px';
+                dot.style.left = '50%';
+                dot.style.transform = 'translateX(-50%)';
+                arg.el.appendChild(dot);
+            }
+        }
+        
+        function createAgendaItem(event) {
+            const date = new Date(event.date + 'T00:00:00'); 
+            const day = date.getDate();
+            const month = MESES_CURTOS[date.getMonth()]; // Usa o array PT-BR
+
+            const item = document.createElement('div');
+            item.className = 'agenda-item';
+            item.dataset.id = event.id;
+            item.dataset.date = event.date;
+            item.innerHTML = `
+                <div class="agenda-date">
+                    <span class="agenda-date-day">${day}</span>
+                    <span class="agenda-date-month">${month}</span>
+                </div>
+                <div class="agenda-details">
+                    <div class="agenda-title">${event.title}</div>
+                    <div class="agenda-type">${event.type}</div>
+                </div>
+            `;
+            item.addEventListener('click', () => {
+                const fullEvent = calendarInstance.getEventById(event.id);
+                if (fullEvent) handleEventClick({ event: fullEvent });
+            });
+            return item;
+        }
+        
+        function buildAgendaList() {
+            eventList.innerHTML = ''; 
+            if (!initialEvents || initialEvents.length === 0) {
+                 if (initialNoEventsMessage) initialNoEventsMessage.style.display = 'block';
+                updateNoEventsMessage(false); 
+                return;
+            }
+
+            const sortedEvents = [...initialEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
+            allEventItems = []; 
+            
+            sortedEvents.forEach(event => {
+                const item = createAgendaItem(event);
+                eventList.appendChild(item);
+                allEventItems.push(item);
             });
 
-            calendar.render(); // Desenha o calendário
-            console.log("FullCalendar renderizado com sucesso.");
-
-        } catch (error) {
-            console.error("Erro ao inicializar o FullCalendar:", error);
-            document.getElementById('calendar-wrapper').innerHTML = '<p class="no-events-message" style="color: red;">Erro ao carregar o componente do calendário.</p>';
-        }
-
-        // --- 3. FUNCIONALIDADE DA LISTA DE AGENDA (Controlada pelo JS) ---
-        
-        // Seletores dos elementos da Agenda
-        const searchInput = document.getElementById('event-search');
-        const agendaListContainer = document.getElementById('agenda-list');
-        const allEventItems = agendaListContainer.querySelectorAll('.agenda-item');
-        const eventListTitle = document.getElementById('event-list-title');
-        const showAllBtn = document.getElementById('show-all-btn');
-        const noFilterResultsMessage = document.getElementById('no-filter-results');
-        const initialNoEventsMessage = document.querySelector('.no-events-message'); // A mensagem vinda do Flask
-        
-        // --- Funções Helper ---
-
-        // Converte "YYYY-MM-DD" para um objeto Date em UTC (para comparações seguras)
-        function parseDateISO(str) { 
-            if (!str) return null;
-            try {
-                const [year, month, day] = str.split('-').map(Number);
-                return new Date(Date.UTC(year, month - 1, day));
-            } catch (e) { return null; }
-        }
-
-        // Rola a página até a lista de agenda
-        function scrollToAgenda() {
-            const agendaSection = document.getElementById('agenda-section');
-            if (agendaSection) {
-                 agendaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        // Destaca o dia clicado no FullCalendar
-        function highlightSelectedDay(dayElement) {
-            document.querySelectorAll('.fc-daygrid-day.fc-day-selected').forEach(el => el.classList.remove('fc-day-selected'));
-            if (dayElement && dayElement.classList.contains('fc-daygrid-day')) {
-                dayElement.classList.add('fc-day-selected');
-            }
-        }
-
-        // Mostra ou esconde a mensagem "Nenhum resultado"
-        function updateNoEventsMessage(show) {
-            if (noFilterResultsMessage) {
-                noFilterResultsMessage.style.display = show ? 'block' : 'none';
-            }
-            // Esconde a lista inteira se não houver resultados para o filtro
-            agendaListContainer.style.display = show ? 'none' : 'block';
-            
-            // Garante que a mensagem original (se houver) seja escondida
-            if(initialNoEventsMessage && show) {
+            if (initialNoEventsMessage) {
                 initialNoEventsMessage.style.display = 'none';
             }
+            updateNoEventsMessage(allEventItems.length === 0 && searchInput.value === '');
         }
 
-        // Função: Filtra a lista de agenda por data
-        function filterEventsByDate(dateISO) { // dateISO é YYYY-MM-DD
-            let hasEventsOnDate = false;
-            const dateClicked = parseDateISO(dateISO); // Data clicada (UTC)
-            if (!dateClicked) return;
-
-            const [year, month, day] = dateISO.split('-');
-            const formattedDate = `${day}/${month}/${year}`;
-            eventListTitle.textContent = `Eventos para ${formattedDate}`;
-            showAllBtn.classList.remove('hidden');
-            searchInput.value = ''; // Limpa a busca
-
-            allEventItems.forEach(item => {
-                const itemStartDateISO = item.dataset.date; // Data de início do item
-                
-                // Tenta pegar a data final (se existir no HTML)
-                const itemEndDateElement = item.querySelector('.agenda-full-date');
-                let itemEndDateISO = itemStartDateISO; // Assume data única por padrão
-                if (itemEndDateElement && itemEndDateElement.textContent.includes('Até: ')) {
-                    try {
-                        const dateParts = itemEndDateElement.textContent.split(': ')[1].split('/'); // DD/MM/YYYY
-                        itemEndDateISO = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Converte para YYYY-MM-DD
-                    } catch (e) { /* Usa data de início se falhar */ }
-                }
-
-                const itemStartDate = parseDateISO(itemStartDateISO);
-                const itemEndDate = parseDateISO(itemEndDateISO);
-
-                // Verifica se a data clicada está DENTRO do intervalo do evento
-                if (itemStartDate && itemEndDate && dateClicked >= itemStartDate && dateClicked <= itemEndDate) {
-                    item.style.display = 'flex';
-                    hasEventsOnDate = true;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            updateNoEventsMessage(!hasEventsOnDate); // Mostra msg se 'hasEventsOnDate' for falso
-            if (!hasEventsOnDate) {
-                 eventListTitle.textContent = `Nenhum evento para ${formattedDate}`;
+        function updateNoEventsMessage(show) {
+            noEventsMsg.classList.toggle('hidden', !show);
+            if (initialNoEventsMessage && show) {
+                 initialNoEventsMessage.style.display = 'none';
             }
         }
 
-        // Função: Mostra todos os eventos (limpa filtros)
-        function showAllEvents() {
-            eventListTitle.textContent = 'Todos os Eventos';
-            showAllBtn.classList.add('hidden');
+        function highlightSelectedDay(dateStr) {
+            document.querySelectorAll('.fc-daygrid-day').forEach(dayEl => {
+                dayEl.classList.remove('highlight-day');
+                if (dateStr && dayEl.dataset.date === dateStr) {
+                    dayEl.classList.add('highlight-day');
+                }
+            });
+        }
+        
+        function filterAgendaByDate(dateStr) {
+            let count = 0;
+            allEventItems.forEach(item => {
+                const isMatch = item.dataset.date === dateStr;
+                item.style.display = isMatch ? 'flex' : 'none';
+                if (isMatch) count++;
+            });
+            updateNoEventsMessage(count === 0);
+            
+            const displayDate = new Date(dateStr + 'T00:00:00').toLocaleDateString('pt-br', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            eventListTitle.textContent = `Eventos para ${displayDate}`;
+            eventListTitle.classList.add('is-filtered');
             searchInput.value = '';
-            
-            allEventItems.forEach(item => {
-                item.style.display = 'flex';
-            });
-
-            // Esconde a mensagem de "sem resultados"
-            updateNoEventsMessage(false); 
-            // Mostra a mensagem de "sem eventos" original APENAS se não houver NENHUM evento
-            if(initialNoEventsMessage) {
-                initialNoEventsMessage.style.display = allEventItems.length === 0 ? 'block' : 'none';
-            }
-            if (allEventItems.length > 0) {
-                 agendaListContainer.style.display = 'block';
-            }
-            
-            highlightSelectedDay(null); // Remove destaque do calendário
+            highlightSelectedDay(dateStr);
         }
 
-        // --- 4. EVENT LISTENERS ---
+        function showAllEvents() {
+            allEventItems.forEach(item => { item.style.display = 'flex'; });
+            updateNoEventsMessage(allEventItems.length === 0);
+            eventListTitle.textContent = 'Todos os Eventos';
+            eventListTitle.classList.remove('is-filtered');
+            searchInput.value = '';
+            highlightSelectedDay(null);
+        }
+        
+        // --- 5. HANDLERS DE EVENTOS ---
+        
+        function handleDateClick(arg) {
+            resetModalForm();
+            modalTitle.textContent = 'Adicionar Evento';
+            eventDateInput.value = arg.dateStr;
+            deleteBtn.classList.add('hidden');
+            showModal();
+            filterAgendaByDate(arg.dateStr); 
+        }
 
-        // Botão "Mostrar Todos"
-        showAllBtn.addEventListener('click', showAllEvents);
+        function handleEventClick(arg) {
+            const event = arg.event;
+            resetModalForm();
+            modalTitle.textContent = 'Editar Evento';
+            
+            eventIdInput.value = event.id;
+            eventTitleInput.value = event.title;
+            eventDateInput.value = event.startStr.split('T')[0];
+            eventTypeInput.value = event.extendedProps.type || 'Outro';
+            eventDescriptionInput.value = event.extendedProps.description || '';
+            
+            deleteBtn.classList.remove('hidden');
+            showModal();
+            filterAgendaByDate(event.startStr.split('T')[0]); 
+        }
 
-        // Campo de busca por texto
+        async function saveEvent(e) {
+            e.preventDefault();
+            const formData = new FormData(eventForm);
+            const eventData = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch("{{ url_for('save_calendar_event') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(eventData)
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    location.reload(); 
+                } else {
+                    alert('Erro ao salvar evento: ' + (result.message || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                console.error('Erro no fetch ao salvar:', error);
+                alert('Erro de conexão ao salvar evento.');
+            }
+            hideModal();
+        }
+
+        async function deleteEvent() {
+            if (!confirm('Tem certeza que deseja excluir este evento?')) {
+                return;
+            }
+            const eventId = eventIdInput.value;
+            if (!eventId) return;
+
+            try {
+                const response = await fetch("{{ url_for('delete_calendar_event') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: eventId })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    location.reload(); 
+                } else {
+                    alert('Erro ao excluir evento: ' + (result.message || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                console.error('Erro no fetch ao excluir:', error);
+                alert('Erro de conexão ao excluir evento.');
+            }
+            hideModal();
+        }
+
+        // --- 6. EVENT LISTENERS (Conexões) ---
+        
+        eventForm.addEventListener('submit', saveEvent);
+        deleteBtn.addEventListener('click', deleteEvent);
+        closeBtn.addEventListener('click', hideModal);
+        cancelBtn.addEventListener('click', hideModal);
+        backdrop.addEventListener('click', hideModal);
+        
+        addEventBtn.addEventListener('click', () => {
+            resetModalForm();
+            showModal();
+        });
+
+        eventListTitle.addEventListener('click', () => {
+            if (eventListTitle.classList.contains('is-filtered')) {
+                showAllEvents();
+            }
+        });
+
         searchInput.addEventListener('keyup', function () {
             const filter = searchInput.value.toLowerCase();
-            showAllBtn.classList.toggle('hidden', filter === ''); 
+            
+            eventListTitle.classList.toggle('is-filtered', filter !== '');
             eventListTitle.textContent = filter === '' ? 'Todos os Eventos' : 'Resultados da Busca';
             let foundCount = 0;
 
@@ -326,16 +746,17 @@
             });
 
             updateNoEventsMessage(foundCount === 0);
-            if (filter === '') { showAllEvents(); } // Restaura tudo se apagar a busca
-            highlightSelectedDay(null); // Remove destaque do calendário
+            if (filter === '') { showAllEvents(); } 
+            highlightSelectedDay(null); 
         });
 
-        // --- 5. ESTADO INICIAL ---
-        // Garante que a mensagem de "sem resultados de filtro" comece escondida
-        updateNoEventsMessage(false);
-        // Garante que a mensagem "Nenhum evento carregado" (do Flask) só apareça se for verdade
+        // --- 7. INICIALIZAÇÃO ---
+        initializeCalendar();
+        
+        const hasInitialEvents = initialEvents && initialEvents.length > 0;
+        updateNoEventsMessage(!hasInitialEvents && searchInput.value === '');
         if (initialNoEventsMessage) {
-             initialNoEventsMessage.style.display = allEventItems.length === 0 ? 'block' : 'none';
+             initialNoEventsMessage.style.display = hasInitialEvents ? 'none' : 'block';
         }
 
     }); // end DOMContentLoaded listener
