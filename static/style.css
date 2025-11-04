@@ -628,3 +628,77 @@ main.profile-page { /* Adicionada classe para perfil */
     .card-face { font-size: 1.1em; }
     .back-btn-flashcard-subject { top: 10px; left: 15px; }
 }
+/* ============================================== */
+/* ★★★ ESTILOS DE NOTIFICAÇÃO (TOAST) ★★★ */
+/* ============================================== */
+
+/* O container que segura os toasts */
+#toast-container {
+  position: fixed; /* Flutua na tela */
+  top: 20px;
+  right: 20px;
+  z-index: 1050; /* Garante que fique acima de tudo */
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* O pop-up individual */
+.toast-message {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 5px solid #ccc; /* Cor padrão */
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #333;
+  
+  /* --- A Mágica da Animação --- */
+  opacity: 0;
+  transform: translateX(100%); /* Começa fora da tela (à direita) */
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* --- Estados de Animação (controlados pelo JS) --- */
+.toast-message.show {
+  opacity: 1;
+  transform: translateX(0); /* Entra na tela */
+}
+.toast-message.hide {
+  opacity: 0;
+  transform: translateX(100%); /* Sai da tela */
+}
+
+/* --- Cores (baseadas na categoria do Flask) --- */
+.toast-message.success {
+  border-left-color: #28a745; /* Verde para sucesso */
+  color: #155724;
+}
+.toast-message.warning {
+  border-left-color: #ffc107; /* Amarelo para aviso */
+  color: #856404;
+}
+.toast-message.danger {
+  border-left-color: #dc3545; /* Vermelho para perigo/erro */
+  color: #721c24;
+}
+.toast-message.info {
+  border-left-color: #17a2b8; /* Azul para info */
+  color: #0c5460;
+}
+
+/* O botão 'X' para fechar */
+.toast-close-btn {
+  float: right;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+  margin-left: 10px;
+  line-height: 0.8;
+}
+.toast-close-btn:hover {
+  color: #333;
+}
