@@ -44,6 +44,7 @@ load_dotenv()
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
 # =======================================================
+DATABASE_URL = os.getenv('DATABASE_URL')
 logging.basicConfig(
     filename="lumi.log",
     level=logging.INFO,
@@ -58,8 +59,6 @@ app.secret_key = os.environ.get(
 # --- Lógica do Banco de Dados para Produção (Render) ---
 db_url = os.environ.get("DATABASE_URL")
 if db_url:
-    if db_url.startswith("postgres://"):
-        db_url = db_url.replace("postgres://", "postgresql://", 1)
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
@@ -75,7 +74,7 @@ def db_create_all():
     """Cria as tabelas do banco de dados (usado pelo Render)."""
     with app.app_context():
         db.create_all()
-        print("Banco de dados e tabelas criados com sucesso.")
+        print("v2 - Banco de dados e tabelas criados com sucesso.")
 
 
 # Configuração Flask-Login
@@ -148,10 +147,10 @@ def load_user(user_id):
 # Agora apenas configuramos a API Key aqui.
 # A inicialização do 'model' foi movida para DEPOIS do contexto ser carregado.
 GEMINI_API_KEY = None
-model = None # Será inicializado APÓS o contexto ser carregado
+model = None  # Será inicializado APÓS o contexto ser carregado
 try:
     GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
-    genai.configure(api_key=GEMINI_API_KEY) # Configura a API aqui
+    genai.configure(api_key=GEMINI_API_KEY)  # Configura a API aqui
 except KeyError:
     print("=" * 80)
     print("ERRO: Variável de ambiente GEMINI_API_KEY não encontrada.")
@@ -198,6 +197,7 @@ CONTEXTO_INICIAL = carregar_contexto_inicial()
 # =======================================================
 # 2. FUNÇÕES AUXILIARES (CARREGAMENTO DE DADOS)
 # =======================================================
+
 
 def carregar_dados_json(arquivo):
     """Função genérica para carregar dados de um arquivo JSON."""
@@ -293,7 +293,8 @@ def carregar_matriz():
         return dados
     elif dados and isinstance(dados, dict):
         # Suporte ao formato antigo que era um objeto único
-        print("AVISO: matriz.json em formato antigo (objeto único). Convertendo para lista.")
+        print(
+            "AVISO: matriz.json em formato antigo (objeto único). Convertendo para lista.")
         return [dados]
     else:
         print("AVISO: Falha ao carregar ou formato inválido para matriz.json.")
@@ -328,24 +329,26 @@ def carregar_contexto_inicial():
     # 2. Carrega e formata o Calendário
     print("Carregando Calendário para o contexto...")
     try:
-        eventos = carregar_calendario() # Função já existente
+        eventos = carregar_calendario()  # Função já existente
         if eventos:
             contexto_calendario = "\n\n=== CALENDÁRIO ACADÊMICO (Use para responder perguntas sobre datas) ===\n"
             for evento in eventos:
-                data_str = evento.get("data") # "dd/mm/YYYY"
+                data_str = evento.get("data")  # "dd/mm/YYYY"
                 desc = evento.get("evento")
                 data_fim_str = ""
                 if evento.get("data_fim") and evento.get("data_fim") != evento.get("data_iso"):
-                     try:
-                         data_fim_obj = datetime.strptime(evento["data_fim"], "%Y-%m-%d")
-                         data_fim_str = f" até {data_fim_obj.strftime('%d/%m/%Y')}"
-                     except ValueError:
-                         pass
+                    try:
+                        data_fim_obj = datetime.strptime(
+                            evento["data_fim"], "%Y-%m-%d")
+                        data_fim_str = f" até {data_fim_obj.strftime('%d/%m/%Y')}"
+                    except ValueError:
+                        pass
                 contexto_calendario += f"- Em {data_str}{data_fim_str}: {desc}\n"
             contexto_calendario += "======================================================================\n"
             print(f"Calendário carregado. {len(eventos)} eventos.")
         else:
-             print("AVISO: Não foi possível carregar os eventos do calendário no contexto.")
+            print(
+                "AVISO: Não foi possível carregar os eventos do calendário no contexto.")
     except Exception as e:
         print(f"ERRO ao processar calendário para o contexto: {e}")
         traceback.print_exc()
@@ -353,28 +356,29 @@ def carregar_contexto_inicial():
     # 3. Carrega e formata a Matriz Curricular
     print("Carregando Matriz Curricular para o contexto...")
     try:
-        matriz_data = carregar_matriz() # Função já existente
+        matriz_data = carregar_matriz()  # Função já existente
         if matriz_data:
             contexto_matriz = "\n\n=== MATRIZ CURRICULAR (Use para responder sobre aulas, professores, horários e salas) ===\n"
             for periodo_info in matriz_data:
-                periodo_nome = periodo_info.get('periodo', 'Período Não Identificado')
+                periodo_nome = periodo_info.get(
+                    'periodo', 'Período Não Identificado')
                 contexto_matriz += f"\n--- Período {periodo_nome} ---\n"
                 disciplinas = periodo_info.get('disciplinas', [])
                 if not disciplinas:
                     contexto_matriz += "(Nenhuma disciplina listada para este período)\n"
-                
+
                 for disc in disciplinas:
                     nome = disc.get('nome', 'Sem nome')
                     prof = disc.get('professor', 'A definir')
                     dia = disc.get('dia', 'A definir')
                     horario = disc.get('horario', 'A definir')
                     sala = disc.get('sala', 'A definir')
-                    
+
                     contexto_matriz += f"- Disciplina: {nome}\n"
                     contexto_matriz += f"  Professor: {prof}\n"
                     contexto_matriz += f"  Horário: {dia}, {horario}\n"
                     contexto_matriz += f"  Sala: {sala}\n\n"
-                    
+
             contexto_matriz += "======================================================================\n"
             print("Matriz Curricular carregada para o contexto.")
         else:
@@ -386,21 +390,21 @@ def carregar_contexto_inicial():
     # 4. Carrega e formata os Métodos de Estudo (VARK)
     print("Carregando Métodos de Estudo (VARK) para o contexto...")
     try:
-        vark_data = carregar_quiz_vark() # Função já existente
-        resultados_vark = vark_data.get('resultados') 
+        vark_data = carregar_quiz_vark()  # Função já existente
+        resultados_vark = vark_data.get('resultados')
         if resultados_vark:
             contexto_vark = "\n\n=== MÉTODOS DE ESTUDO (Use para explicar os estilos VARK) ===\n"
             for tipo, info in resultados_vark.items():
                 titulo = info.get('titulo', tipo)
                 desc = info.get('descricao', 'Sem descrição.')
                 metodos = info.get('metodos', [])
-                
+
                 contexto_vark += f"\n--- {titulo} ({tipo}) ---\n"
                 contexto_vark += f"{desc}\n"
                 contexto_vark += "Métodos sugeridos:\n"
                 for m in metodos:
                     contexto_vark += f"  - {m}\n"
-                    
+
             contexto_vark += "======================================================================\n"
             print("Métodos VARK carregados para o contexto.")
         else:
@@ -429,12 +433,12 @@ if GEMINI_API_KEY:
     try:
         model = genai.GenerativeModel(
             "gemini-2.5-flash",
-            system_instruction=CONTEXTO_INICIAL # <-- AQUI ESTÁ A MÁGICA!
+            system_instruction=CONTEXTO_INICIAL  # <-- AQUI ESTÁ A MÁGICA!
         )
         print("✅ Modelo Gemini inicializado com system_instruction (contexto completo).")
     except Exception as e:
         print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
-        GEMINI_API_KEY = None # Garante que o app não tente usar um modelo falho
+        GEMINI_API_KEY = None  # Garante que o app não tente usar um modelo falho
 else:
     print("⚠️ API Key não encontrada. O Chatbot não funcionará.")
 
@@ -461,6 +465,7 @@ def get_initial_chat_history():
 # =======================================================
 # 5. ROTAS DE AUTENTICAÇÃO (Login, Registro, Logout)
 # =======================================================
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -662,7 +667,7 @@ def ask():
         # Adiciona a pergunta e resposta ao histórico PEQUENO
         historico_chat.append({"role": "user", "parts": [pergunta]})
         historico_chat.append({"role": "model", "parts": [response.text]})
-        
+
         # Salva o histórico PEQUENO de volta na sessão
         session["historico"] = historico_chat
 
@@ -686,7 +691,7 @@ def save_vark_result():
         print(
             f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
-    
+
     scores = data["scores"]
     primary_type = data["primaryType"]
 
