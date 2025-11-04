@@ -5,7 +5,6 @@ A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto un
 
 ## 🤖 Funcionalidades Principais
 - **Chat inteligente com IA local gemini 2.5 flash** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
-=======
 - **Chat inteligente com IA local (Ollama)** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
 - **Chat motivacional** com mensagens de apoio e estratégias para manter a motivação nos estudos.
 
