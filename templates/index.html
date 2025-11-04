@@ -30,17 +30,11 @@
     <main>
         <aside class="funcoes">
             <h2>Funcionalidades</h2>
-            <a href="#" class="func-item disabled">Recomendações de estudo</a>
-            <a href="#" class="func-item disabled">Simulador de provas</a>
+            <a href="#" class="func-item">Simulador de provas</a>
             <a href="{{ url_for('flashcards') }}" class="func-item">Flashcards</a>
             <a href="{{ url_for('metodo_de_estudo') }}" class="func-item">Método de Estudo</a>
-            <a href="#" class="func-item disabled">Análise de desempenho</a>
             <a href="{{ url_for('calendario') }}" class="func-item">Calendário</a>
-            <a href="#" class="func-item disabled">Gerador de Resumos</a>
             <a href="{{ url_for('faq') }}" class="func-item">FAQ</a>
-            <a href="#" class="func-item disabled">Chat motivacional</a>
-            
-            <a href="#" class="func-item disabled">Quiz</a>
             <a href="{{ url_for('modo_foco') }}" class="func-item">Modo Foco</a>
         </aside> <section class="chat-container">
             <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">
