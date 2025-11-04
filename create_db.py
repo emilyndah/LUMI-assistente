@@ -1,15 +1,23 @@
 # ==================================
 # SCRIPT DE CRIAÇÃO DO BANCO DE DADOS
-# (create_db.py)
+# (create_db.py) - COM DEBUG
 # ==================================
 import os
-from app import app, db
+from app import app, db  # Esta linha IMPORTA e EXECUTA a lógica do app.py
 
 print("--- [create_db.py] Script iniciado ---")
 
-# Precisamos 'enganar' o app.py para que ele use o
-# banco de dados de produção (PostgreSQL) e não o SQLite.
-# Fazemos isso setando a variável de ambiente ANTES de criar as tabelas.
+# --- VAMOS ADICIONAR O DEBUG AQUI ---
+# Vamos printar a URL que o app.py configurou ANTES de tentar qualquer coisa
+try:
+    configured_url = app.config.get("SQLALCHEMY_DATABASE_URI")
+    print(
+        f"--- [create_db.py] DEBUG: URL configurada no app: {configured_url} ---")
+except Exception as e:
+    print(f"--- [create_db.py] DEBUG: Erro ao ler config: {e} ---")
+# --- FIM DO DEBUG ---
+
+# Seta a variável de ambiente (não afeta o config já carregado, mas é uma boa prática)
 os.environ["DATABASE_URL"] = os.environ.get("DATABASE_URL", "sqlite:///")
 
 # Força o app a carregar a configuração do banco de dados
