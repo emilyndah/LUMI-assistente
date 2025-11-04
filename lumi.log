@@ -1134,6 +1134,7 @@
 2025-11-04 20:21:22,858 [INFO] 127.0.0.1 - - [04/Nov/2025 20:21:22] "GET /calendario HTTP/1.1" 200 -
 2025-11-04 20:21:22,948 [INFO] 127.0.0.1 - - [04/Nov/2025 20:21:22] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
 2025-11-04 20:21:22,952 [INFO] 127.0.0.1 - - [04/Nov/2025 20:21:22] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+<<<<<<< HEAD
 >>>>>>> 27d3dd73544aef71ff67fa822c8af765a88484e0
 2025-11-04 20:27:42,050 [INFO] Servidor iniciado - monitorando eventos Lumi
 2025-11-04 20:27:42,183 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
@@ -1188,3 +1189,39 @@
 2025-11-04 20:38:58,015 [INFO] 127.0.0.1 - - [04/Nov/2025 20:38:58] "GET / HTTP/1.1" 200 -
 2025-11-04 20:38:58,032 [INFO] 127.0.0.1 - - [04/Nov/2025 20:38:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
 2025-11-04 20:38:58,033 [INFO] 127.0.0.1 - - [04/Nov/2025 20:38:58] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+=======
+2025-11-04 20:24:24,114 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 20:24:24,171 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.205.100:5000
+2025-11-04 20:24:24,171 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-04 20:24:24,172 [INFO]  * Restarting with stat
+2025-11-04 20:24:25,251 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 20:24:25,295 [WARNING]  * Debugger is active!
+2025-11-04 20:24:25,298 [INFO]  * Debugger PIN: 130-186-121
+2025-11-04 20:26:14,113 [INFO] 127.0.0.1 - - [04/Nov/2025 20:26:14] "GET / HTTP/1.1" 200 -
+2025-11-04 20:26:16,428 [INFO] 127.0.0.1 - - [04/Nov/2025 20:26:16] "GET /flashcards HTTP/1.1" 200 -
+2025-11-04 20:26:16,471 [INFO] 127.0.0.1 - - [04/Nov/2025 20:26:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-04 20:26:16,472 [INFO] 127.0.0.1 - - [04/Nov/2025 20:26:16] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:33:50,053 [INFO] 127.0.0.1 - - [04/Nov/2025 20:33:50] "POST /ask HTTP/1.1" 200 -
+2025-11-04 20:37:08,515 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:08] "POST /ask HTTP/1.1" 200 -
+2025-11-04 20:37:14,478 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:14] "GET / HTTP/1.1" 200 -
+2025-11-04 20:37:14,522 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-04 20:37:14,523 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:14] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:37:43,432 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 20:37:43,583 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.205.100:5000
+2025-11-04 20:37:43,583 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-04 20:37:43,585 [INFO]  * Restarting with stat
+2025-11-04 20:37:44,958 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 20:37:45,004 [WARNING]  * Debugger is active!
+2025-11-04 20:37:45,007 [INFO]  * Debugger PIN: 130-186-121
+2025-11-04 20:37:45,293 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:45] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-11-04 20:37:45,316 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:45] "GET / HTTP/1.1" 200 -
+2025-11-04 20:37:45,374 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-04 20:37:45,375 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:45] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:38:01,290 [INFO] 127.0.0.1 - - [04/Nov/2025 20:38:01] "POST /ask HTTP/1.1" 200 -
+>>>>>>> 332525cd7b03bd8683748d2296b2f5acebccef1b
