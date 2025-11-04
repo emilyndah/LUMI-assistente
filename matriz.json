@@ -1,160 +1,165 @@
-{
-  "periodo": "1º",
-  "disciplinas": [
-    {
-      "nome": "CIDADANIA, ÉTICA E ESPIRITUALIDADE",
-      "professor": "Holehon Santos Campos",
-      "dia": "Segunda-feira",
-      "horario": "19h às 20h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "INTRODUÇÃO À ENGENHARIA DE SOLUÇÕES",
-      "professor": "Henrique Valle de Lima",
-      "dia": "Segunda-feira",
-      "horario": "21h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "INTRODUÇÃO À ENGENHARIA DE SOLUÇÕES",
-      "professor": "Eder José Almeida da Silva",
-      "dia": "Terça-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "FUNDAMENTOS MATEMATICOS PARA COMPUTAÇÃO",
-      "professor": "Henrique Valle de Lima",
-      "dia": "Quarta-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "FUNDAMENTOS COMPUTACIONAIS DE INFRAESTRUTURA",
-      "professor": "Jeferson Silva Araújo",
-      "dia": "Quinta-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "FUNDAMENTOS DE ENGENHARIA DE DADOS",
-      "professor": "Fabio Pereira Botelho",
-      "dia": "Sexta-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "LEITURA E INTERPRETAÇÃO DE TEXTO",
-      "professor": "Leonardo Rodrigues de Souza",
-      "dia": "Sábado",
-      "horario": "indeterminado",
-      "sala": "Online via AVA"
-    }
-   ] ,
-  "projetos": [
-    {
-      "mes": "Outubro",
-      "titulo": "Protótipo de Infraestrutura de Rede",
-      "entrega": "28/10"
-    },
-    {
-      "mes": "Novembro",
-      "titulo": "Relatório de Coleta e Limpeza de Dados",
-      "entrega": "25/11"
-    }
-   ],
-  "provas": [
-    {
-      "va": "1ª VA",
-      "periodo": "15 a 20/09"
-    },
-    {
-      "va": "2ª VA",
-      "periodo": "27 a 31/10"
-    },
-    {
-      "va": "3ª VA",
-      "periodo": "08 a 13/12"
-    }
-   ],
-  "periodo": "2º",
-  "disciplinas": [
-    {
-      "nome": "Metodologia do Trabalho Científico",
-      "professor": "Mariana Duarte",
-      "dia": "Segunda-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "Redes e Segurança para Ambientes Digitais",
-      "professor": "Eduardo Nunes",
-      "dia": "Segunda-feira",
-      "horario": "21h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "Redes e Segurança para Ambientes Digitais",
-      "professor": "Eduardo Nunes",
-      "dia": "Terça-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "Estatística Descritiva com Projetos Reais",
-      "professor": "Simone Freitas",
-      "dia": "Quarta-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "Programação Orientada a Objetos Aplicada à IA",
-      "professor": "Felipe Martins",
-      "dia": "Quinta-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "Modelagem de Soluções com Dados",
-      "professor": "Bruna Oliveira",
-      "dia": "Sexta-feira",
-      "horario": "19h às 22h40",
-      "sala": "H103"
-    },
-    {
-      "nome": "Design de Soluções com Foco no Usuário",
-      "professor": "Daniel Souza",
-      "dia": "Sábado",
-      "horario": "indeterminado",
-      "sala": "Online via AVA"
-    }
-   ],
-  "projetos": [
-    {
-      "mes": "Setembro",
-      "titulo": "Relatório de Segurança Digital",
-      "entrega": "22/09"
-    },
-    {
-      "mes": "Novembro",
-      "titulo": "Protótipo de Interface de Usuário",
-      "entrega": "18/11"
-    }
-   ],
-  "provas": [
-    {
-      "va": "1ª VA",
-      "periodo": "15 a 20/09"
-    },
-    {
-      "va": "2ª VA",
-      "periodo": "27 a 31/10"
-    },
-    {
-      "va": "3ª VA",
-      "periodo": "08 a 13/12"
-    }
-   ],
+[
+  {
+    "periodo": "1º",
+    "disciplinas": [
+      {
+        "nome": "CIDADANIA, ÉTICA E ESPIRITUALIDADE",
+        "professor": "Holehon Santos Campos",
+        "dia": "Segunda-feira",
+        "horario": "19h às 20h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "INTRODUÇÃO À ENGENHARIA DE SOLUÇÕES",
+        "professor": "Henrique Valle de Lima",
+        "dia": "Segunda-feira",
+        "horario": "21h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "INTRODUÇÃO À ENGENHARIA DE SOLUÇÕES",
+        "professor": "Eder José Almeida da Silva",
+        "dia": "Terça-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "FUNDAMENTOS MATEMATICOS PARA COMPUTAÇÃO",
+        "professor": "Henrique Valle de Lima",
+        "dia": "Quarta-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "FUNDAMENTOS COMPUTACIONAIS DE INFRAESTRUTURA",
+        "professor": "Jeferson Silva Araújo",
+        "dia": "Quinta-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "FUNDAMENTOS DE ENGENHARIA DE DADOS",
+        "professor": "Fabio Pereira Botelho",
+        "dia": "Sexta-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "LEITURA E INTERPRETAÇÃO DE TEXTO",
+        "professor": "Leonardo Rodrigues de Souza",
+        "dia": "Sábado",
+        "horario": "indeterminado",
+        "sala": "Online via AVA"
+      }
+    ],
+    "projetos": [
+      {
+        "mes": "Outubro",
+        "titulo": "Protótipo de Infraestrutura de Rede",
+        "entrega": "28/10"
+      },
+      {
+        "mes": "Novembro",
+        "titulo": "Relatório de Coleta e Limpeza de Dados",
+        "entrega": "25/11"
+      }
+    ],
+    "provas": [
+      {
+        "va": "1ª VA",
+        "periodo": "15 a 20/09"
+      },
+      {
+        "va": "2ª VA",
+        "periodo": "27 a 31/10"
+      },
+      {
+        "va": "3ª VA",
+        "periodo": "08 a 13/12"
+      }
+    ]
+  },
+  {
+    "periodo": "2º",
+    "disciplinas": [
+      {
+        "nome": "Metodologia do Trabalho Científico",
+        "professor": "Mariana Duarte",
+        "dia": "Segunda-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "Redes e Segurança para Ambientes Digitais",
+        "professor": "Eduardo Nunes",
+        "dia": "Segunda-feira",
+        "horario": "21h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "Redes e Segurança para Ambientes Digitais",
+        "professor": "Eduardo Nunes",
+        "dia": "Terça-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "Estatística Descritiva com Projetos Reais",
+        "professor": "Simone Freitas",
+        "dia": "Quarta-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "Programação Orientada a Objetos Aplicada à IA",
+        "professor": "Felipe Martins",
+        "dia": "Quinta-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "Modelagem de Soluções com Dados",
+        "professor": "Bruna Oliveira",
+        "dia": "Sexta-feira",
+        "horario": "19h às 22h40",
+        "sala": "H103"
+      },
+      {
+        "nome": "Design de Soluções com Foco no Usuário",
+        "professor": "Daniel Souza",
+        "dia": "Sábado",
+        "horario": "indeterminado",
+        "sala": "Online via AVA"
+      }
+    ],
+    "projetos": [
+      {
+        "mes": "Setembro",
+        "titulo": "Relatório de Segurança Digital",
+        "entrega": "22/09"
+      },
+      {
+        "mes": "Novembro",
+        "titulo": "Protótipo de Interface de Usuário",
+        "entrega": "18/11"
+      }
+    ],
+    "provas": [
+      {
+        "va": "1ª VA",
+        "periodo": "15 a 20/09"
+      },
+      {
+        "va": "2ª VA",
+        "periodo": "27 a 31/10"
+      },
+      {
+        "va": "3ª VA",
+        "periodo": "08 a 13/12"
+      }
+    ]
+  },
+  {
     "periodo": "3º",
     "disciplinas": [
       {
@@ -206,7 +211,7 @@
         "horario": "indeterminado",
         "sala": "Online via AVA"
       }
-   ],
+    ],
     "projetos": [
       {
         "mes": "Outubro",
@@ -218,7 +223,7 @@
         "titulo": "MVP de Sistema Web",
         "entrega": "15/12"
       }
-   ],
+    ],
     "provas": [
       {
         "va": "1ª VA",
@@ -231,8 +236,10 @@
       {
         "va": "3ª VA",
         "periodo": "08 a 13/12"
-     }
-   ],
+      }
+    ]
+  },
+  {
     "periodo": "4º",
     "disciplinas": [
       {
@@ -284,7 +291,7 @@
         "horario": "indeterminado",
         "sala": "Online via AVA"
       }
-  ],
+    ],
     "projetos": [
       {
         "mes": "Setembro",
@@ -296,7 +303,7 @@
         "titulo": "Rede Neural Simples",
         "entrega": "20/11"
       }
-  ],
+    ],
     "provas": [
       {
         "va": "1ª VA",
@@ -310,7 +317,9 @@
         "va": "3ª VA",
         "periodo": "08 a 13/12"
       }
-  ],
+    ]
+  },
+  {
     "periodo": "5º",
     "disciplinas": [
       {
@@ -362,7 +371,7 @@
         "horario": "indeterminado",
         "sala": "Online via AVA"
       }
-  ],
+    ],
     "projetos": [
       {
         "mes": "Setembro",
@@ -374,7 +383,7 @@
         "titulo": "Simulação de Ambiente Autônomo",
         "entrega": "25/11"
       }
-  ],
+    ],
     "provas": [
       {
         "va": "1ª VA",
@@ -388,7 +397,9 @@
         "va": "3ª VA",
         "periodo": "08 a 13/12"
       }
-  ],
+    ]
+  },
+  {
     "periodo": "6º",
     "disciplinas": [
       {
@@ -440,7 +451,7 @@
         "horario": "indeterminado",
         "sala": "Online via AVA"
       }
-  ],
+    ],
     "projetos": [
       {
         "mes": "Outubro",
@@ -452,7 +463,7 @@
         "titulo": "Protótipo de Sistema Sensível ao Contexto",
         "entrega": "12/12"
       }
-  ],
+    ],
     "provas": [
       {
         "va": "1ª VA",
@@ -466,7 +477,9 @@
         "va": "3ª VA",
         "periodo": "08 a 13/12"
       }
-   ],
+    ]
+  },
+  {
     "periodo": "7º",
     "disciplinas": [
       {
@@ -518,7 +531,7 @@
         "horario": "indeterminado",
         "sala": "Online via AVA"
       }
-   ],
+    ],
     "projetos": [
       {
         "mes": "Setembro",
@@ -530,7 +543,7 @@
         "titulo": "Protótipo de Robô Autônomo",
         "entrega": "22/11"
       }
-   ],
+    ],
     "provas": [
       {
         "va": "1ª VA",
@@ -544,7 +557,9 @@
         "va": "3ª VA",
         "periodo": "08 a 13/12"
       }
-   ],
+    ]
+  },
+  {
     "periodo": "8º",
     "disciplinas": [
       {
@@ -596,7 +611,7 @@
         "horario": "indeterminado",
         "sala": "Online via AVA"
       }
-   ],
+    ],
     "projetos": [
       {
         "mes": "Outubro",
@@ -608,7 +623,7 @@
         "titulo": "Entrega Final da Residência Tecnológica II",
         "entrega": "17/12"
       }
-   ],
+    ],
     "provas": [
       {
         "va": "1ª VA",
@@ -619,8 +634,9 @@
         "periodo": "27 a 31/10"
       },
       {
-         "va": "3ª VA",
+        "va": "3ª VA",
         "periodo": "08 a 13/12"
       }
     ]
-}
+  }
+]
