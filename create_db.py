@@ -3,22 +3,17 @@
 # (create_db.py) - COM DEBUG
 # ==================================
 import os
-from app import app, db  # Esta linha IMPORTA e EXECUTA a lógica do app.py
+from app import app, db
 
 print("--- [create_db.py] Script iniciado ---")
 
-# --- VAMOS ADICIONAR O DEBUG AQUI ---
-# Vamos printar a URL que o app.py configurou ANTES de tentar qualquer coisa
+# Debug: mostra a URL configurada
 try:
     configured_url = app.config.get("SQLALCHEMY_DATABASE_URI")
     print(
         f"--- [create_db.py] DEBUG: URL configurada no app: {configured_url} ---")
 except Exception as e:
     print(f"--- [create_db.py] DEBUG: Erro ao ler config: {e} ---")
-# --- FIM DO DEBUG ---
-
-# Seta a variável de ambiente (não afeta o config já carregado, mas é uma boa prática)
-os.environ["DATABASE_URL"] = os.environ.get("DATABASE_URL", "sqlite:///")
 
 # Força o app a carregar a configuração do banco de dados
 with app.app_context():
