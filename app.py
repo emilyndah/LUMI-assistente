@@ -59,9 +59,6 @@ app.secret_key = os.environ.get(
 # --- Lógica do Banco de Dados para Produção (Render) ---
 db_url = os.environ.get("DATABASE_URL")
 if db_url:
-    # FIX: Render usa postgres://, mas SQLAlchemy precisa de postgresql://
-    if db_url.startswith("postgres://"):
-        db_url = db_url.replace("postgres://", "postgresql://", 1)
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
