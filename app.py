@@ -73,7 +73,7 @@ def db_create_all():
     """Cria as tabelas do banco de dados (usado pelo Render)."""
     with app.app_context():
         db.create_all()
-        print("Banco de dados e tabelas criados com sucesso.")
+        print("v2 - Banco de dados e tabelas criados com sucesso.")
 
 
 # Configuração Flask-Login
