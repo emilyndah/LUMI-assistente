@@ -13,6 +13,7 @@ import traceback
 from datetime import datetime
 import logging
 from dotenv import load_dotenv
+import uuid  # <-- ADICIONADO para IDs únicos
 
 import google.generativeai as genai
 from flask import (
@@ -43,10 +44,11 @@ load_dotenv()
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
 # =======================================================
+DATABASE_URL = os.getenv('DATABASE_URL')
 logging.basicConfig(
-     filename="lumi.log",
-     level=logging.INFO,
-     format="%(asctime)s [%(levelname)s] %(message)s",
+    filename="lumi.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logging.info("Servidor iniciado - monitorando eventos Lumi")
 
@@ -54,16 +56,32 @@ app = Flask(__name__)
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY", "chave_secreta_final_lumi_app_v6_save_vark"
 )
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-    os.path.dirname(__file__), "lumi_database.db"
-)
+# --- Lógica do Banco de Dados para Produção (Render) ---
+db_url = os.environ.get("DATABASE_URL")
+if db_url:
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+        os.path.dirname(__file__), "lumi_database.db"
+    )
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
+
+
+@app.cli.command("db-create-all")
+def db_create_all():
+    """Cria as tabelas do banco de dados (usado pelo Render)."""
+    with app.app_context():
+        db.create_all()
+        print("v2 - Banco de dados e tabelas criados com sucesso.")
+
 
 # Configuração Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login" # redireciona para /login se não estiver autenticado
+# redireciona para /login se não estiver autenticado
+login_manager.login_view = "login"
 login_manager.login_message = "Você precisa fazer login para acessar esta página."
 login_manager.login_message_category = "warning"
 
@@ -125,20 +143,32 @@ def load_user(user_id):
 # =======================================================
 # 1. CONSTANTES E CONFIGURAÇÃO DO GEMINI
 # =======================================================
-# --- MUDANÇA 1 ---
-# Agora apenas configuramos a API Key aqui.
-# A inicialização do 'model' foi movida para DEPOIS do contexto ser carregado.
 GEMINI_API_KEY = None
-model = None # Será inicializado APÓS o contexto ser carregado
+model = None 
 try:
     GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
-    genai.configure(api_key=GEMINI_API_KEY) # Configura a API aqui
+    genai.configure(api_key=GEMINI_API_KEY) 
 except KeyError:
     print("=" * 80)
     print("ERRO: Variável de ambiente GEMINI_API_KEY não encontrada.")
     print("Por favor, crie um arquivo .env e adicione a linha:")
     print("GEMINI_API_KEY=SUA_CHAVE_AQUI")
     print("=" * 80)
+
+# --- Configuração do Modelo ---
+if GEMINI_API_KEY:
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+        model = genai.GenerativeModel(
+            "gemini-2.5-flash") 
+
+        print("✅ Modelo Gemini inicializado com sucesso (gemini-2.5-flash).")
+    except Exception as e:
+        print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
+        GEMINI_API_KEY = None
+
+else:
+    print("⚠️ API Key do Gemini não encontrada. O Chatbot não funcionará.")
 
 
 # =======================================================
@@ -162,33 +192,35 @@ def carregar_dados_json(arquivo):
         traceback.print_exc()
         return None
 
+# --- NOVA FUNÇÃO PARA SALVAR JSON ---
+def salvar_dados_json(arquivo, dados):
+    """Função genérica para salvar dados em um arquivo JSON."""
+    try:
+        caminho_arquivo = os.path.join(os.path.dirname(__file__), arquivo)
+        with open(caminho_arquivo, "w", encoding="utf-8") as f:
+            json.dump(dados, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"ERRO: Falha ao salvar JSON em {arquivo}. Detalhe: {e}")
+        traceback.print_exc()
+        return False
+# ------------------------------------
 
 def carregar_calendario():
     """Carrega, formata e ordena os eventos do calendário."""
     meses_map = {
-        1: "JAN",
-        2: "FEV",
-        3: "MAR",
-        4: "ABR",
-        5: "MAI",
-        6: "JUN",
-        7: "JUL",
-        8: "AGO",
-        9: "SET",
-        10: "OUT",
-        11: "NOV",
-        12: "DEZ",
+        1: "JAN", 2: "FEV", 3: "MAR", 4: "ABR", 5: "MAI", 6: "JUN",
+        7: "JUL", 8: "AGO", 9: "SET", 10: "OUT", 11: "NOV", 12: "DEZ",
     }
     eventos = []
+    # --- CORREÇÃO AQUI: Usa o padrão "id" e "title" do FullCalendar ---
     dados = carregar_dados_json("calendario.json")
     if dados is None:
         print("AVISO: calendario.json não foi carregado. Retornando lista vazia.")
         return []
 
     if not isinstance(dados, list):
-        print(
-            "AVISO: calendario.json possui formato inválido. Esperada lista de eventos."
-        )
+        print("AVISO: calendario.json possui formato inválido. Esperada lista de eventos.")
         return []
 
     for item in dados:
@@ -196,9 +228,16 @@ def carregar_calendario():
             print(f"AVISO: Evento ignorado por formato inválido: {item}")
             continue
 
-        data_inicio = item.get("data_inicio")
+        # Nomes de campo do JSON do usuário (data_inicio, descricao)
+        data_inicio = item.get("data_inicio") 
         descricao = item.get("descricao", "Evento sem descrição")
         data_fim = item.get("data_fim")
+        
+        # Nomes de campo internos do App (id, type, description)
+        event_id = item.get("id", str(uuid.uuid4())) # Gera ID se não existir
+        event_type = item.get("type", "Outro")
+        event_description = item.get("description", "")
+
 
         if not data_inicio:
             print(f"AVISO: Evento sem data de início ignorado: {item}")
@@ -213,18 +252,21 @@ def carregar_calendario():
         data_fim_iso = None
         if data_fim:
             try:
-                data_fim_iso = datetime.strptime(data_fim, "%Y-%m-%d").strftime(
-                    "%Y-%m-%d"
-                )
+                data_fim_iso = datetime.strptime(data_fim, "%Y-%m-%d").strftime("%Y-%m-%d")
             except ValueError:
                 print(f"AVISO: Data final inválida ignorada: {data_fim}")
 
         eventos.append(
             {
-                "data": data_inicio_obj.strftime("%d/%m/%Y"),
-                "evento": descricao,
+                # Dados para o FullCalendar.js (padrão)
+                "id": event_id,
+                "title": descricao,  # FullCalendar usa 'title'
+                "date": data_inicio, # FullCalendar usa 'date' ou 'start'
+                "type": event_type,
+                "description": event_description,
+
+                # Dados antigos (para manter compatibilidade se houver)
                 "data_obj": data_inicio_obj,
-                "data_iso": data_inicio,
                 "data_fim": data_fim_iso,
                 "mes_curto": meses_map.get(data_inicio_obj.month),
             }
@@ -238,7 +280,6 @@ def carregar_matriz():
     if dados and isinstance(dados, list):
         return dados
     elif dados and isinstance(dados, dict):
-        # Suporte ao formato antigo que era um objeto único
         print("AVISO: matriz.json em formato antigo (objeto único). Convertendo para lista.")
         return [dados]
     else:
@@ -263,9 +304,7 @@ def carregar_contexto_inicial():
         with open("informacoes.txt", "r", encoding="utf-8") as f:
             contexto_base = f.read()
     except FileNotFoundError:
-        print(
-            "Aviso: 'informacoes.txt' não encontrado. O chatbot pode não ter contexto."
-        )
+        print("Aviso: 'informacoes.txt' não encontrado. O chatbot pode não ter contexto.")
         contexto_base = "Você é um assistente acadêmico chamado Lumi, focado em ajudar alunos da UniEVANGÉLICA."
     except Exception as e:
         print(f"Erro ao ler 'informacoes.txt': {e}")
@@ -274,24 +313,24 @@ def carregar_contexto_inicial():
     # 2. Carrega e formata o Calendário
     print("Carregando Calendário para o contexto...")
     try:
-        eventos = carregar_calendario() # Função já existente
+        eventos = carregar_calendario() 
         if eventos:
             contexto_calendario = "\n\n=== CALENDÁRIO ACADÊMICO (Use para responder perguntas sobre datas) ===\n"
             for evento in eventos:
-                data_str = evento.get("data") # "dd/mm/YYYY"
-                desc = evento.get("evento")
+                data_str = evento.get("data_obj").strftime('%d/%m/%Y')
+                desc = evento.get("title") # Usa 'title'
                 data_fim_str = ""
-                if evento.get("data_fim") and evento.get("data_fim") != evento.get("data_iso"):
-                     try:
-                         data_fim_obj = datetime.strptime(evento["data_fim"], "%Y-%m-%d")
-                         data_fim_str = f" até {data_fim_obj.strftime('%d/%m/%Y')}"
-                     except ValueError:
-                         pass
+                if evento.get("data_fim") and evento.get("data_fim") != evento.get("date"):
+                    try:
+                        data_fim_obj = datetime.strptime(evento["data_fim"], "%Y-%m-%d")
+                        data_fim_str = f" até {data_fim_obj.strftime('%d/%m/%Y')}"
+                    except ValueError:
+                        pass
                 contexto_calendario += f"- Em {data_str}{data_fim_str}: {desc}\n"
             contexto_calendario += "======================================================================\n"
             print(f"Calendário carregado. {len(eventos)} eventos.")
         else:
-             print("AVISO: Não foi possível carregar os eventos do calendário no contexto.")
+            print("AVISO: Não foi possível carregar os eventos do calendário no contexto.")
     except Exception as e:
         print(f"ERRO ao processar calendário para o contexto: {e}")
         traceback.print_exc()
@@ -299,7 +338,7 @@ def carregar_contexto_inicial():
     # 3. Carrega e formata a Matriz Curricular
     print("Carregando Matriz Curricular para o contexto...")
     try:
-        matriz_data = carregar_matriz() # Função já existente
+        matriz_data = carregar_matriz() 
         if matriz_data:
             contexto_matriz = "\n\n=== MATRIZ CURRICULAR (Use para responder sobre aulas, professores, horários e salas) ===\n"
             for periodo_info in matriz_data:
@@ -308,19 +347,16 @@ def carregar_contexto_inicial():
                 disciplinas = periodo_info.get('disciplinas', [])
                 if not disciplinas:
                     contexto_matriz += "(Nenhuma disciplina listada para este período)\n"
-                
                 for disc in disciplinas:
                     nome = disc.get('nome', 'Sem nome')
                     prof = disc.get('professor', 'A definir')
                     dia = disc.get('dia', 'A definir')
                     horario = disc.get('horario', 'A definir')
                     sala = disc.get('sala', 'A definir')
-                    
                     contexto_matriz += f"- Disciplina: {nome}\n"
                     contexto_matriz += f"  Professor: {prof}\n"
                     contexto_matriz += f"  Horário: {dia}, {horario}\n"
                     contexto_matriz += f"  Sala: {sala}\n\n"
-                    
             contexto_matriz += "======================================================================\n"
             print("Matriz Curricular carregada para o contexto.")
         else:
@@ -332,21 +368,19 @@ def carregar_contexto_inicial():
     # 4. Carrega e formata os Métodos de Estudo (VARK)
     print("Carregando Métodos de Estudo (VARK) para o contexto...")
     try:
-        vark_data = carregar_quiz_vark() # Função já existente
-        resultados_vark = vark_data.get('resultados') 
+        vark_data = carregar_quiz_vark() 
+        resultados_vark = vark_data.get('resultados')
         if resultados_vark:
             contexto_vark = "\n\n=== MÉTODOS DE ESTUDO (Use para explicar os estilos VARK) ===\n"
             for tipo, info in resultados_vark.items():
                 titulo = info.get('titulo', tipo)
                 desc = info.get('descricao', 'Sem descrição.')
                 metodos = info.get('metodos', [])
-                
                 contexto_vark += f"\n--- {titulo} ({tipo}) ---\n"
                 contexto_vark += f"{desc}\n"
                 contexto_vark += "Métodos sugeridos:\n"
                 for m in metodos:
                     contexto_vark += f"  - {m}\n"
-                    
             contexto_vark += "======================================================================\n"
             print("Métodos VARK carregados para o contexto.")
         else:
@@ -367,20 +401,16 @@ CONTEXTO_INICIAL = carregar_contexto_inicial()
 # =======================================================
 # 1.5. INICIALIZAÇÃO DO MODELO GEMINI (COM CONTEXTO)
 # =======================================================
-# --- MUDANÇA 2 ---
-# Movemos a inicialização do modelo para DEPOIS de carregar o contexto,
-# para que possamos injetá-lo como "system_instruction".
-# Isso resolve o problema do "cookie too large".
 if GEMINI_API_KEY:
     try:
         model = genai.GenerativeModel(
             "gemini-2.5-flash",
-            system_instruction=CONTEXTO_INICIAL # <-- AQUI ESTÁ A MÁGICA!
+            system_instruction=CONTEXTO_INICIAL 
         )
         print("✅ Modelo Gemini inicializado com system_instruction (contexto completo).")
     except Exception as e:
         print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
-        GEMINI_API_KEY = None # Garante que o app não tente usar um modelo falho
+        GEMINI_API_KEY = None 
 else:
     print("⚠️ API Key não encontrada. O Chatbot não funcionará.")
 
@@ -388,11 +418,6 @@ else:
 # =======================================================
 # 3. ROTAS PRINCIPAIS (LOGIN, PÁGINAS, ETC.)
 # =======================================================
-
-# --- MUDANÇA 3 ---
-# O CONTEXTO_INICIAL FOI REMOVIDO DAQUI.
-# Ele agora vive dentro do 'model' (system_instruction).
-# A sessão guardará APENAS as perguntas e respostas (que é pequeno).
 def get_initial_chat_history():
     """Retorna a estrutura de histórico inicial para a sessão."""
     return [
@@ -463,7 +488,8 @@ def login():
         identifier = request.form.get("login_identifier")
         password = request.form.get("password")
         user = User.query.filter(
-            (getattr(User, "email") == identifier) | (getattr(User, "matricula") == identifier)
+            (getattr(User, "email") == identifier) | (
+                getattr(User, "matricula") == identifier)
         ).first()
 
         if user and user.check_password(password):
@@ -512,7 +538,9 @@ def faq():
 def calendario():
     eventos_data = carregar_calendario()
     if not eventos_data:
-        flash("Não foi possível carregar os eventos do calendário.", "danger")
+        # Não é um erro 'danger' se o arquivo estiver apenas vazio
+        flash("Nenhum evento encontrado no calendário.", "info")
+    # Envia os dados para o template com o nome 'eventos_data'
     return render_template("calendario.html", eventos_data=eventos_data)
 
 
@@ -575,7 +603,7 @@ def metodo_de_estudo():
 
 
 # =======================================================
-# 4. ROTAS DA API (CHAT E SALVAR VARK)
+# 4. ROTAS DA API (CHAT, VARK E NOVAS ROTAS DE CALENDÁRIO)
 # =======================================================
 
 
@@ -596,19 +624,13 @@ def ask():
     pergunta = data["pergunta"]
 
     try:
-        # Pega o histórico PEQUENO da sessão
         historico_chat = session.get("historico", get_initial_chat_history())
 
-        # Inicia o chat. O 'model' já sabe o CONTEXTO (system_instruction).
-        # Nós passamos apenas o histórico da conversa.
         chat = model.start_chat(history=historico_chat)
         response = chat.send_message(pergunta)
 
-        # Adiciona a pergunta e resposta ao histórico PEQUENO
         historico_chat.append({"role": "user", "parts": [pergunta]})
         historico_chat.append({"role": "model", "parts": [response.text]})
-        
-        # Salva o histórico PEQUENO de volta na sessão
         session["historico"] = historico_chat
 
         return jsonify({"resposta": response.text})
@@ -628,12 +650,16 @@ def save_vark_result():
     """Recebe os resultados do quiz VARK e salva no perfil do usuário."""
     data = request.json
     if not data or "scores" not in data or "primaryType" not in data:
+        print(
+            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
-    
+
     scores = data["scores"]
     primary_type = data["primaryType"]
 
     if not isinstance(scores, dict) or not isinstance(primary_type, str):
+        print(
+            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
         return jsonify({"success": False, "message": "Tipos de dados inválidos."}), 400
     if not all(k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]):
         return jsonify({"success": False, "message": "Formato de scores inválido."}), 400
@@ -651,12 +677,83 @@ def save_vark_result():
         )
     except Exception as e:
         db.session.rollback()
-        print(f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
+        print(
+            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
         traceback.print_exc()
         return (
             jsonify({"success": False, "message": f"Erro interno do servidor: {e}"}),
             500,
         )
+
+# =======================================================
+# === NOVAS ROTAS DO CALENDÁRIO (SAVE E DELETE) ===
+# =======================================================
+
+@app.route("/save_calendar_event", methods=["POST"])
+@login_required
+def save_calendar_event():
+    """Salva (cria ou atualiza) um evento no calendario.json."""
+    data = request.json
+    if not data or not data.get('title') or not data.get('date'):
+        return jsonify({"success": False, "message": "Dados incompletos."}), 400
+
+    # Carrega todos os eventos atuais
+    eventos = carregar_dados_json("calendario.json") or []
+    event_id = data.get("id")
+    
+    evento_salvo = {
+        "id": event_id if event_id else str(uuid.uuid4()),
+        "data_inicio": data.get("date"),
+        "descricao": data.get("title"),
+        "type": data.get("type", "Outro"),
+        "description": data.get("description", "")
+        # Nota: 'data_fim' não está no formulário do modal, pode ser adicionado se necessário
+    }
+
+    if event_id:
+        # Atualizar: Encontra o evento e o substitui
+        evento_encontrado = False
+        for i, evento in enumerate(eventos):
+            if evento.get("id") == event_id:
+                eventos[i] = evento_salvo
+                evento_encontrado = True
+                break
+        if not evento_encontrado:
+             eventos.append(evento_salvo) # Se não achou o ID, adiciona como novo
+    else:
+        # Criar: Adiciona novo evento
+        eventos.append(evento_salvo)
+
+    # Salva o arquivo JSON de volta
+    if salvar_dados_json("calendario.json", eventos):
+        return jsonify({"success": True, "message": "Evento salvo com sucesso."})
+    else:
+        return jsonify({"success": False, "message": "Erro ao salvar o arquivo JSON."}), 500
+
+
+@app.route("/delete_calendar_event", methods=["POST"])
+@login_required
+def delete_calendar_event():
+    """Exclui um evento do calendario.json."""
+    data = request.json
+    event_id = data.get("id")
+    if not event_id:
+        return jsonify({"success": False, "message": "ID do evento não fornecido."}), 400
+
+    eventos = carregar_dados_json("calendario.json") or []
+    
+    # Cria uma nova lista sem o evento a ser excluído
+    novos_eventos = [evento for evento in eventos if evento.get("id") != event_id]
+
+    if len(novos_eventos) == len(eventos):
+        # Nenhum evento foi removido (ID não encontrado)
+        return jsonify({"success": False, "message": "Evento não encontrado."}), 404
+
+    # Salva a nova lista de volta no arquivo
+    if salvar_dados_json("calendario.json", novos_eventos):
+        return jsonify({"success": True, "message": "Evento excluído com sucesso."})
+    else:
+        return jsonify({"success": False, "message": "Erro ao salvar o arquivo JSON."}), 500
 
 
 # =======================================================
