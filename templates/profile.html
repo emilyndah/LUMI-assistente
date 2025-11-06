@@ -2,78 +2,120 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil - Lumi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Registro - Lumi Assistente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Estilos básicos para a página de perfil */
-        .profile-container {
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f7f9fc; font-family: 'Poppins', sans-serif;}
+        .auth-container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .auth-container img { height: 50px; margin-bottom: 20px;}
+        .auth-container h1 { color: #4B8BEA; margin-bottom: 30px; font-weight: 600;}
+        .auth-container label { display: block; text-align: left; margin-bottom: 5px; font-weight: 500; color: #555; font-size: 0.9em;}
+        .auth-container input[type="text"],
+        .auth-container input[type="email"],
+        .auth-container input[type="password"] { 
+            width: 100%; 
+            padding: 10px; 
+            margin-bottom: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 1em; 
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+        }
+        
+        /* --- ESTILO ADICIONADO PARA OS MENUS --- */
+        .auth-container select {
             width: 100%;
-            max-width: 600px; /* Largura da caixa */
-            margin: 30px auto;
-            background: white;
-            padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+            background-color: white;
+            color: #555;
+            box-sizing: border-box;
         }
-        .profile-container h1 {
-            color: #4B8BEA;
-            margin-bottom: 25px;
-        }
-        .profile-info p {
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 15px;
-            text-align: left; /* Alinha informações à esquerda */
-            border-bottom: 1px solid #eee; /* Linha separadora */
-            padding-bottom: 10px;
-        }
-        .profile-info strong {
-            color: #4B8BEA;
-            display: inline-block;
-            width: 120px; /* Largura fixa para os rótulos */
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: #4B8BEA;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        /* ------------------------------------- */
+
+        .auth-container button { width: 100%; padding: 12px; background: #4B8BEA; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1em; font-weight: 600; transition: background-color 0.2s ease;}
+        .auth-container button:hover { background: #3a74d3;}
+        .auth-container .link { margin-top: 20px; font-size: 0.9em;}
+        .auth-container .link a { color: #4B8BEA; text-decoration: none; font-weight: 600;}
+        
+        .flash-messages { list-style: none; padding: 0; margin-bottom: 20px; }
+        .flash-messages li { padding: 10px 15px; border-radius: 5px; font-size: 0.9em; margin-bottom: 10px; }
+        .flash-messages .danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .flash-messages .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
     </style>
 </head>
 <body>
-    <header>
-        <a href="{{ url_for('index') }}">
-             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
-        </a>
-       <div style="position: absolute; right: 20px; top: 20px; font-size: 0.9em;">
-           {% if current_user.is_authenticated %}
-               <span>Olá, {{ current_user.username }}!</span>
-               <a href="{{ url_for('logout') }}" style="margin-left: 15px; color: #e74c3c; text-decoration: none;">Logout</a>
-           {% endif %}
-       </div>
-    </header>
+    <div class="auth-container">
+        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi"></a>
+        <h1>Criar Conta</h1>
 
-    <main class="faq-page"> <section class="profile-container">
-            <h1>Meu Perfil</h1>
-            {% if current_user.is_authenticated %}
-            <div class="profile-info">
-                <p><strong>Utilizador:</strong> {{ current_user.username }}</p>
-                <p><strong>Email:</strong> {{ current_user.email }}</p>
-                <p><strong>Matrícula:</strong> {{ current_user.matricula }}</p>
-                </div>
-            {% else %}
-            <p>Erro: Não foi possível carregar as informações do utilizador.</p>
-            {% endif %}
-            <a href="{{ url_for('index') }}" class="back-link">← Voltar para o Chat</a>
-        </section>
-    </main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
 
+        <form method="POST" action="{{ url_for('register') }}">
+            <div>
+                <label for="username">Nome de Utilizador:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="email">Email:</label> 
+                <input type="email" id="email" name="email" required>
+            </div>
+             <div>
+                <label for="matricula">Matrícula UniEvangélica:</label>
+                <input type="text" id="matricula" name="matricula" required> 
+            </div>
+            
+            <div>
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" required> 
+            </div>
+            <div>
+                <label for="telefone">Telefone (Opcional):</label>
+                <input type="text" id="telefone" name="telefone"> 
+            </div>
+            <div>
+                <label for="sexo">Sexo (Opcional):</label>
+                <select id="sexo" name="sexo">
+                    <option value="" selected>Prefiro não informar</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                </select>
+            </div>
+            <div>
+                <label for="etnia">Etnia (Opcional):</label>
+                <select id="etnia" name="etnia">
+                    <option value="" selected>Prefiro não informar</option>
+                    <option value="Branca">Branca</option>
+                    <option value="Preta">Preta</option>
+                    <option value="Parda">Parda</option>
+                    <option value="Amarela">Amarela</option>
+                    <option value="Indígena">Indígena</option>
+                </select>
+            </div>
+            <div>
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+             <div>
+                <label for="password_confirm">Confirmar Senha:</label>
+                <input type="password" id="password_confirm" name="password_confirm" required>
+            </div>
+            <button type="submit">Registar</button>
+        </form>
+        <p class="link">Já tem conta? <a href="{{ url_for('login') }}">Faça login</a></p>
+    </div>
 </body>
 </html>
