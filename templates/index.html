@@ -17,9 +17,11 @@
         <div class="user-area">
             {% if current_user.is_authenticated %}
                 <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
+                
                 <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
                     <div class="profile-icon">{{ current_user.username[0]|upper if current_user.username else '?' }}</div>
                 </a>
+                
                 <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
             {% else %}
                  <a href="{{ url_for('login') }}" class="login-link">Login</a>
