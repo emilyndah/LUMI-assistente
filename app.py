@@ -13,7 +13,7 @@ import traceback
 from datetime import datetime
 import logging
 from dotenv import load_dotenv
-import uuid  # <-- ADICIONADO para IDs únicos
+import uuid 
 
 import google.generativeai as genai
 from flask import (
@@ -80,14 +80,13 @@ def db_create_all():
 # Configuração Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
-# redireciona para /login se não estiver autenticado
 login_manager.login_view = "login"
 login_manager.login_message = "Você precisa fazer login para acessar esta página."
 login_manager.login_message_category = "warning"
 
 
 # =======================================================
-# MODELO DE DADOS (User - Atualizado com VARK)
+# MODELO DE DADOS (User - Atualizado com NOVOS CAMPOS)
 # =======================================================
 class User(db.Model, UserMixin):
 
@@ -95,13 +94,17 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     matricula = db.Column(db.String(80), unique=True, nullable=False)
-
     password_hash = db.Column(db.String(256), nullable=False)
+
+    cpf = db.Column(db.String(14), unique=True, nullable=False) 
+    telefone = db.Column(db.String(20), nullable=True) 
+    sexo = db.Column(db.String(30), nullable=True) 
+    etnia = db.Column(db.String(50), nullable=True) 
+    
     vark_scores_json = db.Column(db.Text, nullable=True)
     vark_primary_type = db.Column(db.String(10), nullable=True)
 
     def get_vark_scores(self):
-        """Retorna os scores VARK como dicionário."""
         if not self.vark_scores_json:
             return None
         try:
@@ -110,21 +113,25 @@ class User(db.Model, UserMixin):
             return None
 
     def set_password(self, password):
-        """Cria um hash da senha e o armazena."""
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        """Verifica se a senha em texto puro bate com o hash armazenado."""
         if not self.password_hash:
             return False
         return check_password_hash(self.password_hash, password)
 
-    def __init__(self, username, email, matricula, password=None):
+    def __init__(self, username, email, matricula, password=None, cpf=None, telefone=None, sexo=None, etnia=None):
         self.username = username
         self.email = email
         self.matricula = matricula
         if password:
             self.set_password(password)
+        
+        self.cpf = cpf
+        self.telefone = telefone
+        self.sexo = sexo
+        self.etnia = etnia
+        
         self.vark_scores_json = None
         self.vark_primary_type = None
 
@@ -155,7 +162,6 @@ except KeyError:
     print("GEMINI_API_KEY=SUA_CHAVE_AQUI")
     print("=" * 80)
 
-# --- Configuração do Modelo ---
 if GEMINI_API_KEY:
     try:
         genai.configure(api_key=GEMINI_API_KEY)
@@ -166,7 +172,6 @@ if GEMINI_API_KEY:
     except Exception as e:
         print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
         GEMINI_API_KEY = None
-
 else:
     print("⚠️ API Key do Gemini não encontrada. O Chatbot não funcionará.")
 
@@ -176,7 +181,6 @@ else:
 # =======================================================
 
 def carregar_dados_json(arquivo):
-    """Função genérica para carregar dados de um arquivo JSON."""
     try:
         caminho_arquivo = os.path.join(os.path.dirname(__file__), arquivo)
         with open(caminho_arquivo, "r", encoding="utf-8") as f:
@@ -192,11 +196,7 @@ def carregar_dados_json(arquivo):
         traceback.print_exc()
         return None
 
-# --- NOVA FUNÇÃO PARA SALVAR JSON ---
-
-
 def salvar_dados_json(arquivo, dados):
-    """Função genérica para salvar dados em um arquivo JSON."""
     try:
         caminho_arquivo = os.path.join(os.path.dirname(__file__), arquivo)
         with open(caminho_arquivo, "w", encoding="utf-8") as f:
@@ -206,17 +206,14 @@ def salvar_dados_json(arquivo, dados):
         print(f"ERRO: Falha ao salvar JSON em {arquivo}. Detalhe: {e}")
         traceback.print_exc()
         return False
-# ------------------------------------
 
 
 def carregar_calendario():
-    """Carrega, formata e ordena os eventos do calendário."""
     meses_map = {
         1: "JAN", 2: "FEV", 3: "MAR", 4: "ABR", 5: "MAI", 6: "JUN",
         7: "JUL", 8: "AGO", 9: "SET", 10: "OUT", 11: "NOV", 12: "DEZ",
     }
     eventos = []
-    # --- CORREÇÃO AQUI: Usa o padrão "id" e "title" do FullCalendar ---
     dados = carregar_dados_json("calendario.json")
     if dados is None:
         print("AVISO: calendario.json não foi carregado. Retornando lista vazia.")
@@ -231,13 +228,10 @@ def carregar_calendario():
             print(f"AVISO: Evento ignorado por formato inválido: {item}")
             continue
 
-        # Nomes de campo do JSON do usuário (data_inicio, descricao)
-        data_inicio = item.get("data_inicio")
+        data_inicio = item.get("data_inicio") 
         descricao = item.get("descricao", "Evento sem descrição")
         data_fim = item.get("data_fim")
-
-        # Nomes de campo internos do App (id, type, description)
-        event_id = item.get("id", str(uuid.uuid4()))  # Gera ID se não existir
+        event_id = item.get("id", str(uuid.uuid4())) 
         event_type = item.get("type", "Outro")
         event_description = item.get("description", "")
 
@@ -259,26 +253,19 @@ def carregar_calendario():
             except ValueError:
                 print(f"AVISO: Data final inválida ignorada: {data_fim}")
 
-        eventos.append(
-            {
-                # Dados para o FullCalendar.js (padrão)
-                "id": event_id,
-                "title": descricao,  # FullCalendar usa 'title'
-                "date": data_inicio,  # FullCalendar usa 'date' ou 'start'
-                "type": event_type,
-                "description": event_description,
-
-                # Dados antigos (para manter compatibilidade se houver)
-                "data_obj": data_inicio_obj,
-                "data_fim": data_fim_iso,
-                "mes_curto": meses_map.get(data_inicio_obj.month),
-            }
-        )
+        eventos.append({
+            "id": event_id,
+            "title": descricao, 
+            "date": data_inicio, 
+            "type": event_type,
+            "description": event_description,
+            "data_obj": data_inicio_obj,
+            "data_fim": data_fim_iso,
+            "mes_curto": meses_map.get(data_inicio_obj.month),
+        })
     return sorted(eventos, key=lambda x: x["data_obj"])
 
-
 def carregar_matriz():
-    """Carrega dados da matriz curricular."""
     dados = carregar_dados_json("matriz.json")
     if dados and isinstance(dados, list):
         return dados
@@ -290,14 +277,10 @@ def carregar_matriz():
         print("AVISO: Falha ao carregar ou formato inválido para matriz.json.")
         return None
 
-
 def carregar_quiz_vark():
-    """Carrega dados do quiz VARK."""
     return carregar_dados_json("metodo_estudo.json")
 
-
 def carregar_contexto_inicial():
-    """Carrega o contexto base e adiciona dados do calendário, matriz e métodos de estudo."""
     contexto_base = ""
     contexto_calendario = ""
     contexto_matriz = ""
@@ -322,7 +305,7 @@ def carregar_contexto_inicial():
             contexto_calendario = "\n\n=== CALENDÁRIO ACADÊMICO (Use para responder perguntas sobre datas) ===\n"
             for evento in eventos:
                 data_str = evento.get("data_obj").strftime('%d/%m/%Y')
-                desc = evento.get("title")  # Usa 'title'
+                desc = evento.get("title") 
                 data_fim_str = ""
                 if evento.get("data_fim") and evento.get("data_fim") != evento.get("date"):
                     try:
@@ -400,8 +383,6 @@ def carregar_contexto_inicial():
     print("Contexto inicial montado com sucesso.")
     return contexto_base + contexto_calendario + contexto_matriz + contexto_vark
 
-
-# A variável CONTEXTO_INICIAL é carregada aqui
 CONTEXTO_INICIAL = carregar_contexto_inicial()
 
 
@@ -445,30 +426,41 @@ def get_initial_chat_history():
 def register():
     """Lida com o registro de novos usuários."""
     if current_user.is_authenticated:
-        return redirect(url_for("index"))
+        return redirect(url_for("index")) # Redireciona para o Menu se já logado
 
     if request.method == "POST":
         email = request.form.get("email")
         username = request.form.get("username")
         matricula = request.form.get("matricula")
         password = request.form.get("password")
+        cpf = request.form.get("cpf")
+        telefone = request.form.get("telefone")
+        sexo = request.form.get("sexo")
+        etnia = request.form.get("etnia")
 
         user_by_email = User.query.filter_by(email=email).first()
         user_by_matricula = User.query.filter_by(matricula=matricula).first()
+        user_by_cpf = User.query.filter_by(cpf=cpf).first() 
 
         if user_by_email:
             flash("Este e-mail já está cadastrado. Tente fazer login.", "warning")
             return redirect(url_for("login"))
-
         if user_by_matricula:
             flash("Esta matrícula já está cadastrada. Tente fazer login.", "warning")
+            return redirect(url_for("login"))
+        if user_by_cpf: 
+            flash("Este CPF já está cadastrado. Tente fazer login.", "warning")
             return redirect(url_for("login"))
 
         try:
             new_user = User(
                 email=email,
                 username=username,
-                matricula=matricula
+                matricula=matricula,
+                cpf=cpf,
+                telefone=telefone,
+                sexo=sexo,
+                etnia=etnia
             )
             new_user.set_password(password)
             db.session.add(new_user)
@@ -476,8 +468,7 @@ def register():
 
             login_user(new_user)
             flash("Conta criada com sucesso! Você foi logado.", "success")
-            return redirect(url_for("index"))
-
+            return redirect(url_for("index")) # Redireciona para o Menu
         except Exception as e:
             db.session.rollback()
             print(f"Erro ao registrar usuário: {e}")
@@ -490,22 +481,23 @@ def register():
 def login():
     """Lida com o login do usuário."""
     if current_user.is_authenticated:
-        return redirect(url_for("index"))
+        return redirect(url_for("index")) # Redireciona para o Menu se já logado
 
     if request.method == "POST":
         identifier = request.form.get("login_identifier")
         password = request.form.get("password")
         user = User.query.filter(
-            (getattr(User, "email") == identifier) | (
-                getattr(User, "matricula") == identifier)
+            (getattr(User, "email") == identifier) | 
+            (getattr(User, "matricula") == identifier) |
+            (getattr(User, "cpf") == identifier) 
         ).first()
 
         if user and user.check_password(password):
             login_user(user)
             flash("Login realizado com sucesso!", "success")
-            return redirect(url_for("index"))
+            return redirect(url_for("index")) # Redireciona para o Menu
         else:
-            flash("E-mail/Matrícula ou senha inválidos. Tente novamente.", "danger")
+            flash("Email/Matrícula/CPF ou senha inválidos. Tente novamente.", "danger")
 
     return render_template("login.html")
 
@@ -519,14 +511,27 @@ def logout():
     return redirect(url_for("login"))
 
 
+# =======================================================
+# === MUDANÇA NA ESTRUTURA DAS ROTAS ===
+# =======================================================
+
 @app.route("/")
 @login_required
 def index():
-    """Renderiza a página inicial do chat."""
-    if "historico" not in session:
-        session["historico"] = get_initial_chat_history()
+    """Renderiza a página inicial do MENU."""
+    # (O arquivo index.html agora é o MENU)
     return render_template("index.html")
 
+@app.route("/chat")
+@login_required
+def chat():
+    """Renderiza a página do CHAT."""
+    if "historico" not in session:
+        session["historico"] = get_initial_chat_history()
+    # (O arquivo chat.html é a página do CHAT)
+    return render_template("chat.html")
+
+# =======================================================
 
 @app.route("/profile")
 @login_required
@@ -546,9 +551,7 @@ def faq():
 def calendario():
     eventos_data = carregar_calendario()
     if not eventos_data:
-        # Não é um erro 'danger' se o arquivo estiver apenas vazio
         flash("Nenhum evento encontrado no calendário.", "info")
-    # Envia os dados para o template com o nome 'eventos_data'
     return render_template("calendario.html", eventos_data=eventos_data)
 
 
@@ -574,9 +577,12 @@ def modo_foco():
 @app.route("/limpar")
 @login_required
 def limpar_chat():
-    """Limpa o histórico do chat da sessão e redireciona para o início."""
+    """Limpa o histórico do chat da sessão e redireciona para o CHAT."""
     session["historico"] = get_initial_chat_history()
-    return redirect(url_for("index"))
+    # =======================================================
+    # === CORREÇÃO APLICADA AQUI ===
+    # =======================================================
+    return redirect(url_for("index")) # Redireciona de volta para o menu/chat principal
 
 
 @app.route("/metodo_de_estudo")
@@ -611,7 +617,7 @@ def metodo_de_estudo():
 
 
 # =======================================================
-# 4. ROTAS DA API (CHAT, VARK E NOVAS ROTAS DE CALENDÁRIO)
+# 4. ROTAS DA API (CHAT, VARK E CALENDÁRIO)
 # =======================================================
 
 
@@ -655,7 +661,6 @@ def ask():
 @app.route("/save_vark_result", methods=["POST"])
 @login_required
 def save_vark_result():
-    """Recebe os resultados do quiz VARK e salva no perfil do usuário."""
     data = request.json
     if not data or "scores" not in data or "primaryType" not in data:
         print(
@@ -693,20 +698,15 @@ def save_vark_result():
             500,
         )
 
-# =======================================================
-# === NOVAS ROTAS DO CALENDÁRIO (SAVE E DELETE) ===
-# =======================================================
 
 
 @app.route("/save_calendar_event", methods=["POST"])
 @login_required
 def save_calendar_event():
-    """Salva (cria ou atualiza) um evento no calendario.json."""
     data = request.json
     if not data or not data.get('title') or not data.get('date'):
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
 
-    # Carrega todos os eventos atuais
     eventos = carregar_dados_json("calendario.json") or []
     event_id = data.get("id")
 
@@ -716,11 +716,9 @@ def save_calendar_event():
         "descricao": data.get("title"),
         "type": data.get("type", "Outro"),
         "description": data.get("description", "")
-        # Nota: 'data_fim' não está no formulário do modal, pode ser adicionado se necessário
     }
 
     if event_id:
-        # Atualizar: Encontra o evento e o substitui
         evento_encontrado = False
         for i, evento in enumerate(eventos):
             if evento.get("id") == event_id:
@@ -728,13 +726,10 @@ def save_calendar_event():
                 evento_encontrado = True
                 break
         if not evento_encontrado:
-            # Se não achou o ID, adiciona como novo
-            eventos.append(evento_salvo)
+             eventos.append(evento_salvo) 
     else:
-        # Criar: Adiciona novo evento
         eventos.append(evento_salvo)
 
-    # Salva o arquivo JSON de volta
     if salvar_dados_json("calendario.json", eventos):
         return jsonify({"success": True, "message": "Evento salvo com sucesso."})
     else:
@@ -744,23 +739,18 @@ def save_calendar_event():
 @app.route("/delete_calendar_event", methods=["POST"])
 @login_required
 def delete_calendar_event():
-    """Exclui um evento do calendario.json."""
     data = request.json
     event_id = data.get("id")
     if not event_id:
         return jsonify({"success": False, "message": "ID do evento não fornecido."}), 400
 
     eventos = carregar_dados_json("calendario.json") or []
-
-    # Cria uma nova lista sem o evento a ser excluído
-    novos_eventos = [
-        evento for evento in eventos if evento.get("id") != event_id]
+    
+    novos_eventos = [evento for evento in eventos if evento.get("id") != event_id]
 
     if len(novos_eventos) == len(eventos):
-        # Nenhum evento foi removido (ID não encontrado)
         return jsonify({"success": False, "message": "Evento não encontrado."}), 404
 
-    # Salva a nova lista de volta no arquivo
     if salvar_dados_json("calendario.json", novos_eventos):
         return jsonify({"success": True, "message": "Evento excluído com sucesso."})
     else:

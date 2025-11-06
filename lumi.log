@@ -1224,4 +1224,247 @@
 2025-11-04 20:37:45,374 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
 2025-11-04 20:37:45,375 [INFO] 127.0.0.1 - - [04/Nov/2025 20:37:45] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
 2025-11-04 20:38:01,290 [INFO] 127.0.0.1 - - [04/Nov/2025 20:38:01] "POST /ask HTTP/1.1" 200 -
+<<<<<<< HEAD
 >>>>>>> 332525cd7b03bd8683748d2296b2f5acebccef1b
+=======
+2025-11-04 20:51:47,755 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 20:51:47,905 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.205.100:5000
+2025-11-04 20:51:47,906 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-04 20:51:47,908 [INFO]  * Restarting with stat
+2025-11-04 20:51:49,382 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 20:51:49,431 [WARNING]  * Debugger is active!
+2025-11-04 20:51:49,435 [INFO]  * Debugger PIN: 130-186-121
+2025-11-04 20:51:51,456 [INFO] 127.0.0.1 - - [04/Nov/2025 20:51:51] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-04 20:51:51,479 [INFO] 127.0.0.1 - - [04/Nov/2025 20:51:51] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-04 20:51:51,538 [INFO] 127.0.0.1 - - [04/Nov/2025 20:51:51] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:51:55,915 [INFO] 127.0.0.1 - - [04/Nov/2025 20:51:55] "GET /register HTTP/1.1" 200 -
+2025-11-04 20:51:55,968 [INFO] 127.0.0.1 - - [04/Nov/2025 20:51:55] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:53:53,995 [INFO] 127.0.0.1 - - [04/Nov/2025 20:53:53] "[32mPOST /register HTTP/1.1[0m" 302 -
+2025-11-04 20:53:54,019 [INFO] 127.0.0.1 - - [04/Nov/2025 20:53:54] "GET / HTTP/1.1" 200 -
+2025-11-04 20:53:54,074 [INFO] 127.0.0.1 - - [04/Nov/2025 20:53:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-04 20:53:54,075 [INFO] 127.0.0.1 - - [04/Nov/2025 20:53:54] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:54:04,529 [INFO] 127.0.0.1 - - [04/Nov/2025 20:54:04] "GET /profile HTTP/1.1" 200 -
+2025-11-04 20:54:04,584 [INFO] 127.0.0.1 - - [04/Nov/2025 20:54:04] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:54:16,148 [INFO] 127.0.0.1 - - [04/Nov/2025 20:54:16] "GET /profile HTTP/1.1" 200 -
+2025-11-04 20:54:16,199 [INFO] 127.0.0.1 - - [04/Nov/2025 20:54:16] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:57:09,904 [INFO] 127.0.0.1 - - [04/Nov/2025 20:57:09] "GET / HTTP/1.1" 200 -
+2025-11-04 20:57:12,188 [INFO] 127.0.0.1 - - [04/Nov/2025 20:57:12] "GET /profile HTTP/1.1" 200 -
+2025-11-04 20:57:12,252 [INFO] 127.0.0.1 - - [04/Nov/2025 20:57:12] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 20:59:03,996 [INFO] 127.0.0.1 - - [04/Nov/2025 20:59:03] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-04 20:59:04,036 [INFO] 127.0.0.1 - - [04/Nov/2025 20:59:04] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-11-04 20:59:04,037 [INFO] 127.0.0.1 - - [04/Nov/2025 20:59:04] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-11-04 20:59:04,140 [INFO] 127.0.0.1 - - [04/Nov/2025 20:59:04] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=QsM7DmrKkWPPT4bjFOf5 HTTP/1.1" 200 -
+2025-11-04 20:59:04,171 [INFO] 127.0.0.1 - - [04/Nov/2025 20:59:04] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-11-04 21:01:45,671 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 21:01:45,731 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.205.100:5000
+2025-11-04 21:01:45,731 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-04 21:01:45,732 [INFO]  * Restarting with stat
+2025-11-04 21:01:46,942 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 21:01:46,990 [WARNING]  * Debugger is active!
+2025-11-04 21:01:46,993 [INFO]  * Debugger PIN: 130-186-121
+2025-11-04 21:01:50,089 [INFO] 127.0.0.1 - - [04/Nov/2025 21:01:50] "GET / HTTP/1.1" 200 -
+2025-11-04 21:01:50,140 [INFO] 127.0.0.1 - - [04/Nov/2025 21:01:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-04 21:01:50,144 [INFO] 127.0.0.1 - - [04/Nov/2025 21:01:50] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 21:01:53,594 [INFO] 127.0.0.1 - - [04/Nov/2025 21:01:53] "GET /profile HTTP/1.1" 200 -
+2025-11-04 21:01:53,644 [INFO] 127.0.0.1 - - [04/Nov/2025 21:01:53] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 21:05:47,825 [INFO]  * Detected change in 'C:\\Users\\Cliente\\Desktop\\LUMI-assistente\\app.py', reloading
+2025-11-04 21:05:48,155 [INFO]  * Restarting with stat
+2025-11-04 21:05:50,225 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-04 21:05:50,287 [WARNING]  * Debugger is active!
+2025-11-04 21:05:50,290 [INFO]  * Debugger PIN: 130-186-121
+2025-11-04 21:05:51,566 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "GET / HTTP/1.1" 200 -
+2025-11-04 21:05:51,618 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-04 21:05:51,626 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "[33mGET /static/icon_vark.svg HTTP/1.1[0m" 404 -
+2025-11-04 21:05:51,627 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "[33mGET /static/icon_calendar.svg HTTP/1.1[0m" 404 -
+2025-11-04 21:05:51,630 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "[33mGET /static/icon_flashcards.svg HTTP/1.1[0m" 404 -
+2025-11-04 21:05:51,633 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "[33mGET /static/icon_faq.svg HTTP/1.1[0m" 404 -
+2025-11-04 21:05:51,630 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "[33mGET /static/icon_chat.svg HTTP/1.1[0m" 404 -
+2025-11-04 21:05:51,634 [INFO] 127.0.0.1 - - [04/Nov/2025 21:05:51] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 21:06:07,141 [INFO] 127.0.0.1 - - [04/Nov/2025 21:06:07] "GET / HTTP/1.1" 200 -
+2025-11-04 21:06:07,172 [INFO] 127.0.0.1 - - [04/Nov/2025 21:06:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-04 21:06:07,174 [INFO] 127.0.0.1 - - [04/Nov/2025 21:06:07] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 21:06:10,048 [INFO] 127.0.0.1 - - [04/Nov/2025 21:06:10] "GET /profile HTTP/1.1" 200 -
+2025-11-04 21:06:10,110 [INFO] 127.0.0.1 - - [04/Nov/2025 21:06:10] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-04 21:09:49,905 [INFO] 127.0.0.1 - - [04/Nov/2025 21:09:49] "POST /ask HTTP/1.1" 200 -
+2025-11-04 21:10:02,920 [INFO] 127.0.0.1 - - [04/Nov/2025 21:10:02] "POST /ask HTTP/1.1" 200 -
+2025-11-05 19:35:13,977 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-05 19:35:14,093 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.204.51:5000
+2025-11-05 19:35:14,093 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-05 19:35:14,095 [INFO]  * Restarting with stat
+2025-11-05 19:35:15,669 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-05 19:35:15,782 [WARNING]  * Debugger is active!
+2025-11-05 19:35:15,791 [INFO]  * Debugger PIN: 130-186-121
+2025-11-05 19:36:55,743 [INFO]  * Detected change in 'C:\\Users\\Cliente\\Desktop\\LUMI-assistente\\app.py', reloading
+2025-11-05 19:36:56,065 [INFO]  * Restarting with stat
+2025-11-05 19:36:57,857 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-05 19:36:57,920 [WARNING]  * Debugger is active!
+2025-11-05 19:36:57,924 [INFO]  * Debugger PIN: 130-186-121
+2025-11-05 19:36:58,954 [INFO]  * Detected change in 'C:\\Users\\Cliente\\Desktop\\LUMI-assistente\\app.py', reloading
+2025-11-05 19:36:59,273 [INFO]  * Restarting with stat
+2025-11-05 19:37:00,801 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-05 19:37:00,864 [WARNING]  * Debugger is active!
+2025-11-05 19:37:00,867 [INFO]  * Debugger PIN: 130-186-121
+2025-11-05 19:42:50,893 [INFO] 127.0.0.1 - - [05/Nov/2025 19:42:50] "GET / HTTP/1.1" 200 -
+2025-11-05 19:42:50,976 [INFO] 127.0.0.1 - - [05/Nov/2025 19:42:50] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:42:50,985 [INFO] 127.0.0.1 - - [05/Nov/2025 19:42:50] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:45:21,792 [INFO] 127.0.0.1 - - [05/Nov/2025 19:45:21] "GET / HTTP/1.1" 200 -
+2025-11-05 19:45:21,839 [INFO] 127.0.0.1 - - [05/Nov/2025 19:45:21] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:45:21,840 [INFO] 127.0.0.1 - - [05/Nov/2025 19:45:21] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:47:58,751 [INFO] 127.0.0.1 - - [05/Nov/2025 19:47:58] "GET / HTTP/1.1" 200 -
+2025-11-05 19:47:58,806 [INFO] 127.0.0.1 - - [05/Nov/2025 19:47:58] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:47:58,812 [INFO] 127.0.0.1 - - [05/Nov/2025 19:47:58] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:48:59,818 [INFO] 127.0.0.1 - - [05/Nov/2025 19:48:59] "GET / HTTP/1.1" 200 -
+2025-11-05 19:48:59,871 [INFO] 127.0.0.1 - - [05/Nov/2025 19:48:59] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:48:59,874 [INFO] 127.0.0.1 - - [05/Nov/2025 19:48:59] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:49:19,936 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:19] "GET / HTTP/1.1" 200 -
+2025-11-05 19:49:19,980 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:19] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:49:19,983 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:19] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:49:46,913 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:46] "GET / HTTP/1.1" 200 -
+2025-11-05 19:49:46,956 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:46] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 19:49:46,959 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:46] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:49:49,829 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:49] "GET / HTTP/1.1" 200 -
+2025-11-05 19:49:49,873 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 19:49:49,881 [INFO] 127.0.0.1 - - [05/Nov/2025 19:49:49] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:50:04,652 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:04] "GET / HTTP/1.1" 200 -
+2025-11-05 19:50:04,708 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:04] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:50:04,709 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:04] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:50:04,941 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:04] "GET / HTTP/1.1" 200 -
+2025-11-05 19:50:05,005 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 19:50:05,009 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:05] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:50:31,767 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:31] "GET / HTTP/1.1" 200 -
+2025-11-05 19:50:31,809 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:31] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:50:31,809 [INFO] 127.0.0.1 - - [05/Nov/2025 19:50:31] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:56:29,290 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:29] "GET / HTTP/1.1" 200 -
+2025-11-05 19:56:29,330 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:29] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:56:29,339 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:29] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:56:43,204 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:43] "GET / HTTP/1.1" 200 -
+2025-11-05 19:56:43,246 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:43] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:56:43,247 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:43] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:56:48,119 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:48] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-11-05 19:56:48,178 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:48] "[35m[1mGET /chat HTTP/1.1[0m" 500 -
+2025-11-05 19:56:48,245 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:48] "GET /chat?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-11-05 19:56:48,247 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:48] "GET /chat?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-11-05 19:56:48,634 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:48] "GET /chat?__debugger__=yes&cmd=resource&f=console.png&s=ar9jm2t5v7coRRS0Gv7K HTTP/1.1" 200 -
+2025-11-05 19:56:48,686 [INFO] 127.0.0.1 - - [05/Nov/2025 19:56:48] "GET /chat?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-11-05 19:57:10,455 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:10] "GET / HTTP/1.1" 200 -
+2025-11-05 19:57:10,498 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:10] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 19:57:10,500 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:10] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 19:57:17,864 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:17] "POST /ask HTTP/1.1" 200 -
+2025-11-05 19:57:20,576 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:20] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-11-05 19:57:20,613 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:20] "[35m[1mGET /chat HTTP/1.1[0m" 500 -
+2025-11-05 19:57:20,697 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:20] "[36mGET /chat?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-11-05 19:57:20,698 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:20] "[36mGET /chat?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-11-05 19:57:20,753 [INFO] 127.0.0.1 - - [05/Nov/2025 19:57:20] "[36mGET /chat?__debugger__=yes&cmd=resource&f=console.png&s=ar9jm2t5v7coRRS0Gv7K HTTP/1.1[0m" 304 -
+2025-11-05 20:01:45,425 [INFO]  * Detected change in 'C:\\Users\\Cliente\\Desktop\\LUMI-assistente\\app.py', reloading
+2025-11-05 20:01:48,163 [INFO]  * Restarting with stat
+2025-11-05 20:01:50,348 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-05 20:01:50,481 [WARNING]  * Debugger is active!
+2025-11-05 20:01:50,486 [INFO]  * Debugger PIN: 130-186-121
+2025-11-05 20:01:50,555 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:50] "[35m[1mGET /chat HTTP/1.1[0m" 500 -
+2025-11-05 20:01:50,608 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:50] "[36mGET /chat?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-11-05 20:01:50,613 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:50] "[36mGET /chat?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-11-05 20:01:50,663 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:50] "GET /chat?__debugger__=yes&cmd=resource&f=console.png&s=VuCVcbrqPUkhmEiFuy7F HTTP/1.1" 200 -
+2025-11-05 20:01:50,712 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:50] "[36mGET /chat?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-11-05 20:01:54,578 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:54] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-11-05 20:01:54,612 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:54] "GET / HTTP/1.1" 200 -
+2025-11-05 20:01:54,671 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 20:01:54,673 [INFO] 127.0.0.1 - - [05/Nov/2025 20:01:54] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:02:00,516 [INFO] 127.0.0.1 - - [05/Nov/2025 20:02:00] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:02:01,991 [INFO] 127.0.0.1 - - [05/Nov/2025 20:02:01] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-11-05 20:02:02,020 [INFO] 127.0.0.1 - - [05/Nov/2025 20:02:02] "GET / HTTP/1.1" 200 -
+2025-11-05 20:02:02,091 [INFO] 127.0.0.1 - - [05/Nov/2025 20:02:02] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:02:02,092 [INFO] 127.0.0.1 - - [05/Nov/2025 20:02:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 20:02:28,181 [INFO] 127.0.0.1 - - [05/Nov/2025 20:02:28] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:06:13,030 [INFO] 127.0.0.1 - - [05/Nov/2025 20:06:13] "GET / HTTP/1.1" 200 -
+2025-11-05 20:06:13,105 [INFO] 127.0.0.1 - - [05/Nov/2025 20:06:13] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:06:13,110 [INFO] 127.0.0.1 - - [05/Nov/2025 20:06:13] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:06:32,699 [INFO] 127.0.0.1 - - [05/Nov/2025 20:06:32] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:09:50,249 [INFO] 127.0.0.1 - - [05/Nov/2025 20:09:50] "GET / HTTP/1.1" 200 -
+2025-11-05 20:09:50,323 [INFO] 127.0.0.1 - - [05/Nov/2025 20:09:50] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:09:50,326 [INFO] 127.0.0.1 - - [05/Nov/2025 20:09:50] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:13:07,279 [INFO] 127.0.0.1 - - [05/Nov/2025 20:13:07] "GET / HTTP/1.1" 200 -
+2025-11-05 20:13:07,365 [INFO] 127.0.0.1 - - [05/Nov/2025 20:13:07] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:13:07,367 [INFO] 127.0.0.1 - - [05/Nov/2025 20:13:07] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:13:43,856 [INFO] 127.0.0.1 - - [05/Nov/2025 20:13:43] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:15:26,085 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:26] "GET / HTTP/1.1" 200 -
+2025-11-05 20:15:26,168 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:26] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:15:26,173 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:26] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:15:29,222 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:29] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-11-05 20:15:29,260 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:29] "GET / HTTP/1.1" 200 -
+2025-11-05 20:15:29,319 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:29] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:15:29,320 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 20:15:33,419 [INFO] 127.0.0.1 - - [05/Nov/2025 20:15:33] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:18:33,516 [INFO] 127.0.0.1 - - [05/Nov/2025 20:18:33] "GET / HTTP/1.1" 200 -
+2025-11-05 20:18:33,596 [INFO] 127.0.0.1 - - [05/Nov/2025 20:18:33] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:18:33,601 [INFO] 127.0.0.1 - - [05/Nov/2025 20:18:33] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:18:39,519 [INFO] 127.0.0.1 - - [05/Nov/2025 20:18:39] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:19:14,635 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:14] "[32mGET /limpar HTTP/1.1[0m" 302 -
+2025-11-05 20:19:14,662 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:14] "GET / HTTP/1.1" 200 -
+2025-11-05 20:19:14,741 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:14] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:19:14,742 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:14] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:19:18,842 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:18] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:19:26,991 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:26] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:19:41,278 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:41] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:19:55,403 [INFO] 127.0.0.1 - - [05/Nov/2025 20:19:55] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:20:15,749 [INFO] 127.0.0.1 - - [05/Nov/2025 20:20:15] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:20:26,753 [INFO] 127.0.0.1 - - [05/Nov/2025 20:20:26] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:21:27,746 [INFO] 127.0.0.1 - - [05/Nov/2025 20:21:27] "GET / HTTP/1.1" 200 -
+2025-11-05 20:21:27,843 [INFO] 127.0.0.1 - - [05/Nov/2025 20:21:27] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:21:27,844 [INFO] 127.0.0.1 - - [05/Nov/2025 20:21:27] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:21:35,548 [INFO] 127.0.0.1 - - [05/Nov/2025 20:21:35] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:24:30,858 [INFO] 127.0.0.1 - - [05/Nov/2025 20:24:30] "GET / HTTP/1.1" 200 -
+2025-11-05 20:24:30,949 [INFO] 127.0.0.1 - - [05/Nov/2025 20:24:30] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:24:30,961 [INFO] 127.0.0.1 - - [05/Nov/2025 20:24:30] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:27:15,004 [INFO] 127.0.0.1 - - [05/Nov/2025 20:27:15] "GET / HTTP/1.1" 200 -
+2025-11-05 20:27:15,065 [INFO] 127.0.0.1 - - [05/Nov/2025 20:27:15] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:27:15,074 [INFO] 127.0.0.1 - - [05/Nov/2025 20:27:15] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 20:27:30,409 [INFO] 127.0.0.1 - - [05/Nov/2025 20:27:30] "POST /ask HTTP/1.1" 200 -
+2025-11-05 20:32:14,301 [INFO] 127.0.0.1 - - [05/Nov/2025 20:32:14] "GET / HTTP/1.1" 200 -
+2025-11-05 20:32:14,411 [INFO] 127.0.0.1 - - [05/Nov/2025 20:32:14] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-05 20:32:14,425 [INFO] 127.0.0.1 - - [05/Nov/2025 20:32:14] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:31:27,052 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-05 21:31:27,168 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.150.102.52:5000
+2025-11-05 21:31:27,168 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-05 21:31:27,170 [INFO]  * Restarting with stat
+2025-11-05 21:31:28,907 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-05 21:31:29,021 [WARNING]  * Debugger is active!
+2025-11-05 21:31:29,025 [INFO]  * Debugger PIN: 130-186-121
+2025-11-05 21:31:29,073 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:29] "GET /flashcards HTTP/1.1" 200 -
+2025-11-05 21:31:29,131 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 21:31:29,133 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:29] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:31:38,764 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:38] "GET / HTTP/1.1" 200 -
+2025-11-05 21:31:38,862 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 21:31:38,867 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:38] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:31:41,529 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:41] "GET /metodo_de_estudo HTTP/1.1" 200 -
+2025-11-05 21:31:41,617 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 21:31:41,622 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:41] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:31:44,373 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:44] "GET / HTTP/1.1" 200 -
+2025-11-05 21:31:44,450 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 21:31:44,450 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:44] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:31:46,590 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:46] "GET /calendario HTTP/1.1" 200 -
+2025-11-05 21:31:46,680 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:46] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 21:31:46,682 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:46] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:31:57,273 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:57] "GET /faq HTTP/1.1" 200 -
+2025-11-05 21:31:57,415 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 21:31:57,423 [INFO] 127.0.0.1 - - [05/Nov/2025 21:31:57] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:32:15,518 [INFO] 127.0.0.1 - - [05/Nov/2025 21:32:15] "GET /foco HTTP/1.1" 200 -
+2025-11-05 21:32:15,593 [INFO] 127.0.0.1 - - [05/Nov/2025 21:32:15] "[36mGET /static/css/foco.css HTTP/1.1[0m" 304 -
+2025-11-05 21:32:15,595 [INFO] 127.0.0.1 - - [05/Nov/2025 21:32:15] "[36mGET /static/js/foco.js HTTP/1.1[0m" 304 -
+2025-11-05 21:32:18,962 [INFO] 127.0.0.1 - - [05/Nov/2025 21:32:18] "GET / HTTP/1.1" 200 -
+2025-11-05 21:32:19,056 [INFO] 127.0.0.1 - - [05/Nov/2025 21:32:19] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-05 21:32:19,058 [INFO] 127.0.0.1 - - [05/Nov/2025 21:32:19] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-05 21:34:16,036 [INFO] 127.0.0.1 - - [05/Nov/2025 21:34:16] "GET /profile HTTP/1.1" 200 -
+2025-11-05 21:34:16,170 [INFO] 127.0.0.1 - - [05/Nov/2025 21:34:16] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+>>>>>>> 8c4b6e0e6be64ca3e01ff8e6bbb4af68c9796c92
