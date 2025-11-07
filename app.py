@@ -13,7 +13,8 @@ import traceback
 from datetime import datetime
 import logging
 from dotenv import load_dotenv
-import uuid 
+import uuid
+import psycopg2
 
 import google.generativeai as genai
 from flask import (
@@ -96,11 +97,11 @@ class User(db.Model, UserMixin):
     matricula = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
 
-    cpf = db.Column(db.String(14), unique=True, nullable=False) 
-    telefone = db.Column(db.String(20), nullable=True) 
-    sexo = db.Column(db.String(30), nullable=True) 
-    etnia = db.Column(db.String(50), nullable=True) 
-    
+    cpf = db.Column(db.String(14), unique=True, nullable=False)
+    telefone = db.Column(db.String(20), nullable=True)
+    sexo = db.Column(db.String(30), nullable=True)
+    etnia = db.Column(db.String(50), nullable=True)
+
     vark_scores_json = db.Column(db.Text, nullable=True)
     vark_primary_type = db.Column(db.String(10), nullable=True)
 
@@ -126,12 +127,12 @@ class User(db.Model, UserMixin):
         self.matricula = matricula
         if password:
             self.set_password(password)
-        
+
         self.cpf = cpf
         self.telefone = telefone
         self.sexo = sexo
         self.etnia = etnia
-        
+
         self.vark_scores_json = None
         self.vark_primary_type = None
 
@@ -196,6 +197,7 @@ def carregar_dados_json(arquivo):
         traceback.print_exc()
         return None
 
+
 def salvar_dados_json(arquivo, dados):
     try:
         caminho_arquivo = os.path.join(os.path.dirname(__file__), arquivo)
@@ -228,10 +230,10 @@ def carregar_calendario():
             print(f"AVISO: Evento ignorado por formato inválido: {item}")
             continue
 
-        data_inicio = item.get("data_inicio") 
+        data_inicio = item.get("data_inicio")
         descricao = item.get("descricao", "Evento sem descrição")
         data_fim = item.get("data_fim")
-        event_id = item.get("id", str(uuid.uuid4())) 
+        event_id = item.get("id", str(uuid.uuid4()))
         event_type = item.get("type", "Outro")
         event_description = item.get("description", "")
 
@@ -255,8 +257,8 @@ def carregar_calendario():
 
         eventos.append({
             "id": event_id,
-            "title": descricao, 
-            "date": data_inicio, 
+            "title": descricao,
+            "date": data_inicio,
             "type": event_type,
             "description": event_description,
             "data_obj": data_inicio_obj,
@@ -264,6 +266,7 @@ def carregar_calendario():
             "mes_curto": meses_map.get(data_inicio_obj.month),
         })
     return sorted(eventos, key=lambda x: x["data_obj"])
+
 
 def carregar_matriz():
     dados = carregar_dados_json("matriz.json")
@@ -277,8 +280,10 @@ def carregar_matriz():
         print("AVISO: Falha ao carregar ou formato inválido para matriz.json.")
         return None
 
+
 def carregar_quiz_vark():
     return carregar_dados_json("metodo_estudo.json")
+
 
 def carregar_contexto_inicial():
     contexto_base = ""
@@ -305,7 +310,7 @@ def carregar_contexto_inicial():
             contexto_calendario = "\n\n=== CALENDÁRIO ACADÊMICO (Use para responder perguntas sobre datas) ===\n"
             for evento in eventos:
                 data_str = evento.get("data_obj").strftime('%d/%m/%Y')
-                desc = evento.get("title") 
+                desc = evento.get("title")
                 data_fim_str = ""
                 if evento.get("data_fim") and evento.get("data_fim") != evento.get("date"):
                     try:
@@ -383,6 +388,7 @@ def carregar_contexto_inicial():
     print("Contexto inicial montado com sucesso.")
     return contexto_base + contexto_calendario + contexto_matriz + contexto_vark
 
+
 CONTEXTO_INICIAL = carregar_contexto_inicial()
 
 
@@ -426,7 +432,8 @@ def get_initial_chat_history():
 def register():
     """Lida com o registro de novos usuários."""
     if current_user.is_authenticated:
-        return redirect(url_for("index")) # Redireciona para o Menu se já logado
+        # Redireciona para o Menu se já logado
+        return redirect(url_for("index"))
 
     if request.method == "POST":
         email = request.form.get("email")
@@ -440,7 +447,7 @@ def register():
 
         user_by_email = User.query.filter_by(email=email).first()
         user_by_matricula = User.query.filter_by(matricula=matricula).first()
-        user_by_cpf = User.query.filter_by(cpf=cpf).first() 
+        user_by_cpf = User.query.filter_by(cpf=cpf).first()
 
         if user_by_email:
             flash("Este e-mail já está cadastrado. Tente fazer login.", "warning")
@@ -448,7 +455,7 @@ def register():
         if user_by_matricula:
             flash("Esta matrícula já está cadastrada. Tente fazer login.", "warning")
             return redirect(url_for("login"))
-        if user_by_cpf: 
+        if user_by_cpf:
             flash("Este CPF já está cadastrado. Tente fazer login.", "warning")
             return redirect(url_for("login"))
 
@@ -468,7 +475,7 @@ def register():
 
             login_user(new_user)
             flash("Conta criada com sucesso! Você foi logado.", "success")
-            return redirect(url_for("index")) # Redireciona para o Menu
+            return redirect(url_for("index"))  # Redireciona para o Menu
         except Exception as e:
             db.session.rollback()
             print(f"Erro ao registrar usuário: {e}")
@@ -481,21 +488,22 @@ def register():
 def login():
     """Lida com o login do usuário."""
     if current_user.is_authenticated:
-        return redirect(url_for("index")) # Redireciona para o Menu se já logado
+        # Redireciona para o Menu se já logado
+        return redirect(url_for("index"))
 
     if request.method == "POST":
         identifier = request.form.get("login_identifier")
         password = request.form.get("password")
         user = User.query.filter(
-            (getattr(User, "email") == identifier) | 
+            (getattr(User, "email") == identifier) |
             (getattr(User, "matricula") == identifier) |
-            (getattr(User, "cpf") == identifier) 
+            (getattr(User, "cpf") == identifier)
         ).first()
 
         if user and user.check_password(password):
             login_user(user)
             flash("Login realizado com sucesso!", "success")
-            return redirect(url_for("index")) # Redireciona para o Menu
+            return redirect(url_for("index"))  # Redireciona para o Menu
         else:
             flash("Email/Matrícula/CPF ou senha inválidos. Tente novamente.", "danger")
 
@@ -522,6 +530,7 @@ def index():
     # (O arquivo index.html agora é o MENU)
     return render_template("index.html")
 
+
 @app.route("/chat")
 @login_required
 def chat():
@@ -532,6 +541,7 @@ def chat():
     return render_template("chat.html")
 
 # =======================================================
+
 
 @app.route("/profile")
 @login_required
@@ -582,7 +592,8 @@ def limpar_chat():
     # =======================================================
     # === CORREÇÃO APLICADA AQUI ===
     # =======================================================
-    return redirect(url_for("index")) # Redireciona de volta para o menu/chat principal
+    # Redireciona de volta para o menu/chat principal
+    return redirect(url_for("index"))
 
 
 @app.route("/metodo_de_estudo")
@@ -699,7 +710,6 @@ def save_vark_result():
         )
 
 
-
 @app.route("/save_calendar_event", methods=["POST"])
 @login_required
 def save_calendar_event():
@@ -726,7 +736,7 @@ def save_calendar_event():
                 evento_encontrado = True
                 break
         if not evento_encontrado:
-             eventos.append(evento_salvo) 
+            eventos.append(evento_salvo)
     else:
         eventos.append(evento_salvo)
 
@@ -745,8 +755,9 @@ def delete_calendar_event():
         return jsonify({"success": False, "message": "ID do evento não fornecido."}), 400
 
     eventos = carregar_dados_json("calendario.json") or []
-    
-    novos_eventos = [evento for evento in eventos if evento.get("id") != event_id]
+
+    novos_eventos = [
+        evento for evento in eventos if evento.get("id") != event_id]
 
     if len(novos_eventos) == len(eventos):
         return jsonify({"success": False, "message": "Evento não encontrado."}), 404
