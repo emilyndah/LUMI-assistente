@@ -1468,3 +1468,102 @@
 2025-11-05 21:34:16,036 [INFO] 127.0.0.1 - - [05/Nov/2025 21:34:16] "GET /profile HTTP/1.1" 200 -
 2025-11-05 21:34:16,170 [INFO] 127.0.0.1 - - [05/Nov/2025 21:34:16] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
 >>>>>>> 8c4b6e0e6be64ca3e01ff8e6bbb4af68c9796c92
+2025-11-06 20:04:58,127 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 20:04:58,471 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.203.255:5000
+2025-11-06 20:04:58,471 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-06 20:04:58,496 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 20:04:59,978 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 20:05:00,061 [WARNING]  * Debugger is active!
+2025-11-06 20:05:00,068 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 20:05:03,622 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\sqlalchemy\\orm\\loading.py', reloading
+2025-11-06 20:05:03,648 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\sqlalchemy\\orm\\context.py', reloading
+2025-11-06 20:05:03,676 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\sqlalchemy\\engine\\base.py', reloading
+2025-11-06 20:05:03,705 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\sqlalchemy\\engine\\default.py', reloading
+2025-11-06 20:05:03,713 [INFO] 127.0.0.1 - - [06/Nov/2025 20:05:03] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-06 20:05:03,825 [INFO] 127.0.0.1 - - [06/Nov/2025 20:05:03] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-11-06 20:05:03,868 [INFO] 127.0.0.1 - - [06/Nov/2025 20:05:03] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-11-06 20:05:04,876 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 20:05:06,567 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 20:05:06,644 [WARNING]  * Debugger is active!
+2025-11-06 20:05:06,646 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 20:05:06,670 [INFO] 127.0.0.1 - - [06/Nov/2025 20:05:06] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2025-11-06 20:17:53,641 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 20:17:53,944 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.203.255:5000
+2025-11-06 20:17:53,944 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-06 20:17:53,965 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 20:17:55,389 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 20:17:55,456 [WARNING]  * Debugger is active!
+2025-11-06 20:17:55,462 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 20:17:59,381 [INFO] 127.0.0.1 - - [06/Nov/2025 20:17:59] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-06 20:17:59,482 [INFO] 127.0.0.1 - - [06/Nov/2025 20:17:59] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-11-06 20:17:59,498 [INFO] 127.0.0.1 - - [06/Nov/2025 20:17:59] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-11-06 20:17:59,657 [INFO] 127.0.0.1 - - [06/Nov/2025 20:17:59] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=LfJZ9MNZO54LA5PgNiWS HTTP/1.1" 200 -
+2025-11-06 20:56:26,320 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 20:56:26,481 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.200.138:5000
+2025-11-06 20:56:26,481 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-06 20:56:26,504 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 20:56:27,916 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 20:56:27,976 [WARNING]  * Debugger is active!
+2025-11-06 20:56:27,980 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 20:56:31,323 [INFO] 127.0.0.1 - - [06/Nov/2025 20:56:31] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-06 20:56:31,395 [INFO] 127.0.0.1 - - [06/Nov/2025 20:56:31] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-06 20:56:31,466 [INFO] 127.0.0.1 - - [06/Nov/2025 20:56:31] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-06 20:56:38,280 [INFO] 127.0.0.1 - - [06/Nov/2025 20:56:38] "POST /login HTTP/1.1" 200 -
+2025-11-06 20:56:38,326 [INFO] 127.0.0.1 - - [06/Nov/2025 20:56:38] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-06 20:56:39,764 [INFO] 127.0.0.1 - - [06/Nov/2025 20:56:39] "GET /register HTTP/1.1" 200 -
+2025-11-06 20:56:39,809 [INFO] 127.0.0.1 - - [06/Nov/2025 20:56:39] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-06 20:57:15,165 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:15] "[32mPOST /register HTTP/1.1[0m" 302 -
+2025-11-06 20:57:15,264 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:15] "GET / HTTP/1.1" 200 -
+2025-11-06 20:57:15,309 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:15] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-06 20:57:15,327 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:15] "GET /static/style.css HTTP/1.1" 200 -
+2025-11-06 20:57:31,009 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:31] "POST /ask HTTP/1.1" 200 -
+2025-11-06 20:57:39,584 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:39] "POST /ask HTTP/1.1" 200 -
+2025-11-06 20:57:48,112 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:48] "GET /calendario HTTP/1.1" 200 -
+2025-11-06 20:57:48,146 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-06 20:57:48,158 [INFO] 127.0.0.1 - - [06/Nov/2025 20:57:48] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-06 21:03:39,796 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\ctx.py', reloading
+2025-11-06 21:03:43,073 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 21:03:45,282 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 21:03:45,390 [WARNING]  * Debugger is active!
+2025-11-06 21:03:45,398 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 21:03:56,600 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\re\\__init__.py', reloading
+2025-11-06 21:03:57,808 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 21:03:59,338 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 21:03:59,390 [WARNING]  * Debugger is active!
+2025-11-06 21:03:59,392 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 21:04:03,362 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\helpers.py', reloading
+2025-11-06 21:04:03,404 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\werkzeug\\wrappers\\__init__.py', reloading
+2025-11-06 21:04:03,704 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 21:04:05,097 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 21:04:05,152 [WARNING]  * Debugger is active!
+2025-11-06 21:04:05,153 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 21:04:12,679 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\globals.py', reloading
+2025-11-06 21:04:13,451 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 21:04:14,951 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 21:04:15,003 [WARNING]  * Debugger is active!
+2025-11-06 21:04:15,005 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 21:04:16,316 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask_login\\signals.py', reloading
+2025-11-06 21:04:16,338 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\flask\\signals.py', reloading
+2025-11-06 21:04:16,358 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\blinker\\__init__.py', reloading
+2025-11-06 21:04:16,395 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\blinker\\base.py', reloading
+2025-11-06 21:04:17,299 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 21:04:18,712 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 21:04:18,774 [WARNING]  * Debugger is active!
+2025-11-06 21:04:18,778 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 21:04:45,842 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-11-06 21:04:46,501 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-06 21:04:49,216 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-06 21:04:49,286 [WARNING]  * Debugger is active!
+2025-11-06 21:04:49,288 [INFO]  * Debugger PIN: 122-727-421
+2025-11-06 21:04:50,740 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-11-06 21:04:50,741 [INFO]  * Detected change in 'C:\\Users\\NoteLenovo\\PycharmProjects\\LUMI-assistente-1\\app.py', reloading
+2025-11-06 21:04:51,786 [INFO]  * Restarting with watchdog (windowsapi)
