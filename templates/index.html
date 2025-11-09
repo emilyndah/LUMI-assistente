@@ -17,9 +17,11 @@
         <div class="user-area">
             {% if current_user.is_authenticated %}
                 <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
+                
                 <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
                     <div class="profile-icon">{{ current_user.username[0]|upper if current_user.username else '?' }}</div>
                 </a>
+                
                 <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
             {% else %}
                  <a href="{{ url_for('login') }}" class="login-link">Login</a>
@@ -30,17 +32,22 @@
     <main>
         <aside class="funcoes">
             <h2>Funcionalidades</h2>
-            <a href="#" class="func-item">Simulador de provas</a>
             <a href="{{ url_for('flashcards') }}" class="func-item">Flashcards</a>
             <a href="{{ url_for('metodo_de_estudo') }}" class="func-item">Método de Estudo</a>
             <a href="{{ url_for('calendario') }}" class="func-item">Calendário</a>
             <a href="{{ url_for('faq') }}" class="func-item">FAQ</a>
             <a href="{{ url_for('modo_foco') }}" class="func-item">Modo Foco</a>
-        </aside> <section class="chat-container">
-            <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">
-                Limpar Conversa
-            </a>
+        </aside>
+        
+        <section class="chat-container">
             
+            <div class="chat-header-box">
+                <h2 class="chat-title-main">Chat Geral</h2>
+                <a href="{{ url_for('limpar_chat') }}" class="clear-chat-btn" title="Limpar Conversa">
+                    Limpar Conversa
+                </a>
+            </div>
+
             <div class="chat-box" id="chat-box">
                 </div>
             
@@ -68,71 +75,53 @@
         const chatForm = document.getElementById('chat-form');
         const userInput = document.getElementById('pergunta-input');
         const submitBtn = document.getElementById('submit-btn');
-
-        // CORREÇÃO DE JS #1: Removida a definição duplicada de scrollToBottom
         
         function scrollToBottom() {
-            // Rola suavemente para a última mensagem
             chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
         }
 
-        // Função helper para adicionar mensagens ao chat
         function addMessage(text, sender) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = `msg ${sender}`; // sender é 'user' ou 'lumi'
-            // Substitui quebras de linha \n por <br> APENAS para Lumi
+            msgDiv.className = `msg ${sender}`;
             msgDiv.innerHTML = (sender === 'lumi') ? text.replace(/\n/g, '<br>') : text;
             chatBox.appendChild(msgDiv);
-            
-            // Adiciona um pequeno delay para garantir que o DOM atualizou antes de rolar
             setTimeout(scrollToBottom, 50);
         }
 
-        // Carrega o histórico da sessão (se existir) ao carregar a página
         const initialHistory = {{ session.get('historico', []) | tojson | safe }};
         
-        // Esta lógica de carregamento de histórico está correta e foi mantida
         if (chatBox.children.length === 0 && initialHistory.length > 1) { 
             console.log("Renderizando histórico da sessão...");
-            // Pula a primeira mensagem (contexto inicial do sistema)
             initialHistory.slice(1).forEach(message => {
                 const role = message.role === 'model' ? 'lumi' : 'user';
                 const text = (message.parts && message.parts.length > 0) ? message.parts[0] : '';
                 addMessage(text, role);
             });
-            setTimeout(scrollToBottom, 100); // Rola para o fim após renderizar
+            setTimeout(scrollToBottom, 100);
         } else if (chatBox.children.length === 0) {
-            // Caso o histórico esteja vazio (ex: após limpar chat)
             const userName = "{{ current_user.username if current_user.is_authenticated else 'Aluno' }}";
             addMessage(`Olá ${userName}! Eu sou a Lumi. Como posso te ajudar hoje?`, 'lumi');
             scrollToBottom();
         } else {
-            // Se já tem conteúdo (vindo de reload), apenas rola para baixo
             scrollToBottom();
         }
 
-        // --- CORREÇÃO DE JS #2: Lógica de 'submit' unificada ---
-        // O código original tinha DOIS 'addEventListener' misturados,
-        // um quebrado e outro incompleto. Este é o handler único e correto.
         chatForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const userMessage = userInput.value.trim();
             if (userMessage === '') return;
 
-            // 1. Adiciona a mensagem do usuário (usando a função helper)
             addMessage(userMessage, 'user');
             userInput.value = '';
             userInput.disabled = true;
             submitBtn.disabled = true;
 
-            // 2. Adiciona o indicador "digitando..."
             const typingIndicator = document.createElement('div');
             typingIndicator.className = 'msg lumi typing-indicator';
             typingIndicator.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
             chatBox.appendChild(typingIndicator);
             scrollToBottom();
 
-            // 3. Envia a mensagem para o backend
             try {
                 const response = await fetch('/ask', {
                     method: 'POST',
@@ -140,41 +129,31 @@
                     body: JSON.stringify({ pergunta: userMessage })
                 });
 
-                // Remove o "digitando..."
                 if(chatBox.contains(typingIndicator)) chatBox.removeChild(typingIndicator);
 
                 if (!response.ok) {
-                    // Tenta pegar uma mensagem de erro bonita do JSON da resposta
                     let errorMsg = `Erro ${response.status}. Tente novamente.`;
                     try { 
                         const errorData = await response.json(); 
                         errorMsg = errorData.resposta || errorMsg; 
                     } catch (e) {}
-                    throw new Error(errorMsg); // Joga o erro para o 'catch'
+                    throw new Error(errorMsg);
                 }
 
                 const data = await response.json();
-                
-                // Adiciona a resposta da Lumi (usando a função helper)
                 addMessage(data.resposta, 'lumi');
 
             } catch (error) {
                 console.error('Erro ao enviar/receber mensagem:', error);
-                // Garante que o "digitando" suma, mesmo se der erro
                 if(chatBox.contains(typingIndicator)) chatBox.removeChild(typingIndicator);
-                // Mostra o erro no chat
                 addMessage(`Desculpe, ocorreu um erro: ${error.message}`, 'lumi');
             } finally {
-                // 4. Reabilita o campo de input e o botão
                 userInput.disabled = false;
                 submitBtn.disabled = false;
                 userInput.focus();
             }
         });
 
-        // --- CORREÇÃO DE JS #3: Movido para o local correto ---
-        // Este código estava "flutuando" no meio do handler de submit.
-        // Ele desabilita o clique em links com a classe "disabled".
         document.querySelectorAll('a.func-item.disabled').forEach(link => {
             link.addEventListener('click', (e) => e.preventDefault());
         });
@@ -182,61 +161,54 @@
     });
     </script>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div id="toast-container">
-      {% for category, message in messages %}
-        <div class="toast-message {{ category }}">
-          {{ message }}
-          <span class="toast-close-btn">&times;</span>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="toast-container">
+          {% for category, message in messages %}
+            <div class="toast-message {{ category }}">
+              {{ message }}
+              <span class="toast-close-btn">&times;</span>
+            </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endwith %}
+      {% endif %}
+    {% endwith %}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const toasts = document.querySelectorAll('.toast-message');
+      
+      toasts.forEach((toast, index) => {
+        const delay = 300 * index; 
+
+        setTimeout(() => {
+          toast.classList.add('show');
+        }, delay);
+
+        const hideTimer = setTimeout(() => {
+          toast.classList.add('hide');
+          setTimeout(() => {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 500);
+        }, 5000);
+
+        const closeBtn = toast.querySelector('.toast-close-btn');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => {
+            clearTimeout(hideTimer);
+            toast.classList.add('hide');
+            setTimeout(() => {
+              if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+              }
+            }, 500);
+          });
+        }
+      });
+    });
+    </script>
+
 </body>
 </html>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // 1. Encontra todos os toasts que o Flask criou
-  const toasts = document.querySelectorAll('.toast-message');
-  
-  toasts.forEach((toast, index) => {
-    
-    // Para animação de "cascata" se houver múltiplos
-    const delay = 300 * index; 
-
-    // 2. MOSTRAR: Adiciona a classe 'show' para a animação de entrada
-    setTimeout(() => {
-      toast.classList.add('show');
-    }, delay);
-
-    // 3. AUTO-FECHAR: Define um timer para esconder após 5 segundos
-    const hideTimer = setTimeout(() => {
-      toast.classList.add('hide');
-      // Remove o elemento do HTML após a animação de saída
-      setTimeout(() => {
-        if (toast.parentNode) {
-          toast.parentNode.removeChild(toast);
-        }
-      }, 500); // 500ms = 0.5s (duração da transição do CSS)
-    }, 5000); // 5000ms = 5 segundos
-
-    // 4. FECHAR MANUALMENTE: Adiciona o clique no botão 'X'
-    const closeBtn = toast.querySelector('.toast-close-btn');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        clearTimeout(hideTimer); // Cancela o auto-fechamento
-        toast.classList.add('hide');
-        // Remove o elemento
-        setTimeout(() => {
-          if (toast.parentNode) {
-            toast.parentNode.removeChild(toast);
-          }
-        }, 500);
-      });
-    }
-  });
-});
-</script>
