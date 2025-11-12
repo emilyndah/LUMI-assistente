@@ -1635,3 +1635,131 @@
 2025-11-09 15:52:51,542 [INFO] Servidor iniciado - monitorando eventos Lumi
 2025-11-09 15:52:51,602 [WARNING]  * Debugger is active!
 2025-11-09 15:52:51,605 [INFO]  * Debugger PIN: 135-211-840
+2025-11-09 15:58:12,068 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\errorcodes.py', reloading
+2025-11-09 15:58:12,069 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\errorcodes.py', reloading
+2025-11-09 15:58:12,069 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\errorcodes.py', reloading
+2025-11-09 15:58:12,070 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\errors.py', reloading
+2025-11-09 15:58:12,071 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\errors.py', reloading
+2025-11-09 15:58:12,071 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\extensions.py', reloading
+2025-11-09 15:58:12,072 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\extensions.py', reloading
+2025-11-09 15:58:12,072 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\extras.py', reloading
+2025-11-09 15:58:12,073 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\extras.py', reloading
+2025-11-09 15:58:12,073 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\pool.py', reloading
+2025-11-09 15:58:12,074 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\pool.py', reloading
+2025-11-09 15:58:12,074 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\sql.py', reloading
+2025-11-09 15:58:12,075 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\sql.py', reloading
+2025-11-09 15:58:12,075 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\tz.py', reloading
+2025-11-09 15:58:12,075 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\tz.py', reloading
+2025-11-09 15:58:12,076 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_ipaddress.py', reloading
+2025-11-09 15:58:12,076 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_ipaddress.py', reloading
+2025-11-09 15:58:12,076 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_json.py', reloading
+2025-11-09 15:58:12,077 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_json.py', reloading
+2025-11-09 15:58:12,078 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_range.py', reloading
+2025-11-09 15:58:12,079 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_range.py', reloading
+2025-11-09 15:58:12,079 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\__init__.py', reloading
+2025-11-09 15:58:12,080 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\__init__.py', reloading
+2025-11-09 15:58:12,667 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-09 15:58:13,816 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-09 15:58:13,862 [WARNING]  * Debugger is active!
+2025-11-09 15:58:13,864 [INFO]  * Debugger PIN: 135-211-840
+2025-11-09 15:58:19,061 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\__init__.py', reloading
+2025-11-09 15:58:19,104 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_range.py', reloading
+2025-11-09 15:58:19,575 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\pyparsing\\core.py', reloading
+2025-11-09 15:58:19,644 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\_json.py', reloading
+2025-11-09 15:58:19,736 [INFO]  * Detected change in 'C:\\Users\\emily\\OneDrive\\Documentos\\LUMI-assistente\\venv\\Lib\\site-packages\\psycopg2\\tz.py', reloading
+2025-11-09 15:58:20,085 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-09 15:58:20,395 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-09 15:58:20,461 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.65:5000
+2025-11-09 15:58:20,461 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-09 15:58:20,463 [INFO]  * Restarting with stat
+2025-11-09 15:58:21,126 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-09 15:58:21,167 [WARNING]  * Debugger is active!
+2025-11-09 15:58:21,169 [INFO]  * Debugger PIN: 135-211-840
+2025-11-09 15:58:21,803 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-09 15:58:21,850 [WARNING]  * Debugger is active!
+2025-11-09 15:58:21,852 [INFO]  * Debugger PIN: 129-842-282
+2025-11-09 15:58:24,356 [INFO] 127.0.0.1 - - [09/Nov/2025 15:58:24] "GET / HTTP/1.1" 200 -
+2025-11-09 15:58:24,375 [INFO] 127.0.0.1 - - [09/Nov/2025 15:58:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-09 15:58:24,386 [INFO] 127.0.0.1 - - [09/Nov/2025 15:58:24] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-09 16:14:26,838 [INFO] 127.0.0.1 - - [09/Nov/2025 16:14:26] "GET / HTTP/1.1" 200 -
+2025-11-09 16:14:26,878 [INFO] 127.0.0.1 - - [09/Nov/2025 16:14:26] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-09 16:14:26,878 [INFO] 127.0.0.1 - - [09/Nov/2025 16:14:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-09 16:14:52,525 [INFO]  * Detected change in 'C:\\Users\\emily\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\pathlib\\_local.py', reloading
+2025-11-09 16:14:52,526 [INFO]  * Detected change in 'C:\\Users\\emily\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\pathlib\\_abc.py', reloading
+2025-11-09 16:14:53,714 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-09 16:14:55,106 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-09 16:14:55,167 [WARNING]  * Debugger is active!
+2025-11-09 16:14:55,169 [INFO]  * Debugger PIN: 135-211-840
+2025-11-10 23:39:30,086 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-10 23:39:30,564 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.65:5000
+2025-11-10 23:39:30,565 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-10 23:39:30,570 [INFO]  * Restarting with stat
+2025-11-10 23:39:36,071 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-10 23:39:36,183 [WARNING]  * Debugger is active!
+2025-11-10 23:39:36,191 [INFO]  * Debugger PIN: 676-282-551
+2025-11-10 23:40:30,095 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:30] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-10 23:40:30,282 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:30] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-10 23:40:30,330 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:30] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-10 23:40:30,376 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:30] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-10 23:40:39,355 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:39] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-10 23:40:39,547 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:39] "GET / HTTP/1.1" 200 -
+2025-11-10 23:40:39,601 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:39] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-10 23:40:39,624 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-10 23:40:52,771 [INFO] 127.0.0.1 - - [10/Nov/2025 23:40:52] "POST /ask HTTP/1.1" 200 -
+2025-11-11 19:47:14,144 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-11 19:47:14,442 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.200.146:5000
+2025-11-11 19:47:14,442 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-11 19:47:14,459 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-11 19:47:15,653 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-11 19:47:15,689 [WARNING]  * Debugger is active!
+2025-11-11 19:47:15,692 [INFO]  * Debugger PIN: 135-211-840
+2025-11-11 19:47:18,913 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:18] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-11 19:47:19,041 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:19] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-11 19:47:19,152 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:19] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-11 19:47:19,261 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:19] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-11 19:47:24,362 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:24] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-11-11 19:47:24,567 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:24] "GET / HTTP/1.1" 200 -
+2025-11-11 19:47:24,613 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:24] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-11 19:47:24,637 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-11 19:47:37,409 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:37] "GET /profile HTTP/1.1" 200 -
+2025-11-11 19:47:37,424 [INFO] 127.0.0.1 - - [11/Nov/2025 19:47:37] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-11 20:31:48,460 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-11 20:31:48,805 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.200.146:5000
+2025-11-11 20:31:48,806 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-11 20:31:48,834 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-11 20:31:51,247 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-11 20:31:51,347 [WARNING]  * Debugger is active!
+2025-11-11 20:31:51,353 [INFO]  * Debugger PIN: 135-211-840
+2025-11-11 20:33:06,029 [INFO] 127.0.0.1 - - [11/Nov/2025 20:33:06] "GET / HTTP/1.1" 200 -
+2025-11-11 20:33:06,053 [INFO] 127.0.0.1 - - [11/Nov/2025 20:33:06] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-11 20:33:06,059 [INFO] 127.0.0.1 - - [11/Nov/2025 20:33:06] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-11-12 18:02:32,273 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-12 18:02:32,508 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.160.200.153:5000
+2025-11-12 18:02:32,509 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-12 18:02:32,546 [INFO]  * Restarting with watchdog (windowsapi)
+2025-11-12 18:02:34,625 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-12 18:02:34,702 [WARNING]  * Debugger is active!
+2025-11-12 18:02:34,710 [INFO]  * Debugger PIN: 135-211-840
+2025-11-12 18:02:40,671 [INFO] 127.0.0.1 - - [12/Nov/2025 18:02:40] "[32mGET / HTTP/1.1[0m" 302 -
+2025-11-12 18:02:40,711 [INFO] 127.0.0.1 - - [12/Nov/2025 18:02:40] "GET /login?next=/ HTTP/1.1" 200 -
+2025-11-12 18:02:40,824 [INFO] 127.0.0.1 - - [12/Nov/2025 18:02:40] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-12 18:02:41,058 [INFO] 127.0.0.1 - - [12/Nov/2025 18:02:41] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-11-12 18:02:47,154 [INFO] 127.0.0.1 - - [12/Nov/2025 18:02:47] "POST /login HTTP/1.1" 200 -
+2025-11-12 18:02:47,203 [INFO] 127.0.0.1 - - [12/Nov/2025 18:02:47] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
+2025-11-12 18:10:52,914 [INFO] 127.0.0.1 - - [12/Nov/2025 18:10:52] "POST /login HTTP/1.1" 200 -
+2025-11-12 18:10:52,968 [INFO] 127.0.0.1 - - [12/Nov/2025 18:10:52] "[36mGET /static/lumi_logo.jpg HTTP/1.1[0m" 304 -
