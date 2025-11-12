@@ -150,7 +150,7 @@ Os testes em `tests/test_app.py` validam o fluxo de autenticação (registro, lo
 - Aprimorar o modelo de IA com contextualização acadêmica avançada.
 - Disponibilizar painel administrativo para gerenciamento dos flashcards.
 - Evoluir a interface com componentes modernos e acessíveis.
-- Personalizar recomendações e experiências com base no perfil do aluno.
+- Integrar a assistente com o AVA
 - Concluir a implementação de todas as funcionalidades planejadas no início do projeto.
 
 ## Orientadores
