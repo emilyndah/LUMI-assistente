@@ -1,0 +1,300 @@
+/* =======================================================
+ * TÍTULO: FOLHA DE ESTILOS DO CALENDÁRIO (CALENDARIO.CSS)
+ * (Extraído do calendario.html)
+ * ======================================================= */
+
+/* --- 1. Layout Principal da Página --- */
+.calendar-page {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px;
+    padding: 20px; 
+    max-width: 1600px;
+    margin: 0 auto; 
+}
+
+.calendar-container {
+    flex: 2; 
+    min-width: 500px; 
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10);
+    height: fit-content;
+}
+
+.agenda-container {
+    flex: 1; 
+    min-width: 300px; 
+    max-width: 450px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10);
+    
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh; /* Limita a altura */
+}
+
+/* --- 2. Estilos do FullCalendar --- */
+#calendar {
+    width: 100%;
+    height: 75vh; 
+    font-family: 'Poppins', sans-serif;
+}
+/* Cores dos botões */
+.fc .fc-button-primary {
+    background-color: var(--lumi-blue);
+    border-color: var(--lumi-blue);
+}
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:active {
+    background-color: var(--lumi-blue-dark);
+    border-color: var(--lumi-blue-dark);
+}
+/* Cor do "Hoje" */
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: var(--lumi-blue-transparent-10);
+}
+/* Dia selecionado (JS) */
+.fc .fc-daygrid-day.day-selected {
+    background-color: var(--lumi-blue-transparent-30) !important;
+}
+
+/* --- 3. Estilos da Agenda/Lista de Eventos --- */
+.agenda-header {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+.agenda-header h2 {
+    margin: 0 0 15px 0;
+    color: var(--lumi-blue-dark);
+}
+.agenda-search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+}
+.agenda-search-input:focus {
+    outline: none;
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 3px var(--lumi-blue-transparent-20);
+}
+
+#event-list {
+    overflow-y: auto;
+    flex-grow: 1; /* Ocupa o espaço restante */
+    padding-right: 10px; /* Espaço para scrollbar */
+}
+/* Scrollbar da Agenda */
+#event-list::-webkit-scrollbar { width: 6px; }
+#event-list::-webkit-scrollbar-track { background: #f1f1ff; border-radius: 3px;}
+#event-list::-webkit-scrollbar-thumb { 
+    background: var(--lumi-blue); 
+    border-radius: 3px;
+}
+#event-list::-webkit-scrollbar-thumb:hover { background: var(--lumi-blue-dark); }
+
+.agenda-item {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+.agenda-item:hover {
+    background-color: #f8f9fa;
+}
+
+.agenda-date {
+    flex-shrink: 0;
+    text-align: center;
+    background-color: var(--lumi-blue-transparent-10);
+    border-radius: 8px;
+    padding: 8px;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 500;
+}
+.agenda-day {
+    font-size: 1.3rem;
+    color: var(--lumi-blue-dark);
+    line-height: 1.1;
+}
+.agenda-month {
+    font-size: 0.8rem;
+    color: #555;
+    text-transform: uppercase;
+}
+.agenda-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.agenda-title {
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 3px 0;
+}
+.agenda-time {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.agenda-item[data-tipo="prova"] .agenda-date {
+    background-color: rgba(220, 53, 69, 0.1); /* Vermelho */
+}
+.agenda-item[data-tipo="prova"] .agenda-day {
+    color: #a02a38;
+}
+.agenda-item[data-tipo="trabalho"] .agenda-date {
+    background-color: rgba(255, 193, 7, 0.1); /* Amarelo */
+}
+.agenda-item[data-tipo="trabalho"] .agenda-day {
+    color: #b38600;
+}
+
+/* Mensagem de "Nenhum evento" */
+#no-events-message,
+#initial-no-events-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+/* --- 4. Formulário Modal --- */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5); 
+    
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--lumi-blue-dark);
+}
+.modal-close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 0.8;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+    color: #000;
+    text-decoration: none;
+}
+/* Campos do formulário */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #555;
+}
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+}
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 3px var(--lumi-blue-transparent-20);
+}
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+.form-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+#saveEventBtn {
+    background-color: var(--lumi-blue);
+    color: white;
+}
+#saveEventBtn:hover {
+    background-color: var(--lumi-blue-dark);
+}
+#deleteEventBtn {
+    background-color: #dc3545;
+    color: white;
+}
+#deleteEventBtn:hover {
+    background-color: #a02a38;
+}
+#cancelBtn {
+    background-color: #f0f0f0;
+    color: #333;
+}
+#cancelBtn:hover {
+    background-color: #ddd;
+}
+
+/* --- 5. Responsividade --- */
+@media (max-width: 900px) {
+    .calendar-page {
+        flex-direction: column;
+    }
+    .calendar-container {
+        min-width: 100%;
+    }
+    .agenda-container {
+        min-width: 100%;
+        max-width: 100%;
+        max-height: 500px; /* Altura máxima em telas menores */
+    }
+    #calendar {
+        height: 60vh; /* Reduz altura em telas menores */
+    }
+}

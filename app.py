@@ -12,8 +12,9 @@ import re
 import traceback
 from datetime import datetime
 import logging
+import locale
 from dotenv import load_dotenv
-import uuid
+import uuid 
 import psycopg2
 
 import google.generativeai as genai
@@ -38,6 +39,7 @@ from flask_login import (
 )
 
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 
 load_dotenv()
@@ -67,7 +69,21 @@ else:
     )
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# === MUDANÇA (CORREÇÃO) ===
+# Esta linha foi acidentalmente removida. Ela DEFINE o 'db'.
 db = SQLAlchemy(app)
+# === FIM DA MUDANÇA (CORREÇÃO) ===
+
+
+# === MUDANÇA === Configurações de Upload
+UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+# === FIM DA MUDANÇA ===
 
 
 @app.cli.command("db-create-all")
@@ -86,24 +102,36 @@ login_manager.login_message = "Você precisa fazer login para acessar esta pági
 login_manager.login_message_category = "warning"
 
 
+# === MUDANÇA === Função auxiliar para verificar extensão do arquivo
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+# === FIM DA MUDANÇA ===
+
+
 # =======================================================
 # MODELO DE DADOS (User - Atualizado com NOVOS CAMPOS)
 # =======================================================
 class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), nullable=False)
+    username = db.Column(db.String(80), nullable=False) # 'username' é o NOME
     email = db.Column(db.String(120), unique=True, nullable=False)
     matricula = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
 
     cpf = db.Column(db.String(14), unique=True, nullable=False)
     telefone = db.Column(db.String(20), nullable=True)
-    sexo = db.Column(db.String(30), nullable=True)
+    sexo = db.Column(db.String(30), nullable=True) # Gênero
     etnia = db.Column(db.String(50), nullable=True)
 
     vark_scores_json = db.Column(db.Text, nullable=True)
     vark_primary_type = db.Column(db.String(10), nullable=True)
+
+    # === MUDANÇA === Coluna para salvar o NOME DO ARQUIVO da imagem
+    profile_image = db.Column(db.String(100), nullable=False, default='lumi-2.png')
+    # === FIM DA MUDANÇA ===
+
 
     def get_vark_scores(self):
         if not self.vark_scores_json:
@@ -121,8 +149,10 @@ class User(db.Model, UserMixin):
             return False
         return check_password_hash(self.password_hash, password)
 
-    def __init__(self, username, email, matricula, password=None, cpf=None, telefone=None, sexo=None, etnia=None):
-        self.username = username
+    # === MUDANÇA === Renomeei 'username' para 'nome_completo'
+    # e 'sexo' para 'genero' para bater com o seu HTML/Formulário
+    def __init__(self, nome_completo, email, matricula, password=None, cpf=None, telefone=None, genero=None, etnia=None):
+        self.username = nome_completo # O formulário usa 'username', mas seu HTML exibe 'nome'
         self.email = email
         self.matricula = matricula
         if password:
@@ -130,11 +160,8 @@ class User(db.Model, UserMixin):
 
         self.cpf = cpf
         self.telefone = telefone
-        self.sexo = sexo
+        self.sexo = genero # 'sexo' no BD, 'genero' no formulário
         self.etnia = etnia
-
-        self.vark_scores_json = None
-        self.vark_primary_type = None
 
 
 @login_manager.user_loader
@@ -151,6 +178,7 @@ def load_user(user_id):
 # =======================================================
 # 1. CONSTANTES E CONFIGURAÇÃO DO GEMINI
 # =======================================================
+# (Seu código original mantido aqui)
 GEMINI_API_KEY = None
 model = None
 try:
@@ -180,7 +208,7 @@ else:
 # =======================================================
 # 2. FUNÇÕES AUXILIARES (CARREGAMENTO DE DADOS)
 # =======================================================
-
+# (Seu código original mantido aqui)
 def carregar_dados_json(arquivo):
     try:
         caminho_arquivo = os.path.join(os.path.dirname(__file__), arquivo)
@@ -209,7 +237,7 @@ def salvar_dados_json(arquivo, dados):
         traceback.print_exc()
         return False
 
-
+# (Seu código original 'carregar_calendario', 'carregar_matriz', etc. mantido)
 def carregar_calendario():
     meses_map = {
         1: "JAN", 2: "FEV", 3: "MAR", 4: "ABR", 5: "MAI", 6: "JUN",
@@ -349,9 +377,9 @@ def carregar_contexto_inicial():
                     horario = disc.get('horario', 'A definir')
                     sala = disc.get('sala', 'A definir')
                     contexto_matriz += f"- Disciplina: {nome}\n"
-                    contexto_matriz += f"  Professor: {prof}\n"
-                    contexto_matriz += f"  Horário: {dia}, {horario}\n"
-                    contexto_matriz += f"  Sala: {sala}\n\n"
+                    contexto_matriz += f"  Professor: {prof}\n"
+                    contexto_matriz += f"  Horário: {dia}, {horario}\n"
+                    contexto_matriz += f"  Sala: {sala}\n\n"
             contexto_matriz += "======================================================================\n"
             print("Matriz Curricular carregada para o contexto.")
         else:
@@ -375,7 +403,7 @@ def carregar_contexto_inicial():
                 contexto_vark += f"{desc}\n"
                 contexto_vark += "Métodos sugeridos:\n"
                 for m in metodos:
-                    contexto_vark += f"  - {m}\n"
+                    contexto_vark += f"  - {m}\n"
             contexto_vark += "======================================================================\n"
             print("Métodos VARK carregados para o contexto.")
         else:
@@ -418,7 +446,7 @@ def get_initial_chat_history():
         {
             "role": "model",
             "parts": [
-                "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje?"
+                "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
             ],
         },
     ]
@@ -432,17 +460,16 @@ def get_initial_chat_history():
 def register():
     """Lida com o registro de novos usuários."""
     if current_user.is_authenticated:
-        # Redireciona para o Menu se já logado
         return redirect(url_for("index"))
 
     if request.method == "POST":
         email = request.form.get("email")
-        username = request.form.get("username")
+        nome_completo = request.form.get("username") # O formulário envia 'username'
         matricula = request.form.get("matricula")
         password = request.form.get("password")
         cpf = request.form.get("cpf")
         telefone = request.form.get("telefone")
-        sexo = request.form.get("sexo")
+        genero = request.form.get("sexo") # O formulário envia 'sexo'
         etnia = request.form.get("etnia")
 
         user_by_email = User.query.filter_by(email=email).first()
@@ -462,11 +489,11 @@ def register():
         try:
             new_user = User(
                 email=email,
-                username=username,
+                nome_completo=nome_completo,
                 matricula=matricula,
                 cpf=cpf,
                 telefone=telefone,
-                sexo=sexo,
+                genero=genero,
                 etnia=etnia
             )
             new_user.set_password(password)
@@ -475,7 +502,7 @@ def register():
 
             login_user(new_user)
             flash("Conta criada com sucesso! Você foi logado.", "success")
-            return redirect(url_for("index"))  # Redireciona para o Menu
+            return redirect(url_for("index"))
         except Exception as e:
             db.session.rollback()
             print(f"Erro ao registrar usuário: {e}")
@@ -488,7 +515,6 @@ def register():
 def login():
     """Lida com o login do usuário."""
     if current_user.is_authenticated:
-        # Redireciona para o Menu se já logado
         return redirect(url_for("index"))
 
     if request.method == "POST":
@@ -503,7 +529,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             flash("Login realizado com sucesso!", "success")
-            return redirect(url_for("index"))  # Redireciona para o Menu
+            return redirect(url_for("index"))
         else:
             flash("Email/Matrícula/CPF ou senha inválidos. Tente novamente.", "danger")
 
@@ -527,7 +553,6 @@ def logout():
 @login_required
 def index():
     """Renderiza a página inicial do MENU."""
-    # (O arquivo index.html agora é o MENU)
     return render_template("index.html")
 
 
@@ -537,16 +562,86 @@ def chat():
     """Renderiza a página do CHAT."""
     if "historico" not in session:
         session["historico"] = get_initial_chat_history()
-    # (O arquivo chat.html é a página do CHAT)
     return render_template("chat.html")
 
 # =======================================================
 
-
-@app.route("/profile")
+# =======================================================
+# === ROTA DE PERFIL (COM UPLOAD DE ARQUIVO) ===
+# =======================================================
+@app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
+    """Renderiza a página de perfil (GET) e salva as atualizações (POST)."""
+    
+    user = current_user 
+
+    if request.method == "POST":
+        # --- Lógica para SALVAR os dados ---
+        
+        try:
+            # --- 1. Lógica de Upload da Imagem ---
+            if 'profile_pic' in request.files:
+                file = request.files['profile_pic']
+                
+                if file and file.filename != '' and allowed_file(file.filename):
+                    
+                    filename_secure = secure_filename(file.filename)
+                    extension = filename_secure.rsplit('.', 1)[1].lower()
+                    unique_filename = f"{uuid.uuid4()}.{extension}"
+                    
+                    save_path = os.path.join(app.config["UPLOAD_FOLDER"], unique_filename)
+                    
+                    file.save(save_path)
+                    
+                    if user.profile_image != 'lumi-2.png':
+                        old_path = os.path.join(app.config["UPLOAD_FOLDER"], user.profile_image)
+                        if os.path.exists(old_path):
+                            try:
+                                os.remove(old_path)
+                            except Exception as e:
+                                print(f"Aviso: Não foi possível remover o arquivo antigo: {e}")
+                                
+                    user.profile_image = unique_filename
+            
+            # --- 2. Lógica para salvar os dados do formulário ---
+            
+            # (No seu HTML o 'Nome Completo' tem o name="nome")
+            novo_username = request.form.get('nome') 
+            novo_email = request.form.get('email')
+            novo_telefone = request.form.get('telefone')
+             # (No seu HTML o 'Gênero' tem o name="genero")
+            novo_sexo = request.form.get('genero')
+            novo_etnia = request.form.get('etnia')
+
+            if novo_email != user.email:
+                email_existente = User.query.filter_by(email=novo_email).first()
+                if email_existente:
+                    flash('Este e-mail já está em uso por outra conta. Tente outro.', 'danger')
+                    return redirect(url_for('profile'))
+            
+            user.username = novo_username # 'username' no BD, 'nome' no formulário
+            user.email = novo_email
+            user.telefone = novo_telefone
+            user.sexo = novo_sexo # 'sexo' no BD, 'genero' no formulário
+            user.etnia = novo_etnia
+            
+            db.session.commit()
+            
+            flash('Perfil atualizado com sucesso!', 'success')
+            return redirect(url_for('profile'))
+
+        except Exception as e:
+            db.session.rollback()
+            print(f"ERRO ao atualizar perfil: {e}")
+            traceback.print_exc() 
+            flash(f'Ocorreu um erro ao atualizar: {e}', 'danger')
+
+    # --- Lógica para MOSTRAR a página (GET) ---
     return render_template("profile.html")
+# =======================================================
+# === FIM DA ROTA DE PERFIL ===
+# =======================================================
 
 
 @app.route("/faq")
@@ -589,10 +684,6 @@ def modo_foco():
 def limpar_chat():
     """Limpa o histórico do chat da sessão e redireciona para o CHAT."""
     session["historico"] = get_initial_chat_history()
-    # =======================================================
-    # === CORREÇÃO APLICADA AQUI ===
-    # =======================================================
-    # Redireciona de volta para o menu/chat principal
     return redirect(url_for("index"))
 
 
@@ -646,13 +737,31 @@ def ask():
     data = request.json
     if not data or "pergunta" not in data:
         return jsonify({"resposta": "Nenhuma pergunta recebida."}), 400
-    pergunta = data["pergunta"]
+    
+    pergunta = data["pergunta"] # Pergunta original do usuário
 
     try:
+        # (Sua lógica de data e hora mantida)
+        try:
+            locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+        except locale.Error:
+            try:
+                locale.setlocale(locale.LC_TIME, 'Portuguese_Brazil')
+            except locale.Error:
+                locale.setlocale(locale.LC_TIME, '')
+        
+        data_hora_atual = datetime.now().strftime("%A, %d de %B de %Y, %H:%M")
+        
+        pergunta_com_contexto = (
+            f"Contexto de data/hora atual (use APENAS se o usuário perguntar sobre 'hoje', 'agora', etc.): {data_hora_atual}.\n"
+            f"Pergunta do usuário: {pergunta}"
+        )
+
         historico_chat = session.get("historico", get_initial_chat_history())
 
         chat = model.start_chat(history=historico_chat)
-        response = chat.send_message(pergunta)
+        
+        response = chat.send_message(pergunta_com_contexto)
 
         historico_chat.append({"role": "user", "parts": [pergunta]})
         historico_chat.append({"role": "model", "parts": [response.text]})
@@ -709,7 +818,7 @@ def save_vark_result():
             500,
         )
 
-
+# (Suas rotas de calendário 'save_calendar_event' e 'delete_calendar_event' mantidas)
 @app.route("/save_calendar_event", methods=["POST"])
 @login_required
 def save_calendar_event():

@@ -1,0 +1,401 @@
+/* =======================================================
+ * TÍTULO: FOLHA DE ESTILOS DO CHAT (CHAT.CSS)
+ * (Sidebar + Chat + Ajustes de Chat)
+ * ======================================================= */
+
+/* === SIDEBAR === */
+.funcoes {
+    width: 300px;
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10); /* Ajustado */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: fit-content;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.funcoes:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px var(--lumi-blue-transparent-15); /* Ajustado */
+}
+
+/* Título "Funcionalidades" com Gradiente de Texto */
+.funcoes h2 {
+    text-align: left;
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+    
+    /* Fallback de cor */
+    color: var(--lumi-blue);
+    
+    /* Efeito de Gradiente no Texto */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.funcoes h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lumi-blue), transparent);
+    border-radius: 2px;
+}
+
+.func-item {
+    text-decoration: none;
+    color: #333;
+    background: linear-gradient(135deg, #f0f5ff 0%, #e6edff 100%);
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.95em;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.func-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background: var(--lumi-blue);
+    transition: height 0.3s ease;
+    transform: translateY(-50%);
+}
+
+.func-item:hover::before {
+    height: 60%;
+}
+
+.func-item:hover {
+    background: linear-gradient(135deg, #e0e8ff 0%, #d0dcff 100%);
+    color: var(--lumi-blue-dark); /* Ajustado para o novo azul escuro */
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px var(--lumi-blue-transparent-15);
+}
+
+.func-item.disabled {
+    background: #f5f5f5;
+    color: #aaa;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.func-item.disabled:hover {
+    background: #f5f5f5;
+    color: #aaa;
+    box-shadow: none;
+}
+
+.func-item.disabled::before {
+    display: none;
+}
+
+/* === CHAT === */
+.chat-container {
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10); /* Ajustado */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-height: calc(100vh - 80px - 60px);
+    min-height: 400px;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border-radius: 10px; /* Consistente com o estilo final */
+}
+
+.chat-box {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+    border-radius: 0 0 10px 10px;
+}
+
+.chat-box::-webkit-scrollbar { width: 8px; }
+.chat-box::-webkit-scrollbar-track { background: #f1f1ff; border-radius: 4px;}
+.chat-box::-webkit-scrollbar-thumb { 
+    background: linear-gradient(180deg, var(--lumi-blue), var(--lumi-blue-dark)); 
+    border-radius: 4px;
+}
+.chat-box::-webkit-scrollbar-thumb:hover { background: var(--lumi-blue-dark); }
+
+.msg {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    line-height: 1.45;
+    word-wrap: break-word;
+    font-size: 0.95em;
+    animation: fadeIn 0.3s ease-out;
+    position: relative;
+    opacity: 1; /* Garante que as mensagens não fiquem transparentes */
+}
+
+.msg::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.msg.lumi {
+    background: #f1f3f5;
+    color: #333;
+    border-bottom-left-radius: 5px;
+    align-self: flex-start;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.msg.lumi::before {
+    left: -8px;
+    bottom: 0;
+    border-width: 8px 8px 0 0;
+    border-color: transparent #f1f3f5 transparent transparent;
+}
+
+.msg.lumi.typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background: #f8f9fa;
+}
+
+.typing-indicator .dot {
+    height: 8px;
+    width: 8px;
+    background: linear-gradient(135deg, var(--lumi-blue), var(--lumi-blue-dark));
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: blink 1.4s infinite both;
+}
+
+.typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    20% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.2; transform: scale(0.8); }
+}
+
+/* === AJUSTES DO CHAT (Conforme solicitado) === */
+
+/* --- 1. MODIFICAÇÃO: Mensagens do Usuário (Gradiente SÓLIDO) --- */
+.chat-box .msg.user {
+    /* Gradiente SÓLIDO, 100% Opaco */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    
+    /* Texto 100% branco e opaco */
+    color: #FFFFFF; 
+    
+    /* Layout e bordas */
+    align-self: flex-end;
+    border-radius: 15px 15px 0 15px;
+    box-shadow: 0 2px 8px var(--lumi-blue-transparent-30); /* Sombra suave */
+    border: none; /* Remove qualquer borda */
+    
+    /* Animação correta (substitui o 'fadeIn' da classe .msg) */
+    animation: slideInRight 0.3s ease-out; 
+    
+    /* Garante que a opacidade final seja 1 (após a animação) */
+    opacity: 1 !important; 
+}
+
+/* Triângulo/seta da caixa de mensagem, SÓLIDO */
+.chat-box .msg.user::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    right: -8px;
+    bottom: 0;
+    border-width: 8px 0 0 8px;
+    border-color: transparent transparent transparent var(--lumi-blue-dark); /* Cor escura SÓLIDA */
+}
+
+
+/* --- 2. MODIFICAÇÃO: Input de Texto (Translúcido) --- */
+.chat-input input,
+.chat-input input[type="text"] {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 1em;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: rgba(240, 240, 240, 0.8); /* Cinza claro 80% translúcido */
+    color: #333;
+}
+
+.chat-input input:focus,
+.chat-input input[type="text"]:focus {
+    background-color: #ffffff; /* Fica branco sólido ao clicar */
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 3px var(--lumi-blue-transparent-20);
+    transform: none; /* Sobrescreve o transform anterior */
+}
+
+/* Botão de Enviar (Já usa o gradiente sólido) */
+.chat-input button {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px var(--lumi-blue-transparent-30);
+}
+
+.chat-input button:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 15px var(--lumi-blue-transparent-40);
+}
+
+.chat-input button:active {
+    transform: scale(0.95);
+}
+
+.chat-input button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- 3. ADIÇÃO: Novo Cabeçalho do Chat (Chat Geral) --- */
+.chat-header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent; /* Remove o fundo cinza */
+    padding: 15px 20px;
+    border-bottom: none; /* Remove a borda */
+    border-radius: 10px 10px 0 0; 
+}
+
+.chat-title-main {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0;
+    
+    /* Fallback de cor */
+    color: var(--lumi-blue);
+    
+    /* Efeito de Gradiente no Texto */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    
+    /* Estilos para a "barra quebrada" */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.chat-title-main::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lumi-blue), transparent);
+    border-radius: 2px;
+}
+
+/* --- 4. MODIFICAÇÃO: Botão "Limpar Conversa" (Melhorado) --- */
+.clear-chat-btn {
+    background-color: transparent;
+    color: var(--lumi-blue);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 2px solid var(--lumi-blue-transparent-30); /* Borda azul clara */
+}
+
+.clear-chat-btn:hover {
+    background-color: var(--lumi-blue-transparent-10); /* Fundo azul claro ao passar o mouse */
+    color: var(--lumi-blue-dark);
+    border-color: var(--lumi-blue-transparent-85); /* Borda mais forte */
+    transform: translateY(-1px);
+}
+
+/* --- 6. MODIFICAÇÃO: Caixa de Input (Formulário) --- */
+.chat-input {
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.6); 
+    border-radius: 0 0 10px 10px;
+}
+
+/* === RESPONSIVIDADE (Chat) === */
+@media (max-width: 992px) {
+    main {
+        flex-direction: column;
+        align-items: center;
+    }
+    .funcoes {
+        width: 100%;
+        max-width: 700px;
+        order: 1;
+    }
+    .chat-container {
+        width: 100%;
+        max-width: 700px;
+        order: 2;
+        max-height: 60vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .msg { max-width: 85%; }
+}
+
+@media (max-width: 480px) {
+    .chat-input button { width: 38px; height: 38px; }
+}
