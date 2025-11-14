@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lumi — Simulador de Provas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#0f1220; --panel:#161a2b; --muted:#8fa3c8; --text:#e7eeff;
+      --brand:#7c9cff; --brand-2:#39d98a; --danger:#ff6b6b; --warning:#ffb020;
+      --ok:#39d98a; --chip:#1f2540; --border:#2a2f4b;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+      background:linear-gradient(180deg,#0b0e1a 0%, #0f1220 30%, #0f1220 100%);
+      color:var(--text);
+    }
+    a{color:var(--brand);text-decoration:none}
+    header.nav{
+      position:sticky; top:0; z-index:20; backdrop-filter: blur(10px);
+      background:rgba(15,18,32,.75); border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      max-width:1080px; margin:0 auto; display:flex; align-items:center; gap:16px;
+      padding:14px 16px;
+    }
+    .logo{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px}
+    .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 14px var(--brand-2)}
+    .nav-links{display:flex; gap:14px; flex-wrap:wrap}
+    .nav-links a{padding:8px 12px;border-radius:12px;background:transparent;color:var(--muted); border:1px solid transparent}
+    .nav-links a.active, .nav-links a:hover{color:var(--text); border-color:var(--border); background:rgba(124,156,255,.08)}
+    main{max-width:1080px; margin:28px auto; padding:0 16px 60px}
+    .page-title{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px}
+    .page-title h1{font-size:26px; margin:0; font-weight:700}
+    .hint{color:var(--muted); font-size:13px}
+
+    .panel{
+      background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .config{
+      display:grid; grid-template-columns:1.1fr .9fr; gap:18px; padding:18px;
+    }
+    @media (max-width: 900px){
+      .config{grid-template-columns:1fr}
+    }
+    .block{padding:16px; background:rgba(255,255,255,.02); border:1px solid var(--border); border-radius:16px}
+    .block h3{margin:0 0 12px 0; font-size:16px}
+    .disc-list{display:flex;flex-wrap:wrap; gap:10px}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+      border:1px solid var(--border); background:var(--chip); color:var(--text); cursor:pointer; user-select:none;
+    }
+    .chip input{display:none}
+    .chip.active{outline:2px solid var(--brand); background:rgba(124,156,255,.12)}
+    .chip.disabled{opacity:.6; cursor:default; pointer-events:none}
+    .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    .row label{font-size:13px; color:var(--muted)}
+    select,button,input[type="number"]{
+      background:#0f1326; color:var(--text); border:1px solid var(--border); border-radius:12px;
+      padding:10px 12px; font-family:inherit; font-size:14px;
+    }
+    .btn{
+      padding:12px 16px; border-radius:14px; border:1px solid transparent; cursor:pointer; font-weight:600;
+      transition:.15s ease; letter-spacing:.2px;
+    }
+    .btn-primary{background:var(--brand); color:#0b0f1a}
+    .btn-primary:hover{filter:brightness(1.05)}
+    .btn-ghost{background:transparent; color:var(--text); border-color:var(--border)}
+    .btn-danger{background:var(--danger); color:#0b0f1a}
+    .btn-ok{background:var(--ok); color:#0b0f1a}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+
+    .exam{
+      margin-top:18px; padding:0; display:grid; grid-template-columns: 280px 1fr; gap:18px;
+    }
+    @media (max-width: 1050px){ .exam{grid-template-columns:1fr} }
+
+    .sidebar{padding:16px}
+    .timer{
+      padding:14px; border-radius:14px; background:linear-gradient(135deg, rgba(124,156,255,.18), rgba(57,217,138,.14));
+      border:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;
+    }
+    .timer .big{font-size:22px; font-weight:700}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:12px; padding:2px 6px; border:1px solid var(--border); border-radius:6px; color:var(--muted); background:#0b0f1a}
+    .legend{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 12px}
+    .legend .dot{width:10px;height:10px;border-radius:50%}
+    .dot.answered{background:var(--ok)}
+    .dot.flag{background:var(--warning)}
+    .dot.pending{background:#394165}
+
+    .grid{display:grid; grid-template-columns:repeat(8,1fr); gap:8px}
+    @media (max-width: 420px){ .grid{grid-template-columns:repeat(6,1fr)} }
+    .cell{
+      border:1px solid var(--border); background:#111633; color:var(--text); padding:10px 0; text-align:center;
+      border-radius:12px; cursor:pointer; user-select:none; font-weight:600;
+    }
+    .cell.current{outline:2px solid var(--brand)}
+    .cell.answered{background:rgba(57,217,138,.14); border-color:rgba(57,217,138,.35)}
+    .cell.flag{background:rgba(255,176,32,.12); border-color:rgba(255,176,32,.35)}
+
+    .question-panel{padding:18px}
+    .qhead{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
+    .qidx{font-weight:700}
+    .qstem{white-space:pre-wrap; line-height:1.5; font-size:16px; margin:6px 0 14px}
+
+    .options{display:grid; gap:10px}
+    .opt{
+      border:1px solid var(--border); background:#121735; padding:12px; border-radius:12px; cursor:pointer; display:flex; gap:10px; align-items:flex-start;
+    }
+    .opt:hover{border-color:#3a4170}
+    .opt.selected{outline:2px solid var(--brand)}
+    .opt .letter{font-weight:700; width:26px; min-width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:rgba(124,156,255,.15); border:1px solid var(--border)}
+    .opt .text{flex:1}
+
+    .controls{display:flex; justify-content:space-between; gap:10px; margin-top:14px}
+    .controls .left,.controls .right{display:flex; gap:10px; flex-wrap:wrap}
+
+    .sr-only{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+
+    .report{padding:18px}
+    .table{width:100%; border-collapse:collapse}
+    .table th,.table td{border-bottom:1px solid var(--border); padding:10px 8px; text-align:left}
+    .badge{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700}
+    .badge.ok{background:rgba(57,217,138,.18); color:#9cf2c9}
+    .badge.fail{background:rgba(255,107,107,.18); color:#ffb3b3}
+
+    footer{max-width:1080px; margin:32px auto; padding:16px; color:var(--muted); font-size:12px; opacity:.9}
+    .toast{position:fixed; right:16px; bottom:16px; background:#111633; border:1px solid var(--border); color:var(--text); padding:10px 12px; border-radius:12px; box-shadow:var(--shadow); opacity:0; transform:translateY(8px); transition:.25s}
+    .toast.show{opacity:1; transform:translateY(0)}
+    .banner-offline{position:sticky; top:52px; z-index:21; display:none; background:#331b1b; color:#ffdede; border-bottom:1px solid #5a2a2a; padding:8px 16px; text-align:center; font-size:13px}
+    .banner-offline.show{display:block}
+    .danger{color:#ffb3b3}
+    .hist{margin-top:18px}
+    .hist h3{margin:0 0 8px 0; font-size:16px}
+    .hist-list{display:grid; gap:8px}
+    .hist-item{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px; border:1px solid var(--border); background:#111633; border-radius:12px}
+    .small{font-size:12px; color:var(--muted)}
+  </style>
+</head>
+<body>
+<header class="nav" role="navigation" aria-label="principal">
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="dot" aria-hidden="true"></div>
+      <a href="{{ url_for('index') }}" style="color:var(--text)">Lumi</a>
+      <span class="hint">Assistente Acadêmica</span>
+    </div>
+    <nav class="nav-links" aria-label="links do site">
+      <a href="{{ url_for('index') }}">Chat</a>
+      <a href="{{ url_for('calendario') }}">Calendário</a>
+      <a href="{{ url_for('flashcards') }}">Flashcards</a>
+      <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+      <a href="{{ url_for('modo_foco') }}">Foco</a>
+      <a class="active" href="{{ url_for('simulador_de_provas') }}">Simulador</a>
+      <a href="{{ url_for('profile') }}">Perfil</a>
+      <a href="{{ url_for('logout') }}">Sair</a>
+    </nav>
+  </div>
+  <div id="offlineBanner" class="banner-offline" role="status" aria-live="polite">
+    Conexão perdida. Suas respostas serão salvas localmente e reenviadas quando voltar.
+  </div>
+</header>
+
+<main>
+  <div class="page-title">
+    <h1>Simulador de Provas</h1>
+    <div class="hint">Atalhos: <span class="kbd">1–5</span> opções • <span class="kbd">Enter</span> Próxima • <span class="kbd">Backspace</span> Anterior</div>
+  </div>
+
+  <!-- CONFIGURAÇÃO -->
+  <section id="configPanel" class="panel config" aria-labelledby="cfg-title">
+    <div class="block">
+      <h3 id="cfg-title">Modo</h3>
+      <div class="row">
+        <label for="mode">Escolha o modo</label>
+        <select id="mode" aria-label="Modo de execução">
+          <option value="simulado" selected>Simulado (todas as disciplinas)</option>
+          <option value="prova">Prova (uma disciplina)</option>
+        </select>
+      </div>
+
+      <div id="discWrap" style="margin-top:16px">
+        <h3 id="discTitle">Disciplinas</h3>
+        <div class="disc-list" id="discList" role="group" aria-label="Seleção de disciplinas"></div>
+        <p id="discHint" class="hint" style="margin-top:8px">
+          Selecione <b>uma</b> disciplina no modo Prova. No modo Simulado, as disciplinas são apenas informativas.
+        </p>
+      </div>
+
+      <!-- Histórico -->
+      <div class="hist">
+        <h3>Histórico</h3>
+        <div id="histList" class="hist-list" aria-live="polite"></div>
+        <div class="small">Revise simulados finalizados quando quiser.</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Configurações</h3>
+      <div class="row">
+        <label for="qtd">Quantidade de questões</label>
+        <select id="qtd" aria-label="Quantidade de questões"></select>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label for="dur">Duração</label>
+        <select id="dur" aria-label="Duração do simulador"></select>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="btnStart" class="btn btn-primary">Iniciar Simulado</button>
+        <button id="btnResume" class="btn btn-ghost" style="display:none">Retomar tentativa aberta</button>
+      </div>
+      <div class="hint" style="margin-top:8px">Autosave a cada 15s. Resistente a quedas. O gabarito só aparece após finalizar.</div>
+    </div>
+  </section>
+
+  <!-- PROVA -->
+  <section id="examPanel" class="panel exam" style="display:none" aria-live="polite">
+    <aside class="sidebar">
+      <div class="timer" aria-live="assertive">
+        <div>
+          <div class="hint">Tempo restante</div>
+          <div class="big" id="timeLeft">--:--</div>
+        </div>
+        <div class="row">
+          <button id="btnFinish" class="btn btn-danger">Finalizar</button>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="row"><span class="dot pending"></span><span class="hint">Pendente</span></span>
+        <span class="row"><span class="dot answered"></span><span class="hint">Respondida</span></span>
+        <span class="row"><span class="dot flag"></span><span class="hint">Marcada</span></span>
+      </div>
+
+      <div id="grid" class="grid" role="grid" aria-label="Navegação das questões"></div>
+    </aside>
+
+    <section class="question-panel">
+      <div class="qhead">
+        <div class="qidx"><span id="qPos">1</span>/<span id="qTotal">0</span></div>
+        <div class="row">
+          <button id="btnFlag" class="btn btn-ghost" aria-pressed="false" aria-label="Marcar questão para revisão">Marcar</button>
+        </div>
+      </div>
+      <div id="qStem" class="qstem"></div>
+      <div id="qOptions" class="options" role="radiogroup" aria-label="Alternativas"></div>
+
+      <div class="controls">
+        <div class="left">
+          <button id="btnPrev" class="btn btn-ghost"><span class="kbd">Backspace</span> Anterior</button>
+        </div>
+        <div class="right">
+          <button id="btnNext" class="btn btn-primary">Próxima <span class="kbd">Enter</span></button>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- RELATÓRIO -->
+  <section id="reportPanel" class="panel report" style="display:none">
+    <h2 style="margin:0 0 8px">Resultado</h2>
+    <div class="row" style="gap:16px; margin-bottom:8px">
+      <div class="badge ok" id="scoreBadge">Score: 0%</div>
+      <div class="badge" style="background:#23294a;color:#cfe1ff" id="countBadge">0/0 corretas</div>
+      <div class="badge" style="background:#2b2f49;color:#ffe0a3" id="timeBadge">Tempo: --:--</div>
+    </div>
+    <div class="hint">Abaixo seu gabarito versus respostas. Use para revisar.</div>
+
+    <div style="overflow:auto; margin-top:8px">
+      <table class="table" id="reportTable" aria-label="Relatório de respostas">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Enunciado</th>
+            <th>Sua resposta</th>
+            <th>Gabarito</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <a class="btn btn-ok" href="{{ url_for('simulador_de_provas') }}">Novo</a>
+      <a class="btn btn-ghost" href="{{ url_for('index') }}">Voltar ao Chat</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>© {{ current_year }} Lumi. Feito para estudar sem drama. Se travar, respira, salva e segue.</div>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ========= CONFIG ========= */
+/* Simulado até 40, Prova até 36 */
+const POLICY = { min:12, max:40, def:16, durations:[15,30,45,60,90,120,150,180] };
+const DISCIPLINAS = [
+  "Fundamentos de Computação e Infraestrutura",
+  "Fundamentos de Engenharia de Dados",
+  "Fundamentos Matemáticos para Computação",
+  "Introdução à Engenharia de Soluções"
+];
+const MAX_SIMULADO = 40;
+const MAX_PROVA = 36;
+
+/* ========= Estado ========= */
+let mode = "simulado";
+let attempt = null;
+let questions = [];
+let answers = {};
+let flags = new Set();
+let order = [];
+let pos = 0;
+let timerInt = null;
+let offline = false;
+let finishing = false;
+
+/* ========= Helpers UI ========= */
+const $ = (sel)=>document.querySelector(sel);
+const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), 1800); }
+function fmtSec(s){ const m=Math.floor(s/60), r=(s%60); return String(m).padStart(2,"0")+":"+String(r).padStart(2,"0"); }
+function setBtnLoading(btn, on){ btn.disabled=on; }
+
+/* ========= Conectividade ========= */
+window.addEventListener("online", ()=>{ offline=false; $("#offlineBanner").classList.remove("show"); resendBuffered(); });
+window.addEventListener("offline", ()=>{ offline=true; $("#offlineBanner").classList.add("show"); });
+
+/* ========= Render config ========= */
+function renderQtdOptions(maxCap){
+  const slQtd = $("#qtd"); slQtd.innerHTML="";
+  const minCap = POLICY.min;
+  const def = Math.min(POLICY.def, maxCap);
+  for(let n=minCap; n<=maxCap; n+=4){
+    const opt=document.createElement("option");
+    opt.value=String(n);
+    opt.textContent = n + (n===def ? " (padrão)" : "");
+    if(n===def) opt.selected=true;
+    slQtd.appendChild(opt);
+  }
+  const current = parseInt(slQtd.value||def,10);
+  if(current>maxCap){ slQtd.value = String(maxCap); }
+}
+
+function renderDurOptions(){
+  const slDur=$("#dur"); slDur.innerHTML="";
+  POLICY.durations.forEach(d=>{
+    const opt=document.createElement("option");
+    opt.value=String(d); opt.textContent=d+" min";
+    if(d===60) opt.selected=true;
+    slDur.appendChild(opt);
+  });
+}
+
+function renderDisciplinas(){
+  const list = $("#discList"); list.innerHTML="";
+  DISCIPLINAS.forEach(name=>{
+    const id = "disc_"+btoa(name).replace(/=/g,"");
+    const chip = document.createElement("label");
+    chip.className="chip";
+    chip.setAttribute("tabindex","0");
+    chip.innerHTML = `<input type="checkbox" id="${id}" value="${name}" /> ${name}`;
+    chip.addEventListener("click", ()=>{
+      if(chip.classList.contains("disabled")) return;
+      const input = chip.querySelector("input");
+      if(mode==="prova"){
+        $$("#discList input").forEach(i=>{ i.checked=false; i.closest(".chip")?.classList.remove("active"); });
+        input.checked = true;
+        chip.classList.add("active");
+      }else{
+        input.checked = false;
+      }
+    });
+    chip.addEventListener("keydown", (e)=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); chip.click(); }});
+    list.appendChild(chip);
+  });
+}
+
+function applyModeUI(){
+  const discWrap = $("#discWrap");
+  const title = $("#discTitle");
+  const hint = $("#discHint");
+  const chips = $$("#discList .chip");
+  const btn = $("#btnStart");
+
+  if(mode==="simulado"){
+    btn.textContent = "Iniciar Simulado";
+    renderQtdOptions(Math.min(POLICY.max, MAX_SIMULADO));
+    discWrap.style.display = "block";
+    title.textContent = "Disciplinas (informativo)";
+    hint.innerHTML = `No modo <b>Simulado</b> as questões são embaralhadas de todas as disciplinas.`;
+    chips.forEach(c=>{ c.classList.add("disabled"); c.classList.remove("active"); c.querySelector("input").checked=false; });
+  }else{
+    btn.textContent = "Iniciar Prova";
+    renderQtdOptions(MAX_PROVA);
+    discWrap.style.display = "block";
+    title.textContent = "Disciplinas";
+    hint.innerHTML = `Escolha <b>uma</b> disciplina para o modo Prova.`;
+    chips.forEach(c=>{ c.classList.remove("disabled"); });
+  }
+}
+
+function renderConfig(){
+  renderDisciplinas();
+  renderQtdOptions(POLICY.max);
+  renderDurOptions();
+  applyModeUI();
+  checkOpenAttempt();
+  loadHistory();
+}
+
+/* ========= Autosave ========= */
+function storeKey(){ return attempt ? `attempt_${attempt.id}` : null; }
+function persistLocal(){
+  const k = storeKey(); if(!k) return;
+  const payload = { answers, flags: Array.from(flags), pos };
+  sessionStorage.setItem(k, JSON.stringify(payload));
+}
+function restoreLocal(){
+  const k = storeKey(); if(!k) return;
+  try{
+    const data = JSON.parse(sessionStorage.getItem(k) || "{}");
+    if(data.answers) answers = data.answers;
+    if(data.flags) flags = new Set(data.flags);
+    if(typeof data.pos === "number") pos = data.pos;
+  }catch(_){}
+}
+
+/* ========= Buffer offline ========= */
+const buffer = [];
+function enqueue(qid,opt){ buffer.push({qid,opt}); persistLocal(); }
+async function resendBuffered(){
+  if(!attempt || !buffer.length) return;
+  const pending = buffer.splice(0, buffer.length);
+  for(const it of pending){ await sendAnswer(attempt.id, it.qid, it.opt, true); }
+}
+
+/* ========= API ========= */
+async function api(path, opts={}){
+  const res = await fetch(path, { headers:{ "Content-Type":"application/json" }, ...opts });
+  if(!res.ok){ const t = await res.text().catch(()=>res.statusText); throw new Error(t || `HTTP ${res.status}`); }
+  return res.json();
+}
+
+async function createAttempt(){
+  const total = parseInt($("#qtd").value,10);
+  const dur = parseInt($("#dur").value,10);
+  let payload = { mode, total: total, duracao_min: dur };
+
+  if(mode==="prova"){
+    const discs = $$("#discList input:checked").map(i=>i.value);
+    if(discs.length !== 1){ toast("Selecione exatamente 1 disciplina para Prova."); return; }
+    payload.disciplinas = discs;
+  }
+  setBtnLoading($("#btnStart"), true);
+  try{
+    const data = await api("/simulados", { method:"POST", body: JSON.stringify(payload) });
+    setupAttempt(data);
+    toast(mode==="prova" ? "Prova iniciada." : "Simulado iniciado.");
+  }catch(err){
+    console.error(err); toast("Não foi possível iniciar: "+err.message);
+  }finally{
+    setBtnLoading($("#btnStart"), false);
+  }
+}
+
+async function loadAttempt(aid){
+  const data = await api(`/simulados/${aid}`);
+  setupAttempt(data);
+  restoreLocal();
+  toast("Tentativa retomada.");
+}
+
+async function sendAnswer(aid, qid, opt, silent=false){
+  if(offline){ enqueue(qid,opt); if(!silent) toast("Sem conexão. Resposta salva localmente."); return; }
+  try{
+    await api(`/simulados/${aid}/answer`, { method:"POST", body: JSON.stringify({ question_id: qid, option: opt }) });
+  }catch(err){
+    enqueue(qid,opt);
+    if(!silent) toast("Falha no envio. Guardado para reenvio.");
+  }
+}
+
+async function finishAttempt(){
+  if(!attempt || finishing) return;
+  finishing = true; setBtnLoading($("#btnFinish"), true);
+  try{
+    const data = await api(`/simulados/${attempt.id}/finish`, { method:"POST" });
+    showReport(data);
+    const k = storeKey(); if(k) sessionStorage.removeItem(k);
+    loadHistory(); // atualiza histórico após finalizar
+  }catch(err){
+    console.error(err); toast("Erro ao finalizar: "+err.message);
+  }finally{
+    finishing = false; setBtnLoading($("#btnFinish"), false);
+  }
+}
+
+/* ========= Setup tentativa ========= */
+function setupAttempt(data){
+  attempt = data;
+  questions = data.questions || [];
+  order = data.order || questions.map((_,i)=>i);
+  $("#qTotal").textContent = questions.length;
+  $("#configPanel").style.display="none";
+  $("#examPanel").style.display="grid";
+
+  const g = $("#grid"); g.innerHTML="";
+  order.forEach((_,i)=>{
+    const c=document.createElement("button"); c.type="button"; c.className="cell"; c.textContent=String(i+1);
+    c.setAttribute("aria-label","Ir para questão "+String(i+1));
+    c.addEventListener("click", ()=>{ go(i); });
+    g.appendChild(c);
+  });
+
+  tickTimer();
+  timerInt = setInterval(tickTimer, 1000);
+
+  if(data.answers){ answers = data.answers; }
+
+  go(typeof pos==="number"?pos:0, true);
+
+  setInterval(persistLocal, 15000);
+  updateFinishButton();
+}
+
+function markGrid(){
+  const cells = $$("#grid .cell");
+  cells.forEach((cell,i)=>{
+    cell.classList.toggle("current", i===pos);
+    const q = questions[order[i]];
+    cell.classList.toggle("answered", !!answers[q.id]);
+    cell.classList.toggle("flag", flags.has(q.id));
+  });
+}
+
+/* Botão Finalizar: verde quando tudo respondido */
+function updateFinishButton(){
+  if(!attempt) return;
+  const done = questions.every(q => !!answers[q.id]);
+  const btn = $("#btnFinish");
+  btn.classList.toggle("btn-ok", done);
+  btn.classList.toggle("btn-danger", !done);
+}
+
+/* Esconde 'Próxima' na última questão */
+function updateNavButtons(){
+  const isFirst = pos === 0;
+  const isLast = pos === order.length - 1;
+  $("#btnPrev").disabled = isFirst ? false : false; // mantém ativo, só não bloqueamos
+  $("#btnNext").style.display = isLast ? "none" : "";
+}
+
+function renderQuestion(){
+  const q = questions[order[pos]];
+  $("#qPos").textContent = String(pos+1);
+  $("#qStem").textContent = q.stem || "";
+  const holder = $("#qOptions"); holder.innerHTML="";
+  const current = (answers[q.id]||"").toUpperCase();
+  Object.entries(q.options || {}).forEach(([letter,text])=>{
+    const btn = document.createElement("div");
+    btn.className = "opt"+(current===letter?" selected":"");
+    btn.setAttribute("role","radio");
+    btn.setAttribute("aria-checked", current===letter ? "true":"false");
+    btn.tabIndex = 0;
+    btn.innerHTML = `<div class="letter">${letter}</div><div class="text">${text}</div>`;
+    btn.addEventListener("click", ()=> selectAnswer(letter));
+    btn.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); selectAnswer(letter); }});
+    holder.appendChild(btn);
+  });
+  $("#btnFlag").setAttribute("aria-pressed", flags.has(q.id)?"true":"false");
+  $("#btnFlag").textContent = flags.has(q.id) ? "Desmarcar" : "Marcar";
+  markGrid();
+  updateFinishButton();
+  updateNavButtons();
+}
+
+function selectAnswer(letter){
+  const q = questions[order[pos]];
+  answers[q.id] = letter;
+  renderQuestion();
+  sendAnswer(attempt.id, q.id, letter);
+  setTimeout(()=> next(), 60);
+}
+
+function toggleFlag(){
+  const q = questions[order[pos]];
+  if(flags.has(q.id)) flags.delete(q.id); else flags.add(q.id);
+  renderQuestion();
+  persistLocal();
+}
+
+function prev(){ if(pos>0){ pos--; renderQuestion(); persistLocal(); } }
+function next(){ if(pos<order.length-1){ pos++; renderQuestion(); persistLocal(); } }
+function go(i, first=false){ pos=i; if(!first) persistLocal(); renderQuestion(); }
+
+/* ========= Timer ========= */
+function tickTimer(){
+  if(!attempt) return;
+  const end = new Date(attempt.ends_at).getTime();
+  const now = Date.now();
+  const left = Math.max(0, Math.floor((end - now)/1000));
+  $("#timeLeft").textContent = fmtSec(left);
+  if(left<=0){
+    clearInterval(timerInt);
+    $("#timeLeft").classList.add("danger");
+    finishAttempt();
+  }
+}
+
+/* ========= Report ========= */
+function showReport(data){
+  $("#examPanel").style.display="none";
+  $("#reportPanel").style.display="block";
+  $("#scoreBadge").textContent = `Score: ${Number(data.score).toFixed(2)}%`;
+  $("#countBadge").textContent = `${data.correct_count}/${data.total} corretas`;
+  $("#timeBadge").textContent = `Tempo: ${fmtSec(data.spent_seconds)}`;
+  const tbody = $("#reportTable tbody"); tbody.innerHTML="";
+  (data.report||[]).forEach((r,idx)=>{
+    const ok = r.your && r.correct && r.your===r.correct;
+    const tr=document.createElement("tr");
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td>${escapeHtml(r.stem||"")}</td>
+      <td>
+        <span class="badge ${ok?"ok":"fail"}">${r.your||"—"}</span>
+        ${ok ? "" : `<div class="small" style="margin-top:6px">Correta: <b>${r.correct||"—"}</b>${r.explanation?` — ${escapeHtml(r.explanation)}`:""}</div>`}
+      </td>
+      <td><span class="badge" style="background:#1e2445;color:#cfe1ff">${r.correct||"—"}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ========= Escape ========= */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+}
+
+/* ========= Tentativa aberta ========= */
+async function checkOpenAttempt(){
+  try{
+    const list = await api("/simulados?ts="+Date.now());
+    const open = (list||[]).find(a=>a.status==="active");
+    if(open){
+      $("#btnResume").style.display="inline-flex";
+      $("#btnResume").onclick = ()=> loadAttempt(open.id);
+    }else{
+      $("#btnResume").style.display="none";
+    }
+  }catch(_){}
+}
+
+/* ========= Histórico ========= */
+async function loadHistory(){
+  const box = $("#histList");
+  box.innerHTML = "";
+  try{
+    const list = await api("/simulados?ts="+Date.now());
+    const finished = (list||[]).filter(a=>a.status==="finished");
+    if(!finished.length){
+      box.innerHTML = `<div class="small">Nenhum simulado finalizado ainda.</div>`;
+      return;
+    }
+    finished.forEach(a=>{
+      const el = document.createElement("div");
+      const started = (a.started_at||"").slice(0,16).replace("T"," ");
+      const ends = (a.ends_at||"").slice(11,16);
+      el.className = "hist-item";
+      el.innerHTML = `
+        <div>
+          <div><b>${a.total} questões</b> • ${a.duration_min} min</div>
+          <div class="small">Início: ${started} • Fim: ${ends}</div>
+        </div>
+        <button class="btn btn-ghost" data-id="${a.id}">Rever</button>
+      `;
+      el.querySelector("button").addEventListener("click", async ()=>{
+        try{
+          // Se tiver a rota /report no backend, use-a; senão, chame /finish idempotente ou reaproveite snapshot local.
+          let data;
+          try{
+            data = await api(`/simulados/${a.id}/report`);
+          }catch(_){
+            data = await api(`/simulados/${a.id}/finish`, { method:"POST" });
+          }
+          showReport(data);
+        }catch(err){
+          toast("Não deu para abrir o relatório: "+err.message);
+        }
+      });
+      box.appendChild(el);
+    });
+  }catch(err){
+    box.innerHTML = `<div class="small">Falha ao carregar histórico.</div>`;
+  }
+}
+
+/* ========= Eventos ========= */
+$("#btnStart").addEventListener("click", createAttempt);
+$("#btnFinish").addEventListener("click", ()=>{
+  const unanswered = questions.filter(q=>!answers[q.id]).length;
+  if(unanswered>0){
+    if(!confirm(`Você ainda tem ${unanswered} questão(ões) sem resposta. Deseja finalizar mesmo assim?`)) return;
+  }
+  finishAttempt();
+});
+$("#btnPrev").addEventListener("click", prev);
+$("#btnNext").addEventListener("click", next);
+$("#btnFlag").addEventListener("click", toggleFlag);
+$("#mode").addEventListener("change", (e)=>{ mode = e.target.value; applyModeUI(); });
+
+document.addEventListener("keydown",(e)=>{
+  if(!attempt) return;
+  if(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)) return;
+  const key = e.key;
+  if(key==="Enter"){ e.preventDefault(); next(); return; }
+  if(key==="Backspace"){ e.preventDefault(); prev(); return; }
+  const map = { "1":"A", "2":"B", "3":"C", "4":"D", "5":"E" };
+  if(map[key]){ e.preventDefault(); selectAnswer(map[key]); }
+});
+
+/* ========= Boot ========= */
+renderConfig();
+</script>
+</body>
+</html>
