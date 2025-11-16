@@ -3,6 +3,26 @@
  * (Layout Base + Componentes + Animações Suaves)
  * ======================================================= */
 
+/* === VARIÁVEIS GLOBAIS DE COR === */
+:root {
+  /* Cores principais definidas por você */
+  --lumi-blue: #3fa9f5;
+  --lumi-blue-dark: #004d7b; 
+
+  /* Variações claras derivadas de #3fa9f5 */
+  --lumi-blue-body-bg: #e7f3fe; /* Tom bem claro para o gradiente do body */
+  --lumi-blue-light-bg: #dbeffd; /* Azul claro para fundos de cartão */
+
+  /* Variações transparentes (baseadas em 63, 169, 245) */
+  --lumi-blue-transparent-10: rgba(63, 169, 245, 0.1);
+  --lumi-blue-transparent-15: rgba(63, 169, 245, 0.15);
+  --lumi-blue-transparent-20: rgba(63, 169, 245, 0.2);
+  --lumi-blue-transparent-30: rgba(63, 169, 245, 0.3);
+  --lumi-blue-transparent-40: rgba(63, 169, 245, 0.4);
+  --lumi-blue-transparent-85: rgba(63, 169, 245, 0.85);
+}
+
+
 /* === ANIMAÇÕES GLOBAIS === */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -32,7 +52,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    background: linear-gradient(135deg, #f7f9fc 0%, #e8f0fe 100%);
+    background: linear-gradient(135deg, #f7f9fc 0%, var(--lumi-blue-body-bg) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -46,8 +66,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px 20px;
-    box-shadow: 0 2px 15px rgba(75, 139, 234, 0.08);
+    padding: 15px 0px;
+    box-shadow: 0 2px 15px var(--lumi-blue-transparent-10); /* Ajustado */
     flex-shrink: 0;
     position: relative;
     animation: fadeIn 0.5s ease-out;
@@ -91,7 +111,7 @@ main.profile-page {
 /* === ÁREA DO UTILIZADOR === */
 .user-area {
     position: absolute;
-    right: 25px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -109,6 +129,36 @@ main.profile-page {
     animation: fadeIn 0.5s ease-out 0.5s forwards;
 }
 
+/* Link de Login com Gradiente de Texto */
+.login-link {
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    
+    /* Fallback de cor */
+    color: var(--lumi-blue); 
+    
+    /* Efeito de Gradiente no Texto */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.login-link:hover {
+    /* Reverte para cor sólida no hover */
+    color: var(--lumi-blue-dark);
+    background: var(--lumi-blue-transparent-10);
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: initial;
+    background-clip: initial;
+    text-fill-color: initial;
+}
+
+
 .profile-link {
     text-decoration: none;
     display: flex;
@@ -118,7 +168,7 @@ main.profile-page {
 .profile-icon {
     width: 36px;
     height: 36px;
-    background: linear-gradient(135deg, #4B8BEA 0%, #3a74d3 100%);
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -129,12 +179,12 @@ main.profile-page {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     text-transform: uppercase;
-    box-shadow: 0 2px 8px rgba(75, 139, 234, 0.2);
+    box-shadow: 0 2px 8px var(--lumi-blue-transparent-20);
 }
 
 .profile-link:hover .profile-icon {
     transform: scale(1.15) translateY(-2px);
-    box-shadow: 0 4px 15px rgba(75, 139, 234, 0.4);
+    box-shadow: 0 4px 15px var(--lumi-blue-transparent-40);
 }
 
 .logout-link {
@@ -176,7 +226,7 @@ main.profile-page {
     background: white;
     border-radius: 20px;
     padding: 25px;
-    box-shadow: 0 4px 20px rgba(75, 139, 234, 0.08);
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10); /* Ajustado */
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -187,11 +237,11 @@ main.profile-page {
 
 .funcoes:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(75, 139, 234, 0.12);
+    box-shadow: 0 8px 30px var(--lumi-blue-transparent-15); /* Ajustado */
 }
 
+/* Título "Funcionalidades" com Gradiente de Texto */
 .funcoes h2 {
-    color: #4B8BEA;
     text-align: left;
     font-size: 1.3em;
     margin-top: 0;
@@ -199,6 +249,16 @@ main.profile-page {
     font-weight: 600;
     position: relative;
     padding-bottom: 10px;
+    
+    /* Fallback de cor */
+    color: var(--lumi-blue);
+    
+    /* Efeito de Gradiente no Texto */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
 }
 
 .funcoes h2::after {
@@ -208,7 +268,7 @@ main.profile-page {
     left: 0;
     width: 50px;
     height: 3px;
-    background: linear-gradient(90deg, #4B8BEA, transparent);
+    background: linear-gradient(90deg, var(--lumi-blue), transparent);
     border-radius: 2px;
 }
 
@@ -233,7 +293,7 @@ main.profile-page {
     left: 0;
     width: 4px;
     height: 0;
-    background: #4B8BEA;
+    background: var(--lumi-blue);
     transition: height 0.3s ease;
     transform: translateY(-50%);
 }
@@ -244,9 +304,9 @@ main.profile-page {
 
 .func-item:hover {
     background: linear-gradient(135deg, #e0e8ff 0%, #d0dcff 100%);
-    color: #1e3a8a;
+    color: var(--lumi-blue-dark); /* Ajustado para o novo azul escuro */
     transform: translateX(8px);
-    box-shadow: 0 4px 12px rgba(75, 139, 234, 0.15);
+    box-shadow: 0 4px 12px var(--lumi-blue-transparent-15);
 }
 
 .func-item.disabled {
@@ -271,7 +331,7 @@ main.profile-page {
     width: 100%;
     background: white;
     border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(75, 139, 234, 0.08);
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10); /* Ajustado */
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -279,27 +339,12 @@ main.profile-page {
     min-height: 400px;
     position: relative;
     overflow: hidden;
+    /* AJUSTE DOS NOVOS ESTILOS - Removendo padding para os filhos controlarem */
+    padding: 0;
+    border-radius: 10px; /* Consistente com o estilo final */
 }
 
-.clear-chat-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    z-index: 10;
-    text-decoration: none;
-    color: #888;
-    font-size: 0.9em;
-    font-weight: 500;
-    padding: 8px 15px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.clear-chat-btn:hover {
-    color: #e74c3c;
-    background: rgba(231, 76, 60, 0.05);
-    transform: translateX(-2px);
-}
+/* .clear-chat-btn é redefinido abaixo nos "AJUSTES DO CHAT" */
 
 .chat-box {
     flex-grow: 1;
@@ -309,15 +354,17 @@ main.profile-page {
     flex-direction: column;
     gap: 12px;
     scroll-behavior: smooth;
+    /* AJUSTE DOS NOVOS ESTILOS */
+    border-radius: 0 0 10px 10px;
 }
 
 .chat-box::-webkit-scrollbar { width: 8px; }
-.chat-box::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px;}
+.chat-box::-webkit-scrollbar-track { background: #f1f1ff; border-radius: 4px;}
 .chat-box::-webkit-scrollbar-thumb { 
-    background: linear-gradient(180deg, #4B8BEA, #3a74d3); 
+    background: linear-gradient(180deg, var(--lumi-blue), var(--lumi-blue-dark)); 
     border-radius: 4px;
 }
-.chat-box::-webkit-scrollbar-thumb:hover { background: #3a74d3; }
+.chat-box::-webkit-scrollbar-thumb:hover { background: var(--lumi-blue-dark); }
 
 .msg {
     max-width: 75%;
@@ -328,6 +375,7 @@ main.profile-page {
     font-size: 0.95em;
     animation: fadeIn 0.3s ease-out;
     position: relative;
+    opacity: 1; /* Garante que as mensagens não fiquem transparentes */
 }
 
 .msg::before {
@@ -338,21 +386,7 @@ main.profile-page {
     border-style: solid;
 }
 
-.msg.user {
-    background: linear-gradient(135deg, #4B8BEA 0%, #3a74d3 100%);
-    color: white;
-    border-bottom-right-radius: 5px;
-    align-self: flex-end;
-    box-shadow: 0 2px 8px rgba(75, 139, 234, 0.2);
-    animation: slideInRight 0.3s ease-out;
-}
-
-.msg.user::before {
-    right: -8px;
-    bottom: 0;
-    border-width: 8px 0 0 8px;
-    border-color: transparent transparent transparent #3a74d3;
-}
+/* Regra .msg.user movida para a seção AJUSTES DO CHAT */
 
 .msg.lumi {
     background: #f1f3f5;
@@ -379,7 +413,7 @@ main.profile-page {
 .typing-indicator .dot {
     height: 8px;
     width: 8px;
-    background: linear-gradient(135deg, #4B8BEA, #3a74d3);
+    background: linear-gradient(135deg, var(--lumi-blue), var(--lumi-blue-dark));
     border-radius: 50%;
     margin: 0 2px;
     animation: blink 1.4s infinite both;
@@ -394,6 +428,7 @@ main.profile-page {
     100% { opacity: 0.2; transform: scale(0.8); }
 }
 
+/* .chat-input e filhos são redefinidos abaixo nos "AJUSTES DO CHAT" */
 .chat-input {
     display: flex;
     gap: 10px;
@@ -416,16 +451,17 @@ main.profile-page {
 }
 
 .chat-input input:focus {
-    border-color: #4B8BEA;
-    box-shadow: 0 0 0 4px rgba(75, 139, 234, 0.1);
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 4px var(--lumi-blue-transparent-10);
     transform: translateY(-1px);
 }
 
+/* Botão de Enviar (Já usa o gradiente sólido) */
 .chat-input button {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4B8BEA 0%, #3a74d3 100%);
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
     color: white;
     border: none;
     font-size: 16px;
@@ -435,12 +471,12 @@ main.profile-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(75, 139, 234, 0.3);
+    box-shadow: 0 2px 8px var(--lumi-blue-transparent-30);
 }
 
 .chat-input button:hover {
     transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 4px 15px rgba(75, 139, 234, 0.4);
+    box-shadow: 0 4px 15px var(--lumi-blue-transparent-40);
 }
 
 .chat-input button:active {
@@ -461,15 +497,16 @@ main.profile-page {
     background: white;
     border-radius: 20px;
     padding: 35px 45px;
-    box-shadow: 0 4px 20px rgba(75, 139, 234, 0.08);
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10); /* Ajustado */
     margin: 0 auto 40px auto;
     position: relative;
     animation: fadeIn 0.5s ease-out;
 }
 
+/* Título da FAQ (Já usa o gradiente de texto) */
 .faq-container h1 {
     text-align: center;
-    background: linear-gradient(135deg, #4B8BEA, #3a74d3);
+    background: linear-gradient(135deg, var(--lumi-blue), var(--lumi-blue-dark));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -497,9 +534,9 @@ main.profile-page {
 }
 
 .faq-search:focus {
-    border-color: #4B8BEA;
+    border-color: var(--lumi-blue);
     outline: none;
-    box-shadow: 0 0 0 4px rgba(75, 139, 234, 0.1);
+    box-shadow: 0 0 0 4px var(--lumi-blue-transparent-10);
 }
 
 .faq-item {
@@ -535,13 +572,13 @@ main.profile-page {
 }
 
 .faq-item:hover .faq-question span {
-    color: #4B8BEA;
+    color: var(--lumi-blue);
 }
 
 .faq-icon {
     font-size: 1.4em;
     font-weight: bold;
-    color: #4B8BEA;
+    color: var(--lumi-blue);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     flex-shrink: 0;
     width: 30px;
@@ -550,12 +587,12 @@ main.profile-page {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: rgba(75, 139, 234, 0.1);
+    background: var(--lumi-blue-transparent-10);
 }
 
 .faq-item.active .faq-icon {
     transform: rotate(45deg);
-    background: rgba(75, 139, 234, 0.2);
+    background: var(--lumi-blue-transparent-20);
 }
 
 .faq-answer {
@@ -635,9 +672,10 @@ main.profile-page {
     background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
 }
 
+/* ATUALIZADO: Toast 'info' para usar o azul da Lumi */
 .toast-message.info {
-    border-left-color: #17a2b8;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    border-left-color: var(--lumi-blue);
+    background: linear-gradient(135deg, #ffffff 0%, var(--lumi-blue-body-bg) 100%);
 }
 
 .toast-close-btn {
@@ -692,4 +730,801 @@ main.profile-page {
     main { padding: 0 10px; }
     .faq-container { padding: 20px; }
     .chat-input button { width: 38px; height: 38px; }
+}
+
+/* ======================================================= */
+/* === CSS ADICIONADO PARA FLASHCARDS INTERATIVOS === */
+/* ======================================================= */
+
+/* --- 1. Seleção de Disciplina --- */
+#subject-selection {
+    text-align: center;
+}
+
+#subject-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.subject-btn {
+    background-color: var(--lumi-blue); 
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.subject-btn:hover {
+    background-color: var(--lumi-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn-flashcard-subject {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.back-btn-flashcard-subject:hover {
+    color: var(--lumi-blue);
+    text-decoration: underline;
+}
+
+
+/* --- 2. Visualizador do Flashcard --- */
+#flashcard-viewer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#back-to-subjects {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    padding: 5px;
+}
+#back-to-subjects:hover {
+    color: var(--lumi-blue);
+    text-decoration: underline;
+}
+
+#subject-title {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* --- 3. Efeito 3D de Virar --- */
+
+/* A "cena" define a perspectiva 3D */
+#flashcard-scene {
+    width: 100%;
+    max-width: 500px;
+    height: 300px;
+    perspective: 1000px; /* Define o quão "extremo" é o 3D */
+    margin-bottom: 20px;
+}
+
+/* O 'flashcard' é o container que vira */
+.flashcard {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d; /* Permite que os filhos sejam 3D */
+    transition: transform 0.6s;
+}
+
+/* O estado "virado" */
+.flashcard.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* Estilo comum para frente e verso */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden; /* Esconde o lado que está "atrás" */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* Frente do Cartão */
+.card-front {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #e0e0e0;
+}
+
+/* Verso do Cartão */
+.card-back {
+    background-color: var(--lumi-blue-light-bg);
+    color: var(--lumi-blue-dark); /* Ajustado */
+    border: 1px solid var(--lumi-blue-transparent-40); /* Ajustado */
+    transform: rotateY(180deg); /* Começa "virado" */
+}
+
+#flashcard-question,
+#flashcard-answer {
+    font-weight: 500;
+}
+
+/* --- 4. Navegação --- */
+.flashcard-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.flashcard-nav button {
+    background-color: var(--lumi-blue);
+    color: white;
+    border: none;
+    border-radius: 50%; /* Botões redondos */
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.flashcard-nav button:hover {
+    background-color: var(--lumi-blue-dark);
+}
+
+#card-counter {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+}
+
+/* ======================================================= */
+/* === AJUSTES DO CHAT (Conforme solicitado) === */
+/* (Estes substituem quaisquer regras conflitantes acima) */
+/* ======================================================= */
+
+/* --- 1. MODIFICAÇÃO: Mensagens do Usuário (Gradiente SÓLIDO) --- */
+.chat-box .msg.user {
+    /* Gradiente SÓLIDO, 100% Opaco */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    
+    /* Texto 100% branco e opaco */
+    color: #FFFFFF; 
+    
+    /* Layout e bordas */
+    align-self: flex-end;
+    border-radius: 15px 15px 0 15px;
+    box-shadow: 0 2px 8px var(--lumi-blue-transparent-30); /* Sombra suave */
+    border: none; /* Remove qualquer borda */
+    
+    /* Animação correta (substitui o 'fadeIn' da classe .msg) */
+    animation: slideInRight 0.3s ease-out; 
+    
+    /* Garante que a opacidade final seja 1 (após a animação) */
+    opacity: 1 !important; 
+}
+
+/* Triângulo/seta da caixa de mensagem, SÓLIDO */
+.chat-box .msg.user::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    right: -8px;
+    bottom: 0;
+    border-width: 8px 0 0 8px;
+    border-color: transparent transparent transparent var(--lumi-blue-dark); /* Cor escura SÓLIDA */
+}
+
+
+/* --- 2. MODIFICAÇÃO: Input de Texto (Translúcido) --- */
+.chat-input input,
+.chat-input input[type="text"] {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 1em;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: rgba(240, 240, 240, 0.8); /* Cinza claro 80% translúcido */
+    color: #333;
+}
+
+.chat-input input:focus,
+.chat-input input[type="text"]:focus {
+    background-color: #ffffff; /* Fica branco sólido ao clicar */
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 3px var(--lumi-blue-transparent-20);
+    transform: none; /* Sobrescreve o transform anterior */
+}
+
+/* --- 3. ADIÇÃO: Novo Cabeçalho do Chat (Chat Geral) --- */
+
+/* CORREÇÃO: Remove o fundo cinza e a borda do cabeçalho */
+.chat-header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent; /* Remove o fundo cinza */
+    padding: 15px 20px;
+    border-bottom: none; /* Remove a borda */
+    border-radius: 10px 10px 0 0; 
+}
+
+/* CORREÇÃO: Adiciona a "barra quebrada" ao título do chat */
+.chat-title-main {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0;
+    
+    /* Fallback de cor */
+    color: var(--lumi-blue);
+    
+    /* Efeito de Gradiente no Texto */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    
+    /* Estilos para a "barra quebrada" */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* CORREÇÃO: Cria a "barra quebrada" */
+.chat-title-main::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lumi-blue), transparent);
+    border-radius: 2px;
+}
+
+/* --- 4. MODIFICAÇÃO: Botão "Limpar Conversa" (Melhorado) --- */
+.clear-chat-btn {
+    background-color: transparent;
+    color: var(--lumi-blue);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 2px solid var(--lumi-blue-transparent-30); /* Borda azul clara */
+}
+
+.clear-chat-btn:hover {
+    background-color: var(--lumi-blue-transparent-10); /* Fundo azul claro ao passar o mouse */
+    color: var(--lumi-blue-dark);
+    border-color: var(--lumi-blue-transparent-85); /* Borda mais forte */
+    transform: translateY(-1px);
+}
+
+/* --- 5. MODIFICAÇÃO: Caixa de Chat (Mensagens) --- */
+.chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px; 
+    border-radius: 0 0 10px 10px; 
+}
+
+/* --- 6. MODIFICAÇÃO: Caixa de Input (Formulário) --- */
+.chat-input {
+    display: flex;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    background-color: rgba(255, 255, 255, 0.6); 
+    border-radius: 0 0 10px 10px;
+    backdrop-filter: none; /* Remove backdrop do input-area se houver */
+}
+
+/* =======================================================
+ * BLOCO FINAL DE ADIÇÕES (v9 - SIDEBAR + PERFIL)
+ * (Cole este bloco no final do seu style.css)
+ * ======================================================= */
+
+/* =======================================================
+ * 1. ESTILOS DA SIDEBAR (v8 - Flutuante, Sem Círculo)
+ * (CORRIGIDO: Lumi 4 e Ícone Hambúrguer no .menu-toggle)
+ * ======================================================= */
+
+/* 1.1. O BOTÃO DO MENU (Flutuante, Sem Círculo, À Esquerda) */
+/* (MODIFICADO para ser um container para a imagem e o ícone) */
+/* 1.1. O BOTÃO DO MENU (CORRIGIDO para 'position: absolute') */
+.menu-toggle {
+    /* POSIÇÃO */
+    position: absolute; /* <--- CORRIGIDO (para ficar DENTRO do header) */
+    
+    /* Alinha verticalmente com o centro */
+    top: 2px;
+    
+    /* Distância da esquerda */
+    left: 10px; 
+    
+    z-index: 998; 
+
+    /* ESTILO (Mantido como estava) */
+    background: none;
+    border: none;
+    color: var(--lumi-blue-dark); 
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    /* Forma (Mantido como estava) */
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    box-shadow: none;
+    
+    /* Alinhamento (Mantido como estava) */
+    display: flex;
+    flex-direction: column; 
+    align-items: center;   
+    justify-content: center;
+    line-height: 1;
+    padding: 5px; 
+    margin: 0;
+}
+
+/* Ajuste no :hover para a nova posição */
+.menu-toggle:hover {
+    color: var(--lumi-blue); 
+    transform: scale(1.1);
+}
+/* === NOVO: Estilos para a imagem Lumi 4 === */
+.lumi-4-icon {
+    width: 55px;  /* Ajuste o tamanho da imagem da Lumi 4 */
+    height: auto; /* Mantém a proporção */
+    margin-bottom: 5px; /* Espaçamento entre a Lumi 4 e o hambúrguer */
+    transition: transform 0.2s ease;
+}
+
+.menu-toggle:hover .lumi-4-icon {
+    transform: translateY(-2px); /* Efeito suave ao passar o mouse */
+}
+
+
+/* 1.2. A SIDEBAR (Menu - Usando Transform) */
+/* (Esta parte foi mantida como a sua - Sem Sombra) */
+.sidebar {
+    height: 100%;
+    width: 260px;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: #ffffff; /* Fundo branco (CORRETO) */
+    /* box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); */
+    overflow-y: auto;
+    font-family: 'Poppins', sans-serif;
+    transform: translateX(-100%); /* Começa fora da tela */
+    transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.sidebar.active {
+    transform: translateX(0); /* Entra na tela */
+}
+
+/* (Esta parte foi mantida como a sua) */
+.sidebar-header {
+    background: linear-gradient(to right, var(--lumi-blue), var(--lumi-blue-dark));
+    border-bottom: none; 
+    padding: 20px 25px 24px 25px; 
+    position: relative; 
+}
+
+/* (Esta parte foi mantida como a sua) */
+.sidebar-header h3 {
+    margin: 0;
+    color: white; 
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* (Esta parte foi mantida como a sua) */
+.sidebar-header::after {
+    content: ''; /* Obrigatório */
+    position: absolute;
+    bottom: 0; /* Gruda na parte de baixo do header */
+    left: 0;   /* Começa na esquerda */
+    width: 100%;
+    height: 4px; /* Espessura da barra */
+    background: linear-gradient(to right, 
+        var(--lumi-blue), 
+        var(--lumi-blue-dark), 
+        transparent
+    );
+}
+
+/* (Esta parte foi mantida como a sua - Sem linhas) */
+.sidebar a {
+    padding: 16px 25px;
+    text-decoration: none;
+    font-size: 1.05em;
+    color: var(--lumi-blue-dark, #004d7b); /* Links escuros (CORRETO) */
+    display: block;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-weight: 500;
+    /* border-bottom: 1px solid var(--lumi-blue-transparent-15); */
+    font-family: 'Poppins', sans-serif;
+}
+.sidebar a:hover {
+    background-color: var(--lumi-blue-transparent-10);
+    color: var(--lumi-blue);
+}
+
+/* 1.3. O OVERLAY (Fundo escurecido) */
+/* (Esta parte foi mantida exatamente como a sua) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+/* =======================================================
+ * 1.4. NOVO ÍCONE DE MENU (CSS HAMBURGER)
+ * (Este foi mantido, mas agora o .menu-toggle lida com o posicionamento)
+ * ======================================================= */
+
+/* A barra do meio */
+.hamburger-icon {
+    display: block;
+    position: relative; /* Mantido para ::before/::after */
+    width: 28px; /* Largura do ícone */
+    height: 3px; /* Espessura da barra */
+    background-color: currentColor; /* Pega a cor do .menu-toggle */
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+/* As barras de cima e de baixo */
+.hamburger-icon::before,
+.hamburger-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px; /* Espessura da barra */
+    background-color: currentColor; /* Pega a cor do .menu-toggle */
+    border-radius: 2px;
+}
+
+/* Posição da barra de cima (8px acima da do meio) */
+.hamburger-icon::before {
+    top: -8px; 
+}
+
+/* Posição da barra de baixo (8px abaixo da do meio) */
+.hamburger-icon::after {
+    bottom: -8px;
+}
+
+/* =======================================================
+ * ADIÇÕES: ESTILOS DA PÁGINA DE PERFIL (v14 - VALORES EXATOS)
+ * (Esta seção inteira foi mantida exatamente como a sua)
+ * ======================================================= */
+
+/* 1. CONTAINER DO PERFIL (com margem no topo) */
+.profile-container {
+    max-width: 700px;
+    margin: 40px auto; /* Centraliza e dá espaço no topo */
+    
+    /* O "enchimento" (padding) que vamos "quebrar" */
+    padding: 30px 40px; 
+    
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 77, 123, 0.08);
+    border: 1px solid var(--lumi-blue-transparent-20);
+}
+
+/* === NOVO: Estilos para o círculo da foto de perfil === */
+/* (Anteriormente era para a letra, agora é o container da imagem) */
+.profile-picture {
+    width: 40px;          /* Tamanho do círculo */
+    height: 40px;         /* Tamanho do círculo */
+    border-radius: 50%;   /* Transforma em círculo */
+    background-color: #f0f0f0; /* Fundo padrão, se a imagem não carregar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;     /* Garante que a imagem não vaze do círculo */
+    border: 2px solid var(--lumi-blue); /* Borda ao redor da foto */
+    flex-shrink: 0; /* Impede que o círculo diminua */
+}
+
+/* === NOVO: Estilos para a imagem Lumi 2 dentro do círculo === */
+.profile-picture .profile-img {
+    width: 100%;      /* Preenche a largura do .profile-picture */
+    height: 100%;     /* Preenche a altura do .profile-picture */
+    object-fit: cover; /* Recorta a imagem para preencher o container sem distorcer */
+    border-radius: 50%; /* Garante que a imagem seja circular */
+}
+
+/* 2. LINK "VOLTAR" (CLASSE FINAL com margens exatas) */
+.back-link-profile-glued-final {
+    display: inline-block; 
+    
+    /* === MUDANÇA APLICADA AQUI (v14) === */
+    /* Exatamente o valor do padding-top para "colar" em cima */
+    margin-top: -30px; 
+    /* Exatamente o valor do padding-left para "colar" na esquerda */
+    margin-left: -10px; 
+    /* Garante espaço abaixo antes do h2 */
+    margin-bottom: 0px; 
+    /* =================================== */
+    
+    /* Adicionamos padding interno no link para ele não ficar feio */
+    padding-top: 5px;
+    padding-left: 5px;
+    
+    color: var(--lumi-blue);
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 500;
+    
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.back-link-profile-glued-final:hover {
+    color: var(--lumi-blue-dark);
+    text-decoration: underline;
+    transform: translateX(-3px);
+}
+
+/* 3. MENSAGENS DE FLASH (Sucesso, Erro) */
+.flash-messages-profile {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.flash-messages-profile .flash {
+    padding: 15px;
+    font-weight: 500;
+}
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.flash.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* 4. FORMULÁRIO DE PERFIL */
+.profile-form .form-group {
+    margin-bottom: 20px;
+}
+
+.profile-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--lumi-blue-dark);
+    font-size: 0.9em;
+}
+
+/* 5. INPUTS EDITÁVEIS (Nome, Email, Selects) */
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    background-color: #ffffff;
+    color: #333;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 6. EFEITO DE FOCO nos inputs editáveis */
+.profile-form input[type="text"]:focus,
+.profile-form input[type="email"]:focus,
+.profile-form select:focus {
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 3px var(--lumi-blue-transparent-30);
+    outline: none;
+}
+
+/* 7. INPUTS NÃO-EDITÁVEIS (Matrícula, CPF) */
+.profile-form input[readonly] {
+    background-color: #f4f4f4;
+    color: #555;
+    cursor: not-allowed;
+}
+
+/* 8. CONTAINER DOS BOTÕES (Salvar, Sair) */
+.profile-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* 9. BOTÃO DE SALVAR (Primário) */
+.btn-submit-profile {
+    background-color: var(--lumi-blue);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-submit-profile:hover {
+    background-color: var(--lumi-blue-dark);
+    box-shadow: 0 4px 10px rgba(0, 77, 123, 0.2);
+}
+
+/* 10. BOTÃO DE LOGOUT (Secundário) */
+.btn-logout-profile {
+    background-color: #fce8e8;
+    color: #c94a4a;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid #f5c6c6;
+}
+
+.btn-logout-profile:hover {
+    background-color: #c94a4a;
+    color: white;
+}
+
+/* =======================================================
+ * BLOCO DE CORREÇÃO DO HEADER (Cole no FIM do style.css)
+ * ======================================================= */
+
+/* 1. O HEADER (A caixa principal) */
+header {
+    width: 100% !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    
+    /* Garante a altura mínima para englobar tudo */
+    min-height: 80px !important; 
+    
+    /* Padding vertical, 0 nos lados */
+    padding: 10px 0 !important; 
+    
+    box-shadow: 0 2px 15px var(--lumi-blue-transparent-10) !important;
+    
+    /* Essencial para o .menu-toggle e .user-area */
+    position: relative !important; 
+    
+    /* Layout Flexbox */
+    display: flex !important;
+    align-items: center !important;    
+    justify-content: center !important; /* Centra o logo */
+    
+    flex-shrink: 0 !important;
+}
+
+/* 2. O LOGO (No centro) */
+.logo {
+    height: 50px !important; 
+    width: auto !important;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    cursor: pointer !important;
+    /* Garante que o logo não seja 'absolute' ou 'fixed' */
+    position: relative !important; 
+}
+
+/* 3. A ÁREA DO UTILIZADOR (Perfil, à direita) */
+.user-area {
+    /* Posição absoluta DENTRO do header */
+    position: absolute !important; 
+    right: 10px !important; 
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    
+    /* Remove padding duplicado */
+    padding-right: 0 !important; 
+    
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    font-size: 0.9em !important;
+}
+
+/* 4. O BOTÃO DO MENU (Lumi 4 + Hambúrguer, à esquerda) */
+/* POSIÇÃO */
+.menu-toggle {
+ position: absolute; /* <--- CORRIGIDO (para ficar PRESO no cabeçalho) */
+ 
+ /* === MUDANÇA: Posição no topo (como pediu) === */
+  top: -10px; /* (Ajuste para 15px se quiser mais baixo) */
+ left: 10px; 
+ 
+ z-index: 998; /* Fica acima da página */
+
+ /* ESTILO (Mantido) */
+ background: none;
+ border: none;
+ color: var(--lumi-blue-dark); /* (Cor usada pelas barras do hambúrguer) */
+ cursor: pointer;
+ transition: all 0.2s ease;
+ 
+ /* Forma (Mantido) */
+ width: auto;
+ height: auto;
+ border-radius: 0;
+ box-shadow: none;
+ 
+ /* Alinhamento (Mantido) */
+ display: flex;
+ flex-direction: column; /* Coloca os itens em coluna (um em cima do outro) */
+ align-items: center;   /* Centraliza horizontalmente */
+ justify-content: center; /* Centraliza verticalmente (se houver espaço) */
+ 
+ line-height: 1;
+ padding: 5px; 
+ margin: 0;
+
+}
+
+/* Efeito de hover (CORRIGIDO sem o 'transform' antigo) */
+.menu-toggle:hover { color: var(--lumi-blue); /* (Muda a cor das barras do hambúrguer) */
+transform: scale(1.1); /* (Remove qualquer 'translateY' que possa existir) */
 }

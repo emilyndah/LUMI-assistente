@@ -1,0 +1,106 @@
+/* =======================================================
+ * TÍTULO: FOLHA DE ESTILOS DO PERFIL (PROFILE.CSS)
+ * ======================================================= */
+
+/* --- Container Principal (Baseado no FAQ) --- */
+.profile-container {
+    width: 100%;
+    max-width: 800px;
+    background: white;
+    border-radius: 20px;
+    padding: 35px 45px;
+    box-shadow: 0 4px 20px var(--lumi-blue-transparent-10);
+    margin: 0 auto 40px auto;
+    position: relative;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* --- Cabeçalho do Perfil --- */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 30px;
+}
+
+/* Ícone de perfil grande */
+.profile-icon-large {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 3em; /* Tamanho da letra grande */
+    text-transform: uppercase;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px var(--lumi-blue-transparent-30);
+}
+
+.profile-header-info h1 {
+    margin: 0 0 5px 0;
+    font-size: 2.2em;
+    font-weight: 600;
+    /* Gradiente de texto */
+    background: linear-gradient(135deg, var(--lumi-blue), var(--lumi-blue-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.profile-header-info p {
+    margin: 0;
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* --- Detalhes do Perfil --- */
+.profile-details h2 {
+    font-size: 1.5em;
+    color: var(--lumi-blue-dark);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--lumi-blue-transparent-20);
+    padding-bottom: 10px;
+}
+
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.info-item {
+    background: linear-gradient(135deg, #f9fcff 0%, #f0f8ff 100%);
+    padding: 18px 22px;
+    border-radius: 12px;
+    border: 1px solid var(--lumi-blue-transparent-20);
+}
+
+.info-item label {
+    display: block;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--lumi-blue-dark);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item p {
+    margin: 0;
+    font-size: 1.05em;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Placeholder para dados não informados */
+.info-item .placeholder {
+    color: #999;
+    font-style: italic;
+    font-weight: 400;
+}

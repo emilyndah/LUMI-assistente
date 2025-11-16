@@ -5,75 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Perfil - Lumi</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* Estilos básicos para a página de perfil */
-        .profile-container {
-            width: 100%;
-            max-width: 600px; /* Largura da caixa */
-            margin: 30px auto;
-            background: white;
-            padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .profile-container h1 {
-            color: #4B8BEA;
-            margin-bottom: 25px;
-        }
-        .profile-info p {
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 15px;
-            text-align: left; /* Alinha informações à esquerda */
-            border-bottom: 1px solid #eee; /* Linha separadora */
-            padding-bottom: 10px;
-        }
-        .profile-info strong {
-            color: #4B8BEA;
-            display: inline-block;
-            width: 120px; /* Largura fixa para os rótulos */
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: #4B8BEA;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <a href="{{ url_for('index') }}">
-             <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
-        </a>
-       <div style="position: absolute; right: 20px; top: 20px; font-size: 0.9em;">
-           {% if current_user.is_authenticated %}
-               <span>Olá, {{ current_user.username }}!</span>
-               <a href="{{ url_for('logout') }}" style="margin-left: 15px; color: #e74c3c; text-decoration: none;">Logout</a>
-           {% endif %}
-       </div>
-    </header>
 
-    <main class="faq-page"> <section class="profile-container">
-            <h1>Meu Perfil</h1>
-            {% if current_user.is_authenticated %}
-            <div class="profile-info">
-                <p><strong>Utilizador:</strong> {{ current_user.username }}</p>
-                <p><strong>Email:</strong> {{ current_user.email }}</p>
-                <p><strong>Matrícula:</strong> {{ current_user.matricula }}</p>
+    <!-- A Sidebar e o Overlay (vêm primeiro, mas ficam escondidos) -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu Lumi</h3>
+        </div>
+        <a href="{{ url_for('index') }}">Chat Principal</a>
+        <a href="{{ url_for('profile') }}">Meu Perfil</a>
+        <a href="{{ url_for('calendario') }}">Calendário</a>
+        <a href="{{ url_for('flashcards') }}">Flashcards</a>
+        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
+        <a href="{{ url_for('faq') }}">FAQ</a>
+    </nav>
+    <div class="overlay"></div>
+
+    <!-- O Header CORRIGIDO (Contém o menu, logo e perfil) -->
+    <header>
+    
+    <button class="menu-toggle" title="Menu">
+        <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Lumi 4" class="lumi-4-icon">
+        <span class="hamburger-icon"></span>
+    </button>
+    
+    <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
+    </a>
+    
+    {% if current_user.is_authenticated %}
+    <div class="user-area">
+        <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+        
+        <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+            <div class="profile-picture">
+                {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+            </div>
+        </a>
+    </div>
+    {% endif %}
+</header>
+
+    <!-- Conteúdo Principal (Formulário de Perfil) -->
+    <main class="main-content">
+        <div class="profile-container">
+            <a href="{{ url_for('index') }}" class="back-link-profile-glued-final">&larr; Voltar para o Chat</a>
+            
+            <h2>Meu Perfil</h2>
+            <p>Gerencie suas informações pessoais e preferências.</p>
+            
+            <!-- Mensagens Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="flash-messages-profile">
+                    {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
                 </div>
-            {% else %}
-            <p>Erro: Não foi possível carregar as informações do utilizador.</p>
-            {% endif %}
-            <a href="{{ url_for('index') }}" class="back-link">← Voltar para o Chat</a>
-        </section>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Formulário de Perfil (Corrigido) -->
+            <form method="POST" action="{{ url_for('profile') }}" class="profile-form" enctype="multipart/form-data">
+                
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" value="{{ current_user.username }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" value="{{ current_user.email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="matricula">Matrícula (Não pode ser alterada)</label>
+                    <input type="text" id="matricula" name="matricula" value="{{ current_user.matricula }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="cpf">CPF (Não pode ser alterado)</label>
+                    <input type="text" id="cpf" name="cpf" value="{{ current_user.cpf }}" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" value="{{ current_user.telefone or '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="genero">Gênero</label>
+                    <select id="genero" name="genero">
+                        <option value="" {% if not current_user.sexo %}selected{% endif %}>Prefiro não informar</option>
+                        <option value="Masculino" {% if current_user.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
+                        <option value="Feminino" {% if current_user.sexo == 'Feminino' %}selected{% endif %}>Feminino</option>
+                        <option value="Outro" {% if current_user.sexo == 'Outro' %}selected{% endif %}>Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="etnia">Etnia</label>
+                    <select id="etnia" name="etnia">
+                        <option value="" {% if not current_user.etnia %}selected{% endif %}>Prefiro não informar</option>
+                        <option value="Branca" {% if current_user.etnia == 'Branca' %}selected{% endif %}>Branca</option>
+                        <option value="Preta" {% if current_user.etnia == 'Preta' %}selected{% endif %}>Preta</option>
+                        <option value="Parda" {% if current_user.etnia == 'Parda' %}selected{% endif %}>Parda</option>
+                        <option value="Amarela" {% if current_user.etnia == 'Amarela' %}selected{% endif %}>Amarela</option>
+                        <option value="Indígena" {% if current_user.etnia == 'Indígena' %}selected{% endif %}>Indígena</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="profile_pic">Alterar Foto do Perfil (Opcional)</label>
+                    <input type="file" id="profile_pic" name="profile_pic" accept="image/png, image/jpeg, image/gif">
+                </div>
+
+                <div class="profile-actions">
+                    <button type="submit" class="btn-submit-profile">Salvar Alterações</button>
+                    <a href="{{ url_for('logout') }}" class="btn-logout-profile">Sair (Logout)</a>
+                </div>
+            </form>
+        </div>
     </main>
 
+    <!-- Script da Sidebar -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+        function closeMenu() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+        if (menuToggle && sidebar && overlay) {
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            overlay.addEventListener('click', closeMenu);
+        }
+    });
+    </script>
 </body>
 </html>
