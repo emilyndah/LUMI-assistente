@@ -1647,3 +1647,37 @@
 2025-11-14 21:01:24,314 [INFO] 127.0.0.1 - - [14/Nov/2025 21:01:24] "GET /simulador_de_provas HTTP/1.1" 200 -
 2025-11-14 21:01:24,422 [INFO] 127.0.0.1 - - [14/Nov/2025 21:01:24] "GET /simulados?ts=1763164884355 HTTP/1.1" 200 -
 2025-11-14 21:01:24,426 [INFO] 127.0.0.1 - - [14/Nov/2025 21:01:24] "GET /simulados?ts=1763164884356 HTTP/1.1" 200 -
+2025-11-16 16:52:58,203 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-16 16:52:58,352 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.3.31:5000
+2025-11-16 16:52:58,352 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-16 16:52:58,356 [INFO]  * Restarting with stat
+2025-11-16 16:52:59,703 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-16 16:52:59,765 [WARNING]  * Debugger is active!
+2025-11-16 16:52:59,769 [INFO]  * Debugger PIN: 962-854-849
+2025-11-16 16:53:03,658 [INFO] 127.0.0.1 - - [16/Nov/2025 16:53:03] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-16 16:53:03,778 [INFO] 127.0.0.1 - - [16/Nov/2025 16:53:03] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-11-16 16:53:03,825 [INFO] 127.0.0.1 - - [16/Nov/2025 16:53:03] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-11-16 16:53:04,009 [INFO] 127.0.0.1 - - [16/Nov/2025 16:53:04] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=mdUrCJfYAcpqdJt1zeUT HTTP/1.1" 200 -
+2025-11-16 16:53:04,134 [INFO] 127.0.0.1 - - [16/Nov/2025 16:53:04] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-11-16 16:59:45,578 [INFO]  * Detected change in 'C:\\Users\\user\\LUMI-assistente-2\\app.py', reloading
+2025-11-16 16:59:46,006 [INFO]  * Restarting with stat
+2025-11-16 16:59:48,021 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-16 16:59:48,105 [WARNING]  * Debugger is active!
+2025-11-16 16:59:48,110 [INFO]  * Debugger PIN: 962-854-849
+2025-11-16 17:14:10,342 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-16 17:14:10,566 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.3.31:5000
+2025-11-16 17:14:10,566 [INFO] [33mPress CTRL+C to quit[0m
+2025-11-16 17:14:10,568 [INFO]  * Restarting with stat
+2025-11-16 17:14:13,069 [INFO] Servidor iniciado - monitorando eventos Lumi
+2025-11-16 17:14:13,238 [WARNING]  * Debugger is active!
+2025-11-16 17:14:13,250 [INFO]  * Debugger PIN: 962-854-849
+2025-11-16 17:14:21,953 [INFO] 127.0.0.1 - - [16/Nov/2025 17:14:21] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-11-16 17:14:23,752 [INFO] 127.0.0.1 - - [16/Nov/2025 17:14:23] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-11-16 17:14:23,782 [INFO] 127.0.0.1 - - [16/Nov/2025 17:14:23] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-11-16 17:14:23,989 [INFO] 127.0.0.1 - - [16/Nov/2025 17:14:23] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=3qjIuEgjLaBqj1GIy1aP HTTP/1.1" 200 -
