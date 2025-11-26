@@ -239,12 +239,12 @@ if GEMINI_API_KEY:
         model = genai.GenerativeModel(
             "gemini-2.5-flash")
 
-        print("✅ Modelo Gemini inicializado com sucesso (gemini-2.5-flash).")
+        print("[OK] Modelo Gemini inicializado com sucesso (gemini-2.5-flash).")
     except Exception as e:
-        print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
+        print(f"[ERROR] Erro ao inicializar o modelo Gemini: {e}")
         GEMINI_API_KEY = None
 else:
-    print("⚠️ API Key do Gemini não encontrada. O Chatbot não funcionará.")
+    print("[WARNING] API Key do Gemini não encontrada. O Chatbot não funcionará.")
 
 
 # =======================================================
@@ -312,7 +312,7 @@ def carregar_calendario():
             continue
 
         try:
-            data_inicio_obj = _dt.strptime(data_inicio, "%Y-%m-%d")
+            data_inicio_obj = datetime.strptime(data_inicio, "%Y-%m-%d")
         except ValueError:
             print(f"AVISO: Data de início inválida ignorada: {data_inicio}")
             continue
@@ -465,12 +465,12 @@ if GEMINI_API_KEY:
             "gemini-2.5-flash",
             system_instruction=CONTEXTO_INICIAL
         )
-        print("✅ Modelo Gemini inicializado com system_instruction (contexto completo).")
+        print("[OK] Modelo Gemini inicializado com system_instruction (contexto completo).")
     except Exception as e:
-        print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
+        print(f"[ERROR] Erro ao inicializar o modelo Gemini: {e}")
         GEMINI_API_KEY = None
 else:
-    print("⚠️ API Key não encontrada. O Chatbot não funcionará.")
+    print("[WARNING] API Key não encontrada. O Chatbot não funcionará.")
 
 # =======================================================
 # Helpers de tempo (UTC aware + horário padrão)
