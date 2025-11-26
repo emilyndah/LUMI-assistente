@@ -10,11 +10,12 @@ import json
 import os
 import re
 import traceback
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 from dotenv import load_dotenv
 import uuid
 import psycopg2
+import random
 
 import google.generativeai as genai
 from flask import (
@@ -285,6 +286,10 @@ def carregar_quiz_vark():
     return carregar_dados_json("metodo_estudo.json")
 
 
+def carregar_simulador():
+    return carregar_dados_json("simulador_de_provas.json")
+
+
 def carregar_contexto_inicial():
     contexto_base = ""
     contexto_calendario = ""
@@ -390,6 +395,98 @@ def carregar_contexto_inicial():
 
 
 CONTEXTO_INICIAL = carregar_contexto_inicial()
+
+
+# =======================================================
+# 2.1. DADOS DO SIMULADOR DE PROVAS (CACHE EM MEMÓRIA)
+# =======================================================
+SIMULADOR_CACHE = carregar_simulador() or {}
+SIMULADO_TENTATIVAS = {}
+
+
+def get_simulador_data():
+    """Retorna o JSON do simulador, recarregando caso tenha falhado antes."""
+    global SIMULADOR_CACHE
+    if not SIMULADOR_CACHE:
+        SIMULADOR_CACHE = carregar_simulador() or {}
+    return SIMULADOR_CACHE
+
+
+def get_user_tentativas(user_id):
+    """Obtém (ou cria) o dicionário de tentativas do usuário."""
+    return SIMULADO_TENTATIVAS.setdefault(user_id, {})
+
+
+def selecionar_questoes(config, mode, total, disciplinas=None):
+    """Seleciona questões a partir do arquivo JSON, respeitando modo e disciplinas."""
+    pools = config.get("pools", [])
+    questoes_disponiveis = []
+
+    if mode == "prova" and disciplinas:
+        disciplina_escolhida = disciplinas[0]
+        pool = next(
+            (p for p in pools if p.get("discipline") == disciplina_escolhida), None
+        )
+        if pool:
+            questoes_disponiveis = [
+                {**q, "discipline": pool.get("discipline")}
+                for q in pool.get("questions", [])
+            ]
+    else:
+        for pool in pools:
+            for q in pool.get("questions", []):
+                questoes_disponiveis.append({**q, "discipline": pool.get("discipline")})
+
+    if not questoes_disponiveis:
+        return []
+
+    quantidade = min(total, len(questoes_disponiveis))
+    return random.sample(questoes_disponiveis, quantidade)
+
+
+def questoes_para_resposta(questoes):
+    """Remove informações sensíveis das questões antes de enviar ao cliente."""
+    filtradas = []
+    for q in questoes:
+        filtradas.append(
+            {
+                "id": q.get("id"),
+                "stem": q.get("stem"),
+                "options": q.get("options", {}),
+                "discipline": q.get("discipline"),
+            }
+        )
+    return filtradas
+
+
+def tentativa_para_resposta(tentativa):
+    """Formata a tentativa para resposta JSON ao cliente."""
+    return {
+        "id": tentativa.get("id"),
+        "mode": tentativa.get("mode"),
+        "status": tentativa.get("status"),
+        "started_at": tentativa.get("started_at"),
+        "ends_at": tentativa.get("ends_at"),
+        "duration_min": tentativa.get("duration_min"),
+        "total": len(tentativa.get("questions", [])),
+        "order": tentativa.get("order", []),
+        "questions": questoes_para_resposta(tentativa.get("questions", [])),
+        "answers": tentativa.get("answers", {}),
+        "flags": tentativa.get("flags", []),
+    }
+
+
+def resumo_tentativa(tentativa):
+    """Estrutura resumida para listagens e histórico."""
+    return {
+        "id": tentativa.get("id"),
+        "mode": tentativa.get("mode"),
+        "status": tentativa.get("status"),
+        "started_at": tentativa.get("started_at"),
+        "ends_at": tentativa.get("ends_at"),
+        "duration_min": tentativa.get("duration_min"),
+        "total": len(tentativa.get("questions", [])),
+    }
 
 
 # =======================================================
@@ -627,6 +724,13 @@ def metodo_de_estudo():
     )
 
 
+@app.route("/simulador_de_provas")
+@login_required
+def simulador_de_provas():
+    """Renderiza a página do Simulador de Provas."""
+    return render_template("simulador_de_provas.html", current_year=datetime.now().year)
+
+
 # =======================================================
 # 4. ROTAS DA API (CHAT, VARK E CALENDÁRIO)
 # =======================================================
@@ -766,6 +870,174 @@ def delete_calendar_event():
         return jsonify({"success": True, "message": "Evento excluído com sucesso."})
     else:
         return jsonify({"success": False, "message": "Erro ao salvar o arquivo JSON."}), 500
+
+
+@app.route("/simulados", methods=["GET", "POST"])
+@login_required
+def simulados():
+    """Listagem e criação de simulados/provas."""
+    config = get_simulador_data()
+    if not config:
+        return jsonify({"message": "Configuração do simulador não encontrada."}), 500
+
+    tentativas = get_user_tentativas(current_user.id)
+
+    if request.method == "GET":
+        return jsonify([resumo_tentativa(t) for t in tentativas.values()])
+
+    data = request.get_json(silent=True) or {}
+    mode = data.get("mode", "simulado")
+    policy = config.get("policy", {})
+    time_policy = policy.get("time", {})
+    allowed_durations = time_policy.get("allowed_duration_minutes", [])
+
+    total_solicitado = int(data.get("total") or policy.get("default_questions_total", 16))
+    total = max(
+        policy.get("min_questions_total", 1),
+        min(total_solicitado, policy.get("max_questions_total", total_solicitado)),
+    )
+
+    duracao = int(data.get("duracao_min") or (allowed_durations[0] if allowed_durations else 60))
+    if allowed_durations and duracao not in allowed_durations:
+        duracao = allowed_durations[0]
+
+    disciplinas = data.get("disciplinas") or []
+    if mode == "prova" and not disciplinas:
+        return jsonify({"message": "Selecione ao menos uma disciplina."}), 400
+
+    questoes = selecionar_questoes(config, mode, total, disciplinas)
+    if not questoes:
+        return jsonify({"message": "Nenhuma questão disponível para o critério informado."}), 400
+
+    agora = datetime.utcnow()
+    tentativa = {
+        "id": str(uuid.uuid4()),
+        "mode": mode,
+        "status": "active",
+        "started_at": agora.isoformat(),
+        "ends_at": (agora + timedelta(minutes=duracao)).isoformat(),
+        "duration_min": duracao,
+        "questions": questoes,
+        "order": list(range(len(questoes))),
+        "answers": {},
+        "flags": [],
+    }
+
+    tentativas[tentativa["id"]] = tentativa
+    return jsonify(tentativa_para_resposta(tentativa))
+
+
+def _obter_tentativa(tentativa_id):
+    tentativas = get_user_tentativas(current_user.id)
+    return tentativas.get(tentativa_id)
+
+
+@app.route("/simulados/<tentativa_id>", methods=["GET"])
+@login_required
+def obter_tentativa(tentativa_id):
+    tentativa = _obter_tentativa(tentativa_id)
+    if not tentativa:
+        return jsonify({"message": "Tentativa não encontrada."}), 404
+    return jsonify(tentativa_para_resposta(tentativa))
+
+
+@app.route("/simulados/<tentativa_id>/answer", methods=["POST"])
+@login_required
+def responder_tentativa(tentativa_id):
+    tentativa = _obter_tentativa(tentativa_id)
+    if not tentativa:
+        return jsonify({"message": "Tentativa não encontrada."}), 404
+    if tentativa.get("status") != "active":
+        return jsonify({"message": "Tentativa já finalizada."}), 400
+
+    data = request.get_json(silent=True) or {}
+    question_id = data.get("question_id")
+    option = data.get("option")
+
+    if not question_id or option is None:
+        return jsonify({"message": "Dados incompletos."}), 400
+
+    tentativa.setdefault("answers", {})[question_id] = option
+    return jsonify({"success": True})
+
+
+def gerar_relatorio(tentativa, finished_at=None):
+    respostas = tentativa.get("answers", {})
+    questoes = tentativa.get("questions", [])
+    correct_count = 0
+    report = []
+
+    for q in questoes:
+        correta = q.get("correct")
+        marcada = respostas.get(q.get("id"))
+        if marcada and correta and marcada == correta:
+            correct_count += 1
+        report.append(
+            {
+                "stem": q.get("stem"),
+                "correct": correta,
+                "your": marcada,
+                "explanation": q.get("feedback") or "",
+            }
+        )
+
+    total = len(questoes)
+    score = (correct_count / total * 100) if total else 0
+
+    try:
+        started_at = datetime.fromisoformat(tentativa.get("started_at"))
+    except Exception:
+        started_at = datetime.utcnow()
+
+    finished = finished_at or datetime.utcnow()
+    spent_seconds = max(0, int((finished - started_at).total_seconds()))
+
+    return {
+        "score": round(score, 2),
+        "correct_count": correct_count,
+        "total": total,
+        "spent_seconds": spent_seconds,
+        "report": report,
+    }
+
+
+@app.route("/simulados/<tentativa_id>/finish", methods=["POST"])
+@login_required
+def finalizar_tentativa(tentativa_id):
+    tentativa = _obter_tentativa(tentativa_id)
+    if not tentativa:
+        return jsonify({"message": "Tentativa não encontrada."}), 404
+
+    if tentativa.get("status") != "finished":
+        tentativa["status"] = "finished"
+        finished_at = datetime.utcnow()
+        tentativa["finished_at"] = finished_at.isoformat()
+    else:
+        try:
+            finished_at = datetime.fromisoformat(tentativa.get("finished_at"))
+        except Exception:
+            finished_at = datetime.utcnow()
+
+    relatorio = gerar_relatorio(tentativa, finished_at)
+    return jsonify(relatorio)
+
+
+@app.route("/simulados/<tentativa_id>/report", methods=["GET"])
+@login_required
+def relatorio_tentativa(tentativa_id):
+    tentativa = _obter_tentativa(tentativa_id)
+    if not tentativa:
+        return jsonify({"message": "Tentativa não encontrada."}), 404
+    if tentativa.get("status") != "finished":
+        return jsonify({"message": "A tentativa ainda não foi finalizada."}), 400
+
+    try:
+        finished_at = datetime.fromisoformat(tentativa.get("finished_at"))
+    except Exception:
+        finished_at = datetime.utcnow()
+
+    relatorio = gerar_relatorio(tentativa, finished_at)
+    return jsonify(relatorio)
 
 
 # =======================================================
