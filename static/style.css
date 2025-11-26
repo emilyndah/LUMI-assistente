@@ -731,3 +731,1023 @@ main.profile-page {
     .faq-container { padding: 20px; }
     .chat-input button { width: 38px; height: 38px; }
 }
+
+/* ======================================================= */
+/* === CSS ADICIONADO PARA FLASHCARDS INTERATIVOS === */
+/* ======================================================= */
+
+/* --- 1. Seleção de Disciplina --- */
+#subject-selection {
+    text-align: center;
+}
+
+#subject-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.subject-btn {
+    background-color: var(--lumi-blue); 
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.subject-btn:hover {
+    background-color: var(--lumi-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn-flashcard-subject {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.back-btn-flashcard-subject:hover {
+    color: var(--lumi-blue);
+    text-decoration: underline;
+}
+
+
+/* --- 2. Visualizador do Flashcard --- */
+#flashcard-viewer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#back-to-subjects {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    padding: 5px;
+}
+#back-to-subjects:hover {
+    color: var(--lumi-blue);
+    text-decoration: underline;
+}
+
+#subject-title {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* --- 3. Efeito 3D de Virar --- */
+
+/* A "cena" define a perspectiva 3D */
+#flashcard-scene {
+    width: 100%;
+    max-width: 500px;
+    height: 300px;
+    perspective: 1000px; /* Define o quão "extremo" é o 3D */
+    margin-bottom: 20px;
+}
+
+/* O 'flashcard' é o container que vira */
+.flashcard {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d; /* Permite que os filhos sejam 3D */
+    transition: transform 0.6s;
+}
+
+/* O estado "virado" */
+.flashcard.is-flipped {
+    transform: rotateY(180deg);
+}
+
+/* Estilo comum para frente e verso */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden; /* Esconde o lado que está "atrás" */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* Frente do Cartão */
+.card-front {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #e0e0e0;
+}
+
+/* Verso do Cartão */
+.card-back {
+    background-color: var(--lumi-blue-light-bg);
+    color: var(--lumi-blue-dark); /* Ajustado */
+    border: 1px solid var(--lumi-blue-transparent-40); /* Ajustado */
+    transform: rotateY(180deg); /* Começa "virado" */
+}
+
+#flashcard-question,
+#flashcard-answer {
+    font-weight: 500;
+}
+
+/* --- 4. Navegação --- */
+.flashcard-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.flashcard-nav button {
+    background-color: var(--lumi-blue);
+    color: white;
+    border: none;
+    border-radius: 50%; /* Botões redondos */
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.flashcard-nav button:hover {
+    background-color: var(--lumi-blue-dark);
+}
+
+#card-counter {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+}
+
+/* ======================================================= */
+/* === AJUSTES DO CHAT (Conforme solicitado) === */
+/* (Estes substituem quaisquer regras conflitantes acima) */
+/* ======================================================= */
+
+/* --- 1. MODIFICAÇÃO: Mensagens do Usuário (Gradiente SÓLIDO) --- */
+.chat-box .msg.user {
+    /* Gradiente SÓLIDO, 100% Opaco */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    
+    /* Texto 100% branco e opaco */
+    color: #FFFFFF; 
+    
+    /* Layout e bordas */
+    align-self: flex-end;
+    border-radius: 15px 15px 0 15px;
+    box-shadow: 0 2px 8px var(--lumi-blue-transparent-30); /* Sombra suave */
+    border: none; /* Remove qualquer borda */
+    
+    /* Animação correta (substitui o 'fadeIn' da classe .msg) */
+    animation: slideInRight 0.3s ease-out; 
+    
+    /* Garante que a opacidade final seja 1 (após a animação) */
+    opacity: 1 !important; 
+}
+
+/* Triângulo/seta da caixa de mensagem, SÓLIDO */
+.chat-box .msg.user::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    right: -8px;
+    bottom: 0;
+    border-width: 8px 0 0 8px;
+    border-color: transparent transparent transparent var(--lumi-blue-dark); /* Cor escura SÓLIDA */
+}
+
+
+/* --- 2. MODIFICAÇÃO: Input de Texto (Translúcido) --- */
+.chat-input input,
+.chat-input input[type="text"] {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 1em;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: rgba(240, 240, 240, 0.8); /* Cinza claro 80% translúcido */
+    color: #333;
+}
+
+.chat-input input:focus,
+.chat-input input[type="text"]:focus {
+    background-color: #ffffff; /* Fica branco sólido ao clicar */
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 3px var(--lumi-blue-transparent-20);
+    transform: none; /* Sobrescreve o transform anterior */
+}
+
+/* --- 3. ADIÇÃO: Novo Cabeçalho do Chat (Chat Geral) --- */
+
+/* CORREÇÃO: Remove o fundo cinza e a borda do cabeçalho */
+.chat-header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent; /* Remove o fundo cinza */
+    padding: 15px 20px;
+    border-bottom: none; /* Remove a borda */
+    border-radius: 10px 10px 0 0; 
+}
+
+/* CORREÇÃO: Adiciona a "barra quebrada" ao título do chat */
+.chat-title-main {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0;
+    
+    /* Fallback de cor */
+    color: var(--lumi-blue);
+    
+    /* Efeito de Gradiente no Texto */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    
+    /* Estilos para a "barra quebrada" */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* CORREÇÃO: Cria a "barra quebrada" */
+.chat-title-main::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lumi-blue), transparent);
+    border-radius: 2px;
+}
+
+/* --- 4. MODIFICAÇÃO: Botão "Limpar Conversa" (Melhorado) --- */
+.clear-chat-btn {
+    background-color: transparent;
+    color: var(--lumi-blue);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 2px solid var(--lumi-blue-transparent-30); /* Borda azul clara */
+}
+
+.clear-chat-btn:hover {
+    background-color: var(--lumi-blue-transparent-10); /* Fundo azul claro ao passar o mouse */
+    color: var(--lumi-blue-dark);
+    border-color: var(--lumi-blue-transparent-85); /* Borda mais forte */
+    transform: translateY(-1px);
+}
+
+/* --- 5. MODIFICAÇÃO: Caixa de Chat (Mensagens) --- */
+.chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px; 
+    border-radius: 0 0 10px 10px; 
+}
+
+/* --- 6. MODIFICAÇÃO: Caixa de Input (Formulário) --- */
+.chat-input {
+    display: flex;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    background-color: rgba(255, 255, 255, 0.6); 
+    border-radius: 0 0 10px 10px;
+    backdrop-filter: none; /* Remove backdrop do input-area se houver */
+}
+
+/* =======================================================
+ * BLOCO FINAL DE ADIÇÕES (v9 - SIDEBAR + PERFIL)
+ * (Cole este bloco no final do seu style.css)
+ * ======================================================= */
+
+/* =======================================================
+ * 1. ESTILOS DA SIDEBAR (v8 - Flutuante, Sem Círculo)
+ * (CORRIGIDO: Lumi 4 e Ícone Hambúrguer no .menu-toggle)
+ * ======================================================= */
+
+/* 1.1. O BOTÃO DO MENU (Flutuante, Sem Círculo, À Esquerda) */
+/* (MODIFICADO para ser um container para a imagem e o ícone) */
+/* 1.1. O BOTÃO DO MENU (CORRIGIDO para 'position: absolute') */
+.menu-toggle {
+    /* POSIÇÃO */
+    position: absolute; /* <--- CORRIGIDO (para ficar DENTRO do header) */
+    
+    /* Alinha verticalmente com o centro */
+    top: 2px;
+    
+    /* Distância da esquerda */
+    left: 10px; 
+    
+    z-index: 998; 
+
+    /* ESTILO (Mantido como estava) */
+    background: none;
+    border: none;
+    color: var(--lumi-blue-dark); 
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    /* Forma (Mantido como estava) */
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    box-shadow: none;
+    
+    /* Alinhamento (Mantido como estava) */
+    display: flex;
+    flex-direction: column; 
+    align-items: center;   
+    justify-content: center;
+    line-height: 1;
+    padding: 5px; 
+    margin: 0;
+}
+
+/* Ajuste no :hover para a nova posição */
+.menu-toggle:hover {
+    color: var(--lumi-blue); 
+    transform: scale(1.1);
+}
+/* === NOVO: Estilos para a imagem Lumi 4 === */
+.lumi-4-icon {
+    width: 55px;  /* Ajuste o tamanho da imagem da Lumi 4 */
+    height: auto; /* Mantém a proporção */
+    margin-bottom: 5px; /* Espaçamento entre a Lumi 4 e o hambúrguer */
+    transition: transform 0.2s ease;
+}
+
+.menu-toggle:hover .lumi-4-icon {
+    transform: translateY(-2px); /* Efeito suave ao passar o mouse */
+}
+
+
+/* 1.2. A SIDEBAR (Menu - Usando Transform) */
+/* (Esta parte foi mantida como a sua - Sem Sombra) */
+.sidebar {
+    height: 100%;
+    width: 260px;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background-color: #ffffff; /* Fundo branco (CORRETO) */
+    /* box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); */
+    overflow-y: auto;
+    font-family: 'Poppins', sans-serif;
+    transform: translateX(-100%); /* Começa fora da tela */
+    transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.sidebar.active {
+    transform: translateX(0); /* Entra na tela */
+}
+
+/* (Esta parte foi mantida como a sua) */
+.sidebar-header {
+    background: linear-gradient(to right, var(--lumi-blue), var(--lumi-blue-dark));
+    border-bottom: none; 
+    padding: 20px 25px 24px 25px; 
+    position: relative; 
+}
+
+/* (Esta parte foi mantida como a sua) */
+.sidebar-header h3 {
+    margin: 0;
+    color: white; 
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* (Esta parte foi mantida como a sua) */
+.sidebar-header::after {
+    content: ''; /* Obrigatório */
+    position: absolute;
+    bottom: 0; /* Gruda na parte de baixo do header */
+    left: 0;   /* Começa na esquerda */
+    width: 100%;
+    height: 4px; /* Espessura da barra */
+    background: linear-gradient(to right, 
+        var(--lumi-blue), 
+        var(--lumi-blue-dark), 
+        transparent
+    );
+}
+
+/* (Esta parte foi mantida como a sua - Sem linhas) */
+.sidebar a {
+    padding: 16px 25px;
+    text-decoration: none;
+    font-size: 1.05em;
+    color: var(--lumi-blue-dark, #004d7b); /* Links escuros (CORRETO) */
+    display: block;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-weight: 500;
+    /* border-bottom: 1px solid var(--lumi-blue-transparent-15); */
+    font-family: 'Poppins', sans-serif;
+}
+.sidebar a:hover {
+    background-color: var(--lumi-blue-transparent-10);
+    color: var(--lumi-blue);
+}
+
+/* 1.3. O OVERLAY (Fundo escurecido) */
+/* (Esta parte foi mantida exatamente como a sua) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+/* =======================================================
+ * 1.4. NOVO ÍCONE DE MENU (CSS HAMBURGER)
+ * (Este foi mantido, mas agora o .menu-toggle lida com o posicionamento)
+ * ======================================================= */
+
+/* A barra do meio */
+.hamburger-icon {
+    display: block;
+    position: relative; /* Mantido para ::before/::after */
+    width: 28px; /* Largura do ícone */
+    height: 3px; /* Espessura da barra */
+    background-color: currentColor; /* Pega a cor do .menu-toggle */
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+/* As barras de cima e de baixo */
+.hamburger-icon::before,
+.hamburger-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px; /* Espessura da barra */
+    background-color: currentColor; /* Pega a cor do .menu-toggle */
+    border-radius: 2px;
+}
+
+/* Posição da barra de cima (8px acima da do meio) */
+.hamburger-icon::before {
+    top: -8px; 
+}
+
+/* Posição da barra de baixo (8px abaixo da do meio) */
+.hamburger-icon::after {
+    bottom: -8px;
+}
+
+/* =======================================================
+ * ADIÇÕES: ESTILOS DA PÁGINA DE PERFIL (v14 - VALORES EXATOS)
+ * (Esta seção inteira foi mantida exatamente como a sua)
+ * ======================================================= */
+
+/* 1. CONTAINER DO PERFIL (com margem no topo) */
+.profile-container {
+    max-width: 700px;
+    margin: 40px auto; /* Centraliza e dá espaço no topo */
+    
+    /* O "enchimento" (padding) que vamos "quebrar" */
+    padding: 30px 40px; 
+    
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 77, 123, 0.08);
+    border: 1px solid var(--lumi-blue-transparent-20);
+}
+
+/* === NOVO: Estilos para o círculo da foto de perfil === */
+/* (Anteriormente era para a letra, agora é o container da imagem) */
+.profile-picture {
+    width: 40px;          /* Tamanho do círculo */
+    height: 40px;         /* Tamanho do círculo */
+    border-radius: 50%;   /* Transforma em círculo */
+    background-color: #f0f0f0; /* Fundo padrão, se a imagem não carregar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;     /* Garante que a imagem não vaze do círculo */
+    border: 2px solid var(--lumi-blue); /* Borda ao redor da foto */
+    flex-shrink: 0; /* Impede que o círculo diminua */
+}
+
+/* === NOVO: Estilos para a imagem Lumi 2 dentro do círculo === */
+.profile-picture .profile-img {
+    width: 100%;      /* Preenche a largura do .profile-picture */
+    height: 100%;     /* Preenche a altura do .profile-picture */
+    object-fit: cover; /* Recorta a imagem para preencher o container sem distorcer */
+    border-radius: 50%; /* Garante que a imagem seja circular */
+}
+
+/* 2. LINK "VOLTAR" (CLASSE FINAL com margens exatas) */
+.back-link-profile-glued-final {
+    display: inline-block; 
+    
+    /* === MUDANÇA APLICADA AQUI (v14) === */
+    /* Exatamente o valor do padding-top para "colar" em cima */
+    margin-top: -30px; 
+    /* Exatamente o valor do padding-left para "colar" na esquerda */
+    margin-left: -10px; 
+    /* Garante espaço abaixo antes do h2 */
+    margin-bottom: 0px; 
+    /* =================================== */
+    
+    /* Adicionamos padding interno no link para ele não ficar feio */
+    padding-top: 5px;
+    padding-left: 5px;
+    
+    color: var(--lumi-blue);
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 500;
+    
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.back-link-profile-glued-final:hover {
+    color: var(--lumi-blue-dark);
+    text-decoration: underline;
+    transform: translateX(-3px);
+}
+
+/* 3. MENSAGENS DE FLASH (Sucesso, Erro) */
+.flash-messages-profile {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.flash-messages-profile .flash {
+    padding: 15px;
+    font-weight: 500;
+}
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.flash.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* 4. FORMULÁRIO DE PERFIL */
+.profile-form .form-group {
+    margin-bottom: 20px;
+}
+
+.profile-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--lumi-blue-dark);
+    font-size: 0.9em;
+}
+
+/* 5. INPUTS EDITÁVEIS (Nome, Email, Selects) */
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    background-color: #ffffff;
+    color: #333;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 6. EFEITO DE FOCO nos inputs editáveis */
+.profile-form input[type="text"]:focus,
+.profile-form input[type="email"]:focus,
+.profile-form select:focus {
+    border-color: var(--lumi-blue);
+    box-shadow: 0 0 0 3px var(--lumi-blue-transparent-30);
+    outline: none;
+}
+
+/* 7. INPUTS NÃO-EDITÁVEIS (Matrícula, CPF) */
+.profile-form input[readonly] {
+    background-color: #f4f4f4;
+    color: #555;
+    cursor: not-allowed;
+}
+
+/* 8. CONTAINER DOS BOTÕES (Salvar, Sair) */
+.profile-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* 9. BOTÃO DE SALVAR (Primário) */
+.btn-submit-profile {
+    background-color: var(--lumi-blue);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-submit-profile:hover {
+    background-color: var(--lumi-blue-dark);
+    box-shadow: 0 4px 10px rgba(0, 77, 123, 0.2);
+}
+
+/* 10. BOTÃO DE LOGOUT (Secundário) */
+.btn-logout-profile {
+    background-color: #fce8e8;
+    color: #c94a4a;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid #f5c6c6;
+}
+
+.btn-logout-profile:hover {
+    background-color: #c94a4a;
+    color: white;
+}
+
+/* =======================================================
+ * BLOCO DE CORREÇÃO DO HEADER (Cole no FIM do style.css)
+ * ======================================================= */
+
+/* 1. O HEADER (A caixa principal) */
+header {
+    width: 100% !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    
+    /* Garante a altura mínima para englobar tudo */
+    min-height: 80px !important; 
+    
+    /* Padding vertical, 0 nos lados */
+    padding: 10px 0 !important; 
+    
+    box-shadow: 0 2px 15px var(--lumi-blue-transparent-10) !important;
+    
+    /* Essencial para o .menu-toggle e .user-area */
+    position: relative !important; 
+    
+    /* Layout Flexbox */
+    display: flex !important;
+    align-items: center !important;    
+    justify-content: center !important; /* Centra o logo */
+    
+    flex-shrink: 0 !important;
+}
+
+/* 2. O LOGO (No centro) */
+.logo {
+    height: 50px !important; 
+    width: auto !important;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    cursor: pointer !important;
+    /* Garante que o logo não seja 'absolute' ou 'fixed' */
+    position: relative !important; 
+}
+
+/* 3. A ÁREA DO UTILIZADOR (Perfil, à direita) */
+.user-area {
+    /* Posição absoluta DENTRO do header */
+    position: absolute !important; 
+    right: 10px !important; 
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    
+    /* Remove padding duplicado */
+    padding-right: 0 !important; 
+    
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    font-size: 0.9em !important;
+}
+
+/* 4. O BOTÃO DO MENU (Lumi 4 + Hambúrguer, à esquerda) */
+/* POSIÇÃO */
+.menu-toggle {
+ position: absolute; /* <--- CORRIGIDO (para ficar PRESO no cabeçalho) */
+ 
+ /* === MUDANÇA: Posição no topo (como pediu) === */
+  top: -10px; /* (Ajuste para 15px se quiser mais baixo) */
+ left: 10px; 
+ 
+ z-index: 998; /* Fica acima da página */
+
+ /* ESTILO (Mantido) */
+ background: none;
+ border: none;
+ color: var(--lumi-blue-dark); /* (Cor usada pelas barras do hambúrguer) */
+ cursor: pointer;
+ transition: all 0.2s ease;
+ 
+ /* Forma (Mantido) */
+ width: auto;
+ height: auto;
+ border-radius: 0;
+ box-shadow: none;
+ 
+ /* Alinhamento (Mantido) */
+ display: flex;
+ flex-direction: column; /* Coloca os itens em coluna (um em cima do outro) */
+ align-items: center;   /* Centraliza horizontalmente */
+ justify-content: center; /* Centraliza verticalmente (se houver espaço) */
+ 
+ line-height: 1;
+ padding: 5px; 
+ margin: 0;
+
+}
+
+/* Efeito de hover (CORRIGIDO sem o 'transform' antigo) */
+.menu-toggle:hover { color: var(--lumi-blue); /* (Muda a cor das barras do hambúrguer) */
+transform: scale(1.1); /* (Remove qualquer 'translateY' que possa existir) */
+}
+
+/* =======================================================
+   ATUALIZAÇÕES (MENU + PERFIL) - COLE NO FINAL DO ARQUIVO
+   Isso vai sobrescrever o menu antigo sem quebrar o resto.
+   ======================================================= */
+
+/* --- 1. CABEÇALHO DO MENU (Branco + Barra Degradê) --- */
+.sidebar-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 20px 20px !important;
+    background-color: white !important; /* Força Branco */
+    position: relative !important;
+    border-bottom: none !important;
+    height: auto !important;
+    min-height: 80px;
+}
+
+/* Barra colorida na borda inferior */
+.sidebar-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--lumi-blue, #3fa9f5), transparent);
+    z-index: 10;
+}
+
+/* Foto da Lumi (Bolinha) */
+.sidebar-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    margin: 0 !important; /* Remove margens estranhas antigas */
+}
+
+/* Texto "Menu Lumi" */
+.sidebar-header h3 {
+    margin: 0 !important;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, var(--lumi-blue, #3fa9f5) 0%, var(--lumi-blue-dark, #004d7b) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #3fa9f5;
+}
+
+/* --- 2. BOTÃO HAMBÚRGUER (Cápsula Pequena) --- */
+.menu-toggle {
+    /* Destrava o tamanho */
+    align-self: center !important; 
+    min-height: 0 !important;      
+    padding: 0 !important;
+    
+    /* Tamanho fixo pequeno */
+    width: 45px !important;
+    height: 40px !important;
+    
+    /* Posição fixa */
+    position: absolute !important;
+    left: 20px !important;
+    top: 20px !important; /* Ajuste aqui se quiser subir ou descer */
+    transform: none !important; /* Remove centralização antiga se houver conflito */
+    
+    z-index: 2000 !important;
+    background: transparent !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer;
+    box-shadow: none !important; /* Remove sombra da caixa se tiver */
+}
+
+/* Esconde a imagem antiga se o HTML ainda tiver */
+.menu-toggle img { display: none !important; }
+
+/* O Desenho da Barra (Cápsula) */
+.hamburger-icon {
+    display: block !important;
+    position: relative !important;
+    width: 28px !important;  
+    height: 4px !important;  
+    background-color: var(--lumi-blue-dark, #004d7b) !important;
+    border-radius: 10px !important;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px; 
+    background-color: var(--lumi-blue-dark, #004d7b) !important;
+    border-radius: 10px;
+}
+.hamburger-icon::before { top: -8px; } 
+.hamburger-icon::after { bottom: -8px; }
+
+/* --- 3. ESTILO DO PERFIL (Igual Login/Registro) --- */
+/* Isso garante que o perfil novo funcione mesmo com o CSS antigo */
+body.perfil-centralizado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f9fc;
+    margin: 0;
+}
+
+.auth-style-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 50px; /* Espaço para não bater no botão */
+}
+
+.auth-style-card h2 {
+    color: var(--lumi-blue, #3fa9f5);
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.auth-profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--lumi-blue, #3fa9f5);
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.auth-style-card label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.auth-style-card input,
+.auth-style-card select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.btn-salvar {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--lumi-blue, #3fa9f5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+}
+.btn-salvar:hover { background-color: var(--lumi-blue-dark, #004d7b); }
+
+.btn-sair {
+    display: block; margin-top: 15px; color: #c94a4a;
+    text-decoration: none; font-size: 0.9em; font-weight: 500;
+}
+
+/* =======================================================
+   CORREÇÃO FINAL: CABEÇALHO BRANCO
+   (Cola isso no final do arquivo style.css)
+   ======================================================= */
+
+/* Força o fundo branco e remove qualquer azul */
+nav.sidebar .sidebar-header {
+    background-color: #ffffff !important; /* Fundo BRANCO */
+    background: #ffffff !important;       /* Garante remoção de degradês azuis */
+    border-bottom: none !important;
+}
+
+/* Garante que o texto "Menu Lumi" apareça (Degradê Azul) */
+nav.sidebar .sidebar-header h3 {
+    margin: 0 !important;
+    font-weight: 700 !important;
+    
+    /* O texto fica com aquele degradê bonito */
+    background: linear-gradient(135deg, #3fa9f5 0%, #004d7b 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: #3fa9f5 !important; /* Cor de segurança */
+}
+
+/* Garante a barrinha colorida embaixo */
+nav.sidebar .sidebar-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #3fa9f5, transparent) !important;
+    z-index: 10;
+}
