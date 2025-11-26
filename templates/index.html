@@ -9,51 +9,36 @@
 </head>
 
 <body>
-
-
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <h3>Menu Lumi</h3>
-        </div>
-        <a href="{{ url_for('index') }}">Chat Principal</a>
-        <a href="{{ url_for('profile') }}">Meu Perfil</a>
-        <a href="{{ url_for('calendario') }}">Calendário</a>
-        <a href="{{ url_for('flashcards') }}">Flashcards</a>
-        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
-        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
-        <a href="{{ url_for('faq') }}">FAQ</a>
-        <a href="{{ url_for('simulador_de_provas') }}">Simulador de Provas</a>
-    </nav>
-    
-    <div class="overlay"></div>
-
-
     <header>
-    
-    <button class="menu-toggle" title="Menu">
-        <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Lumi 4" class="lumi-4-icon">
-        <span class="hamburger-icon"></span>
-    </button>
-    
-    <a href="{{ url_for('index') }}">
-        <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
-    </a>
-    
-    {% if current_user.is_authenticated %}
-    <div class="user-area">
-        <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
-        
-        <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
-            <div class="profile-picture">
-                {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
-                <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
-            </div>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
         </a>
-    </div>
-    {% endif %}
-</header>
+
+        <div class="user-area">
+            {% if current_user.is_authenticated %}
+                <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
+                
+                <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                    <div class="profile-icon">{{ current_user.username[0]|upper if current_user.username else '?' }}</div>
+                </a>
+                
+                <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
+            {% else %}
+                 <a href="{{ url_for('login') }}" class="login-link">Login</a>
+            {% endif %}
+        </div>
+    </header>
 
     <main>
+        <aside class="funcoes">
+            <h2>Funcionalidades</h2>
+            <a href="{{ url_for('flashcards') }}" class="func-item">Flashcards</a>
+            <a href="{{ url_for('metodo_de_estudo') }}" class="func-item">Método de Estudo</a>
+            <a href="{{ url_for('calendario') }}" class="func-item">Calendário</a>
+            <a href="{{ url_for('faq') }}" class="func-item">FAQ</a>
+            <a href="{{ url_for('modo_foco') }}" class="func-item">Modo Foco</a>
+        </aside>
+        
         <section class="chat-container">
             
             <div class="chat-header-box">
@@ -75,29 +60,19 @@
                     required
                     autocomplete="off"
                 >
-                <button type="submit" id="submit-btn" aria-label="Enviar Pergunta">&#x27A4;</button>
+                <button
+                    type="submit" id="submit-btn"
+                    aria-label="Enviar Pergunta"
+                >
+                    &#x27A4; </button>
             </form>
         </section>
     </main>
 
-    <!-- Toasts do Flask -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div id="toast-container">
-          {% for category, message in messages %}
-            <div class="toast-message {{ category }}">
-              {{ message }}
-              <span class="toast-close-btn">&times;</span>
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
-
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const chatBox   = document.getElementById('chat-box');
-        const chatForm  = document.getElementById('chat-form');
+        const chatBox = document.getElementById('chat-box');
+        const chatForm = document.getElementById('chat-form');
         const userInput = document.getElementById('pergunta-input');
         const submitBtn = document.getElementById('submit-btn');
         
@@ -108,11 +83,7 @@
         function addMessage(text, sender) {
             const msgDiv = document.createElement('div');
             msgDiv.className = `msg ${sender}`;
-            if (sender === 'lumi') {
-                msgDiv.innerHTML = text.replace(/\n/g, '<br>'); // Permite quebras de linha da Lumi
-            } else {
-                msgDiv.textContent = text; // Sanitiza a entrada do usuário
-            }
+            msgDiv.innerHTML = (sender === 'lumi') ? text.replace(/\n/g, '<br>') : text;
             chatBox.appendChild(msgDiv);
             setTimeout(scrollToBottom, 50);
         }
@@ -186,27 +157,7 @@
         document.querySelectorAll('a.func-item.disabled').forEach(link => {
             link.addEventListener('click', (e) => e.preventDefault());
         });
-
-        // TOASTS: abre, espera e fecha com X
-        const toasts = document.querySelectorAll('.toast-message');
-        toasts.forEach((toast, index) => {
-            const delay = 300 * index; 
-            setTimeout(() => { toast.classList.add('show'); }, delay);
-
-            const hideTimer = setTimeout(() => {
-                toast.classList.add('hide');
-                setTimeout(() => { toast.remove(); }, 500);
-            }, 5000);
-
-            const closeBtn = toast.querySelector('.toast-close-btn');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    clearTimeout(hideTimer);
-                    toast.classList.add('hide');
-                    setTimeout(() => { toast.remove(); }, 500);
-                });
-            }
-        });
+        
     });
     </script>
 
@@ -256,31 +207,6 @@
           });
         }
       });
-    });
-    </script>
-
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
-        const overlay = document.querySelector('.overlay');
-
-        function closeMenu() {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        }
-
-        // Garante que os elementos existem antes de adicionar listeners
-        if (menuToggle && sidebar && overlay) {
-            menuToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-            });
-
-            // Fecha o menu se clicar fora (no overlay)
-            overlay.addEventListener('click', closeMenu);
-        }
     });
     </script>
 
