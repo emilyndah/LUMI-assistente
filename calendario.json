@@ -179,5 +179,12 @@
     "data_inicio": "2026-01-26",
     "data_fim": "2026-01-30",
     "descricao": "Início do Seminário de Atualização de Práticas Docentes"
+  },
+  {
+    "id": "e21592a3-0b67-4f12-ae8e-038512ed6638",
+    "data_inicio": "2025-11-27",
+    "descricao": "AULA DO JEFF",
+    "type": "Prova",
+    "description": "melhor prof"
   }
 ]

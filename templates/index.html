@@ -13,6 +13,7 @@
 
     <nav class="sidebar">
         <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
             <h3>Menu Lumi</h3>
         </div>
         <a href="{{ url_for('index') }}">Chat Principal</a>
@@ -29,11 +30,10 @@
 
     <header>
     
-    <button class="menu-toggle" title="Menu">
-        <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Lumi 4" class="lumi-4-icon">
-        <span class="hamburger-icon"></span>
-    </button>
-    
+  <button class="menu-toggle" title="Menu">
+    <span class="hamburger-icon"></span> 
+</button>
+
     <a href="{{ url_for('index') }}">
         <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
     </a>

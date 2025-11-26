@@ -1528,3 +1528,226 @@ header {
 .menu-toggle:hover { color: var(--lumi-blue); /* (Muda a cor das barras do hambúrguer) */
 transform: scale(1.1); /* (Remove qualquer 'translateY' que possa existir) */
 }
+
+/* =======================================================
+   ATUALIZAÇÕES (MENU + PERFIL) - COLE NO FINAL DO ARQUIVO
+   Isso vai sobrescrever o menu antigo sem quebrar o resto.
+   ======================================================= */
+
+/* --- 1. CABEÇALHO DO MENU (Branco + Barra Degradê) --- */
+.sidebar-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 20px 20px !important;
+    background-color: white !important; /* Força Branco */
+    position: relative !important;
+    border-bottom: none !important;
+    height: auto !important;
+    min-height: 80px;
+}
+
+/* Barra colorida na borda inferior */
+.sidebar-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--lumi-blue, #3fa9f5), transparent);
+    z-index: 10;
+}
+
+/* Foto da Lumi (Bolinha) */
+.sidebar-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    margin: 0 !important; /* Remove margens estranhas antigas */
+}
+
+/* Texto "Menu Lumi" */
+.sidebar-header h3 {
+    margin: 0 !important;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, var(--lumi-blue, #3fa9f5) 0%, var(--lumi-blue-dark, #004d7b) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #3fa9f5;
+}
+
+/* --- 2. BOTÃO HAMBÚRGUER (Cápsula Pequena) --- */
+.menu-toggle {
+    /* Destrava o tamanho */
+    align-self: center !important; 
+    min-height: 0 !important;      
+    padding: 0 !important;
+    
+    /* Tamanho fixo pequeno */
+    width: 45px !important;
+    height: 40px !important;
+    
+    /* Posição fixa */
+    position: absolute !important;
+    left: 20px !important;
+    top: 20px !important; /* Ajuste aqui se quiser subir ou descer */
+    transform: none !important; /* Remove centralização antiga se houver conflito */
+    
+    z-index: 2000 !important;
+    background: transparent !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer;
+    box-shadow: none !important; /* Remove sombra da caixa se tiver */
+}
+
+/* Esconde a imagem antiga se o HTML ainda tiver */
+.menu-toggle img { display: none !important; }
+
+/* O Desenho da Barra (Cápsula) */
+.hamburger-icon {
+    display: block !important;
+    position: relative !important;
+    width: 28px !important;  
+    height: 4px !important;  
+    background-color: var(--lumi-blue-dark, #004d7b) !important;
+    border-radius: 10px !important;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px; 
+    background-color: var(--lumi-blue-dark, #004d7b) !important;
+    border-radius: 10px;
+}
+.hamburger-icon::before { top: -8px; } 
+.hamburger-icon::after { bottom: -8px; }
+
+/* --- 3. ESTILO DO PERFIL (Igual Login/Registro) --- */
+/* Isso garante que o perfil novo funcione mesmo com o CSS antigo */
+body.perfil-centralizado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f9fc;
+    margin: 0;
+}
+
+.auth-style-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-top: 50px; /* Espaço para não bater no botão */
+}
+
+.auth-style-card h2 {
+    color: var(--lumi-blue, #3fa9f5);
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.auth-profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--lumi-blue, #3fa9f5);
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.auth-style-card label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.auth-style-card input,
+.auth-style-card select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.btn-salvar {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--lumi-blue, #3fa9f5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+}
+.btn-salvar:hover { background-color: var(--lumi-blue-dark, #004d7b); }
+
+.btn-sair {
+    display: block; margin-top: 15px; color: #c94a4a;
+    text-decoration: none; font-size: 0.9em; font-weight: 500;
+}
+
+/* =======================================================
+   CORREÇÃO FINAL: CABEÇALHO BRANCO
+   (Cola isso no final do arquivo style.css)
+   ======================================================= */
+
+/* Força o fundo branco e remove qualquer azul */
+nav.sidebar .sidebar-header {
+    background-color: #ffffff !important; /* Fundo BRANCO */
+    background: #ffffff !important;       /* Garante remoção de degradês azuis */
+    border-bottom: none !important;
+}
+
+/* Garante que o texto "Menu Lumi" apareça (Degradê Azul) */
+nav.sidebar .sidebar-header h3 {
+    margin: 0 !important;
+    font-weight: 700 !important;
+    
+    /* O texto fica com aquele degradê bonito */
+    background: linear-gradient(135deg, #3fa9f5 0%, #004d7b 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: #3fa9f5 !important; /* Cor de segurança */
+}
+
+/* Garante a barrinha colorida embaixo */
+nav.sidebar .sidebar-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #3fa9f5, transparent) !important;
+    z-index: 10;
+}
