@@ -151,7 +151,7 @@ class User(db.Model, UserMixin):
 
     # === MUDANÇA === Renomeei 'username' para 'nome_completo'
     # e 'sexo' para 'genero' para bater com o seu HTML/Formulário
-    def __init__(self, nome_completo, email, matricula, password=None, cpf=None, telefone=None, genero=None, etnia=None):
+    def __init__(self, nome_completo, email, matricula, password=None, cpf=None, telefone=None, genero=None, etnia=None, profile_image=None):
         self.username = nome_completo # O formulário usa 'username', mas seu HTML exibe 'nome'
         self.email = email
         self.matricula = matricula
@@ -162,6 +162,7 @@ class User(db.Model, UserMixin):
         self.telefone = telefone
         self.sexo = genero # 'sexo' no BD, 'genero' no formulário
         self.etnia = etnia
+        self.profile_image = profile_image or 'lumi-2.png'
 
 
 @login_manager.user_loader

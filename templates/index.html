@@ -72,7 +72,8 @@
             
             <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
                 <div class="profile-picture">
-                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    {% set user_profile_image = current_user|attr('profile_image')|default('lumi-2.png', true) %}
+                    {% set image_filename = 'uploads/' + user_profile_image if user_profile_image != 'lumi-2.png' else 'lumi-2.png' %}
                     <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
                 </div>
             </a>
