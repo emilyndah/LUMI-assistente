@@ -6,10 +6,40 @@
     <title>Lumi – Assistente Acadêmica</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos para o conteúdo formatado da Lumi */
+        .message-content {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.5;
+        }
+        .message-content strong {
+            font-weight: 700; /* Negrito bem visível */
+        }
+        .message-content ul, .message-content ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        .message-content li {
+            margin-bottom: 5px;
+        }
+        .message-content p {
+            margin-bottom: 10px;
+        }
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+        /* Ajuste para cabeçalhos que o Gemini possa enviar */
+        .message-content h1, .message-content h2, .message-content h3 {
+            font-size: 1.1em;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body>
-
 
     <nav class="sidebar">
         <div class="sidebar-header">
@@ -27,30 +57,28 @@
     
     <div class="overlay"></div>
 
-
     <header>
-    
-  <button class="menu-toggle" title="Menu">
-    <span class="hamburger-icon"></span> 
-</button>
+        <button class="menu-toggle" title="Menu">
+            <span class="hamburger-icon"></span> 
+        </button>
 
-    <a href="{{ url_for('index') }}">
-        <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
-    </a>
-    
-    {% if current_user.is_authenticated %}
-    <div class="user-area">
-        <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
-        
-        <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
-            <div class="profile-picture">
-                {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
-                <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
-            </div>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
         </a>
-    </div>
-    {% endif %}
-</header>
+        
+        {% if current_user.is_authenticated %}
+        <div class="user-area">
+            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+            
+            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                <div class="profile-picture">
+                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </header>
 
     <main>
         <section class="chat-container">
@@ -94,14 +122,23 @@
             chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
         }
 
+        // --- FUNÇÃO CORRIGIDA PARA USAR MARKDOWN ---
         function addMessage(text, sender) {
             const msgDiv = document.createElement('div');
             msgDiv.className = `msg ${sender}`;
+            
+            // Cria um container interno para aplicar o estilo correto
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
             if (sender === 'lumi') {
-                msgDiv.innerHTML = text.replace(/\n/g, '<br>'); // Permite quebras de linha da Lumi
+                // AQUI A MÁGICA: converte o Markdown (asteriscos) em HTML
+                contentDiv.innerHTML = marked.parse(text); 
             } else {
-                msgDiv.textContent = text; // Sanitiza a entrada do usuário
+                contentDiv.textContent = text; // Mantém texto puro para o usuário (segurança)
             }
+
+            msgDiv.appendChild(contentDiv);
             chatBox.appendChild(msgDiv);
             setTimeout(scrollToBottom, 50);
         }
@@ -252,6 +289,8 @@
         }
     });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 </body>
 </html>
