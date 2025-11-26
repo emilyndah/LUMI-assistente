@@ -10,11 +10,12 @@ import json
 import os
 import re
 import traceback
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 from dotenv import load_dotenv
 import uuid
 import psycopg2
+import random
 
 import google.generativeai as genai
 from flask import (
@@ -97,7 +98,7 @@ class User(db.Model, UserMixin):
     matricula = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
 
-    cpf = db.Column(db.String(14), unique=True, nullable=False)
+    cpf = db.Column(db.String(14), unique=True, nullable=True)
     telefone = db.Column(db.String(20), nullable=True)
     sexo = db.Column(db.String(30), nullable=True)
     etnia = db.Column(db.String(50), nullable=True)
@@ -447,7 +448,9 @@ def register():
 
         user_by_email = User.query.filter_by(email=email).first()
         user_by_matricula = User.query.filter_by(matricula=matricula).first()
-        user_by_cpf = User.query.filter_by(cpf=cpf).first()
+        user_by_cpf = None
+        if cpf:
+            user_by_cpf = User.query.filter_by(cpf=cpf).first()
 
         if user_by_email:
             flash("Este e-mail já está cadastrado. Tente fazer login.", "warning")
@@ -584,6 +587,13 @@ def modo_foco():
     return render_template("foco.html")
 
 
+@app.route("/simulador_de_provas")
+@login_required
+def simulador_de_provas():
+    """Renderiza a página do simulador de provas."""
+    return render_template("simulador_de_provas.html", current_year=datetime.utcnow().year)
+
+
 @app.route("/limpar")
 @login_required
 def limpar_chat():
@@ -625,6 +635,292 @@ def metodo_de_estudo():
         quiz_data=quiz_data,
         saved_vark_result=saved_vark_result,
     )
+
+
+# =======================================================
+# SIMULADOR DE PROVAS (API E ESTADO EM MEMÓRIA)
+# =======================================================
+
+# Carrega banco de questões e política
+def carregar_simulador():
+    data = carregar_dados_json("simulador_de_provas.json") or {}
+    policy = data.get("policy", {})
+    pools = {}
+    for pool in data.get("pools", []):
+        disc = pool.get("discipline")
+        if disc and isinstance(pool.get("questions"), list):
+            questions = []
+            for q in pool.get("questions", []):
+                if isinstance(q, dict):
+                    q = {**q, "discipline": disc}
+                    questions.append(q)
+            pools[disc] = questions
+    return policy, pools
+
+
+SIMULADOR_POLICY, SIMULADOR_POOLS = carregar_simulador()
+SIMULADOR_ATTEMPTS = {}
+
+
+def _sim_user_key():
+    if current_user.is_authenticated:
+        return f"user-{current_user.id}"
+    if "sim_session" not in session:
+        session["sim_session"] = str(uuid.uuid4())
+    return f"anon-{session['sim_session']}"
+
+
+def _get_attempt(attempt_id):
+    key = _sim_user_key()
+    return SIMULADOR_ATTEMPTS.get(key, {}).get(attempt_id)
+
+
+def _store_attempt(attempt):
+    key = _sim_user_key()
+    SIMULADOR_ATTEMPTS.setdefault(key, {})[attempt["id"]] = attempt
+    return attempt
+
+
+def _base_questions(mode, disciplinas=None):
+    if mode == "prova" and disciplinas:
+        selected = []
+        for disc in disciplinas:
+            selected.extend(SIMULADOR_POOLS.get(disc, []))
+        return selected
+
+    all_questions = []
+    for items in SIMULADOR_POOLS.values():
+        all_questions.extend(items)
+    return all_questions
+
+
+def _select_questions(mode, total, disciplinas=None):
+    if mode == "prova" and (not disciplinas or len(disciplinas) != 1):
+        raise ValueError("Selecione exatamente uma disciplina para o modo Prova.")
+
+    min_total = SIMULADOR_POLICY.get("min_questions_total", 12)
+    max_total = SIMULADOR_POLICY.get("max_questions_total", 40)
+    if mode == "prova":
+        max_total = min(max_total, 36)
+
+    base = _base_questions(mode, disciplinas)
+    if not base:
+        raise ValueError("Nenhum banco de questões disponível para este modo.")
+
+    max_total = min(max_total, len(base))
+    total = max(min_total, min(total or min_total, max_total))
+
+    sampled = random.sample(base, total)
+    order = list(range(len(sampled)))
+    random.shuffle(order)
+    return sampled, order
+
+
+def _sanitize_questions(questions):
+    sanitized = []
+    for q in questions:
+        sanitized.append(
+            {
+                "id": q.get("id"),
+                "stem": q.get("stem"),
+                "options": q.get("options", {}),
+                "discipline": q.get("discipline"),
+            }
+        )
+    return sanitized
+
+
+def _compute_result(attempt, timed_out=False):
+    if attempt.get("status") == "finished" and attempt.get("result"):
+        return attempt["result"]
+
+    answers = attempt.get("answers", {})
+    questions = attempt.get("questions", [])
+
+    correct_count = 0
+    report = []
+    for q in questions:
+        your = (answers.get(q.get("id")) or "").upper() if answers else ""
+        correct = (q.get("correct") or "").upper()
+        if your and your == correct:
+            correct_count += 1
+        report.append(
+            {
+                "id": q.get("id"),
+                "stem": q.get("stem"),
+                "your": your or None,
+                "correct": correct or None,
+                "explanation": q.get("feedback"),
+            }
+        )
+
+    total = len(questions) or 1
+    started_at = attempt.get("started_at") or datetime.utcnow()
+    finished_at = datetime.utcnow()
+    spent_seconds = int((min(finished_at, attempt.get("ends_at", finished_at)) - started_at).total_seconds())
+    score = (correct_count / total) * 100
+
+    result = {
+        "id": attempt.get("id"),
+        "total": total,
+        "correct_count": correct_count,
+        "score": round(score, 2),
+        "spent_seconds": max(spent_seconds, 0),
+        "report": report,
+    }
+
+    attempt["status"] = "finished"
+    attempt["finished_at"] = finished_at
+    attempt["result"] = result
+    return result
+
+
+def _ensure_not_expired(attempt):
+    if not attempt:
+        return None
+    if attempt.get("status") == "finished":
+        return attempt
+    if datetime.utcnow() >= attempt.get("ends_at", datetime.utcnow()):
+        _compute_result(attempt, timed_out=True)
+    return attempt
+
+
+def _summaries_for_user():
+    key = _sim_user_key()
+    attempts = SIMULADOR_ATTEMPTS.get(key, {}).values()
+    summaries = []
+    for att in attempts:
+        _ensure_not_expired(att)
+        summaries.append(
+            {
+                "id": att.get("id"),
+                "status": att.get("status"),
+                "total": att.get("total"),
+                "duration_min": att.get("duration_min"),
+                "started_at": att.get("started_at").isoformat() if att.get("started_at") else None,
+                "ends_at": att.get("ends_at").isoformat() if att.get("ends_at") else None,
+            }
+        )
+    summaries.sort(key=lambda x: x.get("started_at") or "", reverse=True)
+    return summaries
+
+
+@app.route("/simulados", methods=["GET", "POST"])
+@login_required
+def simulados():
+    """API principal do simulador (lista e criação de tentativas)."""
+    if request.method == "GET":
+        return jsonify(_summaries_for_user())
+
+    payload = request.get_json(silent=True) or {}
+    mode = payload.get("mode", "simulado")
+    total = payload.get("total") or payload.get("qtd") or SIMULADOR_POLICY.get("default_questions_total", 16)
+    dur = payload.get("duracao_min") or payload.get("duration") or 60
+    disciplinas = payload.get("disciplinas") or []
+
+    allowed_durations = SIMULADOR_POLICY.get("time", {}).get("allowed_duration_minutes", [15, 30, 45, 60, 90, 120, 150, 180])
+    if dur not in allowed_durations:
+        dur = 60
+
+    try:
+        questions, order = _select_questions(mode, int(total), disciplinas)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+    started_at = datetime.utcnow()
+    attempt = {
+        "id": str(uuid.uuid4()),
+        "mode": mode,
+        "status": "active",
+        "questions": questions,
+        "answers": {},
+        "order": order,
+        "total": len(questions),
+        "duration_min": int(dur),
+        "started_at": started_at,
+        "ends_at": started_at + timedelta(minutes=int(dur)),
+    }
+
+    _store_attempt(attempt)
+    return jsonify(
+        {
+            "id": attempt["id"],
+            "mode": mode,
+            "status": attempt["status"],
+            "questions": _sanitize_questions(questions),
+            "order": order,
+            "answers": attempt["answers"],
+            "started_at": started_at.isoformat(),
+            "ends_at": attempt["ends_at"].isoformat(),
+        }
+    )
+
+
+@app.route("/simulados/<attempt_id>", methods=["GET"])
+@login_required
+def obter_simulado(attempt_id):
+    attempt = _ensure_not_expired(_get_attempt(attempt_id))
+    if not attempt:
+        return jsonify({"error": "Tentativa não encontrada."}), 404
+
+    return jsonify(
+        {
+            "id": attempt.get("id"),
+            "mode": attempt.get("mode"),
+            "status": attempt.get("status"),
+            "questions": _sanitize_questions(attempt.get("questions", [])),
+            "order": attempt.get("order", []),
+            "answers": attempt.get("answers", {}),
+            "started_at": attempt.get("started_at").isoformat() if attempt.get("started_at") else None,
+            "ends_at": attempt.get("ends_at").isoformat() if attempt.get("ends_at") else None,
+        }
+    )
+
+
+@app.route("/simulados/<attempt_id>/answer", methods=["POST"])
+@login_required
+def registrar_resposta(attempt_id):
+    attempt = _ensure_not_expired(_get_attempt(attempt_id))
+    if not attempt:
+        return jsonify({"error": "Tentativa não encontrada."}), 404
+    if attempt.get("status") == "finished":
+        return jsonify({"error": "Esta tentativa já foi finalizada."}), 400
+
+    payload = request.get_json(silent=True) or {}
+    question_id = payload.get("question_id")
+    option = (payload.get("option") or "").upper()
+
+    if not question_id or not option:
+        return jsonify({"error": "Questão ou resposta ausente."}), 400
+    valid_ids = {q.get("id") for q in attempt.get("questions", [])}
+    if question_id not in valid_ids:
+        return jsonify({"error": "Questão inválida."}), 400
+
+    attempt.setdefault("answers", {})[question_id] = option
+    return jsonify({"success": True})
+
+
+@app.route("/simulados/<attempt_id>/finish", methods=["POST"])
+@login_required
+def finalizar_simulado(attempt_id):
+    attempt = _ensure_not_expired(_get_attempt(attempt_id))
+    if not attempt:
+        return jsonify({"error": "Tentativa não encontrada."}), 404
+
+    result = _compute_result(attempt)
+    return jsonify(result)
+
+
+@app.route("/simulados/<attempt_id>/report", methods=["GET"])
+@login_required
+def relatorio_simulado(attempt_id):
+    attempt = _ensure_not_expired(_get_attempt(attempt_id))
+    if not attempt:
+        return jsonify({"error": "Tentativa não encontrada."}), 404
+    if attempt.get("status") != "finished":
+        return jsonify({"error": "A tentativa ainda está ativa."}), 400
+
+    return jsonify(attempt.get("result") or _compute_result(attempt))
 
 
 # =======================================================
