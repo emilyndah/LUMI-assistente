@@ -1,0 +1,192 @@
+/* =======================================================
+ * TÍTULO: FOLHA DE ESTILOS DO QUIZ (METODO_DE_ESTUDO.CSS)
+ * (Extraído do metodo_de_estudo.html)
+ * ======================================================= */
+
+/* Container principal */
+.quiz-container {
+    width: 100%; max-width: 800px; background: white; border-radius: 15px;
+    padding: 30px 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin: 50px auto 40px auto; /* Aumenta margem superior */
+    position: relative; /* Contexto para botão voltar */
+}
+.quiz-container h1 { 
+    text-align: center; 
+    color: var(--lumi-blue); 
+    margin-bottom: 10px; 
+    font-size: 2em; 
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--lumi-blue), var(--lumi-blue-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.quiz-container > p { 
+    text-align: center; 
+    color: #666; 
+    font-size: 1.1em; 
+    margin-bottom: 30px; 
+}
+/* Botão Voltar (Global) */
+.back-btn-global {
+    position: absolute; top: 25px; left: 25px;
+    text-decoration: none; color: #555; font-size: 0.9rem;
+    padding: 5px 10px; border-radius: 5px;
+    transition: all 0.2s ease;
+}
+.back-btn-global:hover {
+    background-color: #f0f0f0;
+    color: var(--lumi-blue-dark);
+}
+
+/* --- 1. Área de Introdução --- */
+#intro-area { text-align: center; }
+#intro-area p { font-size: 1.05em; line-height: 1.6; margin-bottom: 30px; }
+.start-quiz-btn {
+    background-color: var(--lumi-blue);
+    color: white; border: none; border-radius: 8px;
+    padding: 12px 25px; font-size: 1.1em; font-weight: 500;
+    cursor: pointer; transition: all 0.2s ease;
+}
+.start-quiz-btn:hover {
+    background-color: var(--lumi-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- 2. Área do Quiz (Perguntas) --- */
+.question-header {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+#question-text {
+    font-size: 1.25em;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+}
+#question-counter {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--lumi-blue);
+}
+#options-container {
+    display: flex; flex-direction: column; gap: 12px;
+}
+.option-label {
+    display: block;
+    padding: 15px 20px;
+    border: 2px solid #e0e8ff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #fcfdff;
+}
+.option-label:hover {
+    background-color: #f0f5ff;
+    border-color: var(--lumi-blue-transparent-40);
+}
+.option-label input[type="radio"] {
+    margin-right: 12px;
+    transform: scale(1.1);
+    accent-color: var(--lumi-blue); /* Moderno, mas funciona bem */
+}
+.option-label.selected {
+    background-color: var(--lumi-blue-transparent-10);
+    border-color: var(--lumi-blue);
+    font-weight: 500;
+}
+
+/* Navegação do Quiz */
+.quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+.quiz-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: none; border-radius: 8px;
+    padding: 10px 20px; font-size: 0.95em;
+    font-weight: 500; cursor: pointer;
+    transition: all 0.2s ease;
+}
+.quiz-btn:hover {
+    background-color: #e0e0e0;
+}
+.quiz-btn:disabled {
+    background-color: #f9f9f9;
+    color: #ccc;
+    cursor: not-allowed;
+}
+#finish-btn {
+    background-color: var(--lumi-blue);
+    color: white;
+}
+#finish-btn:hover {
+    background-color: var(--lumi-blue-dark);
+}
+
+/* --- 3. Área de Resultado --- */
+#resultado-area h2 {
+    text-align: center;
+    font-size: 1.8em;
+    color: var(--lumi-blue-dark);
+    margin-bottom: 15px;
+}
+#resultado-categoria {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--lumi-blue);
+    margin-bottom: 25px;
+}
+#resultado-descricao {
+    font-size: 1.05em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+#resultado-dicas {
+    margin-bottom: 30px;
+}
+#resultado-dicas h4 {
+    color: var(--lumi-blue-dark);
+    font-size: 1.1em;
+    border-bottom: 2px solid var(--lumi-blue-transparent-20);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+#resultado-dicas ul {
+    list-style-type: '✓ '; /* Emoji ou similar */
+    padding-left: 25px;
+}
+#resultado-dicas li {
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+#restart-btn {
+    display: block;
+    margin: 20px auto 0 auto;
+    background-color: var(--lumi-blue);
+    color: white;
+    border: none; border-radius: 8px;
+    padding: 10px 20px; font-size: 1em;
+    font-weight: 500; cursor: pointer;
+    transition: all 0.2s ease;
+}
+#restart-btn:hover {
+    background-color: var(--lumi-blue-dark);
+}
+
+/* Gráfico */
+#resultado-grafico-container {
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto;
+}

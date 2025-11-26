@@ -1,0 +1,1880 @@
+{
+  "version": "1.0",
+  "project": "Teste de Conhecimento",
+  "policy": {
+    "mode": "global",
+    "min_questions_total": 12,
+    "max_questions_total": 40,
+    "default_questions_total": 16,
+    "selection_method": "random_without_replacement",
+    "shuffle_options": true,
+    "seed_per_attempt": "attempt_id",
+    "scoring": { "per_correct": 1, "final_formula": "score = (correct_count / total_questions) * 100" },
+    "time": { "validate_server_started_at": true, "auto_finish_on_timeout": true, "allowed_duration_minutes": [15, 30, 45, 60, 90, 120, 150, 180] },
+    "integrity": { "hide_answer_key_until_finish": true, "lock_after_finish": true, "prevent_double_submit": true },
+    "autosave": { "enabled": true, "interval_seconds": 15, "client_state": "sessionStorage", "retry_on_failure": true, "debounce_ms": 400 },
+    "accessibility": { "shortcuts": { "A": "1", "B": "2", "C": "3", "D": "4", "next": "Enter", "prev": "Backspace" }, "aria_live_timer": true, "focus_visible": true }
+  },
+  "pools": [
+    {
+      "discipline": "Fundamentos de Computação e Infraestrutura",
+      "total_expected": 36,
+      "questions": [
+        {
+          "id": "FCI-S1-Q1",
+          "stem": "Ao analisar diferentes sistemas de numeração, observa-se que cada um é definido por sua base. Qual alternativa descreve corretamente o papel da base em um sistema de numeração?",
+          "options": {
+            "A": "A base corresponde à quantidade de símbolos utilizados no sistema e define como os valores são representados",
+            "B": "A base indica o número máximo que pode ser representado em um sistema de numeração",
+            "C": "A base limita o sistema numérico apenas a números naturais, sem representar valores negativos",
+            "D": "A base é determinada pela posição relativa do algarismo em um número",
+            "E": "A base é apenas um identificador simbólico, sem relação com a quantidade de dígitos disponíveis"
+          },
+          "correct": "A",
+          "feedback": "A base define o alfabeto de dígitos e a forma de representação."
+        },
+        {
+          "id": "FCI-S1-Q2",
+          "stem": "Qual é a justificativa correta para o uso do sistema hexadecimal em áreas como endereçamento de memória e protocolos de internet?",
+          "options": {
+            "A": "Porque o sistema hexadecimal dispensa a necessidade de conversões entre bases numéricas",
+            "B": "Porque o sistema hexadecimal permite cálculos matemáticos mais rápidos que o sistema binário",
+            "C": "Porque o sistema hexadecimal utiliza menos dígitos para representar grandes valores, facilitando a leitura e escrita",
+            "D": "Porque o sistema hexadecimal substitui totalmente o uso do binário em operações computacionais",
+            "E": "Porque o sistema hexadecimal é o único sistema capaz de representar endereços de forma precisa"
+          },
+          "correct": "C",
+          "feedback": "Cada dígito hex equivale a 4 bits, compactando a representação."
+        },
+        {
+          "id": "FCI-S1-Q3",
+          "stem": "Assinale a alternativa que apresenta corretamente a diferença entre sistemas posicionais e não posicionais.",
+          "options": {
+            "A": "Sistemas posicionais atribuem valor fixo aos símbolos, enquanto sistemas não posicionais variam o valor conforme a posição",
+            "B": "Nos sistemas posicionais não existe representação para o número zero, enquanto nos não posicionais o zero é um elemento obrigatório",
+            "C": "Sistemas posicionais utilizam a posição do algarismo para determinar seu valor, enquanto nos sistemas não posicionais o valor é sempre fixo",
+            "D": "Sistemas não posicionais atribuem valores distintos aos símbolos dependendo de sua posição, enquanto os sistemas posicionais possuem símbolos fixos",
+            "E": "Ambos os sistemas funcionam da mesma forma, diferenciando-se apenas na quantidade de símbolos disponíveis"
+          },
+          "correct": "C",
+          "feedback": "Decimal e binário são posicionais; romanos são não posicionais."
+        },
+        {
+          "id": "FCI-S1-Q4",
+          "stem": "Qual das alternativas apresenta corretamente uma aplicação prática do sistema hexadecimal?",
+          "options": {
+            "A": "Determinar a quantidade de núcleos de um processador",
+            "B": "Representar instruções executadas pela CPU no ciclo de instrução",
+            "C": "Representar valores RGB em cores digitais, utilizando pares de dígitos hexadecimais para cada componente",
+            "D": "Definir algoritmos de ordenação em linguagens de programação",
+            "E": "Realizar operações aritméticas básicas em sistemas operacionais"
+          },
+          "correct": "C",
+          "feedback": "Cores no formato #RRGGBB usam hexadecimal."
+        },
+        {
+          "id": "FCI-S2-Q1",
+          "stem": "Ao planejar um script introdutório em Python para coletar o nome, a idade e a altura de um usuário, avalie as alternativas e assinale a que descreve corretamente o comportamento esperado e as boas práticas mínimas para esse cenário.",
+          "options": {
+            "A": "É obrigatório declarar tipos antes do uso das variáveis para que print() funcione corretamente",
+            "B": "Valores digitados como True/False são automaticamente interpretados como booleanos por input()",
+            "C": "input() retorna valores no tipo mais provável; portanto, int() e float() só são necessários em casos raros",
+            "D": "print() exige que todo valor seja convertido manualmente para str, mesmo quando passado como argumento separado por vírgula",
+            "E": "input() retorna sempre str; para tratar números é preciso converter explicitamente (ex.: int(\"20\"), float(\"1.75\")). Já print() aceita múltiplos argumentos e dispensa conversão manual quando separados por vírgulas"
+          },
+          "correct": "E",
+          "feedback": "input() sempre retorna str; print() aceita múltiplos argumentos."
+        },
+        {
+          "id": "FCI-S2-Q2",
+          "stem": "Sobre concatenação com +, join(), f-strings e o uso de múltiplos argumentos em print(), assinale a alternativa correta.",
+          "options": {
+            "A": "A expressão \"Idade: \" + idade funciona porque Python converte automaticamente qualquer número para str ao usar +",
+            "B": "print(\"A idade é\", idade) evita conversão manual e insere um espaço entre os argumentos, sendo uma forma idiomática de misturar texto e números",
+            "C": "f-strings só funcionam com valores str; números precisam ser convertidos com str() previamente",
+            "D": "Para unir palavras de uma lista em uma frase, concatenar com + em laço é sempre superior a \" \".join(lista)",
+            "E": "join() aceita listas com números e converte cada item implicitamente para texto"
+          },
+          "correct": "B",
+          "feedback": "print(a, b) adiciona espaço e evita str() manual."
+        },
+        {
+          "id": "FCI-S2-Q3",
+          "stem": "Analise o programa e assinale a saída correta.\nEntradas: \" joão da silva \", \"19\", \"anápolis\".",
+          "options": {
+            "A": "João Da Silva tem 19 anos e mora em ANÁPOLIS",
+            "B": "joão da silva tem 19 anos e mora em anápolis",
+            "C": "João da Silva tem 19 anos e mora em Anápolis",
+            "D": "O programa gera TypeError ao concatenar str com int",
+            "E": "João Da Silva tem 19 anos e mora em Anápolis"
+          },
+          "correct": "A",
+          "feedback": "strip/title/upper e conversão int produzem a saída indicada."
+        },
+        {
+          "id": "FCI-S2-Q4",
+          "stem": "Sobre imutabilidade de strings, métodos básicos e indexação/fatiamento em Python, assinale a alternativa correta.",
+          "options": {
+            "A": "Strings são mutáveis; métodos como upper() alteram o objeto original \"in place\"",
+            "B": "No fatiamento s[início:fim], o índice fim é incluído no resultado",
+            "C": "A indexação negativa (s[-1]) acessa o último caractere; fatiar com s[0:3] retorna os três primeiros caracteres; e métodos como upper()/title() retornam novas strings sem modificar a original",
+            "D": "replace(\"a\",\"o\") substitui apenas a primeira ocorrência por padrão",
+            "E": "strip() remove todos os espaços em branco, inclusive os internos entre palavras"
+          },
+          "correct": "C",
+          "feedback": "Strings são imutáveis; métodos retornam novas instâncias."
+        },
+        {
+          "id": "FCI-S3-Q1",
+          "stem": "Durante o ciclo de instrução de um processador, assinale a alternativa que representa corretamente a sequência lógica desse ciclo.",
+          "options": {
+            "A": "Busca → Decodificação → Execução → Armazenamento",
+            "B": "Execução → Decodificação → Busca → Armazenamento",
+            "C": "Busca → Execução → Decodificação → Armazenamento",
+            "D": "Armazenamento → Busca → Execução → Decodificação",
+            "E": "Decodificação → Busca → Armazenamento → Execução"
+          },
+          "correct": "A",
+          "feedback": "Ordem clássica do ciclo de instrução."
+        },
+        {
+          "id": "FCI-S3-Q2",
+          "stem": "Sobre os barramentos que interligam os componentes de um computador, analise as alternativas abaixo:",
+          "options": {
+            "A": "O barramento de endereços é responsável por transferir instruções entre a CPU e a memória principal",
+            "B": "O barramento de controle garante apenas o envio de sinais de energia entre os dispositivos conectados",
+            "C": "Os barramentos modernos substituem completamente a memória cache, uma vez que operam em alta frequência",
+            "D": "O barramento de dados estabelece a comunicação entre CPU, memória e I/O, transportando tanto instruções quanto valores binários",
+            "E": "A largura do barramento de endereços determina a quantidade de bits que podem ser processados simultaneamente na ULA"
+          },
+          "correct": "D",
+          "feedback": "Barramento de dados carrega dados e instruções."
+        },
+        {
+          "id": "FCI-S3-Q3",
+          "stem": "As arquiteturas CISC e RISC apresentam diferenças estruturais que influenciam diretamente o desempenho. Qual alternativa expressa corretamente essa distinção?",
+          "options": {
+            "A": "RISC utiliza instruções uniformes e curtas, otimizando a execução por pipeline, enquanto CISC adota instruções mais complexas que podem realizar múltiplas operações",
+            "B": "A arquitetura RISC é usada somente em desktops, enquanto a CISC está restrita a sistemas embarcados",
+            "C": "Ambas utilizam instruções complexas, mas a CISC organiza melhor a hierarquia de memória",
+            "D": "Não há diferença de desempenho; apenas muda a codificação de instruções",
+            "E": "CISC foca em instruções simples; RISC prioriza instruções complexas"
+          },
+          "correct": "A",
+          "feedback": "RISC simplifica instruções; CISC amplia complexidade."
+        },
+        {
+          "id": "FCI-S3-Q4",
+          "stem": "O desempenho de um sistema está ligado à hierarquia de memória. Qual alternativa expressa corretamente esse impacto?",
+          "options": {
+            "A": "A proximidade da memória à CPU define relação inversa entre velocidade de acesso e capacidade de armazenamento",
+            "B": "O uso de registradores é dispensável quando há múltiplos níveis de cache",
+            "C": "A memória secundária reduz a latência do ciclo de instrução",
+            "D": "A memória cache elimina a necessidade de registradores",
+            "E": "A memória principal é mais rápida que a cache"
+          },
+          "correct": "A",
+          "feedback": "Quanto mais perto, mais rápida e menor a capacidade."
+        },
+        {
+          "id": "FCI-S4-Q1",
+          "stem": "Qual característica típica diferencia SOs móveis de SOs desktop?",
+          "options": {
+            "A": "São otimizados para economia de energia e conectividade constante, atendendo ao uso intermitente",
+            "B": "Implementam kernels monolíticos em todos os casos",
+            "C": "Dependem de drivers especializados para multitarefas corporativas",
+            "D": "Priorizam desempenho computacional elevado em detrimento da economia de energia",
+            "E": "Usam interfaces sofisticadas para longas sessões multitarefa"
+          },
+          "correct": "A",
+          "feedback": "Móveis priorizam bateria e conectividade."
+        },
+        {
+          "id": "FCI-S4-Q2",
+          "stem": "Qual camada traduz instruções do software em comandos para o hardware?",
+          "options": {
+            "A": "Drivers, que funcionam como tradutores entre chamadas do sistema e comandos específicos de hardware",
+            "B": "Processos de usuário, que controlam diretamente o acesso a dispositivos",
+            "C": "Aplicações, que interagem com hardware sem mediação",
+            "D": "Kernel, que gerencia recursos e fornece interfaces gráficas",
+            "E": "Sistema de arquivos, que organiza a comunicação entre software gráfico e vídeo"
+          },
+          "correct": "A",
+          "feedback": "Drivers fazem a ponte software-hardware."
+        },
+        {
+          "id": "FCI-S4-Q3",
+          "stem": "Qual conceito se relaciona diretamente à estratégia de dividir um processo em múltiplas unidades de execução?",
+          "options": {
+            "A": "Escalonamento de processos",
+            "B": "Processos de sistema",
+            "C": "Kernel monolítico",
+            "D": "Drivers",
+            "E": "Threads, que executam múltiplas tarefas dentro do mesmo processo"
+          },
+          "correct": "E",
+          "feedback": "Threads permitem paralelismo dentro do processo."
+        },
+        {
+          "id": "FCI-S4-Q4",
+          "stem": "Qual limitação típica do algoritmo FIFO (First In, First Out)?",
+          "options": {
+            "A": "Pode gerar o efeito convoy, com processos curtos esperando por um processo muito longo que entrou primeiro",
+            "B": "É adequado para sistemas interativos com respostas rápidas",
+            "C": "Não pode ser implementado em servidores multitarefa",
+            "D": "Reduz significativamente o tempo médio de espera em todos os casos",
+            "E": "Exige maior overhead de troca de contexto para ser justo"
+          },
+          "correct": "A",
+          "feedback": "Convoy é limitação clássica do FIFO."
+        },
+        {
+          "id": "FCI-S5-Q1",
+          "stem": "Associação correta entre sistema operacional e sistema de arquivos padrão:",
+          "options": {
+            "A": "Linux — exFAT",
+            "B": "macOS — APFS",
+            "C": "Windows — FAT32",
+            "D": "Linux — NTFS",
+            "E": "Windows — EXT4"
+          },
+          "correct": "B",
+          "feedback": "macOS usa APFS por padrão."
+        },
+        {
+          "id": "FCI-S5-Q2",
+          "stem": "Qual é esse comando e uma de suas principais vantagens? (sobre privilégios administrativos)",
+          "options": {
+            "A": "nano — edita arquivos sem necessidade de privilégios",
+            "B": "sudo — registra e controla o uso de comandos administrativos",
+            "C": "chmod — permite alterar permissões sem autenticação",
+            "D": "su — possibilita mudar de usuário sem restrições",
+            "E": "ls — lista arquivos, incluindo os ocultos do root"
+          },
+          "correct": "B",
+          "feedback": "sudo controla e audita comandos privilegiados."
+        },
+        {
+          "id": "FCI-S5-Q3",
+          "stem": "Qual tipo de sistema de arquivos é comum em Big Data e nuvem (ex.: GFS, HDFS)?",
+          "options": {
+            "A": "NTFS",
+            "B": "Flat (plano)",
+            "C": "Hierárquico",
+            "D": "Distribuído",
+            "E": "EXT4"
+          },
+          "correct": "D",
+          "feedback": "Sistemas distribuídos escalam horizontalmente."
+        },
+        {
+          "id": "FCI-S5-Q4",
+          "stem": "Quais comandos verificam diretório atual e criam uma pasta chamada \"projetos\"?",
+          "options": {
+            "A": "mv e nano projetos",
+            "B": "cd e rm",
+            "C": "cat e cp projetos",
+            "D": "pwd e mkdir projetos",
+            "E": "ls e rmdir projetos"
+          },
+          "correct": "D",
+          "feedback": "pwd mostra diretório; mkdir cria pastas."
+        },
+        {
+          "id": "FCI-S6-Q1",
+          "stem": "Qual fator explica o sucesso e a adoção massiva do Linux?",
+          "options": {
+            "A": "Dependência de softwares proprietários",
+            "B": "Modelo de negócios baseado em licenças obrigatórias",
+            "C": "Exclusivo para supercomputadores",
+            "D": "Filosofia de liberdade de modificação e redistribuição, somada à colaboração comunitária global",
+            "E": "Código fechado aumenta a segurança por dificultar auditorias"
+          },
+          "correct": "D",
+          "feedback": "Aberto, colaborativo e auditável."
+        },
+        {
+          "id": "FCI-S6-Q2",
+          "stem": "Associe corretamente funcionalidade e comando:",
+          "options": {
+            "A": "rm cria arquivos; pwd muda de diretório",
+            "B": "mv copia arquivos; grep altera permissões",
+            "C": "touch cria arquivos e chmod modifica permissões de leitura, escrita e execução",
+            "D": "mkdir move arquivos; chmod visualiza permissões",
+            "E": "ls -l exclui arquivos; cp altera nomes de diretórios"
+          },
+          "correct": "C",
+          "feedback": "touch cria; chmod ajusta bits de permissão."
+        },
+        {
+          "id": "FCI-S6-Q3",
+          "stem": "Qual a principal vantagem do WSL para o estudante?",
+          "options": {
+            "A": "Configurar manualmente todos os recursos de hardware",
+            "B": "Exigir hardware dedicado para Linux",
+            "C": "Emulação complexa que torna aplicações lentas",
+            "D": "Restrição a distribuições comerciais",
+            "E": "Instalar distribuições Linux com um único comando e usá-las com performance quase nativa dentro do Windows"
+          },
+          "correct": "E",
+          "feedback": "WSL integra Linux ao Windows com baixíssimo overhead."
+        },
+        {
+          "id": "FCI-S6-Q4",
+          "stem": "Qual distribuição atende melhor a estabilidade e segurança em servidores corporativos?",
+          "options": {
+            "A": "Fedora",
+            "B": "Ubuntu",
+            "C": "CentOS (apenas desktop)",
+            "D": "Debian",
+            "E": "Arch Linux"
+          },
+          "correct": "D",
+          "feedback": "Debian é referência em estabilidade."
+        },
+        {
+          "id": "FCI-S7-Q1",
+          "stem": "Qual alternativa representa corretamente o conceito de contêiner em computação?",
+          "options": {
+            "A": "Ambiente de virtualização que depende de hypervisor e SO completo por aplicação",
+            "B": "Máquina virtual dedicada com hardware físico reservado",
+            "C": "Máquina virtual emulada totalmente por software",
+            "D": "Conjunto de servidores físicos que formam um cluster",
+            "E": "Ambiente isolado que compartilha o kernel do SO do host, executando aplicações com dependências de forma leve e independente"
+          },
+          "correct": "E",
+          "feedback": "Contêineres isolam user-space e compartilham o kernel."
+        },
+        {
+          "id": "FCI-S7-Q2",
+          "stem": "Em nuvem, a virtualização exerce papel essencial ao:",
+          "options": {
+            "A": "Substituir redes locais por redes virtuais",
+            "B": "Limitar usuários a uma única máquina física",
+            "C": "Permitir o compartilhamento de hardware físico entre múltiplos usuários, com isolamento e escalabilidade",
+            "D": "Garantir o mesmo SO virtual para todos",
+            "E": "Eliminar a necessidade de sistemas operacionais"
+          },
+          "correct": "C",
+          "feedback": "Virtualização permite multi-tenancy e isolamento."
+        },
+        {
+          "id": "FCI-S7-Q3",
+          "stem": "Essa tecnologia, amplamente utilizada em data centers e provedores de nuvem, é conhecida como:",
+          "options": {
+            "A": "Computação distribuída",
+            "B": "Paralelismo de processos",
+            "C": "Virtualização",
+            "D": "Escalonamento de tarefas",
+            "E": "Clusterização"
+          },
+          "correct": "C",
+          "feedback": "Virtualização é base de IaaS."
+        },
+        {
+          "id": "FCI-S7-Q4",
+          "stem": "Esse comportamento ocorre porque (sobre VMs):",
+          "options": {
+            "A": "As máquinas virtuais operam de forma isolada, sem interferência direta umas nas outras",
+            "B": "As máquinas virtuais compartilham o mesmo kernel do host",
+            "C": "O hardware físico bloqueia a comunicação entre sistemas operacionais",
+            "D": "As VMs são totalmente dependentes do SO do host",
+            "E": "O hypervisor replica os mesmos processos entre todas as VMs"
+          },
+          "correct": "A",
+          "feedback": "Isolamento é propriedade central das VMs."
+        },
+        {
+          "id": "FCI-S8-Q1",
+          "stem": "Qual é a principal contribuição do Docker para desenvolvimento e implantação?",
+          "options": {
+            "A": "Reduzir consumo de energia ao substituir SOs instalados",
+            "B": "Proporcionar ambientes isolados e padronizados, eliminando conflitos de dependências e facilitando a replicação do ambiente de produção",
+            "C": "Centralizar controle de versão em um único servidor",
+            "D": "Eliminar a necessidade de compilar código antes da execução",
+            "E": "Garantir comunicação segura via virtualização de rede interna"
+          },
+          "correct": "B",
+          "feedback": "Ambientes reproduzíveis do dev ao prod."
+        },
+        {
+          "id": "FCI-S8-Q2",
+          "stem": "Função correta dos componentes do Docker:",
+          "options": {
+            "A": "Docker Engine armazena imagens, sem relação com execução",
+            "B": "Docker Hub é interface gráfica para performance em tempo real",
+            "C": "Docker Client executa contêineres; Daemon apenas exibe logs",
+            "D": "Dockerfile cria e publica imagens no Hub automaticamente",
+            "E": "Docker Daemon gerencia imagens, contêineres e volumes; Docker Client envia comandos ao Daemon"
+          },
+          "correct": "E",
+          "feedback": "Client fala com Daemon; Daemon gerencia recursos."
+        },
+        {
+          "id": "FCI-S8-Q3",
+          "stem": "Vantagem principal de contêineres sobre VMs tradicionais:",
+          "options": {
+            "A": "Compartilham o mesmo kernel do SO, iniciam rápido e consomem menos recursos",
+            "B": "Substituem a camada de rede das VMs",
+            "C": "Virtualizam hardware de forma mais avançada",
+            "D": "Eliminam a necessidade de um SO host",
+            "E": "Suportam múltiplos SOs diferentes no mesmo kernel"
+          },
+          "correct": "A",
+          "feedback": "Leves e com startup rápido."
+        },
+        {
+          "id": "FCI-S8-Q4",
+          "stem": "Um estudante usa VirtualBox para criar VMs. Esse comportamento ocorre porque:",
+          "options": {
+            "A": "As máquinas virtuais operam de forma isolada, sem interferência direta umas nas outras",
+            "B": "As VMs compartilham o mesmo kernel do host",
+            "C": "O hardware físico bloqueia a comunicação entre SOs",
+            "D": "As VMs dependem totalmente do SO do host",
+            "E": "O hypervisor replica os mesmos processos entre todas as VMs"
+          },
+          "correct": "A",
+          "feedback": "Isolamento provê segurança e previsibilidade."
+        },
+        {
+          "id": "FCI-S9-Q1",
+          "stem": "O tipo de tecnologia descrito e a função da IA no contexto apresentado são, respectivamente:",
+          "options": {
+            "A": "Computação distribuída e IA para controle manual de dispositivos",
+            "B": "Edge Computing e IA aplicadas exclusivamente à segurança residencial",
+            "C": "IoT e IA atuando na personalização de rotinas e otimização de recursos energéticos",
+            "D": "Automação industrial e IA voltada à substituição de tarefas humanas",
+            "E": "Computação em Nuvem e IA usada apenas para registrar dados de sensores"
+          },
+          "correct": "C",
+          "feedback": "IoT coleta dados; IA personaliza e otimiza."
+        },
+        {
+          "id": "FCI-S9-Q2",
+          "stem": "A tecnologia utilizada para reduzir latência e dependência da nuvem é:",
+          "options": {
+            "A": "Cloud Computing com processamento totalmente centralizado",
+            "B": "Virtualização de servidores para substituir embarcados",
+            "C": "Edge Computing, com processamento próximo à origem dos dados",
+            "D": "Fog Computing restrita ao armazenamento de vídeos",
+            "E": "IoT, limitada à coleta de dados sem processamento local"
+          },
+          "correct": "C",
+          "feedback": "Edge reduz latência processando na borda."
+        },
+        {
+          "id": "FCI-S9-Q3",
+          "stem": "Nesse contexto urbano, a cidade utiliza tecnologias que refletem o conceito de:",
+          "options": {
+            "A": "Computação em Nuvem pura",
+            "B": "Edge Computing isolada",
+            "C": "Cidades Inteligentes, integrando IoT, edge computing e IA para otimizar mobilidade e serviços",
+            "D": "Automação industrial",
+            "E": "Rede Social Urbana"
+          },
+          "correct": "C",
+          "feedback": "Integração de sensores, borda e IA em serviços urbanos."
+        },
+        {
+          "id": "FCI-S9-Q4",
+          "stem": "Com base nesse contexto, o sistema descrito caracteriza-se principalmente como aplicação de:",
+          "options": {
+            "A": "Edge Computing substituindo sensores por servidores de alto desempenho",
+            "B": "Internet das Coisas (IoT) associada à IA, voltada à manutenção preditiva e análise automatizada",
+            "C": "Big Data financeiro em tempo real",
+            "D": "Robótica autônoma",
+            "E": "Computação em Nuvem sem IA"
+          },
+          "correct": "B",
+          "feedback": "IoT + IA permitem manutenção preditiva."
+        }
+      ]
+    },
+    {
+      "discipline": "Fundamentos de Engenharia de Dados",
+      "total_expected": 36,
+      "questions": [
+        {
+          "id": "FED-W1-Q1",
+          "stem": "Qual é o papel principal da engenharia de dados em relação à inteligência artificial (IA) e Machine Learning (ML)?",
+          "options": {
+            "A": "Projetar a interface do usuário para aplicações de IA, garantindo uma boa experiência para o cliente",
+            "B": "Desenvolver novos algoritmos de Machine Learning para detecção de anomalias em dados",
+            "C": "Garantir a coleta, processamento, estruturação e disponibilização de dados de alta qualidade para o treinamento, validação e operação de modelos de IA e Machine Learning",
+            "D": "Otimizar o hardware e a infraestrutura de rede para o treinamento de modelos de IA em grande escala",
+            "E": "Analisar os resultados dos modelos de IA e apresentar relatórios gerenciais para a tomada de decisões de negócios"
+          },
+          "correct": "C",
+          "feedback": "Sem dados de qualidade, não existe IA útil em produção."
+        },
+        {
+          "id": "FED-W1-Q2",
+          "stem": "Qual alternativa descreve corretamente as características das categorias de dados estruturados, semiestruturados e não estruturados?",
+          "options": {
+            "A": "Dados estruturados são sempre armazenados em NoSQL; semiestruturados em data lakes; não estruturados em data warehouses",
+            "B": "Dados não estruturados possuem esquemas flexíveis como XML; semiestruturados e estruturados seguem formato tabular rígido",
+            "C": "Dados estruturados têm esquema claro (ex.: tabelas SQL); semiestruturados possuem alguma organização sem esquema rígido (ex.: JSON); não estruturados não têm formato predefinido (ex.: imagens, vídeos)",
+            "D": "Dados estruturados são os mais difíceis de classificar por exigirem pré-processamento complexo",
+            "E": "Dados semiestruturados não possuem qualquer formato ou organização interna, como imagens e vídeos"
+          },
+          "correct": "C",
+          "feedback": "A distinção é o grau de esquema e padronização."
+        },
+        {
+          "id": "FED-W1-Q3",
+          "stem": "Qual afirmação melhor define o conceito de Engenharia de Dados?",
+          "options": {
+            "A": "Foco exclusivo na otimização de consultas em bancos relacionais",
+            "B": "Gestão e arquivamento de dados históricos em DWH para conformidade regulatória",
+            "C": "Criação de relatórios e dashboards em tempo real diretamente de dados brutos, sem processamento",
+            "D": "Desenvolver algoritmos e modelos de IA/ML; a preparação de dados é secundária",
+            "E": "Projetar, construir e manter sistemas e processos para coletar, processar e estruturar dados brutos de diversas fontes, transformando-os em informações de alta qualidade para análises e IA/ML"
+          },
+          "correct": "E",
+          "feedback": "A disciplina sustenta analytics e IA com dados confiáveis."
+        },
+        {
+          "id": "FED-W1-Q4",
+          "stem": "Sobre prevalência e desafios dos tipos de dados nas empresas, qual afirmação melhor descreve o cenário atual?",
+          "options": {
+            "A": "A distinção entre tipos de dados está obsoleta; ferramentas processam todos igualmente",
+            "B": "Semiestruturados são predominantes e menos complexos que não estruturados",
+            "C": "Estruturados seguem sendo os mais comuns e fáceis de manejar",
+            "D": "Ecossistemas modernos têm formatos heterogêneos, com proliferação de semiestruturados e não estruturados exigindo novas abordagens e complicando a qualidade",
+            "E": "Não estruturados são sempre os mais volumosos e desafiadores por sua completa falta de organização"
+          },
+          "correct": "D",
+          "feedback": "Heterogeneidade pede novas técnicas e governança robusta."
+        },
+        {
+          "id": "FED-W2-Q1",
+          "stem": "Qual função do Pandas é mais adequada para importar dados de um arquivo Excel (.xlsx ou .xls) para um DataFrame?",
+          "options": {
+            "A": "pd.get_spreadsheet()",
+            "B": "pd.read_csv()",
+            "C": "pd.read_excel()",
+            "D": "pd.load_excel()",
+            "E": "pd.import_sheet()"
+          },
+          "correct": "C",
+          "feedback": "Use pd.read_excel; especifique engine quando necessário."
+        },
+        {
+          "id": "FED-W2-Q2",
+          "stem": "Qual alternativa apresenta corretamente uma vantagem e uma limitação de usar planilhas (CSV/Excel)?",
+          "options": {
+            "A": "Vantagem: segurança e versionamento robustos; Limitação: restritas a equipes muito grandes",
+            "B": "Vantagem: melhor formato para dados não estruturados; Limitação: não permitem transformações",
+            "C": "Vantagem: garantem alta qualidade por padrão; Limitação: exigem ferramentas proprietárias caras",
+            "D": "Vantagem: simplicidade e ampla disponibilidade; Limitação: frequentemente têm tipos misturados e inconsistências exigindo limpeza",
+            "E": "Vantagem: única forma lida pelo Pandas; Limitação: não podem ser compartilhadas em ambientes colaborativos"
+          },
+          "correct": "D",
+          "feedback": "Ótimas para coleta inicial, mas exigem higienização."
+        },
+        {
+          "id": "FED-W2-Q3",
+          "stem": "Após importar um CSV/Excel para um DataFrame, qual é o primeiro passo essencial na exploração?",
+          "options": {
+            "A": "Tratar outliers com técnicas avançadas",
+            "B": "Criar repositório no GitHub",
+            "C": "Usar df.head() e df.shape para ver amostra e dimensões",
+            "D": "Construir painel no Power BI/Data Studio",
+            "E": "Rodar um algoritmo de ML para identificar padrões"
+          },
+          "correct": "C",
+          "feedback": "Comece entendendo amostra e shape do dataset."
+        },
+        {
+          "id": "FED-W2-Q4",
+          "stem": "Qual descrição capta o papel fundamental da Engenharia de Dados na implantação de sistemas de IA?",
+          "options": {
+            "A": "Criar interfaces de usuário avançadas para IA",
+            "B": "Desenvolver algoritmos e modelos preditivos",
+            "C": "Garantir qualidade e estrutura dos dados, projetando e mantendo infraestrutura robusta e escalável para ML/IA",
+            "D": "Substituir engenheiros de software no ciclo de desenvolvimento",
+            "E": "Coletar dados brutos sem se preocupar com processamento"
+          },
+          "correct": "C",
+          "feedback": "Dados de qualidade + infraestrutura = IA sustentável."
+        },
+        {
+          "id": "FED-W3-Q1",
+          "stem": "Qual é uma diferença fundamental no gerenciamento de esquema entre bancos SQL e NoSQL?",
+          "options": {
+            "A": "Relacionais não possuem esquema; NoSQL define integralmente na escrita",
+            "B": "Relacionais usam Schema-on-Read; NoSQL exige esquema fixo pré-definido",
+            "C": "A flexibilidade de esquema é exclusiva dos relacionais",
+            "D": "Ambos sempre exigem esquema rígido antes da escrita",
+            "E": "NoSQL adota Schema-on-Read (esquema definido na leitura), enquanto relacionais usam Schema-on-Write com esquema fixo"
+          },
+          "correct": "E",
+          "feedback": "NoSQL é flexível na leitura; SQL exige esquema na escrita."
+        },
+        {
+          "id": "FED-W3-Q2",
+          "stem": "Sobre instalação do MongoDB no Google Colab, assinale a correta.",
+          "options": {
+            "A": "Feita automaticamente com import mongodb",
+            "B": "Conexão exige pyspark, sem porta",
+            "C": "Armazena todos os dados em um único arquivo, como SQLite",
+            "D": "É banco relacional que integra nativamente ao SQLite em Colab",
+            "E": "É necessário executar o serviço via linha de comando por ser VM"
+          },
+          "correct": "E",
+          "feedback": "Em Colab/VM, o daemon do Mongo precisa ser iniciado via shell."
+        },
+        {
+          "id": "FED-W3-Q3",
+          "stem": "Qual afirmação descreve corretamente um ponto forte/fraco de SQL vs NoSQL para IA?",
+          "options": {
+            "A": "SQL é ideal para dados não estruturados graças à flexibilidade de esquema",
+            "B": "NoSQL garante consistência forte e JOINs complexos nativamente",
+            "C": "SQL é indicado para dados com esquema definido e alta consistência, embora escalar horizontalmente seja desafiador",
+            "D": "A escolha é irrelevante; ambos oferecem as mesmas capacidades",
+            "E": "NoSQL com Schema-on-Write rígido é mais eficiente para variação de estrutura"
+          },
+          "correct": "C",
+          "feedback": "SQL prioriza integridade; NoSQL prioriza flexibilidade/escala."
+        },
+        {
+          "id": "FED-W3-Q4",
+          "stem": "No uso de SQL no Colab, qual característica/etapa descreve corretamente o SQLite?",
+          "options": {
+            "A": "NoSQL que integra web scraping sem drivers",
+            "B": "Principal vantagem é ser distribuído para tempo real",
+            "C": "Exige pyspark para consultas SQL via Python",
+            "D": "Motor serverless e self-contained, banco em único arquivo de disco",
+            "E": "Obrigatório criar servidor externo e conectar via URL"
+          },
+          "correct": "D",
+          "feedback": "SQLite é leve, embutido e salva tudo em um arquivo."
+        },
+        {
+          "id": "FED-W4-Q1",
+          "stem": "No contexto de ingestão, qual é a principal distinção entre web scraping e consumo de API que retorna JSON?",
+          "options": {
+            "A": "Scraping é intrinsecamente mais confiável/limpo",
+            "B": "São idênticos; scraping sempre garante conformidade legal",
+            "C": "Scraping depende exclusivamente de bibliotecas de visualização de navegador",
+            "D": "Pandas realiza scraping e BeautifulSoup é exclusiva para APIs",
+            "E": "Scraping extrai HTML visível quando não há API; APIs REST usam requisições estruturadas e retornam JSON"
+          },
+          "correct": "E",
+          "feedback": "Se não há API, analisamos HTML; se há API, recebemos JSON."
+        },
+        {
+          "id": "FED-W4-Q2",
+          "stem": "Quando optar por web scraping em vez de consumir API?",
+          "options": {
+            "A": "Para integrar coleta com ML em tempo real",
+            "B": "Para garantir máxima confiabilidade com esquemas rígidos",
+            "C": "Por preferir dados semiestruturados como JSON",
+            "D": "Quando a informação está somente no HTML e não existe API oficial",
+            "E": "Para minimizar considerações éticas/legais"
+          },
+          "correct": "D",
+          "feedback": "Scraping é fallback quando não existe API."
+        },
+        {
+          "id": "FED-W4-Q3",
+          "stem": "Qual desafio operacional típico do scraping em comparação com APIs?",
+          "options": {
+            "A": "Scraping entrega dados mais limpos e prontos",
+            "B": "Scraping é preferível para tempo real; APIs têm latência alta",
+            "C": "HTML muda com frequência, aumentando manutenção; APIs bem projetadas oferecem contratos de dados estáveis",
+            "D": "APIs sempre dispensam autenticação, scraping não",
+            "E": "Questões éticas/legais são exclusivas de APIs"
+          },
+          "correct": "C",
+          "feedback": "Quebra de layout derruba scrapers; APIs mudam menos."
+        },
+        {
+          "id": "FED-W4-Q4",
+          "stem": "Qual afirmação destaca corretamente a relação entre JSON de APIs e sua manipulação em Python?",
+          "options": {
+            "A": "JSON é inerentemente não estruturado e requer bibliotecas especiais para estruturar",
+            "B": "BeautifulSoup é a principal ferramenta para parse de JSON",
+            "C": "JSON é semiestruturado predominante em APIs; Python o manipula facilmente como dict/list",
+            "D": "JSON é exclusivo para bancos relacionais e raro em APIs",
+            "E": "JSON requer compilação prévia do esquema para evitar erros de tipo"
+          },
+          "correct": "C",
+          "feedback": "json.loads converte para tipos nativos (dict/list)."
+        },
+        {
+          "id": "FED-W5-Q1",
+          "stem": "Na Arquitetura Medalhão, qual é o propósito principal da Camada Silver?",
+          "options": {
+            "A": "Aplicar Edge Computing em fluxos IoT",
+            "B": "Armazenar dados brutos capturados diretamente das fontes",
+            "C": "Receber dados processados e curados, aplicar regras de negócio, limpeza e deduplicação, tornando-os pré-prontos para consumo",
+            "D": "Orquestrar ingestão com ferramentas como Data Factory",
+            "E": "Ser a camada final de consumo com modelos dimensionais"
+          },
+          "correct": "C",
+          "feedback": "Silver melhora qualidade e padroniza dados."
+        },
+        {
+          "id": "FED-W5-Q2",
+          "stem": "Qual é a função da Camada Bronze e a natureza do dado armazenado nela?",
+          "options": {
+            "A": "Armazenar dados após regras de negócio e deduplicação",
+            "B": "Ponto inicial de ingestão, cópia fiel/imutável dos dados brutos em formato original",
+            "C": "Camada final com fatos e dimensões (star schema)",
+            "D": "Área temporária para cientistas de dados testarem ML",
+            "E": "Aplicar Edge Computing em dados de sensores"
+          },
+          "correct": "B",
+          "feedback": "Bronze é a fonte de verdade (raw, imutável)."
+        },
+        {
+          "id": "FED-W5-Q3",
+          "stem": "Qual conceito é crucial para lidar com dados de sensores, permitindo processamento perto da origem?",
+          "options": {
+            "A": "Camada Gold",
+            "B": "Data Warehouse",
+            "C": "CDC baseado em log",
+            "D": "Edge Computing ou Gateway IoT",
+            "E": "Web Scraping"
+          },
+          "correct": "D",
+          "feedback": "Processar na borda reduz latência e tráfego."
+        },
+        {
+          "id": "FED-W5-Q4",
+          "stem": "Qual é o objetivo fundamental da estruturação em camadas (Arquitetura Medalhão)?",
+          "options": {
+            "A": "Impor schema-on-write rígido em todas as camadas",
+            "B": "Estabelecer ciclo de vida e qualidade progressiva: Bronze imutável e Silver com regras/curadoria, garantindo rastreabilidade e governança",
+            "C": "Eliminar necessidade de orquestração",
+            "D": "Converter entrada automaticamente para Star Schema na Silver",
+            "E": "Priorizar edge computing para IoT"
+          },
+          "correct": "B",
+          "feedback": "Cada camada tem papel claro e audível."
+        },
+        {
+          "id": "FED-W6-Q1",
+          "stem": "Na Camada Silver, qual estratégia é mais adequada para valores ausentes e outliers?",
+          "options": {
+            "A": "Simular ingestão para a Gold e tratar depois",
+            "B": "Deixar ausentes inalterados para manter o bruto",
+            "C": "Aplicar imputação (substituição/interpolação) e identificar outliers com estatística básica",
+            "D": "Remover todas as linhas com valores ausentes",
+            "E": "Converter IDs e usar ML avançado para outliers"
+          },
+          "correct": "C",
+          "feedback": "Curadoria é limpar, padronizar e tratar anomalias."
+        },
+        {
+          "id": "FED-W6-Q2",
+          "stem": "Qual procedimento mais adequado para refinar e estruturar um dataset rumo à Gold?",
+          "options": {
+            "A": "Somente agregar por curso e criar Data Mart",
+            "B": "Imputar valores nulos (mediana/interpolação) e identificar outliers (ex.: IQR), garantindo curadoria",
+            "C": "Remover sumariamente linhas com nulos",
+            "D": "Padronizar textos e converter tudo para string",
+            "E": "Usar KNN para classificar valores ausentes"
+          },
+          "correct": "B",
+          "feedback": "Imputação robusta e tratamento de outliers antes da Gold."
+        },
+        {
+          "id": "FED-W6-Q3",
+          "stem": "Qual resultado funcional primário de mover dados da Bronze para a Silver?",
+          "options": {
+            "A": "Silver é otimizada exclusivamente para star schemas",
+            "B": "Dados vão de formato unificado/estruturado para bruto/variado",
+            "C": "Silver padroniza formatos (ex.: datas) e aplica curadoria (imputação/outliers), gerando datasets de alta qualidade prontos para modelagem",
+            "D": "Silver aplica apenas agregações de negócio e KPIs",
+            "E": "Silver foca em reduzir volume removendo todas as linhas com nulos"
+          },
+          "correct": "C",
+          "feedback": "Silver entrega dados consistentes e prontos."
+        },
+        {
+          "id": "FED-W6-Q4",
+          "stem": "Qual estratégia de tratamento de valores ausentes é mais recomendada na Silver?",
+          "options": {
+            "A": "Converter NaN para 0",
+            "B": "Substituir NaN pela média da coluna em qualquer caso",
+            "C": "Imputar NaN pela mediana, mais robusta a outliers e preserva registros",
+            "D": "Remover todos os registros com NaN",
+            "E": "Ignorar valores nulos"
+          },
+          "correct": "C",
+          "feedback": "A mediana é menos sensível a outliers que a média."
+        },
+        {
+          "id": "FED-W7-Q1",
+          "stem": "Qual estratégia Pandas resolve diretamente duplicatas e inconsistências de formatação?",
+          "options": {
+            "A": "Oficina de deduplicação baseada em backward pass de ML",
+            "B": "Implementar CDC log-based para propagar alterações",
+            "C": "Focar em filtragem de colunas e agregação em larga escala",
+            "D": "Imputação complexa para preencher strings inconsistentes",
+            "E": "Normalização de strings (str.lower/strip) e drop_duplicates()"
+          },
+          "correct": "E",
+          "feedback": "Padronize antes, deduplique depois."
+        },
+        {
+          "id": "FED-W7-Q2",
+          "stem": "Se duplicatas não tratadas chegam à Gold, qual impacto direto nos relatórios e decisões?",
+          "options": {
+            "A": "Pipeline sofrerá schema drift",
+            "B": "Gold exigirá imputação estatística complexa",
+            "C": "Ausência de CDC impedirá replicação",
+            "D": "KPIs inflacionados e conclusões equivocadas por violação de unicidade/precisão",
+            "E": "Modelo de dados ficará excessivamente normalizado"
+          },
+          "correct": "D",
+          "feedback": "Duplicata vira KPI mentiroso. Trate na Silver."
+        },
+        {
+          "id": "FED-W7-Q3",
+          "stem": "Que técnicas são essenciais para resolver variações de string e permitir deduplicação eficiente?",
+          "options": {
+            "A": "Recalcular gradientes do modelo de ML",
+            "B": "For loop com if/elif/else",
+            "C": "Mover direto à Gold e confiar em dimensões/fatos",
+            "D": "Interpolação estatística para corrigir strings",
+            "E": "Normalizar strings (ex.: lower/strip) e aplicar drop_duplicates()"
+          },
+          "correct": "E",
+          "feedback": "Uniformize texto antes de deduplicar."
+        },
+        {
+          "id": "FED-W7-Q4",
+          "stem": "Qual operação fundamental deve ocorrer na Silver para atender requisitos de qualidade?",
+          "options": {
+            "A": "Focar na ingestão contínua at least once",
+            "B": "Converter todos os tipos para flexíveis (schema-on-read)",
+            "C": "Desnormalizar e agregar por mês/ano",
+            "D": "Armazenar logs em formato original (JSON/CSV) na Silver",
+            "E": "Deduplicar registros e padronizar strings, criando estruturas comuns e consistentes"
+          },
+          "correct": "E",
+          "feedback": "Silver garante consistência e unicidade."
+        },
+        {
+          "id": "FED-W8-Q1",
+          "stem": "Para logs de interação (JSON) com alta flexibilidade, qual armazenamento é mais indicado?",
+          "options": {
+            "A": "NoSQL com Schema-on-Write que rejeita documentos com campos ausentes",
+            "B": "Data Warehouse otimizado para dados estruturados",
+            "C": "Relacional (SQL) adotando Schema-on-Read",
+            "D": "NoSQL com Schema-on-Read, armazenando JSON nativo",
+            "E": "Relacional (SQL) com Schema-on-Write"
+          },
+          "correct": "D",
+          "feedback": "Document stores lidam bem com JSON variável."
+        },
+        {
+          "id": "FED-W8-Q2",
+          "stem": "Qual característica do modelo relacional garante estrutura rígida e consistência para dados transacionais?",
+          "options": {
+            "A": "Alta flexibilidade para documentos aninhados",
+            "B": "Escalabilidade horizontal ilimitada",
+            "C": "Adoção de Schema-on-Read",
+            "D": "Otimização intrínseca para OLAP paralelo",
+            "E": "Obrigatoriedade de Schema-on-Write, com tipos e relações definidos/validados antes da persistência"
+          },
+          "correct": "E",
+          "feedback": "OLTP requer integridade e validação de esquema."
+        },
+        {
+          "id": "FED-W8-Q3",
+          "stem": "Qual princípio de NoSQL permite adaptação a mudanças rápidas de formato?",
+          "options": {
+            "A": "Schema-on-Read (esquema definido/validado na leitura)",
+            "B": "ACID",
+            "C": "Uso exclusivo de SQL",
+            "D": "Schema-on-Write rígido",
+            "E": "Arquitetura Data Warehouse"
+          },
+          "correct": "A",
+          "feedback": "Leitura decide o esquema conforme a necessidade."
+        },
+        {
+          "id": "FED-W8-Q4",
+          "stem": "Qual estratégia de modelagem adotam bancos de documentos para otimizar leitura?",
+          "options": {
+            "A": "Aderência completa ao ACID",
+            "B": "Denormalização com registros relacionados aninhados em um único documento, minimizando JOINs",
+            "C": "Imposição estrita de Schema-on-Write antes de cada inserção",
+            "D": "Uso exclusivo de SQL",
+            "E": "Particionamento horizontal por chaves estrangeiras"
+          },
+          "correct": "B",
+          "feedback": "Documentos aninhados evitam JOINs custosos."
+        },
+        {
+          "id": "FED-W9-Q1",
+          "stem": "Qual é o propósito e a característica fundamental dos dados na Silver?",
+          "options": {
+            "A": "Catálogo de dados e metadados",
+            "B": "Armazenar dados limpos/transformados, aplicar regras de negócio, padronizações e criar modelos de dados comuns",
+            "C": "Manter histórico completo de dados não processados",
+            "D": "Conter agregações de negócio (fatos/dimensões) para BI",
+            "E": "Ser repositório central para OLTP de alta frequência"
+          },
+          "correct": "B",
+          "feedback": "Silver entrega dados prontos e padronizados."
+        },
+        {
+          "id": "FED-W9-Q2",
+          "stem": "Qual alternativa descreve corretamente o propósito e característica fundamental dos conjuntos na Gold?",
+          "options": {
+            "A": "Zona de transição de ETL/ELT iniciais",
+            "B": "Armazenar dados em formato original, inalterado",
+            "C": "Concentrar exclusivamente dados semiestruturados e não estruturados",
+            "D": "Organizar em estruturas de alto nível (fatos e dimensões) para consumo eficiente em BI por linha de negócio",
+            "E": "Ser repositório principal de sistemas operacionais de transação"
+          },
+          "correct": "D",
+          "feedback": "Gold é o produto final analítico para consumo."
+        },
+        {
+          "id": "FED-W9-Q3",
+          "stem": "Qual característica define fundamentalmente o Data Warehouse em contraste com Lake/Lakehouse?",
+          "options": {
+            "A": "Armazenar dados em formato original e inalterado",
+            "B": "Otimização para consultas exploratórias ad-hoc com dados não limpos",
+            "C": "Exigir dados estruturados e de alta qualidade na ingestão (Schema-on-Write), otimizando para OLAP e SQL complexas",
+            "D": "Dependência exclusiva de ELT",
+            "E": "Uso exclusivo de streaming de eventos"
+          },
+          "correct": "C",
+          "feedback": "DWH exige curadoria antes de entrar, foca em OLAP."
+        },
+        {
+          "id": "FED-W9-Q4",
+          "stem": "Por que os dados na Bronze devem ser mantidos no estado original e inalterado (Raw)?",
+          "options": {
+            "A": "Para escalar horizontalmente as consultas OLAP",
+            "B": "Para aplicar regras de negócio e padronizar formatos",
+            "C": "Para fornecer visão altamente agregada para BI",
+            "D": "Para habilitar processamento contínuo e em tempo real",
+            "E": "Para preservar imutabilidade e histórico completo como fonte de verdade para transformações/validações"
+          },
+          "correct": "E",
+          "feedback": "Bronze mantém rastreabilidade e auditoria total."
+        }
+      ]
+    },
+    {
+      "discipline": "Fundamentos Matemáticos para Computação",
+      "total_expected": 36,
+      "questions": [
+        {
+          "id": "FMC-Q01",
+          "stem": "A disjunção inclusiva p ∨ q é falsa exatamente quando:",
+          "options": {
+            "A": "p é verdadeira e q é verdadeira",
+            "B": "p é verdadeira e q é falsa",
+            "C": "p é falsa e q é verdadeira",
+            "D": "p e q são ambas falsas",
+            "E": "exatamente uma delas é verdadeira"
+          },
+          "correct": "D",
+          "feedback": "p ∨ q só é falsa quando ambas são falsas."
+        },
+        {
+          "id": "FMC-Q02",
+          "stem": "A equivalência correta para a implicação p → q é:",
+          "options": {
+            "A": "p ∧ q",
+            "B": "¬p ∨ q",
+            "C": "p ∨ ¬q",
+            "D": "¬(p ∨ q)",
+            "E": "p ⟷ q"
+          },
+          "correct": "B",
+          "feedback": "Definição clássica: p → q ≡ ¬p ∨ q."
+        },
+        {
+          "id": "FMC-Q03",
+          "stem": "A fórmula p ∨ ¬p é classificada como:",
+          "options": {
+            "A": "contingência",
+            "B": "contradição",
+            "C": "tautologia",
+            "D": "implicação",
+            "E": "equivalência"
+          },
+          "correct": "C",
+          "feedback": "Lei do terceiro excluído."
+        },
+        {
+          "id": "FMC-Q04",
+          "stem": "A negação correta de (p ∧ q) é:",
+          "options": {
+            "A": "¬p ∧ ¬q",
+            "B": "¬p ∨ ¬q",
+            "C": "p ∧ ¬q",
+            "D": "¬(¬p ∨ ¬q)",
+            "E": "p ∨ q"
+          },
+          "correct": "B",
+          "feedback": "Leis de De Morgan: ¬(p ∧ q) = ¬p ∨ ¬q."
+        },
+        {
+          "id": "FMC-Q05",
+          "stem": "A tabela-verdade de p ⟷ q é verdadeira quando:",
+          "options": {
+            "A": "p é verdadeira",
+            "B": "q é verdadeira",
+            "C": "p e q têm o mesmo valor lógico",
+            "D": "p e q são ambas falsas exclusivamente",
+            "E": "exatamente uma é verdadeira"
+          },
+          "correct": "C",
+          "feedback": "Bicondicional é verdade quando os valores coincidem."
+        },
+        {
+          "id": "FMC-Q06",
+          "stem": "Qual fórmula é logicamente equivalente a ¬(p → q)?",
+          "options": {
+            "A": "p ∧ q",
+            "B": "p ∧ ¬q",
+            "C": "¬p ∧ q",
+            "D": "¬p ∨ q",
+            "E": "p ∨ ¬q"
+          },
+          "correct": "B",
+          "feedback": "¬(p → q) ≡ ¬(¬p ∨ q) ≡ p ∧ ¬q."
+        },
+        {
+          "id": "FMC-Q07",
+          "stem": "A forma normal conjuntiva (FNC) de (p ∨ q) → r é:",
+          "options": {
+            "A": "(¬p ∧ ¬q) ∨ r",
+            "B": "(p ∨ q ∨ r)",
+            "C": "(¬p ∨ r) ∧ (¬q ∨ r)",
+            "D": "(p ∧ q) → r",
+            "E": "¬p ∧ (q → r)"
+          },
+          "correct": "C",
+          "feedback": "Usa distribuição: (p ∨ q) → r ≡ ¬(p ∨ q) ∨ r ≡ (¬p ∧ ¬q) ∨ r ≡ (¬p ∨ r) ∧ (¬q ∨ r)."
+        },
+        {
+          "id": "FMC-Q08",
+          "stem": "Considere p: “x é par” e q: “x é múltiplo de 4”. A afirmação q → p é:",
+          "options": {
+            "A": "verdadeira para todo inteiro x",
+            "B": "falsa para x = 8",
+            "C": "falsa para x = 2",
+            "D": "equivalente a p → q",
+            "E": "equivalente a ¬p → ¬q"
+          },
+          "correct": "A",
+          "feedback": "Todo múltiplo de 4 é par."
+        },
+        {
+          "id": "FMC-Q09",
+          "stem": "Se p é verdadeira e q é falsa, o valor de (p → q) ∧ (q ∨ p) é:",
+          "options": {
+            "A": "verdadeiro",
+            "B": "falso",
+            "C": "indeterminado",
+            "D": "equivalente a q",
+            "E": "equivalente a p"
+          },
+          "correct": "B",
+          "feedback": "p→q é falso; q∨p é verdadeiro; falso ∧ verdadeiro = falso."
+        },
+        {
+          "id": "FMC-Q10",
+          "stem": "Qual das equivalências é correta?",
+          "options": {
+            "A": "p ∧ (q ∨ r) ≡ (p ∧ q) ∨ r",
+            "B": "p ∨ (q ∧ r) ≡ (p ∨ q) ∧ (p ∨ r)",
+            "C": "p ∧ (q ∨ r) ≡ p ∨ (q ∧ r)",
+            "D": "p ∨ (q ∨ r) ≡ (p ∧ q) ∨ r",
+            "E": "p ∧ (q ∧ r) ≡ (p ∨ q) ∧ r"
+          },
+          "correct": "B",
+          "feedback": "Distribuição de ∨ sobre ∧."
+        },
+        {
+          "id": "FMC-Q11",
+          "stem": "A negação correta de “para todo x, P(x)” é:",
+          "options": {
+            "A": "para todo x, ¬P(x)",
+            "B": "existe x tal que P(x)",
+            "C": "existe x tal que ¬P(x)",
+            "D": "para nenhum x, P(x)",
+            "E": "para alguns x, P(x)"
+          },
+          "correct": "C",
+          "feedback": "¬(∀x P(x)) ≡ ∃x ¬P(x)."
+        },
+        {
+          "id": "FMC-Q12",
+          "stem": "A negação correta de “existe x tal que P(x)” é:",
+          "options": {
+            "A": "para todo x, ¬P(x)",
+            "B": "para todo x, P(x)",
+            "C": "existe x tal que ¬P(x)",
+            "D": "para nenhum x, ¬P(x)",
+            "E": "para alguns x, ¬P(x)"
+          },
+          "correct": "A",
+          "feedback": "¬(∃x P(x)) ≡ ∀x ¬P(x)."
+        },
+        {
+          "id": "FMC-Q13",
+          "stem": "Se A = {1,2,3} e B = {2,3,4}, então A ∪ B é:",
+          "options": {
+            "A": "{1,2}",
+            "B": "{1,4}",
+            "C": "{1,2,3,4}",
+            "D": "{2,3}",
+            "E": "{3,4}"
+          },
+          "correct": "C",
+          "feedback": "União contém todos os elementos de A ou B."
+        },
+        {
+          "id": "FMC-Q14",
+          "stem": "Se A = {1,2,3} e B = {2,3,4}, então A ∩ B é:",
+          "options": {
+            "A": "{1}",
+            "B": "{4}",
+            "C": "{1,4}",
+            "D": "{2,3}",
+            "E": "{1,2,3,4}"
+          },
+          "correct": "D",
+          "feedback": "Interseção contém elementos comuns."
+        },
+        {
+          "id": "FMC-Q15",
+          "stem": "O conjunto diferença A − B, com A = {a,b,c} e B = {b,c,d}, é:",
+          "options": {
+            "A": "{a}",
+            "B": "{d}",
+            "C": "{b,c}",
+            "D": "{a,d}",
+            "E": "∅"
+          },
+          "correct": "A",
+          "feedback": "A − B são os elementos de A que não estão em B."
+        },
+        {
+          "id": "FMC-Q16",
+          "stem": "O conjunto potência P({0,1}) possui cardinalidade:",
+          "options": {
+            "A": "1",
+            "B": "2",
+            "C": "3",
+            "D": "4",
+            "E": "8"
+          },
+          "correct": "D",
+          "feedback": "Para n elementos, |P(S)| = 2^n; aqui 2^2 = 4."
+        },
+        {
+          "id": "FMC-Q17",
+          "stem": "Se U é o universo, A ⊆ U e A' é o complemento de A, então A ∪ A' e A ∩ A' são, respectivamente:",
+          "options": {
+            "A": "U e A",
+            "B": "A e ∅",
+            "C": "U e ∅",
+            "D": "∅ e U",
+            "E": "A' e A"
+          },
+          "correct": "C",
+          "feedback": "A ∪ A' = U; A ∩ A' = ∅."
+        },
+        {
+          "id": "FMC-Q18",
+          "stem": "O produto cartesiano A × B, para A = {1,2} e B = {x,y}, é:",
+          "options": {
+            "A": "{(1,2),(x,y)}",
+            "B": "{(1,x),(1,y),(2,x),(2,y)}",
+            "C": "{(x,1),(y,2)}",
+            "D": "{(1,1),(2,2)}",
+            "E": "{(x,x),(y,y)}"
+          },
+          "correct": "B",
+          "feedback": "Todos os pares ordenados com 1º de A e 2º de B."
+        },
+        {
+          "id": "FMC-Q19",
+          "stem": "Uma função f: A → B é, por definição:",
+          "options": {
+            "A": "relação qualquer entre A e B",
+            "B": "relação que associa a cada elemento de B exatamente um elemento de A",
+            "C": "relação que associa a cada elemento de A exatamente um elemento de B",
+            "D": "relação injetiva e sobrejetiva",
+            "E": "uma bijeção"
+          },
+          "correct": "C",
+          "feedback": "Função mapeia cada a∈A em único b∈B."
+        },
+        {
+          "id": "FMC-Q20",
+          "stem": "Uma função f é injetiva quando:",
+          "options": {
+            "A": "sua imagem é todo o contradomínio",
+            "B": "elementos distintos do domínio têm imagens distintas",
+            "C": "é uma correspondência de muitos para um",
+            "D": "é constante",
+            "E": "tem domínio finito"
+          },
+          "correct": "B",
+          "feedback": "Injetividade preserva distinção."
+        },
+        {
+          "id": "FMC-Q21",
+          "stem": "Uma função f é sobrejetiva quando:",
+          "options": {
+            "A": "sua imagem coincide com o contradomínio",
+            "B": "é injetiva",
+            "C": "é bijetiva",
+            "D": "é constante",
+            "E": "tem imagem vazia"
+          },
+          "correct": "A",
+          "feedback": "Todo elemento do contradomínio é imagem de alguém do domínio."
+        },
+        {
+          "id": "FMC-Q22",
+          "stem": "Se f: A→B e g: B→C, então g∘f: A→C é definida por:",
+          "options": {
+            "A": "(g∘f)(a) = g(a)",
+            "B": "(g∘f)(a) = f(g(a))",
+            "C": "(g∘f)(a) = g(f(a))",
+            "D": "(g∘f)(a) = a",
+            "E": "(g∘f)(a) = f(a)"
+          },
+          "correct": "C",
+          "feedback": "Composição aplica f primeiro, depois g."
+        },
+        {
+          "id": "FMC-Q23",
+          "stem": "Na Álgebra Booleana, a expressão A + A·B é equivalente a:",
+          "options": {
+            "A": "A·B",
+            "B": "A",
+            "C": "B",
+            "D": "A + B",
+            "E": "A·(A + B)"
+          },
+          "correct": "B",
+          "feedback": "Absorção: A + A·B = A."
+        },
+        {
+          "id": "FMC-Q24",
+          "stem": "No Mapa de Karnaugh para duas variáveis A e B, o agrupamento dos 1s na coluna onde B=1 representa o termo:",
+          "options": {
+            "A": "A · ¬B",
+            "B": "¬A",
+            "C": "B",
+            "D": "A + B",
+            "E": "A"
+          },
+          "correct": "C",
+          "feedback": "Coluna B=1 simplifica para B."
+        },
+        {
+          "id": "FMC-Q25",
+          "stem": "A operação AND (E) retorna 1 apenas quando:",
+          "options": {
+            "A": "pelo menos uma entrada é 1",
+            "B": "todas as entradas são 0",
+            "C": "uma das entradas é 0",
+            "D": "a soma das entradas é par",
+            "E": "todas as entradas são 1"
+          },
+          "correct": "E",
+          "feedback": "AND exige todos 1."
+        },
+        {
+          "id": "FMC-Q26",
+          "stem": "A forma mínima de ¬A·B + A·B é:",
+          "options": {
+            "A": "B",
+            "B": "A",
+            "C": "¬A",
+            "D": "A + B",
+            "E": "A ⊕ B"
+          },
+          "correct": "A",
+          "feedback": "Fatora-se B: (¬A + A)·B = 1·B = B."
+        },
+        {
+          "id": "FMC-Q27",
+          "stem": "O número de permutações de 5 elementos distintos é:",
+          "options": {
+            "A": "5",
+            "B": "10",
+            "C": "25",
+            "D": "60",
+            "E": "120"
+          },
+          "correct": "E",
+          "feedback": "5! = 120."
+        },
+        {
+          "id": "FMC-Q28",
+          "stem": "O número de combinações de 7 elementos tomados 3 a 3 é:",
+          "options": {
+            "A": "21",
+            "B": "35",
+            "C": "42",
+            "D": "14",
+            "E": "7"
+          },
+          "correct": "B",
+          "feedback": "C(7,3) = 35."
+        },
+        {
+          "id": "FMC-Q29",
+          "stem": "Em quantas maneiras diferentes se pode ordenar as letras da palavra 'LEVEL'?",
+          "options": {
+            "A": "5!",
+            "B": "5!/2!",
+            "C": "5!/3!",
+            "D": "5!/(2!·2!)",
+            "E": "5!/4!"
+          },
+          "correct": "D",
+          "feedback": "L e E repetem 2 vezes: 5!/(2!2!)."
+        },
+        {
+          "id": "FMC-Q30",
+          "stem": "Lançando dois dados justos, a probabilidade de a soma ser 7 é:",
+          "options": {
+            "A": "1/12",
+            "B": "1/6",
+            "C": "1/8",
+            "D": "1/9",
+            "E": "5/36"
+          },
+          "correct": "B",
+          "feedback": "6 resultados favoráveis em 36: 6/36 = 1/6."
+        },
+        {
+          "id": "FMC-Q31",
+          "stem": "Num baralho padrão (52 cartas), a probabilidade de tirar um Ás é:",
+          "options": {
+            "A": "1/52",
+            "B": "1/13",
+            "C": "4/13",
+            "D": "1/4",
+            "E": "1/26"
+          },
+          "correct": "B",
+          "feedback": "Há 4 ases: 4/52 = 1/13."
+        },
+        {
+          "id": "FMC-Q32",
+          "stem": "Se P(A)=0,4, P(B)=0,5 e A,B independentes, então P(A∩B) =",
+          "options": {
+            "A": "0,2",
+            "B": "0,9",
+            "C": "0,1",
+            "D": "0,45",
+            "E": "0,4"
+          },
+          "correct": "A",
+          "feedback": "Independentes: P(A∩B)=P(A)P(B)=0,4×0,5=0,2."
+        },
+        {
+          "id": "FMC-Q33",
+          "stem": "A esperança matemática de um dado justo (valores 1..6) é:",
+          "options": {
+            "A": "3",
+            "B": "3,5",
+            "C": "4",
+            "D": "2,5",
+            "E": "4,5"
+          },
+          "correct": "B",
+          "feedback": "E(X)=(1+2+3+4+5+6)/6 = 3,5."
+        },
+        {
+          "id": "FMC-Q34",
+          "stem": "A soma de matrizes A + B está definida quando:",
+          "options": {
+            "A": "A e B são quadradas",
+            "B": "A é m×n e B é n×m",
+            "C": "A e B têm mesma ordem (mesmo m×n)",
+            "D": "A é inversível",
+            "E": "B é diagonal"
+          },
+          "correct": "C",
+          "feedback": "Soma exige matrizes de mesma dimensão."
+        },
+        {
+          "id": "FMC-Q35",
+          "stem": "O produto de matrizes A (2×3) e B (3×4) resulta em matriz de ordem:",
+          "options": {
+            "A": "2×3",
+            "B": "3×4",
+            "C": "2×4",
+            "D": "3×3",
+            "E": "4×2"
+          },
+          "correct": "C",
+          "feedback": "Resultado é 2×4 (linhas de A por colunas de B)."
+        },
+        {
+          "id": "FMC-Q36",
+          "stem": "O sistema linear Ax = b tem solução única quando A é:",
+          "options": {
+            "A": "singular",
+            "B": "diagonalizável",
+            "C": "ortogonal",
+            "D": "inversível",
+            "E": "simétrica"
+          },
+          "correct": "D",
+          "feedback": "Se A tem inversa, x = A^{-1}b é único."
+        }
+      ]
+    },
+    {
+      "discipline": "Introdução à Engenharia de Soluções",
+      "total_expected": 36,
+      "questions": [
+        {
+          "id": "IES-Q01",
+          "stem": "Ao utilizar ferramentas de IA, como o ChatGPT, para mapear processos organizacionais, qual é a principal responsabilidade do usuário?",
+          "options": {
+            "A": "Deixar que a IA defina os dados e os processos sem intervenção",
+            "B": "Pedir que a IA substitua totalmente o conhecimento prático da empresa",
+            "C": "Garantir que a IA compreenda sozinha o contexto organizacional",
+            "D": "Evitar o fornecimento de informações contextuais para simplificar o uso",
+            "E": "Validar e ajustar as informações geradas conforme a realidade da empresa"
+          },
+          "correct": "E"
+        },
+        {
+          "id": "IES-Q02",
+          "stem": "Por que o uso de informações contextuais e detalhadas é fundamental ao empregar IA para mapeamento de processos?",
+          "options": {
+            "A": "Para que a IA se torne independente e dispense validação",
+            "B": "Porque isso garante maior precisão e relevância dos resultados obtidos",
+            "C": "Para que os processos fiquem iguais em qualquer organização",
+            "D": "Para reduzir a participação humana na análise crítica",
+            "E": "Porque a IA compreende automaticamente qualquer ambiente de negócio"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q03",
+          "stem": "Segundo Anderson Guedes, qual prática pode auxiliar na coleta de informações específicas e na documentação de processos de forma eficiente?",
+          "options": {
+            "A": "Utilizar apenas documentos oficiais e ignorar e-mails ou anotações",
+            "B": "Solicitar à IA respostas genéricas sem dados adicionais",
+            "C": "Evitar discussões sobre dificuldades e riscos nos processos",
+            "D": "Confiar unicamente nos comandos curtos fornecidos à IA",
+            "E": "Transcrever automaticamente reuniões com ferramentas digitais"
+          },
+          "correct": "E"
+        },
+        {
+          "id": "IES-Q04",
+          "stem": "De acordo com o vídeo, qual é a principal vantagem de usar IA no mapeamento de processos em comparação com métodos tradicionais?",
+          "options": {
+            "A": "Facilitar a coleta, organização e clareza dos documentos produzidos",
+            "B": "Eliminar totalmente a necessidade de conhecimento do gestor",
+            "C": "Substituir reuniões presenciais por relatórios automáticos",
+            "D": "Evitar a participação de diferentes envolvidos no processo",
+            "E": "Garantir que não seja necessário revisar as informações geradas"
+          },
+          "correct": "A"
+        },
+        {
+          "id": "IES-Q05",
+          "stem": "Como a natureza iterativa do Design Thinking se relaciona com o Mapa de Empatia?",
+          "options": {
+            "A": "Substitui a prototipagem pelo uso exclusivo do Mapa de Empatia",
+            "B": "Elimina a necessidade de revisar hipóteses ao longo do processo",
+            "C": "Permite atualizar continuamente o Mapa de Empatia conforme novos insights surgem",
+            "D": "Impede que as soluções sejam adaptadas após os testes",
+            "E": "Transforma o processo em linear e sem retornos a etapas anteriores"
+          },
+          "correct": "C"
+        },
+        {
+          "id": "IES-Q06",
+          "stem": "Como a etapa de empatia e o uso do Mapa de Empatia diferenciam o Design Thinking de abordagens lineares e tecnicistas?",
+          "options": {
+            "A": "Porque tornam desnecessária a etapa de testes, já que tudo é resolvido na empatia",
+            "B": "Porque substituem a prototipagem pela coleta de percepções subjetivas",
+            "C": "Porque permitem compreender profundamente o usuário e adaptar as soluções às suas necessidades",
+            "D": "Porque eliminam a necessidade de coletar dados, focando apenas na intuição da equipe",
+            "E": "Porque transformam o processo em uma sequência rígida de etapas sem revisões"
+          },
+          "correct": "C"
+        },
+        {
+          "id": "IES-Q07",
+          "stem": "Por que é importante considerar aspectos objetivos e subjetivos no Mapa de Empatia dentro do Design Thinking?",
+          "options": {
+            "A": "Porque substitui a etapa de testes, eliminando retrabalhos",
+            "B": "Porque amplia a compreensão do usuário, revelando necessidades ocultas",
+            "C": "Porque garante que apenas dados financeiros sejam avaliados",
+            "D": "Porque torna a ideação mais rápida sem necessidade de pesquisa",
+            "E": "Porque limita a análise apenas ao que o usuário diz em entrevistas"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q08",
+          "stem": "Qual é a principal contribuição do Mapa de Empatia para o alinhamento das equipes durante a etapa de empatia no Design Thinking?",
+          "options": {
+            "A": "Definir métricas financeiras para o projeto",
+            "B": "Garantir que o processo ocorra de forma linear e sem revisões",
+            "C": "Criar um protótipo inicial antes da coleta de dados",
+            "D": "Organizar percepções dos usuários e alinhar entendimentos entre a equipe",
+            "E": "Estabelecer o cronograma de execução da solução"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q09",
+          "stem": "A partir do contexto, qual alternativa apresenta corretamente um requisito funcional?",
+          "options": {
+            "A": "O sistema deve armazenar os dados em servidores com certificação de segurança",
+            "B": "O aplicativo deve estar disponível 24 horas por dia, 7 dias por semana",
+            "C": "O tempo de resposta do sistema não deve ultrapassar 3 segundos",
+            "D": "O passageiro deve ser capaz de visualizar a localização do motorista em tempo real",
+            "E": "O aplicativo deve ser compatível com os principais navegadores móveis"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q10",
+          "stem": "Qual das alternativas define corretamente o conceito de backlog?",
+          "options": {
+            "A": "Relatório final entregue ao cliente",
+            "B": "Documentação técnica detalhada",
+            "C": "Repositório de código-fonte do sistema",
+            "D": "Lista organizada e priorizada de funcionalidades e requisitos que guiam o desenvolvimento",
+            "E": "Ferramenta exclusiva do Trello usada apenas para registrar tarefas concluídas"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q11",
+          "stem": "Considerando o exemplo de requisitos levantados, identifique qual das alternativas abaixo representa corretamente uma história de usuário.",
+          "options": {
+            "A": "O sistema deve oferecer escalabilidade para suportar milhares de acessos simultâneos",
+            "B": "Como estudante, quero marcar uma aula como concluída para controlar meu progresso",
+            "C": "O sistema deve permitir que professores criem turmas virtuais",
+            "D": "Professores devem ter acesso a relatórios detalhados sobre alunos",
+            "E": "O sistema deve processar as solicitações em até 2 segundos"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q12",
+          "stem": "Considerando esse contexto, qual alternativa descreve corretamente o papel dos critérios de aceitação?",
+          "options": {
+            "A": "São listas de tarefas utilizadas pelos desenvolvedores para organizar suas atividades internas",
+            "B": "São indicadores financeiros usados para calcular o custo do desenvolvimento",
+            "C": "São restrições técnicas que limitam a arquitetura do sistema",
+            "D": "São métricas de desempenho que avaliam a quantidade de acessos simultâneos no sistema",
+            "E": "São condições que definem quando uma história de usuário pode ser considerada pronta"
+          },
+          "correct": "E"
+        },
+        {
+          "id": "IES-Q13",
+          "stem": "Considerando esse cenário, qual alternativa descreve corretamente o papel dos critérios de aceitação?",
+          "options": {
+            "A": "São condições que definem quando uma história de usuário pode ser considerada concluída",
+            "B": "São metas de desempenho que garantem a escalabilidade da aplicação",
+            "C": "São relatórios financeiros utilizados para calcular o custo de desenvolvimento do sistema",
+            "D": "São documentos contratuais que registram a negociação entre cliente e fornecedor",
+            "E": "São tarefas internas de programação usadas apenas pelos desenvolvedores"
+          },
+          "correct": "A"
+        },
+        {
+          "id": "IES-Q14",
+          "stem": "Nesse cenário, qual alternativa descreve corretamente como essa matriz funciona?",
+          "options": {
+            "A": "Cruza a percepção dos stakeholders com as limitações orçamentárias, sem avaliar esforço",
+            "B": "Coloca todas as funcionalidades em uma ordem aleatória para evitar viés de decisão",
+            "C": "Classifica as funcionalidades comparando benefício esperado e o esforço necessário para implementá-las",
+            "D": "Prioriza exclusivamente as funcionalidades relacionadas à performance do sistema",
+            "E": "Baseia-se apenas na ordem cronológica em que os requisitos foram levantados"
+          },
+          "correct": "C"
+        },
+        {
+          "id": "IES-Q15",
+          "stem": "Com base nisso, qual alternativa apresenta corretamente uma técnica de priorização?",
+          "options": {
+            "A": "Priorizar apenas as solicitações dos atendentes, já que eles usam o sistema diariamente",
+            "B": "Classificar as funcionalidades em Must have, Should have, Could have e Won't have for now",
+            "C": "Implementar primeiro as funções que parecem mais fáceis para os desenvolvedores",
+            "D": "Registrar todas as funcionalidades sem definir ordem, deixando a escolha para o momento da implementação",
+            "E": "Ordenar os requisitos pela ordem em que foram lembrados pelos usuários"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q16",
+          "stem": "Nesse contexto, qual das alternativas representa corretamente o papel do backlog?",
+          "options": {
+            "A": "É uma planilha que registra apenas os requisitos não funcionais do sistema",
+            "B": "É um relatório produzido ao final de cada sprint, descrevendo as funcionalidades testadas",
+            "C": "É uma lista dinâmica e priorizada de requisitos e histórias de usuário que orientam o desenvolvimento",
+            "D": "É um banco de dados técnico usado para armazenar os códigos-fonte do sistema",
+            "E": "É um documento final entregue ao cliente, com a lista de todas as funcionalidades concluídas"
+          },
+          "correct": "C"
+        },
+        {
+          "id": "IES-Q17",
+          "stem": "Com base nesse cenário, qual é a principal vantagem de começar com wireframes de baixa fidelidade?",
+          "options": {
+            "A": "Evitar a necessidade de participação de stakeholders no processo",
+            "B": "Impedir que a equipe altere os fluxos após aprovação inicial",
+            "C": "Eliminar completamente a necessidade de validação com usuários reais",
+            "D": "Focar na estrutura e funcionalidade antes da estética visual",
+            "E": "Garantir que a interface final terá design sofisticado desde o início"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q18",
+          "stem": "Qual é a maior lição a ser aprendida nesse processo?",
+          "options": {
+            "A": "Que testar fluxos simples ajuda a entregar mais valor ao cliente",
+            "B": "Que prototipar substitui por completo as etapas de desenvolvimento em código",
+            "C": "Que o protótipo é válido apenas quando desenvolvido em ferramentas digitais",
+            "D": "Que a estética visual deve sempre ser o ponto de partida no design",
+            "E": "Que o uso de papel e lousa não tem utilidade em ambientes de inovação"
+          },
+          "correct": "A"
+        },
+        {
+          "id": "IES-Q19",
+          "stem": "Considerando o exemplo, o que esse caso demonstra sobre a prototipagem de baixa fidelidade?",
+          "options": {
+            "A": "Que ela é inútil quando há clareza inicial dos requisitos",
+            "B": "Que substitui integralmente a necessidade de desenvolvimento posterior",
+            "C": "Que serve apenas para avaliar estética e design visual",
+            "D": "Que permite identificar falhas no fluxo de interação antes da codificação",
+            "E": "Que deve ser utilizada apenas por designers gráficos"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q20",
+          "stem": "Qual é o maior benefício da prototipagem de baixa fidelidade para o caso apresentado?",
+          "options": {
+            "A": "Reduzir a necessidade de reuniões entre equipe e cliente",
+            "B": "Evitar a necessidade de ferramentas digitais no processo",
+            "C": "Validar rapidamente a experiência do usuário com baixo custo",
+            "D": "Substituir a necessidade de testes posteriores com usuários reais",
+            "E": "Garantir que o layout visual final será exatamente o mesmo aprovado"
+          },
+          "correct": "C"
+        },
+        {
+          "id": "IES-Q21",
+          "stem": "Qual das alternativas representa corretamente o conceito de MVP?",
+          "options": {
+            "A": "Construir um protótipo inicial que já entrega valor e pode ser validado",
+            "B": "Substituir metodologias ágeis por planos rígidos de projeto",
+            "C": "Produzir apenas um documento de requisitos para validar ideias",
+            "D": "Lançar um produto sem testes nem coleta de feedback",
+            "E": "Criar um sistema completo com todas as funcionalidades antes de lançar"
+          },
+          "correct": "A"
+        },
+        {
+          "id": "IES-Q22",
+          "stem": "O que a função alugar_veiculo faz no código do MVP em Python?",
+          "options": {
+            "A": "Marca um veículo como alugado para um cliente",
+            "B": "Cria um novo cliente no sistema",
+            "C": "Cria uma lista com todos os veículos cadastrados",
+            "D": "Remove um veículo do banco de dados",
+            "E": "Define uma data de devolução automática para o veículo"
+          },
+          "correct": "A"
+        },
+        {
+          "id": "IES-Q23",
+          "stem": "No MVP de locadora implementado em Python, qual foi a estrutura usada para armazenar veículos e clientes?",
+          "options": {
+            "A": "Arquivos CSV",
+            "B": "Dicionários",
+            "C": "Classes de orientação a objetos",
+            "D": "Strings",
+            "E": "Tuplas"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q24",
+          "stem": "Qual é uma das principais vantagens de adotar o MVP no desenvolvimento de software?",
+          "options": {
+            "A": "Reduzir a coleta de feedback dos usuários",
+            "B": "Impedir que o produto evolua após o lançamento",
+            "C": "Permitir validar hipóteses rapidamente com menor custo",
+            "D": "Construir um sistema completo antes de liberar",
+            "E": "Eliminar totalmente a necessidade de testes"
+          },
+          "correct": "C"
+        },
+        {
+          "id": "IES-Q25",
+          "stem": "Assinale a alternativa que melhor descreve o papel das ramificações (branches) em um repositório GitHub.",
+          "options": {
+            "A": "Eliminam a necessidade de realizar testes em novas funcionalidades",
+            "B": "Funcionam como cópias estáticas e não podem ser unidas novamente ao projeto",
+            "C": "São utilizadas apenas para armazenar versões de código em modo de leitura",
+            "D": "Permitem desenvolver partes do código de forma paralela sem alterar a versão principal",
+            "E": "Servem para excluir módulos antigos e substituir automaticamente o código principal"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q26",
+          "stem": "Escolha a alternativa que melhor representa a relação entre modularização e versionamento em projetos de software.",
+          "options": {
+            "A": "O versionamento substitui a modularização e elimina a necessidade de separar funções",
+            "B": "O versionamento é responsável apenas por armazenar cópias de segurança do código",
+            "C": "São conceitos independentes e não possuem relação direta no desenvolvimento",
+            "D": "A modularização organiza o código internamente, e o versionamento controla externamente suas alterações",
+            "E": "A modularização impede o uso de sistemas de controle de versão distribuídos"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q27",
+          "stem": "Identifique a alternativa que melhor caracteriza um sistema monolítico.",
+          "options": {
+            "A": "Um sistema que utiliza microserviços e controle de versão distribuído",
+            "B": "Um sistema em que todas as funcionalidades estão fortemente integradas em um único bloco de código",
+            "C": "Um sistema que prioriza o desacoplamento entre componentes e o reuso de código",
+            "D": "Um sistema que facilita o trabalho colaborativo entre múltiplos desenvolvedores",
+            "E": "Um sistema formado por vários módulos independentes que se comunicam por interfaces bem definidas"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q28",
+          "stem": "Identifique aquela que representa a principal vantagem da modularização de software.",
+          "options": {
+            "A": "Elimina a necessidade de testes unitários e de integração entre componentes",
+            "B": "Aumenta a complexidade do código e torna o processo de manutenção mais difícil",
+            "C": "Centraliza todas as funções em um único arquivo para facilitar o controle",
+            "D": "Permite dividir o sistema em partes menores e independentes, facilitando manutenção e reutilização",
+            "E": "Substitui completamente o uso de repositórios de versionamento, como o GitHub"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q29",
+          "stem": "Considerando um sistema completo que integra todos os estágios de desenvolvimento discutidos, qual alternativa descreve o fluxo de dados e a função de cada abordagem de forma mais lógica e coerente?",
+          "options": {
+            "A": "O sistema opera em quatro silos independentes: a busca e o lote são para desenvolvedores, enquanto a validação e a interface são para analistas, sem integração direta",
+            "B": "O sistema começa com a validação de uma lista de sites pré-aprovados, depois usa a interface web para permitir que o usuário crie uma lista de tarefas, que por sua vez executa as buscas avançadas",
+            "C": "A interface web é usada para escrever o script de busca avançada, que é então executado em lote e cujos resultados são enviados para uma equipe de validação manual",
+            "D": "Um processo automático em lote executa periodicamente buscas avançadas e focadas; os resultados brutos passam por um módulo de validação que limpa os dados; os dados limpos são finalmente apresentados em uma interface web para o usuário final",
+            "E": "O usuário interage com a interface web para iniciar uma única busca avançada, cujo resultado é imediatamente validado e depois salvo em um arquivo de lote para consulta futura"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q30",
+          "stem": "Qual das seguintes afirmativas descreve com maior precisão o principal salto evolutivo e a mudança de paradigma representados pela Abordagem 2 (Organizador em Lote)?",
+          "options": {
+            "A": "O avanço mais significativo é a capacidade do script de verificar a integridade de cada link encontrado, garantindo que nenhum deles esteja quebrado",
+            "B": "A vantagem fundamental da segunda abordagem é a redução da complexidade do código, eliminando a necessidade de bibliotecas externas",
+            "C": "A mudança de paradigma está na introdução da escalabilidade e automação, onde a ferramenta deixa de ser interativa e passa a operar de forma autônoma sobre um conjunto de dados de entrada, gerando uma saída estruturada sem intervenção manual a cada passo",
+            "D": "A principal evolução é a melhoria na interface do usuário, que se torna gráfica e mais intuitiva",
+            "E": "O salto evolutivo consiste na otimização do algoritmo de busca para trazer resultados mais precisos utilizando IA"
+          },
+          "correct": "C"
+        },
+        {
+          "id": "IES-Q31",
+          "stem": "Qual alternativa melhor descreve o papel e a importância da Abordagem 3 (Validador de Conteúdo)?",
+          "options": {
+            "A": "Criar uma interface web para revisão manual de cada link e decidir se é válido ou não",
+            "B": "Introduzir uma camada de controle de qualidade e mitigação de riscos, verificando se cada link corresponde ao tipo esperado, aumentando a confiabilidade do conjunto de dados",
+            "C": "Organizar os links em diferentes categorias dentro do arquivo CSV, utilizando tags e metadados",
+            "D": "Reescrever o código para usar apenas APIs oficiais, garantindo validade por padrão",
+            "E": "Acelerar a coleta utilizando múltiplos processos paralelos para baixar links mais rapidamente"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q32",
+          "stem": "Qual das seguintes opções explica com mais precisão a transformação proporcionada pela Abordagem 4 (Ferramenta Web)?",
+          "options": {
+            "A": "Otimizar o backend para rodar em servidores mais potentes, permitindo mais desenvolvedores simultaneamente via terminal",
+            "B": "Criar uma interface gráfica acessível via navegador, que abstrai a linha de comando e permite que usuários não-técnicos usem a ferramenta de forma intuitiva",
+            "C": "Gerar documentação técnica extremamente detalhada para aprendizado por qualquer pessoa",
+            "D": "Automatizar completamente o processo, eliminando qualquer interface e rodando em um servidor que envia relatórios por e-mail",
+            "E": "Traduzir todo o código para uma linguagem mais simples como JavaScript para facilitar contribuição"
+          },
+          "correct": "B"
+        },
+        {
+          "id": "IES-Q33",
+          "stem": "Qual das alternativas abaixo melhor descreve a principal vantagem de usar APIs simuladas no desenvolvimento de um assistente virtual?",
+          "options": {
+            "A": "Garante que os dados da API simulada serão idênticos aos de uma API real, sem variações",
+            "B": "Permite que o assistente interaja com APIs reais sem precisar de acesso à internet",
+            "C": "Impede que o assistente faça chamadas para APIs externas, reduzindo o risco de falhas",
+            "D": "Facilita o teste do sistema sem depender de APIs externas reais, possibilitando testes sob diferentes condições",
+            "E": "Aumenta a complexidade do sistema, tornando a integração mais difícil"
+          },
+          "correct": "D"
+        },
+        {
+          "id": "IES-Q34",
+          "stem": "Quando o assistente virtual se conecta a uma API simulada, qual dessas opções melhor descreve a melhor prática para garantir a robustez do sistema?",
+          "options": {
+            "A": "Exibir apenas uma mensagem de erro genérica sem tentar corrigir a falha",
+            "B": "Ignorar qualquer erro retornado pela API simulada, assumindo que os dados estão corretos",
+            "C": "Depender exclusivamente de uma API externa real para garantir a integridade dos dados",
+            "D": "Encerrar a execução sempre que uma falha na API simulada for detectada",
+            "E": "Validar e tratar as falhas, como respostas vazias ou erros, antes de exibir informações ao usuário"
+          },
+          "correct": "E"
+        },
+        {
+          "id": "IES-Q35",
+          "stem": "Qual é a principal razão pela qual a autenticação é necessária em assistentes virtuais com integração a APIs externas?",
+          "options": {
+            "A": "Para garantir que somente usuários autenticados possam acessar funcionalidades personalizadas e sensíveis",
+            "B": "Para impedir que o assistente execute funções não relacionadas à consulta feita pelo usuário",
+            "C": "Para garantir que o assistente virtual sempre tenha uma resposta pronta para qualquer consulta",
+            "D": "Para garantir que os dados enviados ao assistente não sejam compartilhados com outras aplicações",
+            "E": "Para permitir que o assistente acesse todos os dados da API simulada sem restrições"
+          },
+          "correct": "A"
+        },
+        {
+          "id": "IES-Q36",
+          "stem": "Qual é a principal característica de uma API simulada durante o desenvolvimento de um assistente virtual?",
+          "options": {
+            "A": "Restringir a quantidade de dados processados pelo assistente, limitando seu desempenho",
+            "B": "Servir apenas para testar a funcionalidade de login do assistente, sem interagir com dados",
+            "C": "Automatizar a coleta de dados, tornando desnecessária qualquer intervenção manual",
+            "D": "Sempre fornecer dados reais e atualizados, semelhantes aos de uma API externa",
+            "E": "Imitar o comportamento de uma API real, permitindo o teste do assistente sem a dependência de sistemas externos"
+          },
+          "correct": "E"
+        }
+      ]
+    }
+  ]
+}
