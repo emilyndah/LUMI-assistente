@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lumi – Assistente Acadêmica{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
+            <h3>Menu Lumi</h3>
+        </div>
+        <a href="{{ url_for('index') }}">Chat Principal</a>
+        <a href="{{ url_for('profile') }}">Meu Perfil</a>
+        <a href="{{ url_for('calendario') }}">Calendário</a>
+        <a href="{{ url_for('flashcards') }}">Flashcards</a>
+        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
+        <a href="{{ url_for('faq') }}">FAQ</a>
+    </nav>
+    
+    <div class="overlay"></div>
+
+    <header>
+        <button class="menu-toggle" title="Menu">
+            <span class="hamburger-icon"></span> 
+        </button>
+
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
+        </a>
+        
+        {% if current_user.is_authenticated %}
+        <div class="user-area">
+            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+            
+            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                <div class="profile-picture">
+                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div id="toast-container">
+            {% for category, message in messages %}
+                <div class="toast-message {{ category }}">
+                {{ message }}
+                <span class="toast-close-btn">&times;</span>
+                </div>
+            {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lógica do Menu Lateral
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.overlay');
+
+        function closeMenu() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        if (menuToggle && sidebar && overlay) {
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            overlay.addEventListener('click', closeMenu);
+        }
+
+        // Lógica das Notificações (Toasts)
+        const toasts = document.querySelectorAll('.toast-message');
+        toasts.forEach((toast, index) => {
+            setTimeout(() => { toast.classList.add('show'); }, 300 * index);
+            setTimeout(() => {
+                toast.classList.add('hide');
+                setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 500);
+            }, 5000);
+            const closeBtn = toast.querySelector('.toast-close-btn');
+            if (closeBtn) closeBtn.addEventListener('click', () => { toast.classList.add('hide'); });
+        });
+    });
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+</html>
