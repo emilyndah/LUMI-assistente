@@ -368,7 +368,7 @@ main.profile-page {
 
 .msg {
     max-width: 75%;
-    padding: 12px 16px;
+    padding: 12px 12px;
     border-radius: 18px;
     line-height: 1.45;
     word-wrap: break-word;
@@ -408,6 +408,11 @@ main.profile-page {
     align-items: center;
     padding: 10px 15px;
     background: #f8f9fa;
+}
+
+.msg p, .msg h1, .msg h2, .msg h3, .msg h4, .msg h5, .msg h6 {
+    margin: 0;
+    padding: 0;
 }
 
 .typing-indicator .dot {
@@ -1750,4 +1755,42 @@ nav.sidebar .sidebar-header::after {
     height: 4px;
     background: linear-gradient(90deg, #3fa9f5, transparent) !important;
     z-index: 10;
+}
+
+/* =======================================================
+   ESTILO DO AVATAR NO CHAT (BOLINHA)
+   ======================================================= */
+
+/* Container que segura a Imagem + Balão */
+.message-wrapper {
+    display: flex;
+    align-items: flex-end; /* Alinha o avatar na parte de baixo do balão */
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Alinhamento da Lumi (Esquerda) */
+.message-wrapper.lumi {
+    justify-content: flex-start;
+}
+
+/* Alinhamento do Usuário (Direita) */
+.message-wrapper.user {
+    justify-content: flex-end;
+}
+
+/* Estilo da Bolinha (Avatar) - AJUSTADO */
+.chat-avatar {
+    width: 30px;           /* Tamanho reduzido (era 40px) */
+    height: 30px;
+    border-radius: 50%;    
+    object-fit: cover;     
+    margin-right: 8px;     /* Espaço levemente reduzido */
+    flex-shrink: 0;        
+}
+
+/* Pequeno ajuste no balão para não grudar na imagem */
+.msg {
+    max-width: 75% !important; 
+    margin: 0 !important; /* A margem agora é controlada pelo wrapper */
 }

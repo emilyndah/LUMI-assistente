@@ -122,24 +122,47 @@
             chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
         }
 
-        // --- FUNÇÃO CORRIGIDA PARA USAR MARKDOWN ---
+        // --- FUNÇÃO ATUALIZADA: MENSAGEM COM AVATAR LUMI-PERFIL ---
         function addMessage(text, sender) {
+            const chatBox = document.getElementById('chat-box');
+
+            // 1. Cria o container (wrapper)
+            const wrapperDiv = document.createElement('div');
+            wrapperDiv.className = `message-wrapper ${sender}`;
+
+            // 2. Se for a Lumi, adiciona a foto (avatar)
+            if (sender === 'lumi') {
+                const avatarImg = document.createElement('img');
+                // Caminho da imagem que você salvou na pasta static
+                avatarImg.src = "{{ url_for('static', filename='lumi-5.png') }}"; 
+                avatarImg.alt = "Lumi";
+                avatarImg.className = "chat-avatar";
+                wrapperDiv.appendChild(avatarImg);
+            }
+
+            // 3. Cria o balão de mensagem (código padrão)
             const msgDiv = document.createElement('div');
             msgDiv.className = `msg ${sender}`;
             
-            // Cria um container interno para aplicar o estilo correto
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
 
+            // Processa Markdown se for a Lumi, texto normal se for usuário
             if (sender === 'lumi') {
-                // AQUI A MÁGICA: converte o Markdown (asteriscos) em HTML
                 contentDiv.innerHTML = marked.parse(text); 
             } else {
-                contentDiv.textContent = text; // Mantém texto puro para o usuário (segurança)
+                contentDiv.textContent = text; 
             }
 
             msgDiv.appendChild(contentDiv);
-            chatBox.appendChild(msgDiv);
+            
+            // 4. Adiciona o balão ao container
+            wrapperDiv.appendChild(msgDiv);
+
+            // 5. Adiciona tudo ao chat
+            chatBox.appendChild(wrapperDiv);
+            
+            // Rola para baixo suavemente
             setTimeout(scrollToBottom, 50);
         }
 

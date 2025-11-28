@@ -9,31 +9,98 @@
 </head>
 
 <body>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
+            <h3>Menu Lumi</h3>
+        </div>
+        <a href="{{ url_for('index') }}">Chat Principal</a>
+        <a href="{{ url_for('profile') }}">Meu Perfil</a>
+        <a href="{{ url_for('calendario') }}">Calendário</a>
+        <a href="{{ url_for('flashcards') }}">Flashcards</a>
+        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
+        <a href="{{ url_for('faq') }}">FAQ</a>
+    </nav>
+    
+    <div class="overlay"></div>
+
     <header>
+        <button class="menu-toggle" title="Menu">
+            <span class="hamburger-icon"></span> 
+        </button>
+
         <a href="{{ url_for('index') }}">
-            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
         </a>
+        
+        {% if current_user.is_authenticated %}
+        <div class="user-area">
+            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+            
+            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                <div class="profile-picture">
+                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                </div>
+            </a>
+        </div>
+        {% endif %}
     </header>
 
-    <main class="faq-page">
-
-        <section class="faq-container">
+  <main class="faq-page">
+        <div id="main-white-box" style="max-width: 1200px; margin: 0 auto; width: 100%; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: max-width 0.5s ease, padding 0.5s ease;">
 
             <div id="subject-selection">
+                
+                <div style="margin-bottom: 20px; text-align: left;">
+                    <a href="{{ url_for('index') }}" class="back-link-profile-glued-final" style="float: none; display: inline-flex; align-items: center; color: #666; text-decoration: none; font-weight: 500;">
+                        &larr; Voltar para o Chat
+                    </a>
+                </div>
 
-                <a href="{{ url_for('index') }}" class="back-btn-flashcard-subject">← Voltar para o Chat</a>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 30px;">
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 700;
+                        background: linear-gradient(135deg, var(--lumi-blue, #3fa9f5), var(--lumi-blue-dark, #004d7b));
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;">
+                        Flashcards
+                    </h2>
+                    
+                    <button id="btn-open-modal" style="
+                        background: linear-gradient(135deg, var(--lumi-blue, #3fa9f5), var(--lumi-blue-dark, #004d7b));
+                        color: white; border: none; padding: 12px 24px; border-radius: 10px; 
+                        font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(63, 169, 245, 0.3); transition: transform 0.2s;">
+                        + Adicionar Matéria / Cards
+                    </button>
+                </div>
 
-                <h2>Flashcards</h2>
-                <p>Selecione uma disciplina para revisar:</p>
-                <div id="subject-buttons">
+                <h3 style="text-align: left; border-left: 5px solid var(--lumi-blue, #3fa9f5); padding-left: 15px; color: #555; margin-bottom: 20px; font-size: 1.2rem;">
+                    📂 Meus Flashcards
+                </h3>
+                <div id="user-decks-container" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; margin-bottom: 40px;">
+                    <p class="empty-msg" style="color: #999; font-style: italic; margin-left: 5px;">Você ainda não criou nenhum deck.</p>
+                </div>
+
+                <h3 style="text-align: left; border-left: 5px solid var(--lumi-blue, #3fa9f5); padding-left: 15px; color: #555; margin-bottom: 20px; font-size: 1.2rem;">
+                    🤖 Flashcards de Inteligência Artificial
+                </h3>
+                <div id="system-decks-container" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">
                     </div>
             </div>
 
-            <div id="flashcard-viewer" class="hidden">
-                <button id="back-to-subjects">← Voltar para Disciplinas</button>
-                <h2 id="subject-title"></h2>
+            <div id="flashcard-viewer" class="hidden" style="display: flex; flex-direction: column; align-items: center;">
+                
+                <div style="width: 100%; text-align: left; margin-bottom: 20px;">
+                    <button id="back-to-subjects" style="background: none; border: none; color: #666; cursor: pointer; font-size: 1rem; font-weight: 500; display: flex; align-items: center;">
+                        <span style="font-size: 1.2rem; margin-right: 5px;">&larr;</span> Voltar para Disciplinas
+                    </button>
+                </div>
 
-                <div id="flashcard-scene">
+                <h2 id="subject-title" style="color: var(--lumi-blue-dark, #004d7b); margin-bottom: 30px; font-size: 1.6rem;"></h2>
+
+                <div id="flashcard-scene" style="perspective: 1000px; width: 100%; max-width: 500px; height: 300px; margin-bottom: 20px;">
                     <div id="flashcard" class="flashcard">
                         <div class="card-face card-front">
                             <span id="flashcard-question"></span>
@@ -44,112 +111,254 @@
                     </div>
                 </div>
 
-                <div class="flashcard-nav">
-                    <button id="prev-card">←</button>
-                    <span id="card-counter">1/10</span>
-                    <button id="next-card">→</button>
+                <div class="flashcard-nav" style="margin-top: 10px; display: flex; align-items: center; gap: 20px;">
+                    <button id="prev-card" style="background: var(--lumi-blue, #3fa9f5); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">&larr;</button>
+                    <span id="card-counter" style="font-weight: bold; color: #555; font-size: 1.1rem;">1/10</span>
+                    <button id="next-card" style="background: var(--lumi-blue, #3fa9f5); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">&rarr;</button>
                 </div>
             </div>
 
-        </section>
+        </div>
+
+        <div id="modal-create" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; justify-content: center; align-items: flex-start; padding-top: 50px;">
+            <div class="modal-content" style="background: white; width: 90%; max-width: 650px; padding: 30px; border-radius: 15px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                    <h3 style="margin: 0; color: var(--lumi-blue-dark, #004d7b); font-size: 1.4rem;">Criar Novos Flashcards</h3>
+                    <button id="close-modal-x" style="background: none; border: none; font-size: 2rem; cursor: pointer; line-height: 1; color: #999;">&times;</button>
+                </div>
+
+                <form id="form-create-card" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #444;">Nome da Matéria / Deck:</label>
+                        <input type="text" id="new-materia" placeholder="Ex: Biologia, Python, História..." list="existing-subjects" 
+                               style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;" required>
+                        <datalist id="existing-subjects"></datalist>
+                    </div>
+
+                    <div id="cards-inputs-list" style="overflow-y: auto; flex: 1; padding: 10px; margin-bottom: 15px; border: 1px solid #eee; border-radius: 8px; background: #f8f9fa;">
+                        <div class="input-row" style="background: white; padding: 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #e0e0e0; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                            <span style="font-weight: bold; color: var(--lumi-blue, #3fa9f5); display: block; margin-bottom: 8px; font-size: 0.9rem;">CARD 1</span>
+                            <input type="text" name="pergunta[]" placeholder="Digite a Pergunta..." style="width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 6px;" required>
+                            <input type="text" name="resposta[]" placeholder="Digite a Resposta..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" required>
+                        </div>
+                    </div>
+
+                    <button type="button" id="btn-add-row" style="width: 100%; padding: 12px; background: white; border: 2px dashed #ccc; color: #666; border-radius: 8px; cursor: pointer; margin-bottom: 20px; transition: 0.3s; font-weight: 500;">
+                        + Adicionar outra pergunta
+                    </button>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 15px;">
+                        <button type="button" id="btn-cancel" style="padding: 12px 25px; border: none; background: #eee; color: #555; border-radius: 8px; cursor: pointer; font-weight: 500;">Cancelar</button>
+                        
+                        <button type="submit" style="
+                            padding: 12px 25px; border: none; 
+                            background: linear-gradient(135deg, var(--lumi-blue, #3fa9f5), var(--lumi-blue-dark, #004d7b));
+                            color: white; border-radius: 8px; cursor: pointer; font-weight: bold; 
+                            box-shadow: 0 4px 10px rgba(63, 169, 245, 0.3);">
+                            Salvar Todos
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. Referências do DOM ---
-            const subjectSelectionDiv = document.getElementById('subject-selection');
-            const subjectButtonsContainer = document.getElementById('subject-buttons');
-            const flashcardViewerDiv = document.getElementById('flashcard-viewer');
-            const subjectTitle = document.getElementById('subject-title');
-            const backToSubjectsBtn = document.getElementById('back-to-subjects'); // Botão dentro do viewer
+            // ============================================
+            // 1. INICIALIZAÇÃO DE DADOS E ELEMENTOS
+            // ============================================
+            const systemDecks = {{ system_decks|tojson }};
+            const userDecks = {{ user_decks|tojson }};
+            
+            const userContainer = document.getElementById('user-decks-container');
+            const systemContainer = document.getElementById('system-decks-container');
+            const dataList = document.getElementById('existing-subjects');
 
-            const flashcardElement = document.getElementById('flashcard');
-            const questionEl = document.getElementById('flashcard-question');
-            const answerEl = document.getElementById('flashcard-answer');
-            const cardCounter = document.getElementById('card-counter');
-            const prevCardBtn = document.getElementById('prev-card');
-            const nextCardBtn = document.getElementById('next-card');
+            // Elementos de Layout
+            const mainBox = document.getElementById('main-white-box');
 
-            // --- 2. Variáveis de Estado ---
-            let allFlashcards = {{ flashcard_data|tojson }};
+            // Modal elements
+            const modal = document.getElementById('modal-create');
+            const form = document.getElementById('form-create-card');
+            const inputsList = document.getElementById('cards-inputs-list');
+
+            // Viewer elements
+            const viewer = document.getElementById('flashcard-viewer');
+            const selection = document.getElementById('subject-selection');
+            const cardEl = document.getElementById('flashcard');
+            
             let currentCards = [];
-            let currentIndex = 0;
+            let currentIdx = 0;
 
-            // --- 3. Funções ---
-            function showCard(index) {
-                if (flashcardElement.classList.contains('is-flipped')) {
-                    flashcardElement.classList.remove('is-flipped');
+            // ============================================
+            // 2. FUNÇÕES VISUAIS (Decks e Estilo)
+            // ============================================
+            
+            function createDeckButton(name, cards, container) {
+                const btn = document.createElement('div');
+                btn.style.cssText = `
+                    background: white; border-radius: 12px; padding: 20px; 
+                    width: 200px; text-align: center; cursor: pointer; 
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s;
+                    border: 1px solid #eee; display: flex; flex-direction: column; 
+                    justify-content: center; align-items: center;
+                `;
+                btn.innerHTML = `
+                    <h4 style="margin: 0 0 5px 0; color: #004d7b;">${name}</h4>
+                    <span style="font-size: 0.9rem; color: #888;">${cards.length} cartas</span>
+                `;
+                btn.onmouseover = () => { btn.style.transform = "translateY(-5px)"; btn.style.boxShadow = "0 8px 20px rgba(63, 169, 245, 0.2)"; };
+                btn.onmouseout = () => { btn.style.transform = "translateY(0)"; btn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.05)"; };
+                btn.onclick = () => openDeck(name, cards);
+                container.appendChild(btn);
+            }
+
+            // Renderiza User Decks
+            const userSubjects = Object.keys(userDecks);
+            if (userSubjects.length > 0) {
+                userContainer.innerHTML = '';
+                userSubjects.forEach(subj => {
+                    createDeckButton(subj, userDecks[subj], userContainer);
+                    const opt = document.createElement('option');
+                    opt.value = subj;
+                    dataList.appendChild(opt);
+                });
+            }
+
+            // Renderiza System Decks
+            Object.keys(systemDecks).forEach(subj => {
+                createDeckButton(subj, systemDecks[subj], systemContainer);
+            });
+
+            // ============================================
+            // 3. LÓGICA DO MODAL
+            // ============================================
+            function toggleModal(show) {
+                modal.classList.toggle('hidden', !show);
+                modal.style.display = show ? 'flex' : 'none';
+            }
+            document.getElementById('btn-open-modal').onclick = () => toggleModal(true);
+            document.getElementById('close-modal-x').onclick = () => toggleModal(false);
+            document.getElementById('btn-cancel').onclick = () => toggleModal(false);
+
+            document.getElementById('btn-add-row').onclick = () => {
+                const rowCount = inputsList.querySelectorAll('.input-row').length + 1;
+                const div = document.createElement('div');
+                div.className = 'input-row';
+                div.style.cssText = "background: white; padding: 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #e0e0e0; box-shadow: 0 2px 5px rgba(0,0,0,0.02);";
+                div.innerHTML = `
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="font-weight: bold; color: #3fa9f5; display: block; margin-bottom: 8px; font-size: 0.9rem;">CARD ${rowCount}</span>
+                        <span style="cursor:pointer; color:red;" onclick="this.closest('.input-row').remove()">🗑️</span>
+                    </div>
+                    <input type="text" name="pergunta[]" placeholder="Digite a Pergunta..." style="width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 6px;" required>
+                    <input type="text" name="resposta[]" placeholder="Digite a Resposta..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" required>
+                `;
+                inputsList.appendChild(div);
+                div.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                const materia = document.getElementById('new-materia').value;
+                const pergs = document.getElementsByName('pergunta[]');
+                const resps = document.getElementsByName('resposta[]');
+                
+                let cards = [];
+                for(let i=0; i<pergs.length; i++){
+                    if(pergs[i].value.trim()){
+                        cards.push({ pergunta: pergs[i].value, resposta: resps[i].value });
+                    }
                 }
+                if(cards.length === 0) return alert('Adicione pelo menos uma pergunta.');
+
+                const res = await fetch('/add_flashcard', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ materia, cards })
+                });
+                const data = await res.json();
+                if(data.success){
+                    alert('Cards salvos com sucesso!');
+                    window.location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            };
+
+            // ============================================
+            // 4. LÓGICA DO VIEWER (VISUALIZADOR)
+            // ============================================
+            
+            window.openDeck = function(name, cards) {
+                currentCards = cards;
+                currentIdx = 0;
+                document.getElementById('subject-title').textContent = name;
+                showCard(0);
+                
+                // Transição de Telas
+                selection.style.display = 'none'; // Esconde menu
+                viewer.classList.remove('hidden');
+                viewer.style.display = 'flex';    // Mostra viewer
+
+                // --- EFEITO: ENCOLHER A BOX BRANCA ---
+                mainBox.style.maxWidth = "700px";
+            };
+
+            function showCard(idx) {
+                cardEl.classList.remove('is-flipped');
                 setTimeout(() => {
-                    if (currentCards && currentCards[index]) {
-                        questionEl.textContent = currentCards[index].pergunta;
-                        answerEl.textContent = currentCards[index].resposta;
-                        cardCounter.textContent = `${index + 1}/${currentCards.length}`;
-                    } else {
-                        console.error("Erro: Tentando acessar cartão inválido.");
-                        questionEl.textContent = "Erro";
-                        answerEl.textContent = "Erro";
-                        cardCounter.textContent = `?/${currentCards ? currentCards.length : '?'}`;
+                    if(currentCards[idx]){
+                        document.getElementById('flashcard-question').textContent = currentCards[idx].pergunta;
+                        document.getElementById('flashcard-answer').textContent = currentCards[idx].resposta;
+                        document.getElementById('card-counter').textContent = `${idx+1}/${currentCards.length}`;
                     }
                 }, 150);
             }
 
-            // --- 4. Inicialização ---
-            const subjects = Object.keys(allFlashcards);
-            subjects.forEach(subject => {
-                const btn = document.createElement('button');
-                btn.className = 'subject-btn';
-                btn.textContent = subject;
-                subjectButtonsContainer.appendChild(btn);
+            document.getElementById('back-to-subjects').onclick = () => {
+                viewer.classList.add('hidden');
+                viewer.style.display = 'none';
+                selection.style.display = 'block';
+                
+                // --- EFEITO: EXPANDIR A BOX BRANCA DE VOLTA ---
+                mainBox.style.maxWidth = "1200px";
+                
+                window.location.reload();
+            };
 
-                btn.addEventListener('click', () => {
-                    currentCards = allFlashcards[subject];
-                    if (currentCards && currentCards.length > 0) {
-                        currentIndex = 0;
-                        subjectTitle.textContent = subject;
-                        showCard(currentIndex);
-
-                        // Esconde seleção e mostra o visualizador
-                        subjectSelectionDiv.classList.add('hidden');
-                        flashcardViewerDiv.classList.remove('hidden');
-                    } else {
-                        const p = document.createElement('p');
-                        p.textContent = `Nenhum flashcard encontrado para "${subject}".`;
-                        p.style.color = 'red';
-                        p.style.textAlign = 'center';
-                        subjectButtonsContainer.appendChild(p);
-                        setTimeout(() => p.remove(), 3000);
-                    }
-                });
-            });
-
-            // --- 5. Event Listeners ---
-            // Botão DENTRO do viewer para voltar à seleção de matérias
-            backToSubjectsBtn.addEventListener('click', () => {
-                subjectSelectionDiv.classList.remove('hidden');
-                flashcardViewerDiv.classList.add('hidden');
-            });
-
-            // Virar o cartão
-            flashcardElement.addEventListener('click', () => {
-                flashcardElement.classList.toggle('is-flipped');
-            });
-
-            // Navegação
-            prevCardBtn.addEventListener('click', () => {
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    showCard(currentIndex);
-                }
-            });
-
-            nextCardBtn.addEventListener('click', () => {
-                if (currentIndex < currentCards.length - 1) {
-                    currentIndex++;
-                    showCard(currentIndex);
-                }
-            });
+            cardEl.onclick = () => cardEl.classList.toggle('is-flipped');
+            document.getElementById('next-card').onclick = () => { if(currentIdx < currentCards.length - 1) showCard(++currentIdx); };
+            document.getElementById('prev-card').onclick = () => { if(currentIdx > 0) showCard(--currentIdx); };
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+
+    // Função para fechar o menu
+    function closeMenu() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+
+    // Verifica se os elementos existem antes de adicionar o clique
+    if (menuToggle && sidebar && overlay) {
+        
+        // Ao clicar no botão (Hamburguer)
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        // Ao clicar na parte escura (Overlay) fecha o menu
+        overlay.addEventListener('click', closeMenu);
+    }
+});
+</script>
 </body>
 </html>

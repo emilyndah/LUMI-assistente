@@ -87,20 +87,43 @@
     </style>
 </head>
 <body>
-    <header>
-        <a href="{{ url_for('index') }}">
-            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Logo Lumi" class="logo">
-        </a>
-         <!-- Área do Usuário -->
-        <div class="user-area">
-            {% if current_user.is_authenticated %}
-                <span class="welcome-msg">Olá, {{ current_user.username }}!</span>
-                <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
-                    <div class="profile-icon">{{ current_user.username[0]|upper if current_user.username else '?' }}</div>
-                </a>
-                <a href="{{ url_for('logout') }}" class="logout-link" title="Sair">Logout</a>
-            {% endif %}
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
+            <h3>Menu Lumi</h3>
         </div>
+        <a href="{{ url_for('index') }}">Chat Principal</a>
+        <a href="{{ url_for('profile') }}">Meu Perfil</a>
+        <a href="{{ url_for('calendario') }}">Calendário</a>
+        <a href="{{ url_for('flashcards') }}">Flashcards</a>
+        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
+        <a href="{{ url_for('faq') }}">FAQ</a>
+    </nav>
+    
+    <div class="overlay"></div>
+
+    <header>
+        <button class="menu-toggle" title="Menu">
+            <span class="hamburger-icon"></span> 
+        </button>
+
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
+        </a>
+        
+        {% if current_user.is_authenticated %}
+        <div class="user-area">
+            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+            
+            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                <div class="profile-picture">
+                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                </div>
+            </a>
+        </div>
+        {% endif %}
     </header>
 
     <!-- Usa a classe 'faq-page' para layout de página inteira -->
@@ -108,7 +131,7 @@
 
         <section class="quiz-container">
             <!-- Botão voltar é mostrado pelo JS -->
-            <a href="{{ url_for('index') }}" class="back-btn-global hidden">← Voltar para o Chat</a>
+            <a href="{{ url_for('index') }}" class="back-link-profile-glued-final">&larr; Voltar para o Chat</a>
 
             <!-- ==============================\r
                  ÁREA DO QUIZ (Começa visível por padrão, JS esconde se resultado existir)
@@ -404,5 +427,31 @@
 
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+
+    // Função para fechar o menu
+    function closeMenu() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+
+    // Verifica se os elementos existem antes de adicionar o clique
+    if (menuToggle && sidebar && overlay) {
+        
+        // Ao clicar no botão (Hamburguer)
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        // Ao clicar na parte escura (Overlay) fecha o menu
+        overlay.addEventListener('click', closeMenu);
+    }
+});
+</script>
 </body>
 </html>

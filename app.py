@@ -174,6 +174,24 @@ def load_user(user_id):
             return None
     return None
 
+# =======================================================
+# NOVO MODELO: Flashcards do Usuário
+# =======================================================
+class UserFlashcard(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    materia = db.Column(db.String(100), nullable=False) # Nome do "Deck"
+    pergunta = db.Column(db.String(300), nullable=False)
+    resposta = db.Column(db.String(500), nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pergunta": self.pergunta,
+            "resposta": self.resposta,
+            "materia": self.materia
+        }
+
 
 # =======================================================
 # 1. CONSTANTES E CONFIGURAÇÃO DO GEMINI
@@ -663,14 +681,28 @@ def calendario():
 @app.route("/flashcards")
 @login_required
 def flashcards():
-    dados = carregar_dados_json("flashcards.json")
-    flashcard_data = {}
-    if dados:
-        flashcard_data = dados.get("flash_cards", dados)
-    if not flashcard_data:
-        flash("Não foi possível carregar os flashcards.", "warning")
-    return render_template("flashcards.html", flashcard_data=flashcard_data)
+    # 1. Carrega Conteúdo do Sistema (JSON)
+    dados_json = carregar_dados_json("flashcards.json")
+    system_decks = {}
+    if dados_json:
+        system_decks = dados_json.get("flash_cards", dados_json)
 
+    # 2. Carrega Conteúdo do Usuário (Banco de Dados)
+    user_cards = UserFlashcard.query.filter_by(user_id=current_user.id).all()
+    
+    # Agrupa os cartões do usuário por matéria
+    user_decks = {}
+    for card in user_cards:
+        if card.materia not in user_decks:
+            user_decks[card.materia] = []
+        user_decks[card.materia].append(card.to_dict())
+
+    # Passamos as duas listas separadas para o HTML
+    return render_template(
+        "flashcards.html", 
+        system_decks=system_decks, 
+        user_decks=user_decks
+    )
 
 @app.route("/foco")
 @login_required
@@ -719,63 +751,106 @@ def metodo_de_estudo():
 
 
 # =======================================================
-# 4. ROTAS DA API (CHAT, VARK E CALENDÁRIO)
+# 4. ROTAS DA API (CHAT, FLASHCARDS, VARK E CALENDÁRIO)
 # =======================================================
 
-
-@app.route("/ask", methods=["POST"])
+@app.route("/add_flashcard", methods=["POST"])
 @login_required
-def ask():
-    """Recebe perguntas do usuário e retorna respostas do Gemini."""
-    if not model:
-        return (
-            jsonify(
-                {"resposta": "Desculpe, o serviço de chat não está configurado."}),
-            500,
-        )
-
+def add_flashcard():
     data = request.json
-    if not data or "pergunta" not in data:
-        return jsonify({"resposta": "Nenhuma pergunta recebida."}), 400
-    
-    pergunta = data["pergunta"] # Pergunta original do usuário
+    materia = data.get("materia")
+    cards_list = data.get("cards") # Agora esperamos uma lista de cards
+
+    if not materia or not cards_list or len(cards_list) == 0:
+        return jsonify({"success": False, "message": "Preencha a matéria e adicione pelo menos um card."}), 400
 
     try:
-        # (Sua lógica de data e hora mantida)
-        try:
-            locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
-        except locale.Error:
-            try:
-                locale.setlocale(locale.LC_TIME, 'Portuguese_Brazil')
-            except locale.Error:
-                locale.setlocale(locale.LC_TIME, '')
+        # Vamos iterar sobre a lista e adicionar um por um na sessão do banco
+        for card_item in cards_list:
+            pergunta = card_item.get("pergunta")
+            resposta = card_item.get("resposta")
+            
+            # Só adiciona se tiver conteúdo
+            if pergunta and resposta:
+                novo_card = UserFlashcard(
+                    user_id=current_user.id,
+                    materia=materia,
+                    pergunta=pergunta,
+                    resposta=resposta
+                )
+                db.session.add(novo_card)
         
-        data_hora_atual = datetime.now().strftime("%A, %d de %B de %Y, %H:%M")
-        
-        pergunta_com_contexto = (
-            f"Contexto de data/hora atual (use APENAS se o usuário perguntar sobre 'hoje', 'agora', etc.): {data_hora_atual}.\n"
-            f"Pergunta do usuário: {pergunta}"
-        )
-
-        historico_chat = session.get("historico", get_initial_chat_history())
-
-        chat = model.start_chat(history=historico_chat)
-        
-        response = chat.send_message(pergunta_com_contexto)
-
-        historico_chat.append({"role": "user", "parts": [pergunta]})
-        historico_chat.append({"role": "model", "parts": [response.text]})
-        session["historico"] = historico_chat
-
-        return jsonify({"resposta": response.text})
+        # O commit salva tudo de uma vez no final
+        db.session.commit()
+        return jsonify({"success": True, "message": f"{len(cards_list)} cards criados com sucesso!"})
 
     except Exception as e:
-        print(f"Erro na API do Gemini: {e}")
-        traceback.print_exc()
-        return (
-            jsonify({"resposta": f"Desculpe, ocorreu um erro: {e}"}),
-            500,
-        )
+        db.session.rollback()
+        return jsonify({"success": False, "message": str(e)}), 500
+    
+# =======================================================
+# SUBSTITUA A FUNÇÃO 'def ask():' NO SEU APP.PY POR ESTA:
+# =======================================================
+
+@app.route('/ask', methods=['POST'])
+def ask():
+    if not GEMINI_API_KEY:
+        return jsonify({'resposta': 'Erro: API Key não configurada.'}), 500
+
+    dados = request.get_json()
+    pergunta_usuario = dados.get('pergunta')
+    
+    # 1. Carregar os Flashcards para dar contexto à IA
+    dados_flashcards = carregar_dados_json('flashcards.json')
+    
+    # Transforma o JSON em texto para a IA ler (formata bonitinho)
+    texto_flashcards = json.dumps(dados_flashcards, ensure_ascii=False, indent=2)
+
+    # 2. Gerenciamento de Histórico
+    historico = session.get('historico', [])
+    
+    # 3. Contexto do Sistema (Aqui acontece a mágica)
+    if not historico:
+        sistema_msg = {
+            "role": "user",
+            "parts": [
+                f"""
+                Você é a Lumi, uma assistente acadêmica universitária.
+                Seja prestativa, use emojis ocasionalmente e fale de forma motivadora.
+                Responda sempre em Português do Brasil.
+                Use formatação Markdown (negrito, listas) para organizar a resposta.
+
+                IMPORTANTE: Você tem acesso ao banco de dados de Flashcards do aluno abaixo.
+                Use essas perguntas e respostas como base de conhecimento se o aluno perguntar sobre esses temas:
+                
+                --- INÍCIO DOS FLASHCARDS ---
+                {texto_flashcards}
+                --- FIM DOS FLASHCARDS ---
+
+                Se a pergunta não estiver nos flashcards, use seu conhecimento geral para responder.
+                """
+            ]
+        }
+        historico.append(sistema_msg)
+        historico.append({"role": "model", "parts": ["Entendido! Li os flashcards e estou pronta para ajudar com base neles."]})
+
+    # Adiciona a pergunta atual
+    historico.append({"role": "user", "parts": [pergunta_usuario]})
+    
+    try:
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        chat = model.start_chat(history=historico)
+        response = chat.send_message(pergunta_usuario)
+        texto_resposta = response.text
+        
+        historico.append({"role": "model", "parts": [texto_resposta]})
+        session['historico'] = historico
+        
+        return jsonify({'resposta': texto_resposta})
+    
+    except Exception as e:
+        print(f"Erro Gemini: {e}")
+        return jsonify({'resposta': 'Desculpe, tive um problema de conexão.'}), 500
 
 
 @app.route("/save_vark_result", methods=["POST"])
