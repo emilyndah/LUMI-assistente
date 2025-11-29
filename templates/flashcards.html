@@ -49,13 +49,13 @@
     </header>
 
   <main class="faq-page">
-        <div id="main-white-box" style="max-width: 1200px; margin: 0 auto; width: 100%; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: max-width 0.5s ease, padding 0.5s ease;">
+    <div id="main-white-box" style="position: relative; max-width: 1200px; margin: 0 auto; width: 100%; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: max-width 0.5s ease, padding 0.5s ease;">
 
-            <div id="subject-selection">
-                
-                <div style="margin-bottom: 20px; text-align: left;">
-                    <a href="{{ url_for('index') }}" class="back-link-profile-glued-final" style="float: none; display: inline-flex; align-items: center; color: #666; text-decoration: none; font-weight: 500;">
-                        &larr; Voltar para o Chat
+        <a href="{{ url_for('index') }}" class="back-btn-global">&larr; Voltar para o Chat</a>
+
+        <div id="subject-selection">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 30px; margin-top: 40px;">
                     </a>
                 </div>
 

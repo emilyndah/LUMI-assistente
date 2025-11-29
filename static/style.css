@@ -1294,9 +1294,27 @@ main.profile-page {
     border-radius: 50%; /* Garante que a imagem seja circular */
 }
 
-/* 2. LINK "VOLTAR" (CLASSE FINAL com margens exatas) */
-.back-link-profile-glued-final {
-    display: inline-block; 
+/* Botão Voltar Padrão (Global) */
+.back-btn-global {
+    /* REMOVIDO: position: absolute, top, left */
+    
+    display: inline-flex;  /* Faz o botão ocupar só o espaço dele */
+    align-items: center;   /* Centraliza a setinha verticalmente */
+    margin-bottom: 15px;   /* Empurra o título para baixo */
+    
+    /* Estilos visuais */
+    text-decoration: none;
+    color: #4B8BEA;
+    font-weight: 500;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.back-btn-global:hover {
+    color: #3a74d3;
+}
+
     
     /* === MUDANÇA APLICADA AQUI (v14) === */
     /* Exatamente o valor do padding-top para "colar" em cima */

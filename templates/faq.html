@@ -50,12 +50,15 @@
     </header>
 
     <main class="faq-page">
+    
+    <section class="faq-container">
         
-        <section class="faq-container">
-            <h1>Dúvidas Frequentes (FAQ)</h1>
-            <p>Encontre respostas rápidas para as perguntas mais comuns.</p>
+        <a href="{{ url_for('index') }}" class="back-btn-global">&larr; Voltar para o Chat</a>
 
-            <input type="text" id="faq-search" class="faq-search" placeholder="Buscar por palavra-chave...">
+        <h1>Dúvidas Frequentes (FAQ)</h1>
+        <p>Encontre respostas rápidas para as perguntas mais comuns.</p>
+
+        <input type="text" id="faq-search" class="faq-search" placeholder="Buscar por palavra-chave...">
 
             {% if faq_data %}
                 {% for item in faq_data %}

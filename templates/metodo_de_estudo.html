@@ -20,14 +20,27 @@
         .quiz-container > p { text-align: center; color: #666; font-size: 1.1em; margin-bottom: 30px; }
 
         /* Botão Voltar (Global) */
-        .back-btn-global {
-            position: absolute; top: 15px; left: 25px; text-decoration: none;
-            color: #4B8BEA; font-weight: 500; font-size: 1em; background: none;
-            border: none; padding: 5px; cursor: pointer; transition: color 0.2s ease;
-            z-index: 10;
-        }
-        .back-btn-global:hover { color: #3a74d3; }
+        /* NOVO ESTILO (Copie e cole isso) */
+.back-btn-global {
+    display: inline-flex;       /* Faz o botão ocupar seu espaço natural */
+    align-items: center;        /* Alinha a setinha com o texto */
+    margin-bottom: 20px;        /* Empurra o título do Quiz para baixo */
+    
+    /* Estilos visuais */
+    text-decoration: none;
+    color: #4B8BEA;
+    font-weight: 500;
+    font-size: 0.95em;
+    background: none;
+    border: none;
+    padding: 0;                 /* Remove padding extra para alinhar à esquerda */
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
 
+.back-btn-global:hover {
+    color: #3a74d3;
+}
         /* Área do Quiz */
         #quiz-area p#pergunta-texto { font-size: 1.1em; font-weight: 500; color: #333; margin-bottom: 20px; line-height: 1.5;}
         .options-container { display: flex; flex-direction: column; gap: 12px; }
@@ -131,7 +144,7 @@
 
         <section class="quiz-container">
             <!-- Botão voltar é mostrado pelo JS -->
-            <a href="{{ url_for('index') }}" class="back-link-profile-glued-final">&larr; Voltar para o Chat</a>
+            <a href="{{ url_for('index') }}" class="back-btn-global">&larr; Voltar para o Chat</a>
 
             <!-- ==============================\r
                  ÁREA DO QUIZ (Começa visível por padrão, JS esconde se resultado existir)
