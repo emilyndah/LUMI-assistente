@@ -4,18 +4,16 @@
 # =======================================================
 
 # =======================================================
-# IMPORTAÇÕES (Limpas e Agrupadas)
+# IMPORTAÇÕES
 # =======================================================
 import json
 import os
-import re
 import traceback
 from datetime import datetime
 import logging
-import locale
 from dotenv import load_dotenv
-import uuid 
-import psycopg2
+import uuid
+import psycopg2  # pode ficar aqui para uso futuro (Render/Postgres)
 
 import google.generativeai as genai
 from flask import (
@@ -41,13 +39,11 @@ from flask_login import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
-
 load_dotenv()
 
 # =======================================================
 # CONFIGURAÇÃO DA APLICAÇÃO FLASK
 # =======================================================
-DATABASE_URL = os.getenv('DATABASE_URL')
 logging.basicConfig(
     filename="lumi.log",
     level=logging.INFO,
@@ -59,9 +55,13 @@ app = Flask(__name__)
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY", "chave_secreta_final_lumi_app_v6_save_vark"
 )
-# --- Lógica do Banco de Dados para Produção (Render) ---
+
+# --- Banco de Dados ---
 db_url = os.environ.get("DATABASE_URL")
 if db_url:
+    # Se vier postgres:// (Render), converte para postgresql://
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
@@ -70,28 +70,23 @@ else:
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# === MUDANÇA (CORREÇÃO) ===
-# Esta linha foi acidentalmente removida. Ela DEFINE o 'db'.
 db = SQLAlchemy(app)
-# === FIM DA MUDANÇA (CORREÇÃO) ===
 
-
-# === MUDANÇA === Configurações de Upload
-UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+# --- Uploads ---
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif"}
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-# === FIM DA MUDANÇA ===
 
 
 @app.cli.command("db-create-all")
 def db_create_all():
-    """Cria as tabelas do banco de dados (usado pelo Render)."""
+    """Cria as tabelas do banco de dados (usado pelo Render ou local)."""
     with app.app_context():
         db.create_all()
-        print("v2 - Banco de dados e tabelas criados com sucesso.")
+        print("Banco de dados e tabelas criados com sucesso.")
 
 
 # Configuração Flask-Login
@@ -102,36 +97,36 @@ login_manager.login_message = "Você precisa fazer login para acessar esta pági
 login_manager.login_message_category = "warning"
 
 
-# === MUDANÇA === Função auxiliar para verificar extensão do arquivo
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
-# === FIM DA MUDANÇA ===
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+    )
 
 
 # =======================================================
-# MODELO DE DADOS (User - Atualizado com NOVOS CAMPOS)
+# MODELOS
 # =======================================================
 class User(db.Model, UserMixin):
-
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), nullable=False) # 'username' é o NOME
+    # 'username' é o nome completo
+    username = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     matricula = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
 
     cpf = db.Column(db.String(14), unique=True, nullable=False)
     telefone = db.Column(db.String(20), nullable=True)
-    sexo = db.Column(db.String(30), nullable=True) # Gênero
+    sexo = db.Column(db.String(30), nullable=True)  # Gênero
     etnia = db.Column(db.String(50), nullable=True)
 
     vark_scores_json = db.Column(db.Text, nullable=True)
     vark_primary_type = db.Column(db.String(10), nullable=True)
 
-    # === MUDANÇA === Coluna para salvar o NOME DO ARQUIVO da imagem
-    profile_image = db.Column(db.String(100), nullable=False, default='lumi-2.png')
-    # === FIM DA MUDANÇA ===
-
+    # Imagem de perfil com default
+    profile_image = db.Column(
+        db.String(100), nullable=False, default="lumi-2.png"
+    )
 
     def get_vark_scores(self):
         if not self.vark_scores_json:
@@ -149,10 +144,18 @@ class User(db.Model, UserMixin):
             return False
         return check_password_hash(self.password_hash, password)
 
-    # === MUDANÇA === Renomeei 'username' para 'nome_completo'
-    # e 'sexo' para 'genero' para bater com o seu HTML/Formulário
-    def __init__(self, nome_completo, email, matricula, password=None, cpf=None, telefone=None, genero=None, etnia=None):
-        self.username = nome_completo # O formulário usa 'username', mas seu HTML exibe 'nome'
+    def __init__(
+        self,
+        nome_completo,
+        email,
+        matricula,
+        password=None,
+        cpf=None,
+        telefone=None,
+        genero=None,
+        etnia=None,
+    ):
+        self.username = nome_completo
         self.email = email
         self.matricula = matricula
         if password:
@@ -160,8 +163,33 @@ class User(db.Model, UserMixin):
 
         self.cpf = cpf
         self.telefone = telefone
-        self.sexo = genero # 'sexo' no BD, 'genero' no formulário
+        self.sexo = genero
         self.etnia = etnia
+
+
+class UserFlashcard(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    materia = db.Column(db.String(100), nullable=False)  # Nome do "Deck"
+    pergunta = db.Column(db.String(300), nullable=False)
+    resposta = db.Column(db.String(500), nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "pergunta": self.pergunta,
+            "resposta": self.resposta,
+            "materia": self.materia,
+        }
+
+
+class ChatHistory(db.Model):
+    """Histórico de mensagens do chat, salvo no banco (não na sessão)."""
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    role = db.Column(db.String(10), nullable=False)  # "user" ou "model"
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 @login_manager.user_loader
@@ -174,59 +202,10 @@ def load_user(user_id):
             return None
     return None
 
-# =======================================================
-# NOVO MODELO: Flashcards do Usuário
-# =======================================================
-class UserFlashcard(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    materia = db.Column(db.String(100), nullable=False) # Nome do "Deck"
-    pergunta = db.Column(db.String(300), nullable=False)
-    resposta = db.Column(db.String(500), nullable=False)
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "pergunta": self.pergunta,
-            "resposta": self.resposta,
-            "materia": self.materia
-        }
-
 
 # =======================================================
-# 1. CONSTANTES E CONFIGURAÇÃO DO GEMINI
+# FUNÇÕES AUXILIARES DE JSON
 # =======================================================
-# (Seu código original mantido aqui)
-GEMINI_API_KEY = None
-model = None
-try:
-    GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
-    genai.configure(api_key=GEMINI_API_KEY)
-except KeyError:
-    print("=" * 80)
-    print("ERRO: Variável de ambiente GEMINI_API_KEY não encontrada.")
-    print("Por favor, crie um arquivo .env e adicione a linha:")
-    print("GEMINI_API_KEY=SUA_CHAVE_AQUI")
-    print("=" * 80)
-
-if GEMINI_API_KEY:
-    try:
-        genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel(
-            "gemini-2.5-flash")
-
-        print("✅ Modelo Gemini inicializado com sucesso (gemini-2.5-flash).")
-    except Exception as e:
-        print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
-        GEMINI_API_KEY = None
-else:
-    print("⚠️ API Key do Gemini não encontrada. O Chatbot não funcionará.")
-
-
-# =======================================================
-# 2. FUNÇÕES AUXILIARES (CARREGAMENTO DE DADOS)
-# =======================================================
-# (Seu código original mantido aqui)
 def carregar_dados_json(arquivo):
     try:
         caminho_arquivo = os.path.join(os.path.dirname(__file__), arquivo)
@@ -255,11 +234,21 @@ def salvar_dados_json(arquivo, dados):
         traceback.print_exc()
         return False
 
-# (Seu código original 'carregar_calendario', 'carregar_matriz', etc. mantido)
+
 def carregar_calendario():
     meses_map = {
-        1: "JAN", 2: "FEV", 3: "MAR", 4: "ABR", 5: "MAI", 6: "JUN",
-        7: "JUL", 8: "AGO", 9: "SET", 10: "OUT", 11: "NOV", 12: "DEZ",
+        1: "JAN",
+        2: "FEV",
+        3: "MAR",
+        4: "ABR",
+        5: "MAI",
+        6: "JUN",
+        7: "JUL",
+        8: "AGO",
+        9: "SET",
+        10: "OUT",
+        11: "NOV",
+        12: "DEZ",
     }
     eventos = []
     dados = carregar_dados_json("calendario.json")
@@ -297,20 +286,23 @@ def carregar_calendario():
         if data_fim:
             try:
                 data_fim_iso = datetime.strptime(
-                    data_fim, "%Y-%m-%d").strftime("%Y-%m-%d")
+                    data_fim, "%Y-%m-%d"
+                ).strftime("%Y-%m-%d")
             except ValueError:
                 print(f"AVISO: Data final inválida ignorada: {data_fim}")
 
-        eventos.append({
-            "id": event_id,
-            "title": descricao,
-            "date": data_inicio,
-            "type": event_type,
-            "description": event_description,
-            "data_obj": data_inicio_obj,
-            "data_fim": data_fim_iso,
-            "mes_curto": meses_map.get(data_inicio_obj.month),
-        })
+        eventos.append(
+            {
+                "id": event_id,
+                "title": descricao,
+                "date": data_inicio,
+                "type": event_type,
+                "description": event_description,
+                "data_obj": data_inicio_obj,
+                "data_fim": data_fim_iso,
+                "mes_curto": meses_map.get(data_inicio_obj.month),
+            }
+        )
     return sorted(eventos, key=lambda x: x["data_obj"])
 
 
@@ -319,8 +311,7 @@ def carregar_matriz():
     if dados and isinstance(dados, list):
         return dados
     elif dados and isinstance(dados, dict):
-        print(
-            "AVISO: matriz.json em formato antigo (objeto único). Convertendo para lista.")
+        print("AVISO: matriz.json em formato antigo (objeto único). Convertendo para lista.")
         return [dados]
     else:
         print("AVISO: Falha ao carregar ou formato inválido para matriz.json.")
@@ -329,165 +320,184 @@ def carregar_matriz():
 
 def carregar_quiz_vark():
     return carregar_dados_json("metodo_estudo.json")
-
-
 def carregar_contexto_inicial():
     contexto_base = ""
     contexto_calendario = ""
     contexto_matriz = ""
     contexto_vark = ""
 
-    # 1. Carrega o contexto principal (informacoes.txt)
+    # 1. informacoes.txt
     try:
         with open("informacoes.txt", "r", encoding="utf-8") as f:
             contexto_base = f.read()
     except FileNotFoundError:
-        print("Aviso: 'informacoes.txt' não encontrado. O chatbot pode não ter contexto.")
+        print("Aviso: 'informacoes.txt' não encontrado.")
         contexto_base = "Você é um assistente acadêmico chamado Lumi, focado em ajudar alunos da UniEVANGÉLICA."
     except Exception as e:
         print(f"Erro ao ler 'informacoes.txt': {e}")
         contexto_base = "Você é um assistente acadêmico chamado Lumi."
 
-    # 2. Carrega e formata o Calendário
-    print("Carregando Calendário para o contexto...")
+    # 2. Calendário
     try:
         eventos = carregar_calendario()
         if eventos:
-            contexto_calendario = "\n\n=== CALENDÁRIO ACADÊMICO (Use para responder perguntas sobre datas) ===\n"
+            contexto_calendario = (
+                "\n\n=== CALENDÁRIO ACADÊMICO (Use para responder perguntas sobre datas) ===\n"
+            )
             for evento in eventos:
-                data_str = evento.get("data_obj").strftime('%d/%m/%Y')
+                data_str = evento.get("data_obj").strftime("%d/%m/%Y")
                 desc = evento.get("title")
                 data_fim_str = ""
-                if evento.get("data_fim") and evento.get("data_fim") != evento.get("date"):
+                if evento.get("data_fim") and evento.get("data_fim") != evento.get(
+                    "date"
+                ):
                     try:
                         data_fim_obj = datetime.strptime(
-                            evento["data_fim"], "%Y-%m-%d")
+                            evento["data_fim"], "%Y-%m-%d"
+                        )
                         data_fim_str = f" até {data_fim_obj.strftime('%d/%m/%Y')}"
                     except ValueError:
                         pass
                 contexto_calendario += f"- Em {data_str}{data_fim_str}: {desc}\n"
-            contexto_calendario += "======================================================================\n"
-            print(f"Calendário carregado. {len(eventos)} eventos.")
-        else:
-            print(
-                "AVISO: Não foi possível carregar os eventos do calendário no contexto.")
+            contexto_calendario += (
+                "======================================================================\n"
+            )
     except Exception as e:
         print(f"ERRO ao processar calendário para o contexto: {e}")
         traceback.print_exc()
 
-    # 3. Carrega e formata a Matriz Curricular
-    print("Carregando Matriz Curricular para o contexto...")
+    # 3. Matriz
     try:
         matriz_data = carregar_matriz()
         if matriz_data:
             contexto_matriz = "\n\n=== MATRIZ CURRICULAR (Use para responder sobre aulas, professores, horários e salas) ===\n"
             for periodo_info in matriz_data:
-                periodo_nome = periodo_info.get(
-                    'periodo', 'Período Não Identificado')
+                periodo_nome = periodo_info.get("periodo", "Período Não Identificado")
                 contexto_matriz += f"\n--- Período {periodo_nome} ---\n"
-                disciplinas = periodo_info.get('disciplinas', [])
+                disciplinas = periodo_info.get("disciplinas", [])
                 if not disciplinas:
-                    contexto_matriz += "(Nenhuma disciplina listada para este período)\n"
+                    contexto_matriz += (
+                        "(Nenhuma disciplina listada para este período)\n"
+                    )
                 for disc in disciplinas:
-                    nome = disc.get('nome', 'Sem nome')
-                    prof = disc.get('professor', 'A definir')
-                    dia = disc.get('dia', 'A definir')
-                    horario = disc.get('horario', 'A definir')
-                    sala = disc.get('sala', 'A definir')
+                    nome = disc.get("nome", "Sem nome")
+                    prof = disc.get("professor", "A definir")
+                    dia = disc.get("dia", "A definir")
+                    horario = disc.get("horario", "A definir")
+                    sala = disc.get("sala", "A definir")
                     contexto_matriz += f"- Disciplina: {nome}\n"
-                    contexto_matriz += f"  Professor: {prof}\n"
-                    contexto_matriz += f"  Horário: {dia}, {horario}\n"
-                    contexto_matriz += f"  Sala: {sala}\n\n"
-            contexto_matriz += "======================================================================\n"
-            print("Matriz Curricular carregada para o contexto.")
-        else:
-            print("AVISO: Não foi possível carregar a matriz curricular no contexto.")
+                    contexto_matriz += f"  Professor: {prof}\n"
+                    contexto_matriz += f"  Horário: {dia}, {horario}\n"
+                    contexto_matriz += f"  Sala: {sala}\n\n"
+            contexto_matriz += (
+                "======================================================================\n"
+            )
     except Exception as e:
         print(f"ERRO ao processar matriz para o contexto: {e}")
         traceback.print_exc()
 
-    # 4. Carrega e formata os Métodos de Estudo (VARK)
-    print("Carregando Métodos de Estudo (VARK) para o contexto...")
+    # 4. VARK
     try:
         vark_data = carregar_quiz_vark()
-        resultados_vark = vark_data.get('resultados')
+        if vark_data:
+            resultados_vark = vark_data.get("resultados")
+        else:
+            resultados_vark = None
+
         if resultados_vark:
-            contexto_vark = "\n\n=== MÉTODOS DE ESTUDO (Use para explicar os estilos VARK) ===\n"
+            contexto_vark = (
+                "\n\n=== MÉTODOS DE ESTUDO (Use para explicar os estilos VARK) ===\n"
+            )
             for tipo, info in resultados_vark.items():
-                titulo = info.get('titulo', tipo)
-                desc = info.get('descricao', 'Sem descrição.')
-                metodos = info.get('metodos', [])
+                titulo = info.get("titulo", tipo)
+                desc = info.get("descricao", "Sem descrição.")
+                metodos = info.get("metodos", [])
                 contexto_vark += f"\n--- {titulo} ({tipo}) ---\n"
                 contexto_vark += f"{desc}\n"
                 contexto_vark += "Métodos sugeridos:\n"
                 for m in metodos:
-                    contexto_vark += f"  - {m}\n"
-            contexto_vark += "======================================================================\n"
-            print("Métodos VARK carregados para o contexto.")
-        else:
-            print("AVISO: Não foi possível carregar os resultados VARK no contexto.")
+                    contexto_vark += f"  - {m}\n"
+            contexto_vark += (
+                "======================================================================\n"
+            )
     except Exception as e:
         print(f"ERRO ao processar VARK para o contexto: {e}")
         traceback.print_exc()
 
-    # 5. Combina tudo
-    print("Contexto inicial montado com sucesso.")
     return contexto_base + contexto_calendario + contexto_matriz + contexto_vark
 
 
 CONTEXTO_INICIAL = carregar_contexto_inicial()
 
+# =======================================================
+# GEMINI - INICIALIZAÇÃO ÚNICA
+# =======================================================
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+model = None
 
-# =======================================================
-# 1.5. INICIALIZAÇÃO DO MODELO GEMINI (COM CONTEXTO)
-# =======================================================
 if GEMINI_API_KEY:
     try:
+        genai.configure(api_key=GEMINI_API_KEY)
+        # Aqui já usamos o contexto completo como system_instruction
         model = genai.GenerativeModel(
             "gemini-2.5-flash",
-            system_instruction=CONTEXTO_INICIAL
+            system_instruction=CONTEXTO_INICIAL,
         )
-        print("✅ Modelo Gemini inicializado com system_instruction (contexto completo).")
+        print("✅ Modelo Gemini inicializado com system_instruction.")
     except Exception as e:
         print(f"❌ Erro ao inicializar o modelo Gemini: {e}")
-        GEMINI_API_KEY = None
+        model = None
 else:
-    print("⚠️ API Key não encontrada. O Chatbot não funcionará.")
+    print("⚠️ API Key do Gemini não encontrada. O Chatbot não funcionará.")
 
 
 # =======================================================
-# 3. ROTAS PRINCIPAIS (LOGIN, PÁGINAS, ETC.)
+# FUNÇÕES DE HISTÓRICO
 # =======================================================
 def get_initial_chat_history():
-    """Retorna a estrutura de histórico inicial para a sessão."""
+    """Mensagem inicial padrão do chat (modelo)."""
     return [
         {
             "role": "model",
             "parts": [
                 "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
             ],
-        },
+        }
     ]
 
-# =======================================================
-# 5. ROTAS DE AUTENTICAÇÃO (Login, Registro, Logout)
-# =======================================================
+
+def carregar_historico_usuario(user_id):
+    """Retorna uma lista de mensagens no formato esperado pelo Gemini."""
+    historico = ChatHistory.query.filter_by(user_id=user_id).order_by(ChatHistory.timestamp).all()
+    return [
+        {"role": h.role, "parts": [h.content]}
+        for h in historico
+    ]
 
 
+def salvar_mensagem_no_banco(user_id, role, content):
+    """Salva uma mensagem no histórico do usuário."""
+    nova_msg = ChatHistory(user_id=user_id, role=role, content=content)
+    db.session.add(nova_msg)
+    db.session.commit()
+
+
+# =======================================================
+# ROTAS DE AUTENTICAÇÃO
+# =======================================================
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """Lida com o registro de novos usuários."""
     if current_user.is_authenticated:
         return redirect(url_for("index"))
 
     if request.method == "POST":
         email = request.form.get("email")
-        nome_completo = request.form.get("username") # O formulário envia 'username'
+        nome_completo = request.form.get("username")
         matricula = request.form.get("matricula")
         password = request.form.get("password")
         cpf = request.form.get("cpf")
         telefone = request.form.get("telefone")
-        genero = request.form.get("sexo") # O formulário envia 'sexo'
+        genero = request.form.get("sexo")
         etnia = request.form.get("etnia")
 
         user_by_email = User.query.filter_by(email=email).first()
@@ -512,7 +522,7 @@ def register():
                 cpf=cpf,
                 telefone=telefone,
                 genero=genero,
-                etnia=etnia
+                etnia=etnia,
             )
             new_user.set_password(password)
             db.session.add(new_user)
@@ -531,7 +541,6 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """Lida com o login do usuário."""
     if current_user.is_authenticated:
         return redirect(url_for("index"))
 
@@ -539,9 +548,9 @@ def login():
         identifier = request.form.get("login_identifier")
         password = request.form.get("password")
         user = User.query.filter(
-            (getattr(User, "email") == identifier) |
-            (getattr(User, "matricula") == identifier) |
-            (getattr(User, "cpf") == identifier)
+            (User.email == identifier)
+            | (User.matricula == identifier)
+            | (User.cpf == identifier)
         ).first()
 
         if user and user.check_password(password):
@@ -549,7 +558,9 @@ def login():
             flash("Login realizado com sucesso!", "success")
             return redirect(url_for("index"))
         else:
-            flash("Email/Matrícula/CPF ou senha inválidos. Tente novamente.", "danger")
+            flash(
+                "Email/Matrícula/CPF ou senha inválidos. Tente novamente.", "danger"
+            )
 
     return render_template("login.html")
 
@@ -557,109 +568,100 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-    """Lida com o logout do usuário."""
     logout_user()
     flash("Você foi desconectado.", "info")
     return redirect(url_for("login"))
 
 
 # =======================================================
-# === MUDANÇA NA ESTRUTURA DAS ROTAS ===
+# ROTAS DE PÁGINA
 # =======================================================
-
 @app.route("/")
 @login_required
 def index():
-    """Renderiza a página inicial do MENU."""
     return render_template("index.html")
 
 
 @app.route("/chat")
 @login_required
 def chat():
-    """Renderiza a página do CHAT."""
-    if "historico" not in session:
-        session["historico"] = get_initial_chat_history()
+    # Garante que o histórico inicial existe no banco para este usuário
+    historico_existente = ChatHistory.query.filter_by(user_id=current_user.id).first()
+    if not historico_existente:
+        # salva a mensagem inicial padrão no banco
+        salvar_mensagem_no_banco(
+            current_user.id,
+            "model",
+            "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
+        )
     return render_template("chat.html")
 
-# =======================================================
 
-# =======================================================
-# === ROTA DE PERFIL (COM UPLOAD DE ARQUIVO) ===
-# =======================================================
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    """Renderiza a página de perfil (GET) e salva as atualizações (POST)."""
-    
-    user = current_user 
+    user = current_user
 
     if request.method == "POST":
-        # --- Lógica para SALVAR os dados ---
-        
         try:
-            # --- 1. Lógica de Upload da Imagem ---
-            if 'profile_pic' in request.files:
-                file = request.files['profile_pic']
-                
-                if file and file.filename != '' and allowed_file(file.filename):
-                    
-                    filename_secure = secure_filename(file.filename)
-                    extension = filename_secure.rsplit('.', 1)[1].lower()
+            # Upload da imagem
+            if "profile_pic" in request.files:
+                file = request.files["profile_pic"]
+                if file and file.filename != "" and allowed_file(file.filename):
+                    extension = file.filename.rsplit(".", 1)[1].lower()
                     unique_filename = f"{uuid.uuid4()}.{extension}"
-                    
-                    save_path = os.path.join(app.config["UPLOAD_FOLDER"], unique_filename)
-                    
+                    save_path = os.path.join(
+                        app.config["UPLOAD_FOLDER"], unique_filename
+                    )
                     file.save(save_path)
-                    
-                    if user.profile_image != 'lumi-2.png':
-                        old_path = os.path.join(app.config["UPLOAD_FOLDER"], user.profile_image)
+
+                    if user.profile_image != "lumi-2.png":
+                        old_path = os.path.join(
+                            app.config["UPLOAD_FOLDER"], user.profile_image
+                        )
                         if os.path.exists(old_path):
                             try:
                                 os.remove(old_path)
                             except Exception as e:
-                                print(f"Aviso: Não foi possível remover o arquivo antigo: {e}")
-                                
+                                print(
+                                    f"Aviso: Não foi possível remover o arquivo antigo: {e}"
+                                )
+
                     user.profile_image = unique_filename
-            
-            # --- 2. Lógica para salvar os dados do formulário ---
-            
-            # (No seu HTML o 'Nome Completo' tem o name="nome")
-            novo_username = request.form.get('nome') 
-            novo_email = request.form.get('email')
-            novo_telefone = request.form.get('telefone')
-             # (No seu HTML o 'Gênero' tem o name="genero")
-            novo_sexo = request.form.get('genero')
-            novo_etnia = request.form.get('etnia')
+
+            novo_username = request.form.get("nome")
+            novo_email = request.form.get("email")
+            novo_telefone = request.form.get("telefone")
+            novo_sexo = request.form.get("genero")
+            novo_etnia = request.form.get("etnia")
 
             if novo_email != user.email:
                 email_existente = User.query.filter_by(email=novo_email).first()
                 if email_existente:
-                    flash('Este e-mail já está em uso por outra conta. Tente outro.', 'danger')
-                    return redirect(url_for('profile'))
-            
-            user.username = novo_username # 'username' no BD, 'nome' no formulário
+                    flash(
+                        "Este e-mail já está em uso por outra conta. Tente outro.",
+                        "danger",
+                    )
+                    return redirect(url_for("profile"))
+
+            user.username = novo_username
             user.email = novo_email
             user.telefone = novo_telefone
-            user.sexo = novo_sexo # 'sexo' no BD, 'genero' no formulário
+            user.sexo = novo_sexo
             user.etnia = novo_etnia
-            
+
             db.session.commit()
-            
-            flash('Perfil atualizado com sucesso!', 'success')
-            return redirect(url_for('profile'))
+
+            flash("Perfil atualizado com sucesso!", "success")
+            return redirect(url_for("profile"))
 
         except Exception as e:
             db.session.rollback()
             print(f"ERRO ao atualizar perfil: {e}")
-            traceback.print_exc() 
-            flash(f'Ocorreu um erro ao atualizar: {e}', 'danger')
+            traceback.print_exc()
+            flash(f"Ocorreu um erro ao atualizar: {e}", "danger")
 
-    # --- Lógica para MOSTRAR a página (GET) ---
     return render_template("profile.html")
-# =======================================================
-# === FIM DA ROTA DE PERFIL ===
-# =======================================================
 
 
 @app.route("/faq")
@@ -681,48 +683,50 @@ def calendario():
 @app.route("/flashcards")
 @login_required
 def flashcards():
-    # 1. Carrega Conteúdo do Sistema (JSON)
     dados_json = carregar_dados_json("flashcards.json")
     system_decks = {}
     if dados_json:
         system_decks = dados_json.get("flash_cards", dados_json)
 
-    # 2. Carrega Conteúdo do Usuário (Banco de Dados)
     user_cards = UserFlashcard.query.filter_by(user_id=current_user.id).all()
-    
-    # Agrupa os cartões do usuário por matéria
     user_decks = {}
     for card in user_cards:
         if card.materia not in user_decks:
             user_decks[card.materia] = []
         user_decks[card.materia].append(card.to_dict())
 
-    # Passamos as duas listas separadas para o HTML
     return render_template(
-        "flashcards.html", 
-        system_decks=system_decks, 
-        user_decks=user_decks
+        "flashcards.html",
+        system_decks=system_decks,
+        user_decks=user_decks,
     )
+
 
 @app.route("/foco")
 @login_required
 def modo_foco():
-    """Renderiza a página do Modo Foco (timer)."""
     return render_template("foco.html")
 
 
 @app.route("/limpar")
 @login_required
 def limpar_chat():
-    """Limpa o histórico do chat da sessão e redireciona para o CHAT."""
-    session["historico"] = get_initial_chat_history()
-    return redirect(url_for("index"))
+    # Apaga todo o histórico do usuário
+    ChatHistory.query.filter_by(user_id=current_user.id).delete()
+    db.session.commit()
+
+    # Recria a mensagem inicial de boas-vindas
+    salvar_mensagem_no_banco(
+        current_user.id,
+        "model",
+        "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
+    )
+    return redirect(url_for("chat"))
 
 
 @app.route("/metodo_de_estudo")
 @login_required
 def metodo_de_estudo():
-    """Renderiza quiz ou resultado VARK salvo."""
     quiz_data = carregar_quiz_vark()
     saved_vark_result = None
 
@@ -750,155 +754,293 @@ def metodo_de_estudo():
     )
 
 
-# =======================================================
-# 4. ROTAS DA API (CHAT, FLASHCARDS, VARK E CALENDÁRIO)
-# =======================================================
+# ✅ NOVA ROTA: SIMULADOR DE PROVAS
+@app.route("/simulador")
+@login_required
+def simulador():
+    simulador_data = carregar_dados_json("simulador.json")
+    if simulador_data is None:
+        flash("Erro ao carregar o simulado. Verifique o arquivo simulador.json.", "danger")
+    return render_template("simulador.html", simulador_data=simulador_data)
 
+@app.route("/simulador/iniciar", methods=["POST"])
+@login_required
+def simulador_iniciar():
+    data_request = request.get_json() or {}
+    quantidade_solicitada = data_request.get("quantidade", 10)
+    disciplina_escolhida = data_request.get("disciplina", "todas")
+    
+    data = carregar_dados_json("simulador.json")
+
+    if not data or "pools" not in data:
+        return jsonify({"erro": "Arquivo simulador.json inválido."}), 400
+
+    # Filtrar pools por disciplina, se especificada
+    if disciplina_escolhida == "todas":
+        pools_filtrados = data["pools"]
+    else:
+        pools_filtrados = []
+        for pool in data["pools"]:
+            # Verifica se alguma questão no pool tem o prefixo da disciplina
+            questoes_pool = pool.get("questions", [])
+            if questoes_pool and questoes_pool[0].get("id", "").startswith(disciplina_escolhida):
+                pools_filtrados.append(pool)
+    
+    if not pools_filtrados:
+        return jsonify({"erro": "Nenhuma questão encontrada para a disciplina selecionada."}), 400
+
+    # Coletar todas as questões dos pools filtrados
+    todas_questoes = []
+    for pool in pools_filtrados:
+        todas_questoes.extend(pool.get("questions", []))
+
+    if not todas_questoes:
+        return jsonify({"erro": "Nenhuma questão encontrada em 'questions'."}), 400
+
+    import random
+    # Seleciona a quantidade escolhida pelo usuário
+    num_questoes = min(quantidade_solicitada, len(todas_questoes))
+    selecionadas = random.sample(todas_questoes, num_questoes)
+
+    # Salva as questões completas na sessão (com gabarito)
+    session["simulador_questoes"] = selecionadas
+
+    # Envia ao frontend SEM o gabarito
+    questoes_sem_gabarito = []
+    for q in selecionadas:
+        questoes_sem_gabarito.append({
+            "texto": q["stem"],
+            "alternativas": q["options"]
+        })
+
+    return jsonify({"questoes": questoes_sem_gabarito})
+
+@app.route("/simulador/resultado", methods=["POST"])
+@login_required
+def simulador_resultado():
+    data = request.get_json()
+    respostas = data.get("respostas", {})
+
+    questoes = session.get("simulador_questoes", [])
+
+    if not questoes:
+        return jsonify({"erro": "Nenhuma questão encontrada na sessão."}), 400
+
+    acertos = 0
+    gabarito = []
+
+    for i, q in enumerate(questoes):
+        correta = q["correct"]
+        # Aceita tanto string "0", "1" quanto int 0, 1
+        marcada = respostas.get(str(i)) or respostas.get(i)
+
+        if marcada == correta:
+            acertos += 1
+
+        gabarito.append({
+            "numero": i + 1,
+            "correta": correta
+        })
+
+    return jsonify({
+        "acertos": acertos,
+        "total": len(questoes),
+        "gabarito": gabarito
+    })
+# =======================================================
+# API: FLASHCARDS
+# =======================================================
 @app.route("/add_flashcard", methods=["POST"])
 @login_required
 def add_flashcard():
     data = request.json
     materia = data.get("materia")
-    cards_list = data.get("cards") # Agora esperamos uma lista de cards
+    cards_list = data.get("cards")
 
     if not materia or not cards_list or len(cards_list) == 0:
-        return jsonify({"success": False, "message": "Preencha a matéria e adicione pelo menos um card."}), 400
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Preencha a matéria e adicione pelo menos um card.",
+                }
+            ),
+            400,
+        )
 
     try:
-        # Vamos iterar sobre a lista e adicionar um por um na sessão do banco
         for card_item in cards_list:
             pergunta = card_item.get("pergunta")
             resposta = card_item.get("resposta")
-            
-            # Só adiciona se tiver conteúdo
             if pergunta and resposta:
                 novo_card = UserFlashcard(
                     user_id=current_user.id,
                     materia=materia,
                     pergunta=pergunta,
-                    resposta=resposta
+                    resposta=resposta,
                 )
                 db.session.add(novo_card)
-        
-        # O commit salva tudo de uma vez no final
+
         db.session.commit()
-        return jsonify({"success": True, "message": f"{len(cards_list)} cards criados com sucesso!"})
+        return jsonify(
+            {
+                "success": True,
+                "message": f"{len(cards_list)} cards criados com sucesso!",
+            }
+        )
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"success": False, "message": str(e)}), 500
-    
-# =======================================================
-# SUBSTITUA A FUNÇÃO 'def ask():' NO SEU APP.PY POR ESTA:
-# =======================================================
 
-@app.route('/ask', methods=['POST'])
+
+# =======================================================
+# API: CHAT /ask
+# =======================================================
+@app.route("/ask", methods=["POST"])
+@login_required
 def ask():
-    if not GEMINI_API_KEY:
-        return jsonify({'resposta': 'Erro: API Key não configurada.'}), 500
+    if model is None:
+        return jsonify({"resposta": "Erro: API Key não configurada."}), 500
 
     dados = request.get_json()
-    pergunta_usuario = dados.get('pergunta')
-    
-    # 1. Carregar os Flashcards para dar contexto à IA
-    dados_flashcards = carregar_dados_json('flashcards.json')
-    
-    # Transforma o JSON em texto para a IA ler (formata bonitinho)
+    pergunta_usuario = (dados.get("pergunta") or "").strip()
+
+    if not pergunta_usuario:
+        return jsonify({"resposta": "Por favor, digite uma pergunta."}), 400
+
+    # Carrega flashcards do sistema para dar contexto extra
+    dados_flashcards = carregar_dados_json("flashcards.json") or {}
     texto_flashcards = json.dumps(dados_flashcards, ensure_ascii=False, indent=2)
 
-    # 2. Gerenciamento de Histórico
-    historico = session.get('historico', [])
-    
-    # 3. Contexto do Sistema (Aqui acontece a mágica)
+    # Carrega histórico do usuário a partir do banco
+    historico = carregar_historico_usuario(current_user.id)
     if not historico:
-        sistema_msg = {
-            "role": "user",
-            "parts": [
-                f"""
-                Você é a Lumi, uma assistente acadêmica universitária.
-                Seja prestativa, use emojis ocasionalmente e fale de forma motivadora.
-                Responda sempre em Português do Brasil.
-                Use formatação Markdown (negrito, listas) para organizar a resposta.
+        # Se por algum motivo não houver histórico, cria a mensagem inicial
+        salvar_mensagem_no_banco(
+            current_user.id,
+            "model",
+            "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
+        )
+        historico = carregar_historico_usuario(current_user.id)
 
-                IMPORTANTE: Você tem acesso ao banco de dados de Flashcards do aluno abaixo.
-                Use essas perguntas e respostas como base de conhecimento se o aluno perguntar sobre esses temas:
-                
-                --- INÍCIO DOS FLASHCARDS ---
-                {texto_flashcards}
-                --- FIM DOS FLASHCARDS ---
+    # Adiciona a mensagem de contexto de flashcards apenas uma vez
+    if not any(
+        msg.get("role") == "user" and "INÍCIO DOS FLASHCARDS" in "".join(msg["parts"])
+        for msg in historico
+    ):
+        instrucao_flashcards = f"""
+Você é a Lumi, uma assistente acadêmica universitária da UniEVANGÉLICA.
+Seja prestativa, use emojis de forma equilibrada e fale de forma motivadora.
+Responda sempre em Português do Brasil.
+Use formatação Markdown (negrito, listas) para organizar a resposta.
 
-                Se a pergunta não estiver nos flashcards, use seu conhecimento geral para responder.
-                """
-            ]
-        }
-        historico.append(sistema_msg)
-        historico.append({"role": "model", "parts": ["Entendido! Li os flashcards e estou pronta para ajudar com base neles."]})
+IMPORTANTE: Você tem acesso ao banco de dados de Flashcards do aluno abaixo.
+Use essas perguntas e respostas como base de conhecimento se o aluno perguntar sobre esses temas:
 
-    # Adiciona a pergunta atual
+--- INÍCIO DOS FLASHCARDS ---
+{texto_flashcards}
+--- FIM DOS FLASHCARDS ---
+
+Se a pergunta não estiver nos flashcards, use seu conhecimento geral para responder.
+"""
+        historico.append({"role": "user", "parts": [instrucao_flashcards]})
+        salvar_mensagem_no_banco(current_user.id, "user", instrucao_flashcards)
+
+    # Adiciona a pergunta atual do usuário
     historico.append({"role": "user", "parts": [pergunta_usuario]})
-    
+    salvar_mensagem_no_banco(current_user.id, "user", pergunta_usuario)
+
     try:
-        model = genai.GenerativeModel('gemini-2.5-flash')
         chat = model.start_chat(history=historico)
         response = chat.send_message(pergunta_usuario)
         texto_resposta = response.text
-        
-        historico.append({"role": "model", "parts": [texto_resposta]})
-        session['historico'] = historico
-        
-        return jsonify({'resposta': texto_resposta})
-    
+
+        salvar_mensagem_no_banco(current_user.id, "model", texto_resposta)
+
+        return jsonify({"resposta": texto_resposta})
+
     except Exception as e:
         print(f"Erro Gemini: {e}")
-        return jsonify({'resposta': 'Desculpe, tive um problema de conexão.'}), 500
+        traceback.print_exc()
+        return (
+            jsonify(
+                {
+                    "resposta": "Desculpe, tive um problema ao falar com a IA. Tente novamente em alguns instantes."
+                }
+            ),
+            500,
+        )
 
 
+# =======================================================
+# API: VARK
+# =======================================================
 @app.route("/save_vark_result", methods=["POST"])
 @login_required
 def save_vark_result():
     data = request.json
     if not data or "scores" not in data or "primaryType" not in data:
-        print(
-            f"DEBUG: Dados incompletos recebidos em /save_vark_result: {data}")
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
 
     scores = data["scores"]
     primary_type = data["primaryType"]
 
     if not isinstance(scores, dict) or not isinstance(primary_type, str):
-        print(
-            f"DEBUG: Tipos de dados inválidos: {type(scores)}, {type(primary_type)}")
-        return jsonify({"success": False, "message": "Tipos de dados inválidos."}), 400
-    if not all(k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]):
-        return jsonify({"success": False, "message": "Formato de scores inválido."}), 400
+        return (
+            jsonify(
+                {"success": False, "message": "Tipos de dados inválidos."}
+            ),
+            400,
+        )
+    if not all(
+        k in scores and isinstance(scores[k], int) for k in ["V", "A", "R", "K"]
+    ):
+        return (
+            jsonify(
+                {"success": False, "message": "Formato de scores inválido."}
+            ),
+            400,
+        )
     if not primary_type or len(primary_type) > 10:
-        return jsonify({"success": False, "message": "Tipo primário inválido."}), 400
+        return (
+            jsonify(
+                {"success": False, "message": "Tipo primário inválido."}
+            ),
+            400,
+        )
 
     try:
         user = current_user
         user.vark_scores_json = json.dumps(scores)
         user.vark_primary_type = primary_type
         db.session.commit()
-        return (
-            jsonify({"success": True, "message": "Resultado salvo com sucesso."}),
-            200,
+        return jsonify(
+            {"success": True, "message": "Resultado salvo com sucesso."}
         )
     except Exception as e:
         db.session.rollback()
-        print(
-            f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
+        print(f"ERRO ao salvar resultado VARK para user {current_user.id}: {e}")
         traceback.print_exc()
         return (
-            jsonify({"success": False, "message": f"Erro interno do servidor: {e}"}),
+            jsonify(
+                {
+                    "success": False,
+                    "message": f"Erro interno do servidor: {e}",
+                }
+            ),
             500,
         )
 
-# (Suas rotas de calendário 'save_calendar_event' e 'delete_calendar_event' mantidas)
+
+# =======================================================
+# API: CALENDÁRIO
+# =======================================================
 @app.route("/save_calendar_event", methods=["POST"])
 @login_required
 def save_calendar_event():
     data = request.json
-    if not data or not data.get('title') or not data.get('date'):
+    if not data or not data.get("title") or not data.get("date"):
         return jsonify({"success": False, "message": "Dados incompletos."}), 400
 
     eventos = carregar_dados_json("calendario.json") or []
@@ -909,7 +1051,7 @@ def save_calendar_event():
         "data_inicio": data.get("date"),
         "descricao": data.get("title"),
         "type": data.get("type", "Outro"),
-        "description": data.get("description", "")
+        "description": data.get("description", ""),
     }
 
     if event_id:
@@ -927,7 +1069,15 @@ def save_calendar_event():
     if salvar_dados_json("calendario.json", eventos):
         return jsonify({"success": True, "message": "Evento salvo com sucesso."})
     else:
-        return jsonify({"success": False, "message": "Erro ao salvar o arquivo JSON."}), 500
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Erro ao salvar o arquivo JSON.",
+                }
+            ),
+            500,
+        )
 
 
 @app.route("/delete_calendar_event", methods=["POST"])
@@ -936,12 +1086,18 @@ def delete_calendar_event():
     data = request.json
     event_id = data.get("id")
     if not event_id:
-        return jsonify({"success": False, "message": "ID do evento não fornecido."}), 400
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "ID do evento não fornecido.",
+                }
+            ),
+            400,
+        )
 
     eventos = carregar_dados_json("calendario.json") or []
-
-    novos_eventos = [
-        evento for evento in eventos if evento.get("id") != event_id]
+    novos_eventos = [evento for evento in eventos if evento.get("id") != event_id]
 
     if len(novos_eventos) == len(eventos):
         return jsonify({"success": False, "message": "Evento não encontrado."}), 404
@@ -949,11 +1105,31 @@ def delete_calendar_event():
     if salvar_dados_json("calendario.json", novos_eventos):
         return jsonify({"success": True, "message": "Evento excluído com sucesso."})
     else:
-        return jsonify({"success": False, "message": "Erro ao salvar o arquivo JSON."}), 500
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Erro ao salvar o arquivo JSON.",
+                }
+            ),
+            500,
+        )
 
 
 # =======================================================
-# 5. FILTRO JINJA (para formatar data no template)
+# API: SIMULADOR DE PROVAS
+# =======================================================
+@app.route("/api/simulador_config")
+@login_required
+def api_simulador_config():
+    simulador_data = carregar_dados_json("simulador.json")
+    if simulador_data is None:
+        return jsonify({"success": False, "message": "Arquivo simulador.json não encontrado."}), 500
+    return jsonify({"success": True, "data": simulador_data})
+
+
+# =======================================================
+# FILTRO JINJA
 # =======================================================
 @app.template_filter("format_date_br")
 def format_date_br_filter(value):
@@ -966,11 +1142,11 @@ def format_date_br_filter(value):
 
 
 # =======================================================
-# 6. EXECUÇÃO DO SERVIDOR E CRIAÇÃO DO BD
+# MAIN
 # =======================================================
 if __name__ == "__main__":
-    if GEMINI_API_KEY is None:
-        print("Servidor Flask NÃO foi iniciado. Verifique o erro da API Key acima.")
+    if model is None:
+        print("Servidor Flask NÃO foi iniciado. Verifique a GEMINI_API_KEY no .env.")
     else:
         with app.app_context():
             print("Criando tabelas do banco de dados (se não existirem)...")

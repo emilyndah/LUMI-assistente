@@ -6,144 +6,122 @@
     <title>Lumi – Método de Estudo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Chart.js para o gráfico -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        /* Container principal */
         .quiz-container {
             width: 100%; max-width: 800px; background: white; border-radius: 15px;
             padding: 30px 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            margin: 50px auto 40px auto; /* Aumenta margem superior */
-            position: relative; /* Contexto para botão voltar */
+            margin: 50px auto 40px auto;
+            position: relative;
         }
         .quiz-container h1 { text-align: center; color: #4B8BEA; margin-bottom: 10px; font-size: 2em; }
         .quiz-container > p { text-align: center; color: #666; font-size: 1.1em; margin-bottom: 30px; }
 
-        /* Botão Voltar (Global) */
-        .back-btn-global {
-            position: absolute; top: 15px; left: 25px; text-decoration: none;
-            color: #4B8BEA; font-weight: 500; font-size: 1em; background: none;
-            border: none; padding: 5px; cursor: pointer; transition: color 0.2s ease;
-            z-index: 10;
-        }
-        .back-btn-global:hover { color: #3a74d3; }
-
-        /* Área do Quiz */
-        #quiz-area p#pergunta-texto { font-size: 1.1em; font-weight: 500; color: #333; margin-bottom: 20px; line-height: 1.5;}
+        #quiz-area p#pergunta-texto { font-size: 1.1em; font-weight: 500; color: #333; margin-bottom: 20px; }
         .options-container { display: flex; flex-direction: column; gap: 12px; }
         .option-label {
             display: flex; align-items: center; background: #f0f5ff;
             padding: 12px 18px; border-radius: 10px; border: 2px solid transparent;
-            cursor: pointer; transition: border-color 0.2s ease, background-color 0.2s ease;
-            font-size: 0.95em;
+            cursor: pointer; transition: 0.2s ease;
         }
-        .option-label:hover { background-color: #e6edff; }
-        .option-label input[type="checkbox"] { margin-right: 12px; flex-shrink: 0; transform: scale(1.1); /* Checkbox ligeiramente maior */ accent-color: #4B8BEA;}
-        .option-label span { flex-grow: 1; }
-        .option-label.selected { background-color: #e0e8ff; border-color: #4B8BEA; font-weight: 500; }
-        .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .option-label:hover { background: #e6edff; }
+        .option-label input[type="checkbox"] {
+            margin-right: 12px; flex-shrink: 0; transform: scale(1.1); accent-color: #4B8BEA;
+        }
+        .option-label.selected { background: #e0e8ff; border-color: #4B8BEA; font-weight: 500; }
+
+        .quiz-nav { display: flex; justify-content: space-between; margin-top: 30px; }
         .quiz-nav button {
-            padding: 10px 20px; font-size: 1em; background: #4B8BEA; color: white;
-            border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s;
+            padding: 10px 20px; background: #4B8BEA; color: white;
+            border: none; border-radius: 8px; cursor: pointer; transition: 0.3s;
         }
-        .quiz-nav button:hover { background: #3a74d3; }
-        .quiz-nav button:disabled { background: #ccc; cursor: not-allowed; }
         .quiz-nav button.prev-btn { background: #f0f0f0; color: #555; }
-        .quiz-nav button.prev-btn:hover { background: #e0e0e0; }
-        #question-counter { font-size: 0.9em; color: #777; font-weight: 500;}
+        .quiz-nav button:hover { opacity: 0.9; }
+        .quiz-nav button:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* Área do Resultado */
-        #resultado-area h2 { text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 20px;}
-        #resultado-area p#resultado-descricao { color: #555; line-height: 1.6; font-size: 1em; margin-bottom: 25px; text-align: justify;} /* Justifica descrição */
-        #resultado-area h3 { color: #4B8BEA; font-size: 1.3em; margin-top: 30px; margin-bottom: 15px; font-weight: 600;}
-        #resultado-area ul { list-style-type: none; /* Remove bolinha padrão */ padding-left: 5px; }
+        #resultado-area h2 { text-align: center; color: #2c3e50; font-size: 1.8em; margin-bottom: 20px; }
+        #resultado-area p#resultado-descricao {
+            color: #555; line-height: 1.6; font-size: 1em;
+            margin-bottom: 25px; text-align: justify;
+        }
+        #resultado-area h3 { color: #4B8BEA; margin-top: 30px; margin-bottom: 15px; }
+        #resultado-area ul { list-style: none; padding-left: 5px; }
         #resultado-area li {
-             margin-bottom: 12px; font-size: 0.95em; position: relative; padding-left: 25px; /* Espaço para o ícone */
-             line-height: 1.5;
+            margin-bottom: 12px; font-size: 0.95em; position: relative; padding-left: 25px;
         }
-        #resultado-area li::before { /* Adiciona ícone check */
-            content: '✔'; /* Ou outro ícone: ✓, ➤ */
-            position: absolute; left: 0; top: 1px; /* Ajusta posição */
-            color: #34D399; /* Cor do ícone */
-            font-weight: bold;
-            font-size: 1.1em;
+        #resultado-area li::before {
+            content: "✔"; color: #34D399; font-weight: bold; position: absolute; left: 0;
         }
+
         #chart-container { width: 100%; max-width: 350px; margin: 25px auto; }
+
         .restart-btn {
-            display: block; width: 200px; margin: 30px auto 0 auto; padding: 12px 20px;
-            font-size: 1em; font-weight: 500; text-align: center; background: #555; /* Cor diferente para refazer */
-            color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s;
+            display: block; width: 200px; margin: 30px auto;
+            padding: 12px 20px; background: #555; color: white;
+            border-radius: 8px; text-align: center;
         }
-        .restart-btn:hover { background: #444; }
 
-         /* Mensagem de Erro */
         #error-area h1 { color: #dc3545; }
-        #error-area p { color: #555; }
         #error-area .restart-btn { background-color: #6c757d; }
-        #error-area .restart-btn:hover { background-color: #5a6268; }
-
-
         .hidden { display: none; }
     </style>
 </head>
+
 <body>
     <nav class="sidebar">
         <div class="sidebar-header">
-            <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" class="sidebar-avatar">
             <h3>Menu Lumi</h3>
         </div>
+
         <a href="{{ url_for('index') }}">Chat Principal</a>
         <a href="{{ url_for('profile') }}">Meu Perfil</a>
         <a href="{{ url_for('calendario') }}">Calendário</a>
         <a href="{{ url_for('flashcards') }}">Flashcards</a>
-        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+        <a class="active" href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+        <a href="{{ url_for('simulador') }}" class="active">Simulador de Provas</a>
         <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
         <a href="{{ url_for('faq') }}">FAQ</a>
     </nav>
-    
+
     <div class="overlay"></div>
 
     <header>
-        <button class="menu-toggle" title="Menu">
-            <span class="hamburger-icon"></span> 
-        </button>
+        <button class="menu-toggle"><span class="hamburger-icon"></span></button>
 
         <a href="{{ url_for('index') }}">
-            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" class="logo">
         </a>
-        
+
         {% if current_user.is_authenticated %}
         <div class="user-area">
             <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
-            
-            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+            <a href="{{ url_for('profile') }}">
                 <div class="profile-picture">
                     {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
-                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                    <img src="{{ url_for('static', filename=image_filename) }}" class="profile-img">
                 </div>
             </a>
         </div>
         {% endif %}
     </header>
 
-    <!-- Usa a classe 'faq-page' para layout de página inteira -->
     <main class="faq-page">
-
         <section class="quiz-container">
-            <!-- Botão voltar é mostrado pelo JS -->
-            <a href="{{ url_for('index') }}" class="back-link-profile-glued-final">&larr; Voltar para o Chat</a>
 
-            <!-- ==============================\r
-                 ÁREA DO QUIZ (Começa visível por padrão, JS esconde se resultado existir)
-            ================================== -->
+            <a href="{{ url_for('index') }}" class="back-link-profile-glued-final">
+                &larr; Voltar para o Chat
+            </a>
+
+            <!-- QUIZ -->
             <div id="quiz-area">
                 <h1 id="quiz-titulo">Carregando Quiz...</h1>
                 <p id="quiz-descricao"></p>
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+                <hr>
                 <p id="pergunta-texto">Carregando pergunta...</p>
-                <div class="options-container" id="options-container">
-                    <!-- Opções são carregadas aqui -->
-                </div>
+                <div class="options-container" id="options-container"></div>
+
                 <div class="quiz-nav">
                     <button id="prev-btn" class="prev-btn" disabled>Anterior</button>
                     <span id="question-counter">-- / --</span>
@@ -152,27 +130,24 @@
                 </div>
             </div>
 
-            <!-- ==============================\r
-                 ÁREA DO RESULTADO (Começa escondida)
-            ================================== -->
+            <!-- RESULTADOS -->
             <div id="resultado-area" class="hidden">
-                <h2>Seu resultado: <span id="resultado-titulo" class="destaque"></span></h2>
-                <div id="chart-container">
-                    <canvas id="vark-chart"></canvas>
-                </div>
+                <h2>Seu resultado: <span id="resultado-titulo"></span></h2>
+
+                <div id="chart-container"><canvas id="vark-chart"></canvas></div>
                 <p id="resultado-descricao"></p>
+
                 <h3>Métodos de Estudo Recomendados:</h3>
                 <ul id="resultado-metodos"></ul>
+
                 <button id="restart-btn" class="restart-btn">Refazer Quiz</button>
             </div>
 
-            <!-- ==============================\r
-                 ÁREA DE ERRO (Começa escondida)
-            ================================== -->
+            <!-- ERRO -->
             <div id="error-area" class="hidden">
                 <h1>Oops! Algo deu errado.</h1>
-                <p>Não foi possível carregar os dados do quiz. Por favor, tente recarregar a página ou contacte o suporte.</p>
-                 <a href="{{ url_for('index') }}" class="restart-btn" style="width: fit-content; margin-top: 20px; background-color: #6c757d;">Voltar para o Início</a>
+                <p id="error-msg">Erro ao inicializar o quiz.</p>
+                <a href="{{ url_for('index') }}" class="restart-btn">Voltar ao Início</a>
             </div>
 
         </section>
@@ -181,11 +156,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- 1. Referências do DOM ---
+            // Seletores — AGORA SEM back-btn-global
             const quizArea = document.getElementById('quiz-area');
             const resultadoArea = document.getElementById('resultado-area');
             const errorArea = document.getElementById('error-area');
-            const backBtnGlobal = document.querySelector('.back-btn-global');
 
             const quizTitulo = document.getElementById('quiz-titulo');
             const quizDescricao = document.getElementById('quiz-descricao');
@@ -201,257 +175,197 @@
             const resultadoTitulo = document.getElementById('resultado-titulo');
             const resultadoDescricao = document.getElementById('resultado-descricao');
             const resultadoMetodos = document.getElementById('resultado-metodos');
+
             const chartCtx = document.getElementById('vark-chart').getContext('2d');
             let varkChart = null;
 
-            // --- 2. Variáveis de Estado ---
             let currentQuestion = 0;
-            let userAnswers = {}; // Respostas da tentativa ATUAL {0: ['V'], 1: ['K', 'A']}
-            let fullQuizData = null; // Perguntas e opções carregadas do JSON
+            let userAnswers = {};
             let perguntas = [];
-            let resultadosVARK = {}; // Descrições dos resultados V,A,R,K
+            let resultadosVARK = {};
 
-            // **** DADOS VINDOS DO FLASK ****
-            // 'quiz_data' contém as perguntas/opções OU null se erro
-            // 'saved_vark_result' contém {primaryType: 'X', scores: {V:.., A:..}} OU null
             const flaskQuizData = {{ quiz_data | tojson | safe }};
             const savedResultData = {{ saved_vark_result | tojson | safe }};
 
-            // --- 3. Inicialização ---
             try {
-                // Verifica se os dados das perguntas foram carregados
-                if (!flaskQuizData || !flaskQuizData.perguntas || !flaskQuizData.resultados) {
-                    throw new Error("Dados essenciais do quiz não foram carregados do servidor.");
-                }
-                fullQuizData = flaskQuizData;
-                perguntas = fullQuizData.perguntas;
-                resultadosVARK = fullQuizData.resultados; // Guarda as descrições
+                if (!flaskQuizData || !flaskQuizData.perguntas || !flaskQuizData.resultados)
+                    throw new Error("Dados essenciais não carregados.");
 
-                initializeQuizOrResult(); // Chama a função que decide o que mostrar
+                perguntas = flaskQuizData.perguntas;
+                resultadosVARK = flaskQuizData.resultados;
+
+                initializeQuizOrResult();
 
             } catch (error) {
-                console.error("Erro Crítico na Inicialização:", error);
-                showErrorState(`Erro ao inicializar o quiz: ${error.message}`);
+                console.error(error);
+                showError(error.message);
             }
-
-            // --- 4. Funções Principais ---
 
             function initializeQuizOrResult() {
-                // Mostra o botão voltar global AGORA, pois sabemos que a página carregou
-                backBtnGlobal.classList.remove('hidden');
-
-                // Verifica se HÁ um resultado salvo E se ele é válido
-                if (savedResultData && savedResultData.primaryType && savedResultData.scores) {
-                    console.log("Exibindo resultado VARK salvo.");
-                    // Mostra a área de resultado diretamente com os dados salvos
-                    displayVarkResult(savedResultData.scores, savedResultData.primaryType);
-                    quizArea.classList.add('hidden');       // Esconde quiz
-                    resultadoArea.classList.remove('hidden'); // Mostra resultado
-                    errorArea.classList.add('hidden');      // Esconde erro
-                } else {
-                    console.log("Iniciando quiz VARK (sem resultado salvo ou inválido).");
-                    // Prepara e mostra o quiz
-                    quizTitulo.textContent = fullQuizData.titulo;
-                    quizDescricao.textContent = fullQuizData.descricao;
-                    userAnswers = {}; // Limpa respostas de tentativas anteriores
-                    currentQuestion = 0;
-                    showQuestion(currentQuestion); // Mostra a primeira pergunta
-                    quizArea.classList.remove('hidden');    // Mostra quiz
-                    resultadoArea.classList.add('hidden');  // Esconde resultado
-                    errorArea.classList.add('hidden');      // Esconde erro
+                if (savedResultData && savedResultData.primaryType) {
+                    displayResult(savedResultData.scores, savedResultData.primaryType);
+                    quizArea.classList.add('hidden');
+                    resultadoArea.classList.remove('hidden');
+                    return;
                 }
-            }
-
-            // Mostra o estado de erro
-            function showErrorState(message) {
-                 quizArea.classList.add('hidden');
-                 resultadoArea.classList.add('hidden');
-                 errorArea.classList.remove('hidden');
-                 const errorP = errorArea.querySelector('p');
-                 if(errorP) errorP.textContent = message || "Não foi possível carregar os dados. Tente recarregar.";
-                 backBtnGlobal.classList.remove('hidden'); // Permite voltar mesmo com erro
-            }
-
-            // Mostra uma pergunta específica
-            function showQuestion(index) {
-                if (index < 0 || index >= perguntas.length) return;
-
-                const q = perguntas[index];
-                perguntaTexto.textContent = q.texto;
-                optionsContainer.innerHTML = ''; // Limpa opções
-
-                q.opcoes.forEach(opt => {
-                    const optionId = `q${index}_${opt.tipo}`; // ID único para o input
-                    const label = document.createElement('label'); label.className = 'option-label'; label.htmlFor = optionId;
-                    const input = document.createElement('input'); input.type = 'checkbox'; input.name = `question_${index}`; input.id = optionId; input.value = opt.tipo;
-
-                    // Evento para atualizar respostas e UI ao marcar/desmarcar
-                    input.addEventListener('change', () => {
-                        const currentAnswers = userAnswers[index] || [];
-                        if (input.checked) { if (!currentAnswers.includes(opt.tipo)) currentAnswers.push(opt.tipo); }
-                        else { const pos = currentAnswers.indexOf(opt.tipo); if (pos > -1) currentAnswers.splice(pos, 1); }
-                        userAnswers[index] = currentAnswers; // Salva respostas da tentativa atual
-
-                        label.classList.toggle('selected', input.checked); // Atualiza estilo visual
-                        updateNavButtons(); // Habilita/desabilita botões de navegação
-                    });
-
-                    // Marca a caixa se já foi respondida nesta tentativa
-                    if (userAnswers[index] && userAnswers[index].includes(opt.tipo)) {
-                        input.checked = true; label.classList.add('selected');
-                    }
-
-                    const textSpan = document.createElement('span'); textSpan.textContent = ` ${opt.texto}`;
-                    label.appendChild(input); label.appendChild(textSpan); optionsContainer.appendChild(label);
-                });
-
-                questionCounter.textContent = `${index + 1} / ${perguntas.length}`; // Atualiza contador
-                updateNavButtons(); // Atualiza estado dos botões
-            }
-
-            // Atualiza o estado dos botões Anterior/Próxima/Finalizar
-            function updateNavButtons() {
-                prevBtn.disabled = currentQuestion === 0;
-                const hasAnswered = userAnswers[currentQuestion] && userAnswers[currentQuestion].length > 0;
-
-                if (currentQuestion === perguntas.length - 1) { // Última pergunta
-                    nextBtn.classList.add('hidden'); finishBtn.classList.remove('hidden');
-                    finishBtn.disabled = !hasAnswered; // Habilita Finalizar só se respondeu
-                } else { // Perguntas intermédias
-                    nextBtn.classList.remove('hidden'); finishBtn.classList.add('hidden');
-                    nextBtn.disabled = !hasAnswered; // Habilita Próxima só se respondeu
-                }
-            }
-
-            // Chamada quando clica em Finalizar
-            async function finishQuiz() {
-                // 1. Calcular pontuação final
-                const scores = { V: 0, A: 0, R: 0, K: 0 };
-                Object.values(userAnswers).forEach(tipos => { if (tipos) tipos.forEach(t => scores[t]++); });
-
-                // 2. Determinar tipo(s) primário(s)
-                let maxScore = 0; let primaryTypesList = [];
-                Object.values(scores).forEach(s => { if (s > maxScore) maxScore = s; });
-                if (maxScore > 0) { Object.entries(scores).forEach(([t, s]) => { if (s === maxScore) primaryTypesList.push(t); }); }
-                const primaryTypeString = primaryTypesList.join('/') || "N/A"; // Ex: "V/R" ou "N/A"
-
-                // 3. Exibir o resultado calculado
-                displayVarkResult(scores, primaryTypeString);
-
-                // 4. Salvar o resultado no backend (APENAS se for um resultado válido)
-                if (maxScore > 0) {
-                    try {
-                        const response = await fetch('/save_vark_result', {
-                            method: 'POST', headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({ scores: scores, primaryType: primaryTypeString })
-                        });
-                        const result = await response.json();
-                        if (!result.success) { console.error("Falha ao salvar VARK:", result.message); /* Opcional: alert */ }
-                        else { console.log("Resultado VARK salvo."); savedResultData = {scores: scores, primaryType: primaryTypeString}; } // Atualiza estado local
-                    } catch (error) { console.error("Erro de rede ao salvar VARK:", error); /* Opcional: alert */ }
-                }
-
-                // 5. Mostrar a área de resultado
-                quizArea.classList.add('hidden');
-                resultadoArea.classList.remove('hidden');
-                backBtnGlobal.classList.remove('hidden');
-            }
-
-            // Função para RENDERIZAR a área de resultado (usada por finishQuiz e initializeQuizOrResult)
-            function displayVarkResult(scores, primaryTypeString) {
-                let tituloFinal = ""; let descricaoFinal = ""; let metodosFinais = new Set();
-                const primaryTypesList = primaryTypeString === "N/A" ? [] : primaryTypeString.split('/');
-
-                primaryTypesList.forEach((tipo, index) => {
-                    if (resultadosVARK[tipo]) {
-                        const resultData = resultadosVARK[tipo];
-                        tituloFinal += resultData.titulo + (index < primaryTypesList.length - 1 ? " / " : "");
-                        descricaoFinal += resultData.descricao + (index < primaryTypesList.length - 1 ? "\n\n" : ""); // Adiciona quebra de linha entre descrições
-                        if(resultData.metodos) resultData.metodos.forEach(m => metodosFinais.add(m));
-                    }
-                });
-
-                // Lida com caso sem resultado (maxScore=0 ou tipo 'N/A')
-                if (!tituloFinal) {
-                    resultadoTitulo.textContent = "Indefinido";
-                    resultadoDescricao.textContent = "Não foi possível determinar o estilo predominante com as respostas fornecidas.";
-                    resultadoMetodos.innerHTML = '<li>Tente refazer o quiz selecionando as opções que mais se aplicam.</li>';
-                    document.getElementById('chart-container').style.display = 'none'; // Esconde gráfico
-                } else {
-                    resultadoTitulo.textContent = tituloFinal;
-                    resultadoDescricao.innerHTML = descricaoFinal.replace(/\n/g, '<br>'); // Transforma quebras de linha em <br>
-                    resultadoMetodos.innerHTML = ''; // Limpa
-                    if (metodosFinais.size > 0) {
-                        metodosFinais.forEach(metodo => { const li = document.createElement('li'); li.textContent = metodo; resultadoMetodos.appendChild(li); });
-                    } else {
-                         resultadoMetodos.innerHTML = '<li>Nenhum método específico encontrado.</li>';
-                    }
-
-                    // Desenha/Atualiza o gráfico Doughnut
-                    document.getElementById('chart-container').style.display = 'block';
-                    if (varkChart) varkChart.destroy();
-                    varkChart = new Chart(chartCtx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Visual (V)', 'Auditivo (A)', 'Leitura/Escrita (R)', 'Cinestésico (K)'],
-                            datasets: [{
-                                data: [scores?.V || 0, scores?.A || 0, scores?.R || 0, scores?.K || 0],
-                                backgroundColor: ['#4B8BEA', '#34D399', '#F59E0B', '#EF4444'], hoverOffset: 4
-                            }]
-                        },
-                        options: {
-                             responsive: true, maintainAspectRatio: true,
-                             plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed}` } } }
-                        }
-                    });
-                }
-            }
-
-
-            // Chamada quando clica em "Refazer Quiz"
-            function restartQuiz() {
-                userAnswers = {}; // Limpa respostas da tentativa atual
-                currentQuestion = 0;
-                resultadoArea.classList.add('hidden');
-                quizArea.classList.remove('hidden');
-                backBtnGlobal.classList.remove('hidden'); // Botão voltar continua visível
+                quizTitulo.textContent = flaskQuizData.titulo;
+                quizDescricao.textContent = flaskQuizData.descricao;
                 showQuestion(0);
-                quizArea.scrollIntoView({ behavior: 'smooth' }); // Rola para o topo do quiz
             }
 
-            // --- 5. EVENT LISTENERS ---
-            nextBtn.addEventListener('click', () => { if (currentQuestion < perguntas.length - 1) { currentQuestion++; showQuestion(currentQuestion); } });
-            prevBtn.addEventListener('click', () => { if (currentQuestion > 0) { currentQuestion--; showQuestion(currentQuestion); } });
-            finishBtn.addEventListener('click', finishQuiz); // Chama a função que calcula, mostra E SALVA
-            restartBtn.addEventListener('click', restartQuiz);
+            function showError(msg) {
+                quizArea.classList.add('hidden');
+                resultadoArea.classList.add('hidden');
+                errorArea.classList.remove('hidden');
+                document.getElementById("error-msg").textContent = msg;
+            }
+
+            function showQuestion(i) {
+                perguntaTexto.textContent = perguntas[i].texto;
+                optionsContainer.innerHTML = "";
+
+                perguntas[i].opcoes.forEach(opt => {
+                    const label = document.createElement("label");
+                    label.className = "option-label";
+
+                    const input = document.createElement("input");
+                    input.type = "checkbox";
+                    input.value = opt.tipo;
+
+                    input.addEventListener("change", () => {
+                        if (!userAnswers[i]) userAnswers[i] = [];
+                        if (input.checked) {
+                            userAnswers[i].push(opt.tipo);
+                        } else {
+                            userAnswers[i] = userAnswers[i].filter(x => x !== opt.tipo);
+                        }
+                        label.classList.toggle("selected", input.checked);
+                        updateButtons();
+                    });
+
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(opt.texto));
+                    optionsContainer.appendChild(label);
+                });
+
+                questionCounter.textContent = `${i + 1} / ${perguntas.length}`;
+                updateButtons();
+            }
+
+            function updateButtons() {
+                prevBtn.disabled = currentQuestion === 0;
+
+                const answered = userAnswers[currentQuestion] && userAnswers[currentQuestion].length > 0;
+
+                if (currentQuestion === perguntas.length - 1) {
+                    nextBtn.classList.add("hidden");
+                    finishBtn.classList.remove("hidden");
+                    finishBtn.disabled = !answered;
+                } else {
+                    finishBtn.classList.add("hidden");
+                    nextBtn.classList.remove("hidden");
+                    nextBtn.disabled = !answered;
+                }
+            }
+
+            nextBtn.onclick = () => {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            };
+
+            prevBtn.onclick = () => {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            };
+
+            finishBtn.onclick = async () => {
+                const scores = { V: 0, A: 0, R: 0, K: 0 };
+
+                Object.values(userAnswers).forEach(list => {
+                    if (list) list.forEach(t => scores[t]++);
+                });
+
+                let max = Math.max(scores.V, scores.A, scores.R, scores.K);
+                let primary = Object.keys(scores).filter(k => scores[k] === max).join("/");
+
+                displayResult(scores, primary);
+
+                try {
+                    await fetch("/save_vark_result", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ scores, primaryType: primary })
+                    });
+                } catch(err) { console.error(err); }
+
+                quizArea.classList.add("hidden");
+                resultadoArea.classList.remove("hidden");
+            };
+
+            function displayResult(scores, primary) {
+                resultadoTitulo.textContent = primary;
+
+                let descricao = "";
+                let metodos = new Set();
+
+                primary.split("/").forEach(t => {
+                    if (resultadosVARK[t]) {
+                        descricao += resultadosVARK[t].descricao + "<br><br>";
+                        resultadosVARK[t].metodos.forEach(m => metodos.add(m));
+                    }
+                });
+
+                resultadoDescricao.innerHTML = descricao;
+                resultadoMetodos.innerHTML = "";
+
+                metodos.forEach(m => {
+                    const li = document.createElement("li");
+                    li.textContent = m;
+                    resultadoMetodos.appendChild(li);
+                });
+
+                if (varkChart) varkChart.destroy();
+                varkChart = new Chart(chartCtx, {
+                    type: "doughnut",
+                    data: {
+                        labels: ["V", "A", "R", "K"],
+                        datasets: [{
+                            data: [scores.V, scores.A, scores.R, scores.K],
+                            backgroundColor: ["#4B8BEA", "#34D399", "#F59E0B", "#EF4444"]
+                        }]
+                    }
+                });
+            }
+
+            restartBtn.onclick = () => {
+                userAnswers = {};
+                currentQuestion = 0;
+                resultadoArea.classList.add("hidden");
+                quizArea.classList.remove("hidden");
+                showQuestion(0);
+            };
 
         });
     </script>
+
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    const overlay = document.querySelector('.overlay');
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
 
-    // Função para fechar o menu
-    function closeMenu() {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-    }
+            if (menuToggle && sidebar && overlay) {
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                });
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            }
+        })
+    </script>
 
-    // Verifica se os elementos existem antes de adicionar o clique
-    if (menuToggle && sidebar && overlay) {
-        
-        // Ao clicar no botão (Hamburguer)
-        menuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        });
-
-        // Ao clicar na parte escura (Overlay) fecha o menu
-        overlay.addEventListener('click', closeMenu);
-    }
-});
-</script>
 </body>
 </html>
