@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumi – Simulador de Provas</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/simulador.css') }}">
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
@@ -29,38 +27,39 @@
 
     <div class="overlay"></div>
 
-    <header>
-        <button class="menu-toggle" title="Menu">
-            <span class="hamburger-icon"></span> 
+    <header class="simulador-header">
+        <button class="menu-toggle">
+            <span class="hamburger-icon"></span>
         </button>
 
-        <a href="{{ url_for('index') }}">
-            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
-        </a>
-        
-        {% if current_user.is_authenticated %}
-        <div class="user-area">
-            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
-            
-            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
-                <div class="profile-picture">
-                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
-                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
-                </div>
-            </a>
+        <h1>Simulador de Provas</h1>
+
+        <div class="header-right">
+            <div id="timer-box" class="hidden">
+                ⏱️ <span id="timer">--:--</span>
+            </div>
+            <div class="user-info">
+                <span>Olá, {{ current_user.username.split()[0] }}</span>
+                {% if current_user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + current_user.profile_image) }}" 
+                         alt="Avatar" class="user-avatar" onerror="this.src='{{ url_for('static', filename='lumi-2.png') }}'">
+                {% else %}
+                    <img src="{{ url_for('static', filename='lumi-2.png') }}" 
+                         alt="Avatar" class="user-avatar">
+                {% endif %}
+            </div>
         </div>
-        {% endif %}
     </header>
 
     <main class="simulador-container">
-        
+
+        <!-- TELA INICIAL COM CONFIGURAÇÕES -->
         <section id="inicio-box">
             <div class="config-card">
-                
-                <a href="{{ url_for('index') }}" class="back-btn-global">← Voltar para o Chat</a>
-
-                <div class="icon-header">📝</div>
-                <h1 class="card-title">Simulador de Provas</h1>
+                <div class="icon-header">
+                    📝
+                </div>
+                <h2>Bem-vindo ao Simulador de Provas!</h2>
                 <p class="subtitle">Configure seu simulado e teste seus conhecimentos</p>
 
                 <div class="config-options">
@@ -124,10 +123,9 @@
             </div>
         </section>
 
+        <!-- TELA DAS QUESTÕES -->
         <section id="questao-box" class="hidden">
             <div class="questao-card">
-                <a href="javascript:location.reload()" class="back-btn-global">← Cancelar e Voltar</a>
-
                 <div class="questao-header">
                     <div class="questao-numero-wrapper">
                         <span class="questao-label">Questão</span>
@@ -149,13 +147,20 @@
                 <div id="alternativas-box" class="alternativas-box"></div>
 
                 <div class="nav-buttons">
-                    <button id="prev-btn" class="secondary-btn" disabled>← Anterior</button>
-                    <button id="next-btn" class="secondary-btn">Próxima →</button>
-                    <button id="finish-btn" class="success-btn hidden">✓ Finalizar Prova</button>
+                    <button id="prev-btn" class="secondary-btn" disabled>
+                        ← Anterior
+                    </button>
+                    <button id="next-btn" class="secondary-btn">
+                        Próxima →
+                    </button>
+                    <button id="finish-btn" class="success-btn hidden">
+                        ✓ Finalizar Prova
+                    </button>
                 </div>
             </div>
         </section>
 
+        <!-- RESULTADO -->
         <section id="resultado-box" class="hidden">
             <div class="resultado-card">
                 <div class="resultado-header">
@@ -197,41 +202,19 @@
                 </div>
 
                 <div class="resultado-actions">
-                    <button onclick="location.reload()" class="primary-btn">🔄 Fazer Novo Simulado</button>
-                    <a href="{{ url_for('index') }}" class="secondary-btn">← Voltar ao Chat</a>
+                    <button onclick="location.reload()" class="primary-btn">
+                        🔄 Fazer Novo Simulado
+                    </button>
+                    <a href="{{ url_for('index') }}" class="secondary-btn">
+                        ← Voltar ao Chat
+                    </a>
                 </div>
             </div>
         </section>
 
     </main>
 
+    <!-- Link para o arquivo JS externo -->
     <script src="{{ url_for('static', filename='js/simulador.js') }}"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.querySelector('.overlay');
-
-            // Só adiciona o evento se os elementos existirem
-            if (menuToggle && sidebar && overlay) {
-                
-                // Abre/Fecha Menu
-                menuToggle.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Evita cliques duplos indesejados
-                    sidebar.classList.toggle('active');
-                    overlay.classList.toggle('active');
-                });
-
-                // Fecha ao clicar fora
-                overlay.addEventListener('click', function() {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                });
-            } else {
-                console.warn('Elementos do menu não encontrados neste HTML.');
-            }
-        });
-    </script>
 </body>
 </html>
