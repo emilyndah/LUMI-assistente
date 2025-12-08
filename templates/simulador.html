@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumi – Simulador de Provas</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/simulador.css') }}">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" class="sidebar-avatar">
+            <h3>Menu Lumi</h3>
+        </div>
+        <a href="{{ url_for('index') }}">Chat Principal</a>
+        <a href="{{ url_for('profile') }}">Meu Perfil</a>
+        <a href="{{ url_for('calendario') }}">Calendário</a>
+        <a href="{{ url_for('flashcards') }}">Flashcards</a>
+        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
+        <a href="{{ url_for('simulador') }}" class="active">Simulador de Provas</a>
+        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
+        <a href="{{ url_for('faq') }}">FAQ</a>
+    </nav>
+
+    <div class="overlay"></div>
+
+    <header>
+        <button class="menu-toggle" title="Menu">
+            <span class="hamburger-icon"></span> 
+        </button>
+
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
+        </a>
+        
+        {% if current_user.is_authenticated %}
+        <div class="user-area">
+            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+            
+            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                <div class="profile-picture">
+                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </header>
+
+    <main class="simulador-container">
+        
+        <section id="inicio-box">
+            <div class="config-card">
+                
+                <a href="{{ url_for('index') }}" class="back-btn-global">← Voltar para o Chat</a>
+
+                <div class="icon-header">📝</div>
+                <h1 class="card-title">Simulador de Provas</h1>
+                <p class="subtitle">Configure seu simulado e teste seus conhecimentos</p>
+
+                <div class="config-options">
+                    <div class="config-group">
+                        <label for="disciplina">
+                            <span class="label-icon">📚</span>
+                            Disciplina
+                        </label>
+                        <select id="disciplina" class="config-select">
+                            <option value="todas" selected>Todas as Disciplinas</option>
+                            <option value="FMC">Fundamentos Matemáticos para Computação</option>
+                            <option value="IES">Introdução à Engenharia de Soluções</option>
+                            <option value="FED">Fundamentos de Engenharia de Dados</option>
+                            <option value="FCI">Fundamentos de Computação e Infraestrutura</option>
+                        </select>
+                    </div>
+
+                    <div class="config-group">
+                        <label for="num-questoes">
+                            <span class="label-icon">📊</span>
+                            Número de Questões
+                        </label>
+                        <select id="num-questoes" class="config-select">
+                            <option value="5">5 questões</option>
+                            <option value="10" selected>10 questões</option>
+                            <option value="15">15 questões</option>
+                            <option value="20">20 questões</option>
+                            <option value="25">25 questões</option>
+                            <option value="30">30 questões</option>
+                        </select>
+                    </div>
+
+                    <div class="config-group">
+                        <label for="tempo-prova">
+                            <span class="label-icon">⏱️</span>
+                            Tempo da Prova
+                        </label>
+                        <select id="tempo-prova" class="config-select">
+                            <option value="15">15 minutos</option>
+                            <option value="30">30 minutos</option>
+                            <option value="45">45 minutos</option>
+                            <option value="60" selected>1 hora</option>
+                            <option value="75">1 hora e 15 minutos</option>
+                            <option value="90">1 hora e 30 minutos</option>
+                            <option value="105">1 hora e 45 minutos</option>
+                            <option value="120">2 horas</option>
+                            <option value="135">2 horas e 15 minutos</option>
+                            <option value="150">2 horas e 30 minutos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="primary-btn">
+                    <span>Iniciar Simulado</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+
+                <div class="info-box">
+                    <p>💡 <strong>Dica:</strong> Responda com calma e revise suas respostas antes de finalizar!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="questao-box" class="hidden">
+            <div class="questao-card">
+                <a href="javascript:location.reload()" class="back-btn-global">← Cancelar e Voltar</a>
+
+                <div class="questao-header">
+                    <div class="questao-numero-wrapper">
+                        <span class="questao-label">Questão</span>
+                        <h3 id="questao-numero">1</h3>
+                        <span class="questao-total">de <span id="total-questoes-display">10</span></span>
+                    </div>
+                    <div class="progresso-wrapper">
+                        <div class="progresso-bar">
+                            <div id="progresso-fill" class="progresso-fill"></div>
+                        </div>
+                        <span class="progresso-text"><span id="questoes-respondidas">0</span> respondidas</span>
+                    </div>
+                </div>
+
+                <div class="questao-conteudo">
+                    <p id="questao-texto" class="questao-texto"></p>
+                </div>
+
+                <div id="alternativas-box" class="alternativas-box"></div>
+
+                <div class="nav-buttons">
+                    <button id="prev-btn" class="secondary-btn" disabled>← Anterior</button>
+                    <button id="next-btn" class="secondary-btn">Próxima →</button>
+                    <button id="finish-btn" class="success-btn hidden">✓ Finalizar Prova</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="resultado-box" class="hidden">
+            <div class="resultado-card">
+                <div class="resultado-header">
+                    <div class="resultado-icon">🎯</div>
+                    <h2>Resultado do Simulado</h2>
+                </div>
+
+                <div class="resultado-stats">
+                    <div class="stat-card stat-correct">
+                        <div class="stat-icon">✓</div>
+                        <div class="stat-content">
+                            <span class="stat-label">Acertos</span>
+                            <span class="stat-value" id="resumo-corretas">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-total">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-content">
+                            <span class="stat-label">Total</span>
+                            <span class="stat-value" id="resumo-total">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-percent">
+                        <div class="stat-icon">%</div>
+                        <div class="stat-content">
+                            <span class="stat-label">Aproveitamento</span>
+                            <span class="stat-value" id="resumo-percentual">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mensagem-resultado" class="mensagem-resultado"></div>
+
+                <div class="gabarito-section">
+                    <h3>📋 Gabarito Detalhado</h3>
+                    <ul id="lista-gabarito" class="lista-gabarito"></ul>
+                </div>
+
+                <div class="resultado-actions">
+                    <button onclick="location.reload()" class="primary-btn">🔄 Fazer Novo Simulado</button>
+                    <a href="{{ url_for('index') }}" class="secondary-btn">← Voltar ao Chat</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/simulador.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+
+            // Só adiciona o evento se os elementos existirem
+            if (menuToggle && sidebar && overlay) {
+                
+                // Abre/Fecha Menu
+                menuToggle.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Evita cliques duplos indesejados
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                });
+
+                // Fecha ao clicar fora
+                overlay.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            } else {
+                console.warn('Elementos do menu não encontrados neste HTML.');
+            }
+        });
+    </script>
+</body>
+</html>
