@@ -1,6 +1,5 @@
 # 🌟 Lumi – Assistente Acadêmica Inteligente
 
-🌐 Acesse o Projeto Online
 # 🌐 Acesse o Projeto Online 
 🔗 Lumi – Assistente Acadêmico: 👉 https://lumi-assistente.onrender.com
 
@@ -8,12 +7,13 @@
 A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto universitário para apoiar estudantes em suas rotinas acadêmicas. A plataforma combina automação de respostas, recursos de organização pessoal e materiais de apoio interativos, permitindo que discentes encontrem informações institucionais, consultem um calendário acadêmico dinâmico e obtenham recomendações de estudo personalizadas em um único ambiente web.
 
 ## 🤖 Funcionalidades Principais
-- **Chat inteligente com IA gemini 2.5 flash** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
+- **Chat inteligente com IA** para responder dúvidas sobre a vida universitária e conteúdos acadêmicos.
 - **Calendário acadêmico** com ordenação automática de eventos e descrição detalhada de atividades.
 - **FAQ dinâmico** alimentado por arquivo JSON para garantir facilidade de manutenção das perguntas frequentes.
 - **Flashcards** para revisão rápida de conteúdos e disciplinas.
 - **Metodo de estudo** que sugere métodos de estudo individualizados com base nas respostas do estudante.
-- **Integração completa com Flask** para gerenciamento de rotas, sessões e comunicação com o modelo de linguagem.
+- **Modo Foco** 
+-****
 
 ## 🗂️ Estrutura do Projeto
 ```text
