@@ -325,107 +325,59 @@ def carregar_contexto_inicial():
     contexto_calendario = ""
     contexto_matriz = ""
     contexto_vark = ""
+    contexto_flashcards = ""
 
-    # 1. informacoes.txt
+    # 1. Informações Base
     try:
         with open("informacoes.txt", "r", encoding="utf-8") as f:
             contexto_base = f.read()
-    except FileNotFoundError:
-        print("Aviso: 'informacoes.txt' não encontrado.")
-        contexto_base = "Você é um assistente acadêmico chamado Lumi, focado em ajudar alunos da UniEVANGÉLICA."
-    except Exception as e:
-        print(f"Erro ao ler 'informacoes.txt': {e}")
-        contexto_base = "Você é um assistente acadêmico chamado Lumi."
+    except Exception:
+        contexto_base = "Você é a Lumi, assistente acadêmica da UniEVANGÉLICA."
 
     # 2. Calendário
     try:
         eventos = carregar_calendario()
         if eventos:
-            contexto_calendario = (
-                "\n\n=== CALENDÁRIO ACADÊMICO (Use para responder perguntas sobre datas) ===\n"
-            )
-            for evento in eventos:
-                data_str = evento.get("data_obj").strftime("%d/%m/%Y")
-                desc = evento.get("title")
-                data_fim_str = ""
-                if evento.get("data_fim") and evento.get("data_fim") != evento.get(
-                    "date"
-                ):
-                    try:
-                        data_fim_obj = datetime.strptime(
-                            evento["data_fim"], "%Y-%m-%d"
-                        )
-                        data_fim_str = f" até {data_fim_obj.strftime('%d/%m/%Y')}"
-                    except ValueError:
-                        pass
-                contexto_calendario += f"- Em {data_str}{data_fim_str}: {desc}\n"
-            contexto_calendario += (
-                "======================================================================\n"
-            )
-    except Exception as e:
-        print(f"ERRO ao processar calendário para o contexto: {e}")
-        traceback.print_exc()
+            contexto_calendario = "\n=== CALENDÁRIO ACADÊMICO ===\n"
+            for e in eventos:
+                data_str = e["data_obj"].strftime("%d/%m/%Y")
+                contexto_calendario += f"- {data_str}: {e['title']}\n"
+    except Exception: pass
 
     # 3. Matriz
     try:
-        matriz_data = carregar_matriz()
-        if matriz_data:
-            contexto_matriz = "\n\n=== MATRIZ CURRICULAR (Use para responder sobre aulas, professores, horários e salas) ===\n"
-            for periodo_info in matriz_data:
-                periodo_nome = periodo_info.get("periodo", "Período Não Identificado")
-                contexto_matriz += f"\n--- Período {periodo_nome} ---\n"
-                disciplinas = periodo_info.get("disciplinas", [])
-                if not disciplinas:
-                    contexto_matriz += (
-                        "(Nenhuma disciplina listada para este período)\n"
-                    )
-                for disc in disciplinas:
-                    nome = disc.get("nome", "Sem nome")
-                    prof = disc.get("professor", "A definir")
-                    dia = disc.get("dia", "A definir")
-                    horario = disc.get("horario", "A definir")
-                    sala = disc.get("sala", "A definir")
-                    contexto_matriz += f"- Disciplina: {nome}\n"
-                    contexto_matriz += f"  Professor: {prof}\n"
-                    contexto_matriz += f"  Horário: {dia}, {horario}\n"
-                    contexto_matriz += f"  Sala: {sala}\n\n"
-            contexto_matriz += (
-                "======================================================================\n"
-            )
-    except Exception as e:
-        print(f"ERRO ao processar matriz para o contexto: {e}")
-        traceback.print_exc()
+        matriz = carregar_matriz()
+        if matriz:
+            contexto_matriz = "\n=== MATRIZ CURRICULAR (Horários e Salas) ===\n"
+            # Simplificando a matriz para gastar menos tokens
+            for p in matriz:
+                for d in p.get("disciplinas", []):
+                    contexto_matriz += f"- {d.get('nome')}: {d.get('dia')} às {d.get('horario')} (Sala {d.get('sala')}, Prof. {d.get('professor')})\n"
+    except Exception: pass
 
     # 4. VARK
     try:
-        vark_data = carregar_quiz_vark()
-        if vark_data:
-            resultados_vark = vark_data.get("resultados")
-        else:
-            resultados_vark = None
+        vark = carregar_quiz_vark()
+        if vark and "resultados" in vark:
+            contexto_vark = "\n=== GUIA VARK (Estilos de Aprendizagem) ===\n"
+            for k, v in vark["resultados"].items():
+                contexto_vark += f"- {k}: {v.get('descricao')}\n"
+    except Exception: pass
 
-        if resultados_vark:
-            contexto_vark = (
-                "\n\n=== MÉTODOS DE ESTUDO (Use para explicar os estilos VARK) ===\n"
-            )
-            for tipo, info in resultados_vark.items():
-                titulo = info.get("titulo", tipo)
-                desc = info.get("descricao", "Sem descrição.")
-                metodos = info.get("metodos", [])
-                contexto_vark += f"\n--- {titulo} ({tipo}) ---\n"
-                contexto_vark += f"{desc}\n"
-                contexto_vark += "Métodos sugeridos:\n"
-                for m in metodos:
-                    contexto_vark += f"  - {m}\n"
-            contexto_vark += (
-                "======================================================================\n"
-            )
-    except Exception as e:
-        print(f"ERRO ao processar VARK para o contexto: {e}")
-        traceback.print_exc()
+    # 5. FLASHCARDS (Carrega aqui UMA VEZ, em vez de repetir no chat)
+    try:
+        flash_data = carregar_dados_json("flashcards.json")
+        if flash_data:
+            contexto_flashcards = "\n=== BANCO DE FLASHCARDS (Use para estudar) ===\n"
+            # Converte para string compacta
+            contexto_flashcards += json.dumps(flash_data, ensure_ascii=False)
+    except Exception: pass
 
-    return contexto_base + contexto_calendario + contexto_matriz + contexto_vark
+    # Instrução de Data Atual (CRUCIAL para ela não achar que é 2024)
+    data_hoje = datetime.now().strftime("%d/%m/%Y, %H:%M")
+    instrucao_tempo = f"\n\nIMPORTANTE: A data e hora atual é {data_hoje}. Responda considerando esse momento presente.\n"
 
+    return contexto_base + instrucao_tempo + contexto_calendario + contexto_matriz + contexto_vark + contexto_flashcards
 
 CONTEXTO_INICIAL = carregar_contexto_inicial()
 
@@ -909,69 +861,44 @@ def ask():
     if not pergunta_usuario:
         return jsonify({"resposta": "Por favor, digite uma pergunta."}), 400
 
-    # Carrega flashcards do sistema para dar contexto extra
-    dados_flashcards = carregar_dados_json("flashcards.json") or {}
-    texto_flashcards = json.dumps(dados_flashcards, ensure_ascii=False, indent=2)
+    # 1. Carrega histórico limpo do banco (apenas a conversa real)
+    historico_db = carregar_historico_usuario(current_user.id)
+    
+    # Se estiver vazio, salva a saudação inicial
+    if not historico_db:
+        msg_inicial = "Olá! Eu sou a Lumi, sua assistente acadêmica. Como posso ajudar?"
+        salvar_mensagem_no_banco(current_user.id, "model", msg_inicial)
+        historico_db = [{"role": "model", "parts": [msg_inicial]}]
 
-    # Carrega histórico do usuário a partir do banco
-    historico = carregar_historico_usuario(current_user.id)
-    if not historico:
-        # Se por algum motivo não houver histórico, cria a mensagem inicial
-        salvar_mensagem_no_banco(
-            current_user.id,
-            "model",
-            "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
-        )
-        historico = carregar_historico_usuario(current_user.id)
-
-    # Adiciona a mensagem de contexto de flashcards apenas uma vez
-    if not any(
-        msg.get("role") == "user" and "INÍCIO DOS FLASHCARDS" in "".join(msg["parts"])
-        for msg in historico
-    ):
-        instrucao_flashcards = f"""
-Você é a Lumi, uma assistente acadêmica universitária da UniEVANGÉLICA.
-Seja prestativa, use emojis de forma equilibrada e fale de forma motivadora.
-Responda sempre em Português do Brasil.
-Use formatação Markdown (negrito, listas) para organizar a resposta.
-
-IMPORTANTE: Você tem acesso ao banco de dados de Flashcards do aluno abaixo.
-Use essas perguntas e respostas como base de conhecimento se o aluno perguntar sobre esses temas:
-
---- INÍCIO DOS FLASHCARDS ---
-{texto_flashcards}
---- FIM DOS FLASHCARDS ---
-
-Se a pergunta não estiver nos flashcards, use seu conhecimento geral para responder.
-"""
-        historico.append({"role": "user", "parts": [instrucao_flashcards]})
-        salvar_mensagem_no_banco(current_user.id, "user", instrucao_flashcards)
-
-    # Adiciona a pergunta atual do usuário
-    historico.append({"role": "user", "parts": [pergunta_usuario]})
+    # 2. Salva a pergunta do usuário no banco AGORA
     salvar_mensagem_no_banco(current_user.id, "user", pergunta_usuario)
 
     try:
-        chat = model.start_chat(history=historico)
-        response = chat.send_message(pergunta_usuario)
-        texto_resposta = response.text
+        # 3. Inicia o chat com o histórico do banco
+        # O system_instruction (com todos os dados pesados) já está carregado no 'model' desde o início do app
+        chat_session = model.start_chat(history=historico_db)
+        
+        # 4. Envia a mensagem
+        response = chat_session.send_message(pergunta_usuario)
+        texto_resposta = response.text.strip()
 
+        # 5. Salva a resposta da Lumi no banco
         salvar_mensagem_no_banco(current_user.id, "model", texto_resposta)
 
         return jsonify({"resposta": texto_resposta})
 
     except Exception as e:
-        print(f"Erro Gemini: {e}")
-        traceback.print_exc()
-        return (
-            jsonify(
-                {
-                    "resposta": "Desculpe, tive um problema ao falar com a IA. Tente novamente em alguns instantes."
-                }
-            ),
-            500,
-        )
-
+        print(f"❌ ERRO GEMINI: {e}")
+        # Remove a pergunta do usuário do banco se falhou, para não ficar sem resposta no histórico visual
+        # (Opcional, mas ajuda a manter coerência)
+        try:
+            ultimo = ChatHistory.query.filter_by(user_id=current_user.id, role="user").order_by(ChatHistory.id.desc()).first()
+            if ultimo:
+                db.session.delete(ultimo)
+                db.session.commit()
+        except: pass
+        
+        return jsonify({"resposta": "Desculpe, tive um problema técnico. Pode repetir?"}), 500
 
 # =======================================================
 # API: VARK
