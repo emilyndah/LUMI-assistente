@@ -46,14 +46,20 @@
             <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
             <h3>Menu Lumi</h3>
         </div>
-        <a href="{{ url_for('index') }}">Chat Principal</a>
-        <a href="{{ url_for('profile') }}">Meu Perfil</a>
-        <a href="{{ url_for('calendario') }}">Calendário</a>
-        <a href="{{ url_for('simulador') }}">Simulador de Provas</a>
-        <a href="{{ url_for('flashcards') }}">Flashcards</a>
-        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
-        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
-        <a href="{{ url_for('faq') }}">FAQ</a>
+         <ul>
+    <li><a href="{{ url_for('index') }}">🤖 Chat Principal</a></li>
+    <li><a href="{{ url_for('profile') }}">👤 Meu Perfil</a></li>
+    <li><a href="{{ url_for('calendario') }}">📅 Calendário</a></li>
+    <li><a href="{{ url_for('simulador') }}">🧠 Simulador de Provas</a></li>
+    <li><a href="{{ url_for('flashcards') }}">⚡ Flashcards</a></li>
+    <li><a href="{{ url_for('metodo_de_estudo') }}">📚 Método de Estudo</a></li>
+    <li><a href="{{ url_for('modo_foco') }}">🍅 Modo Foco</a></li>
+    <a href="#" id="theme-toggle" style="display: flex; align-items: center; gap: 10px;">
+    <span class="theme-icon">🌙</span> 
+    <span class="theme-text">Modo Escuro</span>
+</a>
+    <li><a href="{{ url_for('faq') }}">❓ FAQ</a></li>
+</ul>
     </nav>
     
     <div class="overlay"></div>
@@ -167,22 +173,35 @@
             setTimeout(scrollToBottom, 50);
         }
 
-        const initialHistory = {{ session.get('historico', []) | tojson | safe }};
+        const initialHistory = {{ chat_history | default([]) | tojson | safe }};
         
-        if (chatBox.children.length === 0 && initialHistory.length > 1) { 
-            console.log("Renderizando histórico da sessão...");
-            initialHistory.slice(1).forEach(message => {
-                const role = message.role === 'model' ? 'lumi' : 'user';
-                const text = (message.parts && message.parts.length > 0) ? message.parts[0] : '';
+        // --- CÓDIGO NOVO DE RENDERIZAÇÃO ---
+        
+        // Se houver histórico vindo do banco, renderiza tudo, sem pular nada
+        if (initialHistory && initialHistory.length > 0) {
+            console.log("Renderizando histórico do banco...");
+            
+            initialHistory.forEach(message => {
+                // Define quem enviou: 'model' vira 'lumi', 'user' vira 'user'
+                const role = (message.role === 'model') ? 'lumi' : 'user';
+                
+                // Extrai o texto (garante que pega mesmo se vier como lista ou string)
+                let text = "";
+                if (message.parts && Array.isArray(message.parts)) {
+                    text = message.parts[0];
+                } else {
+                    text = message.parts || "";
+                }
+
                 addMessage(text, role);
             });
+            
             setTimeout(scrollToBottom, 100);
-        } else if (chatBox.children.length === 0) {
+        } 
+        // Se o banco estiver VAZIO (o que é raro, pois o backend cria a msg inicial), mostra saudação padrão
+        else if (chatBox.children.length === 0) {
             const userName = "{{ current_user.username if current_user.is_authenticated else 'Aluno' }}";
             addMessage(`Olá ${userName}! Eu sou a Lumi. Como posso te ajudar hoje?`, 'lumi');
-            scrollToBottom();
-        } else {
-            scrollToBottom();
         }
 
         chatForm.addEventListener('submit', async function(e) {
@@ -315,6 +334,54 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+    // === SCRIPT DE MODO ESCURO GLOBAL ===
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = toggleBtn ? toggleBtn.querySelector('.theme-icon') : null;
+        const themeText = toggleBtn ? toggleBtn.querySelector('.theme-text') : null;
+        
+        // 1. Verifica se já existe uma preferência salva
+        const savedTheme = localStorage.getItem('lumiTheme');
+        
+        // Função para aplicar o tema
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                if(themeIcon) themeIcon.textContent = '☀️';
+                if(themeText) themeText.textContent = 'Modo Claro';
+            } else {
+                document.body.classList.remove('dark-mode');
+                if(themeIcon) themeIcon.textContent = '🌙';
+                if(themeText) themeText.textContent = 'Modo Escuro';
+            }
+        }
+
+        // Aplica o tema salvo ao carregar a página
+        if (savedTheme === 'dark') {
+            applyTheme(true);
+        }
+
+        // 2. Evento de Clique
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita pular para o topo da página
+                
+                // Troca a classe
+                document.body.classList.toggle('dark-mode');
+                
+                // Verifica se ficou escuro ou claro
+                const isDarkNow = document.body.classList.contains('dark-mode');
+                
+                // Atualiza ícones e textos
+                applyTheme(isDarkNow);
+                
+                // Salva na memória do navegador
+                localStorage.setItem('lumiTheme', isDarkNow ? 'dark' : 'light');
+            });
+        }
+    });
+</script>
 
 </body>
 </html>

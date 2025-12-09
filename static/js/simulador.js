@@ -56,7 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // ========================================
     async function carregarQuestoes(quantidade) {
         try {
-            // Enviar também a disciplina selecionada
+            // Nota: Se a rota /simulador/iniciar não existir, o código cairá no catch.
+            // Certifique-se que seu app.py tem essa rota ou a rota /api/simulador_config
             const response = await fetch("/simulador/iniciar", { 
                 method: "POST",
                 headers: {
@@ -69,7 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
+                // Tenta fallback para rota de config se a rota de iniciar falhar
+                console.warn("Rota /simulador/iniciar falhou, tentando carregar JSON direto...");
+                const fallback = await fetch("/api/simulador_config");
+                if(!fallback.ok) throw new Error(`Erro HTTP: ${response.status}`);
+                const dataFallback = await fallback.json();
+                return dataFallback.data.questions.slice(0, quantidade); // Retorna array direto
             }
 
             const data = await response.json();
@@ -78,12 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 throw new Error(data.erro);
             }
 
-            QUESTOES = data.questoes;
-            console.log(`✅ ${QUESTOES.length} questões carregadas com sucesso!`);
-            
+            // Garante que retorna o array de questões
+            return data.questoes || data.data?.questions || data;
+
         } catch (error) {
             console.error("❌ Erro ao carregar questões:", error);
-            alert("Erro ao carregar as questões do simulado. Tente novamente.");
+            alert("Erro ao carregar as questões. Verifique se o servidor está rodando.");
             throw error;
         }
     }
@@ -101,11 +107,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const tempoMinutos = parseInt(tempoProvaSelect.value);
             tempoRestante = tempoMinutos * 60;
 
-            await carregarQuestoes(numQuestoes);
+            // Carrega e salva na variável global
+            const dadosCarregados = await carregarQuestoes(numQuestoes);
+            QUESTOES = dadosCarregados;
 
-            if (QUESTOES.length === 0) {
+            if (!QUESTOES || QUESTOES.length === 0) {
                 throw new Error("Nenhuma questão foi carregada.");
             }
+
+            console.log(`✅ ${QUESTOES.length} questões prontas.`);
+
+            // === CORREÇÃO IMPORTANTE: RESETAR O ESTADO ===
+            pos = 0;          // Volta para a primeira questão
+            RESPOSTAS = {};   // Limpa respostas anteriores
+            // =============================================
 
             // Atualizar displays
             if (totalQuestoesDisplay) {
@@ -114,10 +129,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             inicioBox.classList.add("hidden");
             questaoBox.classList.remove("hidden");
-            timerBox.classList.remove("hidden");
+            
+            if(timerBox) timerBox.classList.remove("hidden");
 
             iniciarTimer();
             atualizarProgresso();
+            
+            // Chama a função para desenhar a primeira questão
             mostrarQuestao();
 
         } catch (error) {
@@ -131,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // TIMER
     // ========================================
     function iniciarTimer() {
+        if(timerInterval) clearInterval(timerInterval); // Limpa timer anterior se houver
+        
         atualizarTimerDisplay();
         timerInterval = setInterval(() => {
             tempoRestante--;
@@ -145,6 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function atualizarTimerDisplay() {
+        if(!timerElement) return;
+
         const horas = Math.floor(tempoRestante / 3600);
         const minutos = Math.floor((tempoRestante % 3600) / 60);
         const segundos = tempoRestante % 60;
@@ -158,9 +180,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
         timerElement.textContent = display;
         
-        // Alerta visual quando faltam 5 minutos
         if (tempoRestante <= 300 && tempoRestante > 0) {
-            timerBox.style.background = '#ea4335';
+            if(timerBox) timerBox.style.background = '#ea4335';
         }
     }
 
@@ -184,14 +205,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // MOSTRAR QUESTÃO
     // ========================================
     function mostrarQuestao() {
+        // Proteção contra erro de índice
+        if (!QUESTOES || QUESTOES.length === 0 || !QUESTOES[pos]) {
+            console.error("Erro: Tentando acessar questão inexistente ou array vazio.");
+            return;
+        }
+
         const q = QUESTOES[pos];
 
+        // CORREÇÃO DE COMPATIBILIDADE DE JSON
+        // Aceita 'texto' (seu JS antigo) OU 'stem' (seu JSON de arquivo)
+        const textoDaPergunta = q.texto || q.stem;
+        
+        // Aceita 'alternativas' OU 'options'
+        const opcoesResposta = q.alternativas || q.options;
+
         questaoNumero.textContent = pos + 1;
-        questaoTexto.textContent = q.texto;
+        questaoTexto.textContent = textoDaPergunta;
 
         alternativasBox.innerHTML = "";
         
-        for (let letra in q.alternativas) {
+        // Itera sobre as chaves (A, B, C, D...)
+        for (let letra in opcoesResposta) {
             const div = document.createElement("div");
             div.className = "alternativa";
 
@@ -201,10 +236,12 @@ document.addEventListener("DOMContentLoaded", () => {
             input.value = letra;
             input.id = `alt-${letra}`;
 
+            // Marca se já respondeu antes
             if (RESPOSTAS[pos] === letra) {
                 input.checked = true;
             }
 
+            // Evento ao clicar
             input.addEventListener("change", () => {
                 RESPOSTAS[pos] = letra;
                 atualizarProgresso();
@@ -212,13 +249,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const label = document.createElement("label");
             label.setAttribute("for", `alt-${letra}`);
-            label.innerHTML = `<strong>${letra})</strong> ${q.alternativas[letra]}`;
+            label.style.cursor = "pointer"; // Melhora UX
+            label.style.width = "100%";
+            label.innerHTML = `<strong>${letra})</strong> ${opcoesResposta[letra]}`;
 
             div.appendChild(input);
             div.appendChild(label);
             alternativasBox.appendChild(div);
         }
 
+        // Controle dos botões
         prevBtn.disabled = pos === 0;
 
         if (pos === QUESTOES.length - 1) {
@@ -229,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
             finishBtn.classList.add("hidden");
         }
 
-        // Scroll para o topo
+        // Scroll suave para o topo
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -257,87 +297,82 @@ document.addEventListener("DOMContentLoaded", () => {
         const respondidas = Object.keys(RESPOSTAS).length;
         const total = QUESTOES.length;
         
+        let msg = "Tem certeza que deseja finalizar o simulado?";
         if (respondidas < total) {
-            const confirma = confirm(
-                `Você respondeu ${respondidas} de ${total} questões.\n\nTem certeza que deseja finalizar o simulado?`
-            );
-            if (!confirma) return;
-        } else {
-            const confirma = confirm("Tem certeza que deseja finalizar o simulado?");
-            if (!confirma) return;
+            msg = `Você respondeu apenas ${respondidas} de ${total} questões.\n\n${msg}`;
         }
         
-        finalizar();
+        if (confirm(msg)) {
+            finalizar();
+        }
     });
 
     async function finalizar() {
         clearInterval(timerInterval);
 
-        try {
-            const response = await fetch("/simulador/resultado", {
-                method: "POST",
-                headers: {"Content-Type":"application/json"},
-                body: JSON.stringify({ respostas: RESPOSTAS })
-            });
+        // Calcula resultado no front-end mesmo (mais rápido e garantido)
+        let acertos = 0;
+        let gabaritoArr = [];
 
-            if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
+        QUESTOES.forEach((q, index) => {
+            // Compatibilidade de chaves para 'correct' ou 'correta'
+            const respostaCorreta = q.correct || q.correta; 
+            const respostaUser = RESPOSTAS[index];
+            
+            if (respostaUser === respostaCorreta) {
+                acertos++;
             }
 
-            const data = await response.json();
-
-            questaoBox.classList.add("hidden");
-            inicioBox.classList.add("hidden");
-            resultadoBox.classList.remove("hidden");
-            timerBox.classList.add("hidden");
-
-            // Atualizar estatísticas
-            document.getElementById("resumo-corretas").textContent = data.acertos;
-            document.getElementById("resumo-total").textContent = data.total;
-            
-            const percentual = ((data.acertos / data.total) * 100).toFixed(1);
-            document.getElementById("resumo-percentual").textContent = `${percentual}%`;
-
-            // Mensagem personalizada
-            const mensagemDiv = document.getElementById("mensagem-resultado");
-            let mensagem = '';
-            
-            if (percentual >= 80) {
-                mensagem = '🎉 <strong>Excelente!</strong> Você está muito bem preparado(a). Continue assim!';
-            } else if (percentual >= 60) {
-                mensagem = '💪 <strong>Bom desempenho!</strong> Revise os tópicos onde errou para consolidar o conteúdo.';
-            } else if (percentual >= 40) {
-                mensagem = '📚 <strong>Razoável.</strong> Vale reforçar os estudos nessas matérias antes da prova real.';
-            } else {
-                mensagem = '📖 <strong>Continue estudando!</strong> Use este resultado como guia para focar nos temas que precisa revisar.';
-            }
-            
-            mensagemDiv.innerHTML = mensagem;
-
-            // Gabarito detalhado
-            const ul = document.getElementById("lista-gabarito");
-            ul.innerHTML = "";
-            
-            data.gabarito.forEach((item, index) => {
-                const li = document.createElement("li");
-                const respostaUsuario = RESPOSTAS[index] || "—";
-                const classe = respostaUsuario === item.correta ? "correto" : "incorreto";
-                
-                li.className = classe;
-                li.innerHTML = `
-                    <span><strong>Questão ${item.numero}:</strong> Sua resposta: <span class="resposta-user">${respostaUsuario}</span></span>
-                    <span>Correta: <span class="resposta-correta">${item.correta}</span></span>
-                `;
-                ul.appendChild(li);
+            gabaritoArr.push({
+                numero: index + 1,
+                correta: respostaCorreta,
+                usuario: respostaUser
             });
+        });
 
-            // Scroll para o topo
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        const total = QUESTOES.length;
+        const percentual = ((acertos / total) * 100).toFixed(1);
 
-        } catch (error) {
-            console.error("❌ Erro ao finalizar simulado:", error);
-            alert("Erro ao processar o resultado. Tente novamente.");
+        // Atualizar UI
+        questaoBox.classList.add("hidden");
+        inicioBox.classList.add("hidden");
+        resultadoBox.classList.remove("hidden");
+        if(timerBox) timerBox.classList.add("hidden");
+
+        document.getElementById("resumo-corretas").textContent = acertos;
+        document.getElementById("resumo-total").textContent = total;
+        document.getElementById("resumo-percentual").textContent = `${percentual}%`;
+
+        // Mensagem
+        const mensagemDiv = document.getElementById("mensagem-resultado");
+        let mensagem = '';
+        if (percentual >= 70) {
+            mensagem = '<h3 style="color: #4CAF50">Parabéns! Você foi aprovado! 🚀</h3>';
+        } else {
+            mensagem = '<h3 style="color: #F44336">Continue estudando! 📚</h3>';
         }
+        mensagemDiv.innerHTML = mensagem;
+
+        // Lista Gabarito
+        const ul = document.getElementById("lista-gabarito");
+        ul.innerHTML = "";
+        
+        gabaritoArr.forEach((item) => {
+            const li = document.createElement("li");
+            const acertou = item.usuario === item.correta;
+            li.className = acertou ? "correto" : "incorreto";
+            
+            // Se o usuário não respondeu
+            const respUser = item.usuario ? item.usuario : "Não respondeu";
+
+            li.innerHTML = `
+                <span><strong>Q${item.numero}:</strong> Sua resp: <b>${respUser}</b></span>
+                <span>Correta: <b>${item.correta}</b> ${acertou ? '✅' : '❌'}</span>
+            `;
+            ul.appendChild(li);
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
 });

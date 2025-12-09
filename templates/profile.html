@@ -12,44 +12,46 @@
     <!-- A Sidebar e o Overlay (vêm primeiro, mas ficam escondidos) -->
     <nav class="sidebar">
         <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
             <h3>Menu Lumi</h3>
         </div>
-        <a href="{{ url_for('index') }}">Chat Principal</a>
-        <a href="{{ url_for('profile') }}">Meu Perfil</a>
-        <a href="{{ url_for('calendario') }}">Calendário</a>
-        <a href="{{ url_for('flashcards') }}">Flashcards</a>
-        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
-        <a href="{{ url_for('simulador') }}" class="active">Simulador de Provas</a>
-        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
-        <a href="{{ url_for('faq') }}">FAQ</a>
+         <ul>
+    <li><a href="{{ url_for('index') }}">🤖 Chat Principal</a></li>
+    <li><a href="{{ url_for('profile') }}">👤 Meu Perfil</a></li>
+    <li><a href="{{ url_for('calendario') }}">📅 Calendário</a></li>
+    <li><a href="{{ url_for('simulador') }}">🧠 Simulador de Provas</a></li>
+    <li><a href="{{ url_for('flashcards') }}">⚡ Flashcards</a></li>
+    <li><a href="{{ url_for('metodo_de_estudo') }}">📚 Método de Estudo</a></li>
+    <li><a href="{{ url_for('modo_foco') }}">🍅 Modo Foco</a></li>
+    <li><a href="#" id="theme-toggle"> <span class="theme-icon">🌙</span> <span class="theme-text">Modo Escuro</span></a></li>
+    <li><a href="{{ url_for('faq') }}">❓ FAQ</a></li>
+</ul>
     </nav>
+    
     <div class="overlay"></div>
 
-    <!-- O Header CORRIGIDO (Contém o menu, logo e perfil) -->
     <header>
-    
-    <button class="menu-toggle" title="Menu">
-        <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Lumi 4" class="lumi-4-icon">
-        <span class="hamburger-icon"></span>
-    </button>
-    
-    <a href="{{ url_for('index') }}">
-        <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
-    </a>
-    
-    {% if current_user.is_authenticated %}
-    <div class="user-area">
-        <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
-        
-        <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
-            <div class="profile-picture">
-                {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
-                <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
-            </div>
+        <button class="menu-toggle" title="Menu">
+            <span class="hamburger-icon"></span> 
+        </button>
+
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
         </a>
-    </div>
-    {% endif %}
-</header>
+        
+        {% if current_user.is_authenticated %}
+        <div class="user-area">
+            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+            
+            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                <div class="profile-picture">
+                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </header>
 
     <!-- Conteúdo Principal (Formulário de Perfil) -->
     <main class="main-content">
@@ -152,5 +154,53 @@
         }
     });
     </script>
+<script>
+    // === SCRIPT DE MODO ESCURO GLOBAL (CORRIGIDO) ===
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = toggleBtn ? toggleBtn.querySelector('.theme-icon') : null;
+        const themeText = toggleBtn ? toggleBtn.querySelector('.theme-text') : null;
+        
+        // 1. Verifica se já existe uma preferência salva
+        const savedTheme = localStorage.getItem('lumiTheme');
+        
+        // Função para aplicar o tema
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                if(themeIcon) themeIcon.textContent = '☀️';
+                if(themeText) themeText.textContent = 'Modo Claro';
+            } else {
+                document.body.classList.remove('dark-mode');
+                if(themeIcon) themeIcon.textContent = '🌙';
+                if(themeText) themeText.textContent = 'Modo Escuro';
+            }
+        }
+
+        // Aplica o tema salvo ao carregar a página
+        if (savedTheme === 'dark') {
+            applyTheme(true);
+        }
+
+        // 2. Evento de clique
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita pular para o topo
+                
+                // Troca a classe
+                document.body.classList.toggle('dark-mode');
+                
+                // Verifica se ficou escuro ou claro
+                const isDarkNow = document.body.classList.contains('dark-mode');
+                
+                // Atualiza ícones e textos
+                applyTheme(isDarkNow);
+                
+                // Salva na memória do navegador
+                localStorage.setItem('lumiTheme', isDarkNow ? 'dark' : 'light');
+            });
+        }
+    });
+</script>
 </body>
 </html>

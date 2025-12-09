@@ -1812,3 +1812,1211 @@ nav.sidebar .sidebar-header::after {
     max-width: 75% !important; 
     margin: 0 !important; /* A margem agora é controlada pelo wrapper */
 }
+
+/* ========================================
+   SIMULADOR DE PROVAS - ESTILO LUMI
+   Design limpo e moderno
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e8f0fe 0%, #f0f4ff 100%);
+    min-height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ========================================
+   CONTAINER PRINCIPAL
+   ======================================== */
+.simulador-container {
+    margin-left: 0;
+    padding-top: 80px;
+    padding: 30px;
+    min-height: calc(100vh - 80px);
+}
+
+/* ========================================
+   TELA DE CONFIGURAÇÃO
+   ======================================== */
+#inicio-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+}
+
+.config-card {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+}
+
+.icon-header {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.config-card h2 {
+    color: #2d3748;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.config-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.config-group {
+    text-align: left;
+}
+
+.config-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.label-icon {
+    font-size: 18px;
+}
+
+.config-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: #2d3748;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.config-select:hover {
+    border-color: #4285f4;
+}
+
+.config-select:focus {
+    outline: none;
+    border-color: #4285f4;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+}
+
+.primary-btn {
+    background: #4285f4;
+    color: white;
+    border: none;
+    padding: 12px 36px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+}
+
+.primary-btn:hover {
+    background: #3367d6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+}
+
+.primary-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-arrow {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.primary-btn:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 12px;
+    background: #f0f4ff;
+    border-radius: 12px;
+    border-left: 4px solid #4285f4;
+}
+
+.info-box p {
+    color: #4a5568;
+    font-size: 13px;
+    text-align: left;
+    margin: 0;
+}
+
+/* ========================================
+   TELA DE QUESTÕES
+   ======================================== */
+.questao-card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.questao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.questao-numero-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.questao-label {
+    color: #718096;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.questao-numero-wrapper h3 {
+    color: #4285f4;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.questao-total {
+    color: #718096;
+    font-size: 14px;
+}
+
+.progresso-wrapper {
+    text-align: right;
+}
+
+.progresso-bar {
+    width: 200px;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progresso-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4285f4 0%, #34a853 100%);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+    width: 0%;
+}
+
+.progresso-text {
+    color: #718096;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.questao-conteudo {
+    margin-bottom: 25px;
+}
+
+.questao-texto {
+    color: #2d3748;
+    font-size: 16px;
+    line-height: 1.8;
+    padding: 20px;
+    background: #f7fafc;
+    border-radius: 12px;
+    border-left: 4px solid #4285f4;
+    margin: 0;
+}
+
+.alternativas-box {
+    margin-bottom: 25px;
+}
+
+.alternativa {
+    background: #f8f9fa;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.alternativa:hover {
+    background: #e8f0fe;
+    border-color: #4285f4;
+}
+
+.alternativa input[type="radio"] {
+    margin-right: 12px;
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #4285f4;
+    flex-shrink: 0;
+}
+
+.alternativa input[type="radio"]:checked ~ label {
+    color: #4285f4;
+    font-weight: 600;
+}
+
+.alternativa label {
+    flex: 1;
+    cursor: pointer;
+    font-size: 15px;
+    color: #2d3748;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.alternativa label strong {
+    color: #4285f4;
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* ========================================
+   NAVEGAÇÃO
+   ======================================== */
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.secondary-btn {
+    flex: 0 1 auto;
+    min-width: 140px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #2d3748;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.secondary-btn:hover:not(:disabled) {
+    border-color: #4285f4;
+    color: #4285f4;
+    background: #f0f4ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+}
+
+.secondary-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.success-btn {
+    flex: 0 1 auto;
+    min-width: 160px;
+    background: #34a853;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 15px rgba(52, 168, 83, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.success-btn:hover {
+    background: #2d9048;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 168, 83, 0.4);
+}
+
+/* ========================================
+   RESULTADO
+   ======================================== */
+.resultado-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.resultado-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.resultado-icon {
+    font-size: 64px;
+    margin-bottom: 15px;
+}
+
+.resultado-header h2 {
+    color: #2d3748;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.resultado-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-left: 4px solid;
+}
+
+.stat-card.stat-correct {
+    border-left-color: #34a853;
+}
+
+.stat-card.stat-total {
+    border-left-color: #4285f4;
+}
+
+.stat-card.stat-percent {
+    border-left-color: #fbbc04;
+}
+
+.stat-icon {
+    font-size: 32px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 10px;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    color: #718096;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.stat-value {
+    color: #2d3748;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.mensagem-resultado {
+    background: #f0f4ff;
+    padding: 18px;
+    border-radius: 12px;
+    border-left: 4px solid #4285f4;
+    margin-bottom: 35px;
+    color: #2d3748;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.gabarito-section h3 {
+    color: #2d3748;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.lista-gabarito {
+    list-style: none;
+    margin-bottom: 35px;
+    padding: 0;
+}
+
+.lista-gabarito li {
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border-left: 4px solid;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lista-gabarito li.correto {
+    background: #e6f4ea;
+    border-left-color: #34a853;
+    color: #1e7e34;
+}
+
+.lista-gabarito li.incorreto {
+    background: #fce8e6;
+    border-left-color: #ea4335;
+    color: #c5221f;
+}
+
+.resposta-user {
+    font-weight: 600;
+}
+
+.resposta-correta {
+    font-weight: 600;
+    color: #34a853;
+}
+
+.resultado-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.resultado-actions .primary-btn,
+.resultado-actions .secondary-btn {
+    flex: 0 0 auto;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   RESPONSIVO
+   ======================================== */
+@media (max-width: 768px) {
+    .simulador-header {
+        padding: 12px 15px;
+    }
+
+    .simulador-header h1 {
+        font-size: 18px;
+    }
+
+    .user-info span {
+        display: none;
+    }
+
+    .simulador-container {
+        padding: 20px;
+        margin-top: 70px;
+    }
+
+    .config-card,
+    .questao-card,
+    .resultado-card {
+        padding: 25px 20px;
+    }
+
+    .questao-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .progresso-bar {
+        width: 100%;
+    }
+
+    .nav-buttons {
+        flex-direction: column;
+    }
+
+    .secondary-btn,
+    .success-btn {
+        width: 100%;
+    }
+
+    .resultado-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .resultado-actions {
+        flex-direction: column;
+    }
+
+    .resultado-actions .primary-btn,
+    .resultado-actions .secondary-btn {
+        width: 100%;
+    }
+
+    #timer-box {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+}
+
+/* =========================================
+   CORREÇÃO CABEÇALHO SIMULADOR
+   ========================================= */
+
+/* Posiciona os elementos da direita de forma absoluta, igual ao index */
+.header-right {
+    position: absolute;
+    right: 15px; /* Mesma margem lateral */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
+}
+
+/* Garante que o H1 fique centralizado e estiloso */
+.simulador-header h1 {
+    margin: 0;
+    font-size: 1.5rem; /* Tamanho similar à logo visualmente */
+    font-weight: 600;
+    color: var(--lumi-blue-dark); /* Usa suas variáveis */
+    text-align: center;
+    
+    /* Opcional: Se quiser o efeito gradiente no texto também */
+    background: linear-gradient(135deg, var(--lumi-blue) 0%, var(--lumi-blue-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Ajuste para telas menores (Responsividade) */
+@media (max-width: 768px) {
+    .header-right span {
+        display: none; /* Esconde o "Olá, Nome" em telas pequenas para não quebrar */
+    }
+    
+    .simulador-header h1 {
+        font-size: 1.2rem;
+        max-width: 200px; /* Evita que o texto sobreponha os ícones */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* =========================================
+   AJUSTE IMAGEM SIDEBAR (LUMI)
+   ========================================= */
+.sidebar-avatar {
+    border: none !important;        /* Remove a linha da borda */
+    background: transparent !important; /* Remove o fundo (se tiver cor) */
+    padding: 0 !important;          /* Remove o espaço entre a imagem e a borda */
+    box-shadow: none !important;    /* Remove sombras se houver */
+    
+    /* SE VOCÊ QUISER ELA QUADRADA (Formato original), descomente a linha abaixo: */
+    /* border-radius: 0 !important; */
+}
+
+/* =========================================
+   AJUSTE POSIÇÃO CABEÇALHO SIDEBAR
+   ========================================= */
+.sidebar-header {
+    /* Força o alinhamento para a esquerda (caso esteja centralizado) */
+    justify-content: flex-start !important; 
+    
+    /* Controla a distância da borda esquerda */
+    /* Diminua este número para ir mais para a esquerda */
+    /* Aumente para empurrar para a direita */
+    padding-left: 12px !important; 
+    /* Espaço entre a imagem e o texto */
+    gap: 8px !important;
+}
+
+/* =======================================================
+   MODO ESCURO - SIMPLES E LIMPO (FINAL)
+   ======================================================= */
+
+/* 1. FUNDO GERAL (Preto Suave) */
+body.dark-mode {
+    background-image: none !important;
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+/* 2. CAIXAS E PAINÉIS (Cinza Escuro) */
+/* Isso pega Sidebar, Header, Cards e a área do Chat */
+body.dark-mode header,
+body.dark-mode .sidebar,
+body.dark-mode .simulador-header,
+body.dark-mode .config-card,
+body.dark-mode .questao-card,
+body.dark-mode .resultado-card,
+body.dark-mode .info-box,
+body.dark-mode .chat-container,
+body.dark-mode .chat-input-area,
+body.dark-mode .gabarito-section {
+    background-color: #1e1e1e !important;
+    background: #1e1e1e !important;
+    border-color: #333 !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+}
+
+
+
+/* =======================================================
+   EXCEÇÃO IMPORTANTE: CHAT DA LUMI (IA)
+   Isso "cancela" a cor branca apenas dentro do balão dela
+   ======================================================= */
+
+body.dark-mode .message.bot .message-content p,
+body.dark-mode .message.bot .message-content span,
+body.dark-mode .message.bot .message-content li,
+body.dark-mode .message.bot .message-content strong,
+body.dark-mode .message.bot .message-content h1,
+body.dark-mode .message.bot .message-content h2,
+body.dark-mode .message.bot .message-content h3 {
+    color: #000000 !important;       /* Força a cor PRETA */
+    background-color: transparent !important;
+}
+
+/* 4. FORMULÁRIOS (Onde digita) */
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background-color: #2c2c2c !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
+
+/* =======================================================
+   CHAT CORRIGIDO: TEXTO PRETO NO FUNDO BRANCO
+   ======================================================= */
+
+/* 1. O CONTAINER (BALÃO) DA LUMI */
+body.dark-mode .message.bot .message-content {
+    background-color: #ffffff !important; /* Fundo Branco */
+    color: #000000 !important;            /* Texto Preto */
+    border: 1px solid #ccc !important;    /* Bordinha Cinza */
+}
+
+/* 2. A REGRA DE OURO (RESET UNIVERSAL) */
+/* Isso seleciona TUDO dentro do balão (parágrafos, negritos, listas, títulos) */
+/* e força a ser PRETO com fundo TRANSPARENTE */
+body.dark-mode .message.bot .message-content * {
+    color: #000000 !important;            /* OBRIGA ser preto */
+    background-color: transparent !important; /* Remove fundos cinzas herdados */
+    text-shadow: none !important;         /* Remove sombras estranhas */
+    box-shadow: none !important;
+}
+
+/* 3. EXCEÇÃO: CÓDIGO DE PROGRAMAÇÃO */
+/* Só o código pode ter fundo escuro para ficar bonito */
+body.dark-mode .message.bot .message-content pre {
+    background-color: #282c34 !important; /* Fundo cinza escuro do código */
+    color: #abb2bf !important;            /* Texto claro do código */
+    padding: 10px !important;
+    border-radius: 5px !important;
+    margin: 10px 0 !important;
+}
+/* O texto dentro do código deve ser claro */
+body.dark-mode .message.bot .message-content pre * {
+    color: #abb2bf !important; 
+}
+
+/* 4. BALÃO DO USUÁRIO (MANTÉM O AZUL) */
+body.dark-mode .message.user .message-content {
+    background-color: var(--lumi-blue-dark) !important;
+    color: #ffffff !important;
+}
+/* Texto do usuário deve ser branco */
+body.dark-mode .message.user .message-content * {
+    color: #ffffff !important;
+    background-color: transparent !important;
+}
+
+/* Garante texto branco SÓ onde o fundo é preto (Sidebar e Simulador) */
+body.dark-mode .sidebar h1, body.dark-mode .sidebar h2, body.dark-mode .sidebar h3,
+body.dark-mode .simulador-container h1, body.dark-mode .simulador-container h2, 
+body.dark-mode .simulador-container h3, body.dark-mode .simulador-container p,
+body.dark-mode .config-card label {
+    color: #ffffff !important;
+}
+
+/* Correção para a página de Flashcards */
+body.dark-mode #main-white-box {
+    background-color: #1e1e1e !important; /* Força o cinza escuro */
+    color: #e0e0e0 !important;
+}
+
+/* Garante que os inputs dentro dos flashcards fiquem escuros */
+body.dark-mode .input-row {
+    background-color: #1e1e1e !important;
+    border: 1px solid #444 !important;
+}
+
+/* Modal de criar cards */
+body.dark-mode .modal-content {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+}
+
+/* =========================================
+   CORREÇÃO MODO ESCURO: PÁGINA DE MÉTODO DE ESTUDO (QUIZ)
+   ========================================= */
+
+/* A caixa principal do Quiz */
+body.dark-mode .quiz-container {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+}
+
+/* O título do Quiz */
+body.dark-mode .quiz-container h1,
+body.dark-mode #quiz-titulo {
+    color: #ffffff !important;
+}
+
+/* O texto da pergunta */
+body.dark-mode #quiz-area p#pergunta-texto {
+    color: #ffffff !important;
+}
+
+/* As opções de resposta (botões de marcar) */
+body.dark-mode .option-label {
+    background-color: #2c2c2c !important; /* Fundo cinza escuro */
+    color: #ffffff !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .option-label:hover {
+    background-color: #333 !important;
+}
+
+/* Opção selecionada no modo escuro */
+body.dark-mode .option-label.selected {
+    background-color: rgba(63, 169, 245, 0.2) !important; /* Azul transparente */
+    border-color: var(--lumi-blue) !important;
+    color: #ffffff !important;
+}
+
+/* Textos de descrição e resultado */
+body.dark-mode #quiz-descricao,
+body.dark-mode #resultado-descricao,
+body.dark-mode #resultado-metodos li {
+    color: #cccccc !important;
+}
+
+/* Gráfico (Fundo do container do gráfico) */
+body.dark-mode #chart-container {
+    background-color: transparent !important;
+}
+
+/* =========================================
+   CORREÇÃO FINAL: TÍTULOS AZUIS (DEGRADÊ)
+   ========================================= */
+
+/* Aplica o azul nos títulos principais (H1, H2) e no título do Quiz */
+body.dark-mode h1, 
+body.dark-mode h2,
+body.dark-mode #quiz-titulo,
+body.dark-mode .quiz-container h1 {
+    /* Recria o degradê azul original */
+    background: linear-gradient(135deg, var(--lumi-blue), #004d7b) !important;
+    
+    /* Faz o fundo (degradê) aparecer apenas dentro das letras */
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    
+    /* Garante uma cor sólida caso o navegador não suporte o efeito acima */
+    color: var(--lumi-blue) !important;
+}
+
+/* Ajuste opcional para subtítulos menores ficarem azul claro (sólido) */
+body.dark-mode h3 {
+    color: var(--lumi-blue) !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--lumi-blue) !important;
+}
+
+/* =========================================
+   CORREÇÃO MODO ESCURO: PÁGINA FAQ
+   ========================================= */
+
+/* 1. Título e Subtítulo da Página */
+body.dark-mode .faq-container h1 {
+    /* Mantém o degradê azul bonito */
+    background: linear-gradient(135deg, var(--lumi-blue), #004d7b) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+body.dark-mode .faq-container p {
+    color: #cccccc !important;
+}
+
+/* 2. Barra de Busca */
+body.dark-mode #faq-search {
+    background-color: #1e1e1e !important; /* Fundo escuro */
+    color: #ffffff !important;           /* Texto branco */
+    border: 1px solid #444 !important;   /* Borda sutil */
+}
+body.dark-mode #faq-search::placeholder {
+    color: #888 !important; /* Cor do texto de ajuda "Buscar..." */
+}
+
+/* 3. A Caixa da Pergunta (O Item do Acordeão) */
+body.dark-mode .faq-item {
+    background-color: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3) !important;
+}
+
+/* 4. O Texto da Pergunta */
+body.dark-mode .faq-question {
+    color: #ffffff !important;
+}
+
+body.dark-mode .faq-question span {
+    color: #ffffff !important;
+}
+
+/* 5. O Ícone (+ / -) */
+body.dark-mode .faq-icon {
+    color: var(--lumi-blue) !important; /* Azul neon para destacar */
+}
+
+/* 6. A Resposta (Quando abre) */
+body.dark-mode .faq-answer {
+    background-color: #252525 !important; /* Um pouco mais claro para destacar a resposta */
+    border-top: 1px solid #333 !important;
+    color: #cccccc !important;
+}
+
+body.dark-mode .faq-answer p {
+    color: #e0e0e0 !important;
+}
+
+/* 7. Botão Voltar */
+body.dark-mode .back-btn-global {
+    color: var(--lumi-blue) !important;
+}
+
+/* =========================================
+   CORREÇÃO FINAL: PERFIL E FAQ (CAIXAS BRANCAS)
+   ========================================= */
+
+/* 1. CAIXA DO PERFIL (Onde tem o formulário) */
+body.dark-mode .profile-container {
+    background-color: #1e1e1e !important; /* Fundo Cinza Escuro */
+    border: 1px solid #333 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+    color: #e0e0e0 !important;
+}
+
+/* 2. CAIXA DO FAQ (Container Geral) */
+/* Adicionando isso caso o fundo branco seja no container maior */
+body.dark-mode .faq-container,
+body.dark-mode .faq-page {
+    background-color: transparent !important; /* Remove fundo branco se houver */
+}
+
+/* 3. TÍTULOS DO PERFIL */
+body.dark-mode .profile-container h2 {
+    /* Efeito Azul Lumi */
+    background: linear-gradient(135deg, var(--lumi-blue), #004d7b) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* 4. FORMULÁRIOS DO PERFIL (Inputs) */
+body.dark-mode .profile-container input,
+body.dark-mode .profile-container select {
+    background-color: #2c2c2c !important; /* Fundo escuro onde digita */
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
+
+/* 5. CAMPOS BLOQUEADOS (Cinza mais escuro para diferenciar) */
+body.dark-mode .profile-container input[readonly] {
+    background-color: #202020 !important; 
+    color: #888 !important; /* Texto mais apagado */
+    cursor: not-allowed !important;
+}
+
+/* 6. LINK DE VOLTAR */
+body.dark-mode .back-link-profile-glued-final {
+    color: var(--lumi-blue) !important;
+}
+
+/* 7. BOTÃO DE LOGOUT */
+body.dark-mode .btn-logout-profile {
+    background-color: #333 !important;
+    color: #ff6b6b !important; /* Vermelho claro para destaque no escuro */
+    border: 1px solid #555 !important;
+}
+
+/* =========================================
+   CORREÇÃO MODO ESCURO: CALENDÁRIO ACADÊMICO
+   ========================================= */
+
+/* 1. VARIÁVEIS DO FULLCALENDAR (REDEFINIÇÃO) */
+body.dark-mode {
+    --fc-page-bg-color: #1e1e1e !important;
+    --fc-neutral-bg-color: #2c2c2c !important;
+    --fc-border-color: #444444 !important; /* Linhas da grade mais escuras */
+    --fc-today-bg-color: rgba(63, 169, 245, 0.15) !important; /* Dia atual azul escuro */
+    --fc-list-event-hover-bg-color: #333 !important;
+    --fc-theme-standard-border-color: #444 !important;
+}
+
+/* 2. CONTAINERS PRINCIPAIS (Calendário e Agenda) */
+body.dark-mode .calendar-container,
+body.dark-mode .agenda-container {
+    background-color: #1e1e1e !important; /* Cinza Escuro */
+    color: #e0e0e0 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+}
+
+/* 3. TÍTULOS */
+body.dark-mode .agenda-container h2,
+body.dark-mode #event-list-title,
+body.dark-mode .fc-toolbar-title {
+    color: #ffffff !important;
+}
+
+/* 4. TEXTOS DENTRO DO CALENDÁRIO */
+body.dark-mode .fc-col-header-cell-cushion, /* Dias da semana (seg, ter...) */
+body.dark-mode .fc-daygrid-day-number {      /* Números dos dias (1, 2, 3...) */
+    color: #e0e0e0 !important;
+    text-decoration: none !important;
+}
+
+/* 5. BUSCA E BOTÕES DA AGENDA */
+body.dark-mode #event-search {
+    background-color: #2c2c2c !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
+
+/* 6. LISTA DE EVENTOS (AGENDA LATERAL) */
+body.dark-mode .agenda-item {
+    background-color: #252525 !important;
+    border: 1px solid #333 !important;
+}
+body.dark-mode .agenda-item:hover {
+    border-color: var(--lumi-blue) !important;
+    background-color: #2a2a2a !important;
+}
+
+/* Data do evento (Quadrado esquerdo) */
+body.dark-mode .agenda-date {
+    background-color: #333 !important;
+    color: var(--lumi-blue) !important;
+}
+
+/* Título e Tipo do evento */
+body.dark-mode .agenda-title { color: #ffffff !important; }
+body.dark-mode .agenda-type { color: #aaaaaa !important; }
+
+/* 7. MODAL (CRIAR/EDITAR EVENTO) */
+body.dark-mode #event-modal {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
+}
+
+body.dark-mode .modal-header {
+    border-bottom: 1px solid #333 !important;
+}
+body.dark-mode .modal-header h2 {
+    color: #ffffff !important;
+}
+body.dark-mode .close-btn {
+    color: #fff !important;
+}
+
+/* Inputs do Modal */
+body.dark-mode #event-form input,
+body.dark-mode #event-form select,
+body.dark-mode #event-form textarea {
+    background-color: #2c2c2c !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
+
+/* Rodapé do Modal */
+body.dark-mode .modal-footer {
+    background-color: #252525 !important;
+    border-top: 1px solid #333 !important;
+}
+
+body.dark-mode .modal-cancel-btn {
+    background-color: #333 !important;
+    color: #ccc !important;
+}
+
+/* =========================================
+   AJUSTE FINO: LOGO X CABEÇALHO
+   ========================================= */
+
+/* 1. Define o tamanho exato da barra do cabeçalho */
+header {
+    height: 80px !important;      /* Altura fixa da barra (pode testar 90px se quiser maior) */
+    padding-top: 0 !important;    /* Remove espaço inútil em cima */
+    padding-bottom: 0 !important; /* Remove espaço inútil embaixo */
+    
+    display: flex !important;
+    align-items: center !important; /* Centraliza a logo verticalmente na marra */
+}
+
+/* 2. Define o tamanho da Logo para caber na barra */
+.logo {
+    /* A logo deve ser um pouco menor que o header para não encostar nas bordas */
+    height: 70px !important;      /* 10px a menos que o header fica perfeito */
+    width: auto !important;
+    
+    /* Reseta posições estranhas */
+    position: static !important;
+    transform: none !important;
+    margin: 0 15px 0 0 !important; /* Margem apenas na direita para separar do texto */
+    
+    /* Garante nitidez */
+    object-fit: contain !important;
+}
+
+/* =========================================
+   ANIMAÇÃO DA LOGO (CRESCER AO PASSAR O MOUSE)
+   ========================================= */
+
+.logo {
+    /* Garante que o movimento seja suave (dura 0.3 segundos) */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    
+    /* Garante que a origem do zoom seja o centro */
+    transform-origin: center center !important;
+    
+    /* Mantém ela visível e clicável */
+    cursor: pointer !important;
+}
+
+/* Quando passar o mouse em cima */
+.logo:hover {
+    /* Aumenta 10% do tamanho (1.1) */
+    /* Se quiser maior, mude para 1.2 ou 1.3 */
+    transform: scale(1.1) !important; 
+    
+    /* Opcional: Adiciona um brilho suave */
+    filter: drop-shadow(0 0 5px rgba(63, 169, 245, 0.5));
+}
+
+/* =========================================
+   CORREÇÃO FINAL: MENU LATERAL (SIDEBAR)
+   ========================================= */
+
+/* 1. Fundo da Sidebar inteira */
+body.dark-mode .sidebar {
+    background-color: #1e1e1e !important;   /* Cinza Escuro */
+    background: #1e1e1e !important;         /* Reforço */
+    border-right: 1px solid #333 !important; /* Borda direita escura */
+    box-shadow: 2px 0 10px rgba(0,0,0,0.5) !important;
+}
+
+/* 2. Cabeçalho da Sidebar (Onde fica a foto da Lumi) */
+/* Este é o culpado! Ele costuma ter fundo branco próprio */
+body.dark-mode .sidebar-header {
+    background-color: #1e1e1e !important; 
+    background: #1e1e1e !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+/* 3. Título "Menu Lumi" */
+body.dark-mode .sidebar-header h3 {
+    color: #ffffff !important;
+}
+
+/* 4. Links do Menu (Textos) */
+body.dark-mode .sidebar ul li a,
+body.dark-mode .sidebar a {
+    color: #cccccc !important; /* Cinza claro para não cansar a vista */
+}
+
+/* 5. Efeito ao passar o mouse ou item Ativo */
+body.dark-mode .sidebar ul li a:hover, 
+body.dark-mode .sidebar ul li a.active,
+body.dark-mode .sidebar a:hover,
+body.dark-mode .sidebar a.active {
+    background-color: #2c2c2c !important; /* Fundo do botão selecionado */
+    color: var(--lumi-blue) !important;   /* Azul Lumi */
+    border-left-color: var(--lumi-blue) !important; /* Se tiver borda lateral */
+}
+
+/* 6. Botão de Fechar (se aparecer no mobile) */
+body.dark-mode .sidebar .close-btn {
+    color: #fff !important;
+}
+

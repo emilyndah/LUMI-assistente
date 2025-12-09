@@ -5,50 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumi – Simulador de Provas</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/simulador.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* FORÇA O BOTÃO A FICAR NA FRENTE DE TUDO */
+        header {
+            position: relative;
+            z-index: 2000; /* Garante que o cabeçalho fique acima do overlay */
+        }
+
+        .menu-toggle {
+            cursor: pointer;
+            z-index: 2001 !important; /* Força bruta para o botão ficar no topo */
+            position: absolute; /* Garante que obedeça ao posicionamento */
+        }
+        
+        /* Garante que o overlay não bloqueie cliques quando estiver invisível */
+        .overlay {
+            z-index: 1500; /* Menor que o header */
+            /* O CSS original deve ter opacity: 0 e visibility: hidden quando não tem a classe .active */
+        }
+    </style>
 </head>
 
 <body>
+    <div class="overlay"></div>
     <nav class="sidebar">
         <div class="sidebar-header">
-            <img src="{{ url_for('static', filename='lumi-4.png') }}" class="sidebar-avatar">
+            <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
             <h3>Menu Lumi</h3>
         </div>
-        <a href="{{ url_for('index') }}">Chat Principal</a>
-        <a href="{{ url_for('profile') }}">Meu Perfil</a>
-        <a href="{{ url_for('calendario') }}">Calendário</a>
-        <a href="{{ url_for('flashcards') }}">Flashcards</a>
-        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
-        <a href="{{ url_for('simulador') }}" class="active">Simulador de Provas</a>
-        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
-        <a href="{{ url_for('faq') }}">FAQ</a>
+         <ul>
+    <li><a href="{{ url_for('index') }}">🤖 Chat Principal</a></li>
+    <li><a href="{{ url_for('profile') }}">👤 Meu Perfil</a></li>
+    <li><a href="{{ url_for('calendario') }}">📅 Calendário</a></li>
+    <li><a href="{{ url_for('simulador') }}">🧠 Simulador de Provas</a></li>
+    <li><a href="{{ url_for('flashcards') }}">⚡ Flashcards</a></li>
+    <li><a href="{{ url_for('metodo_de_estudo') }}">📚 Método de Estudo</a></li>
+    <li><a href="{{ url_for('modo_foco') }}">🍅 Modo Foco</a></li>
+    <li><a href="#" id="theme-toggle"> <span class="theme-icon">🌙</span> <span class="theme-text">Modo Escuro</span></a></li>
+    <li><a href="{{ url_for('faq') }}">❓ FAQ</a></li>
+</ul>
     </nav>
 
-    <div class="overlay"></div>
-
-    <header class="simulador-header">
-        <button class="menu-toggle">
-            <span class="hamburger-icon"></span>
+    <header>
+        <button class="menu-toggle" title="Menu">
+            <span class="hamburger-icon"></span> 
         </button>
 
-        <h1>Simulador de Provas</h1>
-
-        <div class="header-right">
-            <div id="timer-box" class="hidden">
-                ⏱️ <span id="timer">--:--</span>
-            </div>
-            <div class="user-info">
-                <span>Olá, {{ current_user.username.split()[0] }}</span>
-                {% if current_user.profile_image %}
-                    <img src="{{ url_for('static', filename='uploads/' + current_user.profile_image) }}" 
-                         alt="Avatar" class="user-avatar" onerror="this.src='{{ url_for('static', filename='lumi-2.png') }}'">
-                {% else %}
-                    <img src="{{ url_for('static', filename='lumi-2.png') }}" 
-                         alt="Avatar" class="user-avatar">
-                {% endif %}
-            </div>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='lumi_logo.jpg') }}" alt="Lumi Logo" class="logo">
+        </a>
+        
+        {% if current_user.is_authenticated %}
+        <div class="user-area">
+            <span class="username">Olá, {{ current_user.username.split(' ')[0] }}</span>
+            
+            <a href="{{ url_for('profile') }}" class="profile-link" title="Meu Perfil">
+                <div class="profile-picture">
+                    {% set image_filename = 'uploads/' + current_user.profile_image if current_user.profile_image != 'lumi-2.png' else 'lumi-2.png' %}
+                    <img src="{{ url_for('static', filename=image_filename) }}" alt="Foto de Perfil" class="profile-img">
+                </div>
+            </a>
         </div>
+        {% endif %}
     </header>
 
     <main class="simulador-container">
@@ -213,8 +233,122 @@
         </section>
 
     </main>
+    <!-- Script da Sidebar -->
+    <style>
+    /* === HIERARQUIA DE CAMADAS (QUEM FICA EM CIMA DE QUEM) === */
+
+    /* 1. O Cabeçalho fica acima do conteúdo normal */
+    header {
+        position: relative;
+        z-index: 100 !important; 
+    }
+
+    /* 2. O Overlay (fundo preto) cobre o cabeçalho e o site */
+    .overlay {
+        z-index: 2000 !important; 
+    }
+
+    /* 3. O Menu (Sidebar) é o REI. Fica acima de TUDO. */
+    .sidebar {
+        z-index: 3000 !important; 
+    }
+
+    /* 4. O Botão precisa ser clicável sempre */
+    .menu-toggle {
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        position: relative;
+        z-index: 101 !important; /* Acima do header, mas abaixo do overlay quando o menu abre */
+    }
+
+    /* FORÇA O MENU A APARECER QUANDO ESTIVER ATIVO */
+    .sidebar.active {
+        left: 0 !important;
+        transform: translateX(0) !important;
+        visibility: visible !important;
+        display: block !important; /* Caso tenha algum display: none perdido */
+    }
+</style>
 
     <!-- Link para o arquivo JS externo -->
     <script src="{{ url_for('static', filename='js/simulador.js') }}"></script>
+    <script>
+    // === SCRIPT DE MODO ESCURO GLOBAL ===
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = toggleBtn ? toggleBtn.querySelector('.theme-icon') : null;
+        const themeText = toggleBtn ? toggleBtn.querySelector('.theme-text') : null;
+        
+        // 1. Verifica se já existe uma preferência salva
+        const savedTheme = localStorage.getItem('lumiTheme');
+        
+        // Função para aplicar o tema
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                if(themeIcon) themeIcon.textContent = '☀️';
+                if(themeText) themeText.textContent = 'Modo Claro';
+            } else {
+                document.body.classList.remove('dark-mode');
+                if(themeIcon) themeIcon.textContent = '🌙';
+                if(themeText) themeText.textContent = 'Modo Escuro';
+            }
+        }
+
+        // Aplica o tema salvo ao carregar a página
+        if (savedTheme === 'dark') {
+            applyTheme(true);
+        }
+
+        // 2. Evento de Clique
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita pular para o topo da página
+                
+                // Troca a classe
+                document.body.classList.toggle('dark-mode');
+                
+                // Verifica se ficou escuro ou claro
+                const isDarkNow = document.body.classList.contains('dark-mode');
+                
+                // Atualiza ícones e textos
+                applyTheme(isDarkNow);
+                
+                // Salva na memória do navegador
+                localStorage.setItem('lumiTheme', isDarkNow ? 'dark' : 'light');
+            });
+        }
+    });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startBtn = document.getElementById('start-btn');
+    
+    if (startBtn) {
+        startBtn.addEventListener('click', function() {
+            // Espera 500ms (meio segundo) para garantir que a prova carregou
+            // e tenta forçar a primeira pergunta a aparecer
+            setTimeout(function() {
+                console.log("Tentando forçar a exibição da Questão 1...");
+                
+                // Tenta encontrar a função que seus botões "Próxima/Anterior" usam
+                // A maioria dos scripts usa nomes assim:
+                if (typeof showQuestion === 'function') {
+                    showQuestion(0);
+                } else if (typeof renderQuestion === 'function') {
+                    renderQuestion(0);
+                } else if (typeof updateUI === 'function') {
+                    updateUI();
+                }
+                
+                // Força a remoção de classes que ocultam o texto (caso seja visual)
+                const texto = document.getElementById('questao-texto');
+                if(texto) texto.style.display = 'block';
+                
+            }, 800); // Tempo de espera
+        });
+    }
+});
+</script>
 </body>
 </html>

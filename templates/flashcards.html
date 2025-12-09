@@ -14,14 +14,17 @@
             <img src="{{ url_for('static', filename='lumi-4.png') }}" alt="Avatar Lumi" class="sidebar-avatar">
             <h3>Menu Lumi</h3>
         </div>
-        <a href="{{ url_for('index') }}">Chat Principal</a>
-        <a href="{{ url_for('profile') }}">Meu Perfil</a>
-        <a href="{{ url_for('calendario') }}">Calendário</a>
-        <a href="{{ url_for('flashcards') }}">Flashcards</a>
-        <a href="{{ url_for('metodo_de_estudo') }}">Método de Estudo</a>
-        <a href="{{ url_for('simulador') }}" class="active">Simulador de Provas</a>
-        <a href="{{ url_for('modo_foco') }}">Modo Foco</a>
-        <a href="{{ url_for('faq') }}">FAQ</a>
+         <ul>
+    <li><a href="{{ url_for('index') }}">🤖 Chat Principal</a></li>
+    <li><a href="{{ url_for('profile') }}">👤 Meu Perfil</a></li>
+    <li><a href="{{ url_for('calendario') }}">📅 Calendário</a></li>
+    <li><a href="{{ url_for('simulador') }}">🧠 Simulador de Provas</a></li>
+    <li><a href="{{ url_for('flashcards') }}">⚡ Flashcards</a></li>
+    <li><a href="{{ url_for('metodo_de_estudo') }}">📚 Método de Estudo</a></li>
+    <li><a href="{{ url_for('modo_foco') }}">🍅 Modo Foco</a></li>
+    <li><a href="#" id="theme-toggle"> <span class="theme-icon">🌙</span> <span class="theme-text">Modo Escuro</span></a></li>
+    <li><a href="{{ url_for('faq') }}">❓ FAQ</a></li>
+</ul>
     </nav>
     
     <div class="overlay"></div>
@@ -335,6 +338,7 @@
             document.getElementById('prev-card').onclick = () => { if(currentIdx > 0) showCard(--currentIdx); };
         });
     </script>
+    
     <script>
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.querySelector('.menu-toggle');
@@ -360,6 +364,54 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.addEventListener('click', closeMenu);
     }
 });
+</script>
+<script>
+    // === SCRIPT DE MODO ESCURO GLOBAL (CORRIGIDO) ===
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = toggleBtn ? toggleBtn.querySelector('.theme-icon') : null;
+        const themeText = toggleBtn ? toggleBtn.querySelector('.theme-text') : null;
+        
+        // 1. Verifica se já existe uma preferência salva
+        const savedTheme = localStorage.getItem('lumiTheme');
+        
+        // Função para aplicar o tema
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                if(themeIcon) themeIcon.textContent = '☀️';
+                if(themeText) themeText.textContent = 'Modo Claro';
+            } else {
+                document.body.classList.remove('dark-mode');
+                if(themeIcon) themeIcon.textContent = '🌙';
+                if(themeText) themeText.textContent = 'Modo Escuro';
+            }
+        }
+
+        // Aplica o tema salvo ao carregar a página
+        if (savedTheme === 'dark') {
+            applyTheme(true);
+        }
+
+        // 2. Evento de clique
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita pular para o topo
+                
+                // Troca a classe
+                document.body.classList.toggle('dark-mode');
+                
+                // Verifica se ficou escuro ou claro
+                const isDarkNow = document.body.classList.contains('dark-mode');
+                
+                // Atualiza ícones e textos
+                applyTheme(isDarkNow);
+                
+                // Salva na memória do navegador
+                localStorage.setItem('lumiTheme', isDarkNow ? 'dark' : 'light');
+            });
+        }
+    });
 </script>
 </body>
 </html>

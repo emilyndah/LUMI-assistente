@@ -26,6 +26,7 @@ from flask import (
     jsonify,
     flash,
 )
+from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     LoginManager,
@@ -52,6 +53,13 @@ logging.basicConfig(
 logging.info("Servidor iniciado - monitorando eventos Lumi")
 
 app = Flask(__name__)
+# --- INÍCIO DA CONFIGURAÇÃO NOVA ---
+# Configura a sessão para salvar arquivos no servidor (pasta flask_session),
+# em vez de tentar enfiar tudo no cookie do navegador.
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+# --- FIM DA CONFIGURAÇÃO NOVA ---
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY", "chave_secreta_final_lumi_app_v6_save_vark"
 )
@@ -531,8 +539,19 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html")
+    # 1. Busca o histórico no banco de dados
+    historico_db = ChatHistory.query.filter_by(user_id=current_user.id).order_by(ChatHistory.timestamp).all()
+    
+    # 2. Formata para o jeito que o JavaScript do seu HTML entende (role + parts)
+    historico_formatado = []
+    for h in historico_db:
+        historico_formatado.append({
+            "role": h.role,
+            "parts": [h.content] # O JS espera uma lista chamada parts
+        })
 
+    # 3. Envia para o HTML
+    return render_template("index.html", chat_history=historico_formatado)
 
 @app.route("/chat")
 @login_required
@@ -546,7 +565,7 @@ def chat():
             "model",
             "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
         )
-    return render_template("chat.html")
+        return render_template("index.html")
 
 
 @app.route("/profile", methods=["GET", "POST"])
@@ -673,7 +692,7 @@ def limpar_chat():
         "model",
         "Olá! Eu sou a Lumi, sua assistente acadêmica da UniEVANGÉLICA. Como posso te ajudar hoje? 💡"
     )
-    return redirect(url_for("chat"))
+    return redirect(url_for("index"))
 
 
 @app.route("/metodo_de_estudo")
@@ -852,54 +871,37 @@ def add_flashcard():
 @app.route("/ask", methods=["POST"])
 @login_required
 def ask():
-    if model is None:
-        return jsonify({"resposta": "Erro: API Key não configurada."}), 500
+    data = request.get_json()
+    user_text = data.get("pergunta")
 
-    dados = request.get_json()
-    pergunta_usuario = (dados.get("pergunta") or "").strip()
+    if not user_text:
+        return jsonify({"resposta": "Por favor, digite algo."})
 
-    if not pergunta_usuario:
-        return jsonify({"resposta": "Por favor, digite uma pergunta."}), 400
-
-    # 1. Carrega histórico limpo do banco (apenas a conversa real)
-    historico_db = carregar_historico_usuario(current_user.id)
-    
-    # Se estiver vazio, salva a saudação inicial
-    if not historico_db:
-        msg_inicial = "Olá! Eu sou a Lumi, sua assistente acadêmica. Como posso ajudar?"
-        salvar_mensagem_no_banco(current_user.id, "model", msg_inicial)
-        historico_db = [{"role": "model", "parts": [msg_inicial]}]
-
-    # 2. Salva a pergunta do usuário no banco AGORA
-    salvar_mensagem_no_banco(current_user.id, "user", pergunta_usuario)
+    # 1. SALVAR A PERGUNTA DO USUÁRIO NO BANCO
+    # (Isso garante que ela apareça quando recarregar)
+    salvar_mensagem_no_banco(current_user.id, "user", user_text)
 
     try:
-        # 3. Inicia o chat com o histórico do banco
-        # O system_instruction (com todos os dados pesados) já está carregado no 'model' desde o início do app
-        chat_session = model.start_chat(history=historico_db)
+        # Lógica para gerar a resposta da Lumi
+        # (Aqui mantive a lógica do Gemini que você já deve ter)
+        # Se você usa outro método para 'chat', ajuste esta linha:
+        chat_session = model.start_chat(history=[]) # Pode passar histórico se quiser contexto
+        response = chat_session.send_message(user_text)
+        model_text = response.text
         
-        # 4. Envia a mensagem
-        response = chat_session.send_message(pergunta_usuario)
-        texto_resposta = response.text.strip()
-
-        # 5. Salva a resposta da Lumi no banco
-        salvar_mensagem_no_banco(current_user.id, "model", texto_resposta)
-
-        return jsonify({"resposta": texto_resposta})
+        # Se quiser formatar markdown para HTML no backend, pode fazer aqui,
+        # mas geralmente mandamos o texto puro e o front resolve (ou usa filtro).
+        # Vamos assumir que 'model_text' é a resposta final.
 
     except Exception as e:
-        print(f"❌ ERRO GEMINI: {e}")
-        # Remove a pergunta do usuário do banco se falhou, para não ficar sem resposta no histórico visual
-        # (Opcional, mas ajuda a manter coerência)
-        try:
-            ultimo = ChatHistory.query.filter_by(user_id=current_user.id, role="user").order_by(ChatHistory.id.desc()).first()
-            if ultimo:
-                db.session.delete(ultimo)
-                db.session.commit()
-        except: pass
-        
-        return jsonify({"resposta": "Desculpe, tive um problema técnico. Pode repetir?"}), 500
+        model_text = "Desculpe, tive um erro ao processar sua mensagem."
+        print(f"Erro na API: {e}")
 
+    # 2. SALVAR A RESPOSTA DA LUMI NO BANCO
+    # (Isso garante que a resposta dela apareça quando recarregar)
+    salvar_mensagem_no_banco(current_user.id, "model", model_text)
+
+    return jsonify({"resposta": model_text})
 # =======================================================
 # API: VARK
 # =======================================================

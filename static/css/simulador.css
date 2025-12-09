@@ -22,35 +22,11 @@ body {
 /* ========================================
    SIDEBAR
    ======================================== */
-.sidebar {
-    width: 300px;
-    background: white;
-    padding: 0;
-    height: 100vh;
-    position: fixed;
-    left: -300px;
-    top: 0;
-    overflow-y: auto;
-    z-index: 1001;
-    transition: left 0.3s ease;
-    box-shadow: 2px 0 20px rgba(66, 133, 244, 0.1);
-}
 
 .sidebar.active {
     left: 0;
 }
 
-.sidebar-header {
-    padding: 25px;
-    border-bottom: 2px solid #e6edff;
-}
-
-.sidebar-avatar {
-    width: 50px;
-    height: 50px;
-    display: block;
-    margin: 0 auto 15px;
-}
 
 .sidebar h3 {
     text-align: center;
@@ -132,19 +108,6 @@ body {
 /* ========================================
    HEADER
    ======================================== */
-.simulador-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    z-index: 999;
-}
 
 .simulador-header h1 {
     color: #2d3748;
@@ -233,7 +196,7 @@ body {
    ======================================== */
 .simulador-container {
     margin-left: 0;
-    margin-top: 80px;
+    padding-top: 80px;
     padding: 30px;
     min-height: calc(100vh - 80px);
 }
