@@ -12,10 +12,10 @@ A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto un
 - **FAQ dinâmico** alimentado por arquivo JSON para garantir facilidade de manutenção das perguntas frequentes.
 - **Flashcards** para revisão rápida de conteúdos e disciplinas.
 - **Metodo de estudo** que sugere métodos de estudo individualizados com base nas respostas do estudante.
-- **Modo Foco** 
+- **Modo Foco** ambiente dedicado à concentração, reduzindo distrações e auxiliando o aluno a manter o foco durante os estudos.
 -****
 
-## 🗂️ Estrutura do Projeto
+## 🗂️ Estrutura Principal do Projeto
 ```text
 LUMI-assistente/
 ├── app.py                # Aplicação Flask com rotas, integração com IA e regras de negócio
