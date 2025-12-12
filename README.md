@@ -13,7 +13,7 @@ A **Lumi** é uma assistente acadêmica inteligente desenvolvida como projeto un
 - **Flashcards** para revisão rápida de conteúdos e disciplinas.
 - **Metodo de estudo** que sugere métodos de estudo individualizados com base nas respostas do estudante.
 - **Modo Foco** ambiente dedicado à concentração, reduzindo distrações e auxiliando o aluno a manter o foco durante os estudos.
--****
+
 
 ## 🗂️ Estrutura Principal do Projeto
 ```text
