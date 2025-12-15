@@ -123,7 +123,7 @@ class User(db.Model, UserMixin):
     matricula = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
 
-    cpf = db.Column(db.String(14), unique=True, nullable=False)
+    cpf = db.Column(db.String(14), unique=True, nullable=True)
     telefone = db.Column(db.String(20), nullable=True)
     sexo = db.Column(db.String(30), nullable=True)  # Gênero
     etnia = db.Column(db.String(50), nullable=True)
@@ -154,16 +154,22 @@ class User(db.Model, UserMixin):
 
     def __init__(
         self,
-        nome_completo,
-        email,
-        matricula,
+        username=None,
+        nome_completo=None,
+        email=None,
+        matricula=None,
         password=None,
         cpf=None,
         telefone=None,
         genero=None,
         etnia=None,
     ):
-        self.username = nome_completo
+        # Aceita tanto `username` quanto `nome_completo` para compatibilidade
+        if username:
+            self.username = username
+        else:
+            self.username = nome_completo
+
         self.email = email
         self.matricula = matricula
         if password:
